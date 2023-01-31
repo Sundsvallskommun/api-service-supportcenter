@@ -1,0 +1,197 @@
+{
+	"name": "pob-read-case",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/cases/867407"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": {
+			"Type": "Case",
+			"Links": [
+			],
+			"Data": {
+				"CasePK": "113901946",
+				"Id": "867458",
+				"CaseType": {
+					"Type": "CaseType",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casetypes/Service Request"
+						}
+					],
+					"Data": {
+						"Id": "Service Request",
+						"Description": "Beställningar, frågor"
+					},
+					"Memo": {
+					}
+				},
+				"CaseCategory": {
+					"Type": "CaseCategory",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
+						}
+					],
+					"Data": {
+						"Id": "Beställning av Hårdvara Advania",
+						"Description": "Beställning av Hårdvara Advania"
+					},
+					"Memo": {
+					}
+				},
+				"ResponsibleGroup": {
+					"Type": "UserGroup",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/IT Ute"
+						}
+					],
+					"Data": {
+						"Id": "IT Ute",
+						"Description": "IT Utesupport"
+					},
+					"Memo": {
+					}
+				},
+				"Coordinator": {
+					"Type": "User",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/system_api_advania_cube"
+						}
+					],
+					"Data": {
+						"FirstName": "System API",
+						"Id": "system_api_advania_cube",
+						"LastName": "Advania Cube"
+					},
+					"Memo": {
+					}
+				},
+				"Contact.Customer": {
+					"Type": "Customer",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/test02test"
+						}
+					],
+					"Data": {
+						"FirstName": "John",
+						"Id": "test02test",
+						"LastName": "Doetest",
+						"Mobile": "",
+						"Phone": ""
+					},
+					"Memo": {
+					}
+				},
+				"Contact.Organization": {
+					"Type": "Organization",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/organizations/7284"
+						}
+					],
+					"Data": {
+						"Id": "7284",
+						"Description": "VOF GVS Resursbank",
+						"Address2": "",
+						"Virtual.DefaultContractId": "11912"
+					},
+					"Memo": {
+					}
+				},
+				"CIInfo.Type": {
+					"Type": "ConfigurationItemType",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
+						}
+					],
+					"Data": {
+						"Id": "Lätt Bärbar",
+						"Description": "Lätt Bärbar datorarbetsplats"
+					},
+					"Memo": {
+					}
+				},
+				"CIInfo2.OperationStatus": "",
+				"Virtual.Shop_ForvaltningBolag": "BoU",
+				"Virtual.Shop_PersonligGemensam": "1",
+				"Virtual.Shop_Office": "1",
+				"Virtual.Shop_JoinContact": {
+					"Type": "Customer",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/test01test"
+						}
+					],
+					"Data": {
+						"FirstName": "Test",
+						"Id": "test01test",
+						"LastName": "Testsson",
+						"Mobile": "test",
+						"Phone": "test"
+					},
+					"Memo": {
+					}
+				},
+				"Virtual.Shop_Kst_Ansvarsnummer": "15220100",
+				"Virtual.Shop_Kst_Underkonto": "974310",
+				"Virtual.Shop_Kst_Verksamhetsnummer": "920350",
+				"Virtual.Shop_Kst_Aktivitetsnummer": "5662",
+				"Virtual.Shop_Kst_Projektnummer": "17071",
+				"Virtual.Shop_Kst_Objektnummer": "6310000",
+				"Virtual.Shop_Kst_Motpart": "115",
+				"Virtual.Shop_Kst_JoinAccount": {
+					"Type": "Account",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
+						}
+					],
+					"Data": {
+						"Id": "15220100 974310 920350 5662 17071 6310000 115"
+					},
+					"Memo": {
+					}
+				},
+				"Virtual.Shop_CI_Name": "",
+				"Virtual.Shop_CI_Description": "Tydlig och bra CI beskrivning",
+				"Virtual.Shop_Adr_Gatuadress": "Gatan 6",
+				"Virtual.Shop_Adr_Postnr": "851 23",
+				"Virtual.Shop_Adr_Postort": "Sundsvall",
+				"Virtual.Shop_Telefonnummer": "079-11111111",
+				"Virtual.Shop_Epost": "test.testsson@sundsvall.se",
+				"Virtual.Shop_Kontaktperson": "Test Testsson",
+				"Virtual.WebserviceResponse": "",
+				"Virtual.Shop_ServiceIdExternalSync": "123",
+				"Virtual.ExternalCaseId": "",
+				"Virtual.Shop_ExterntArtikelnummer": "4343434",
+				"Virtual.Shop_Fritext": "leverans fredagar",
+				"Virtual.CustomerHasResponded": ""
+			},
+			"Memo": {
+			}
+		}
+	}
+}

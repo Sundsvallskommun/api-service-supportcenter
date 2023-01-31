@@ -1,0 +1,37 @@
+{
+	"name": "pob-update-case-updateCase",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867410",
+						"CaseStatus": "In Process"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "This is a note | Status: 'Reserved'",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

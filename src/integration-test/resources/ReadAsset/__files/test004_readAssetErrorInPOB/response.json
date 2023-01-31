@@ -1,0 +1,5 @@
+{
+	"title": "Bad Gateway",
+	"status": 502,
+	"detail": "pob error: {detail=A database redesign is required, status=422 Unprocessable Entity, title=An error occured}"
+}

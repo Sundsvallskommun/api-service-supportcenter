@@ -1,0 +1,35 @@
+{
+	"name": "pob-read-configurationitems",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/configurationitems",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=FRGDZ1J"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [
+				],
+				"Data": {
+					"Id": "15857"
+				},
+				"Memo": {
+				}
+			}
+		]
+	}
+}

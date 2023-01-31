@@ -1,0 +1,16 @@
+version: "3"
+services:
+  disturbance:
+    image: 'ms-supportcenter:latest'
+    restart: always
+    network_mode: bridge
+    build:
+      context: ../../..
+      dockerfile: src/main/docker/Dockerfile
+    ports:
+        - '8080:8080'
+    environment:
+      SPRING_PROFILES_ACTIVE: 'test'
+      SPRING_CLOUD_CONFIG_URI: '<url>'
+      SPRING_CLOUD_CONFIG_USERNAME: '<username>'
+      SPRING_CLOUD_CONFIG_PASSWORD: '<password>'

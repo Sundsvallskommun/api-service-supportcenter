@@ -1,0 +1,46 @@
+{
+	"name": "pob-update-case-assignBack",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867400",
+						"CaseStatus": "In Process",
+						"Responsible": null,
+						"ResponsibleGroup": "First Line IT"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Status: 'In Process'",
+							"HandleSeparators": true
+						},
+						"Problem": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "This is a note",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

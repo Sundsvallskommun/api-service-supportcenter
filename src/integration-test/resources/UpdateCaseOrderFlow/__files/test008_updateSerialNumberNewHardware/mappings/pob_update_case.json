@@ -1,0 +1,37 @@
+{
+	"name": "pob-update-case-updateSerialNumber",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"CIInfo.Ci": "15857",
+						"Id": "867407"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Updated serialNumber",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

@@ -1,0 +1,40 @@
+{
+	"name": "pob-assign-back-case",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "CS0867597",
+						"Virtual.ActionNeeded": true,
+						"Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
+						"Id": "867597",
+						"Responsible": null,
+						"ResponsibleGroup": "Second Line IT"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Beskrivning av den åtgärd som måste utföras av Sundsvall",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

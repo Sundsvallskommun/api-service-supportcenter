@@ -1,0 +1,48 @@
+{
+	"scenarioName": "resolve-case",
+	"requiredScenarioState": "Started",	
+	"newScenarioState": "CaseSolved",
+	"name": "pob-update-case-to-solved",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "",
+						"ClosureCode": "Advania - Övriga lösningar Incident",
+						"CaseStatus": "Solved",
+						"Id": "910277"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Status: 'Resolved'",
+							"HandleSeparators": true
+						},
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Mjukvara ominstallerad",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

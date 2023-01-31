@@ -1,0 +1,5 @@
+{
+	"title": "Bad Request",
+	"status": 400,
+	"detail": "No ID for serialNumber: 'DOESNTEXIST' was found in POB-configurationitems"
+}

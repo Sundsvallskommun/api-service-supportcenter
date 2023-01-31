@@ -1,0 +1,23 @@
+{
+	"name": "try-1",
+	"scenarioName": "retry",
+	"newScenarioState": "try-1",
+	"requiredScenarioState": "Started",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/configurationitems",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=YYY"
+			}
+		}
+	},
+	"response": {
+		"fixedDelayMilliseconds": 3000
+	}
+}

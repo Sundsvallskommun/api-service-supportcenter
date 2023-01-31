@@ -1,0 +1,27 @@
+{
+	"name": "pob-get-suspension",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/cases/867591/suspension"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": {
+			"Suspension": "Väntar kundsvar Advania",
+			"Description": null,
+			"Time": "2025-06-27T13:41:48",
+			"TimeLimitsAction": 2,
+			"UsePeriod": true,
+			"Period": 1095,
+			"Units": 2
+		}
+	}
+}

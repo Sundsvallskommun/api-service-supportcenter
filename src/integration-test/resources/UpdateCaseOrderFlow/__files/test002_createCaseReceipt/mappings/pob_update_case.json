@@ -1,0 +1,37 @@
+{
+	"name": "pob-update-case-createCaseReceipt",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867401",
+						"Virtual.ExternalCaseId": "INC232323"
+					},
+					"Memo": {
+						"Problem": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "This is a note",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

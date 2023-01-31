@@ -1,0 +1,5 @@
+{
+	"title": "Bad Gateway",
+	"status": 502,
+	"detail": "pob error: {detail=, status=400 Bad Request, title=Serienummer måste vara unikt (serienummer finns redan, {Id:  354384 Serialnumber:  FRGDZ1J}). Aktuellt CI-id: 354385}"
+}

@@ -1,0 +1,45 @@
+{
+	"name": "pob-update-case-resolveCase",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867402",
+						"CaseStatus": "Solved",
+						"ClosureCode": "IT Byte/uppgradering av hårdvara"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Status: 'Solved'",
+							"HandleSeparators": true
+						},
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "This is a note",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

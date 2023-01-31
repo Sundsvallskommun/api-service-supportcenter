@@ -1,0 +1,30 @@
+{
+  "caseId": "111222",
+  "caseType": "Service Request",
+  "caseCategory": "Beställning av Hårdvara Advania",
+  "customerContact": "test02test",
+  "externalArticleNumber": "4343434",
+  "managementCompany": "BoU",
+  "personal": true,
+  "responsibleGroup": "IT Ute",
+  "externalServiceId": "123",
+  "office": true,
+  "freeText": "leverans fredagar",
+  "joinContact": "test01test",
+  "responsibilityNumber": "15220100",
+  "subaccount": "974310",
+  "businessNumber": "920350",
+  "activityNumber": "5662",
+  "projectNumber": "17071",
+  "objectNumber": "6310000",
+  "counterPart": "115",
+  "ciDescription": "Tydlig och bra CI beskrivning",
+  "contactPerson": "Test Testsson",
+  "phoneNumber": "079-11111111",
+  "email": "test.testsson@sundsvall.se",
+  "address": {
+    "street": "Gatan 6",
+    "postalCode": "851 23",
+    "city": "Sundsvall"
+  }
+}

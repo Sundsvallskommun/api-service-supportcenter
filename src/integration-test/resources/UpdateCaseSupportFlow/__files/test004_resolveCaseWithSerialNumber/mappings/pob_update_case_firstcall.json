@@ -1,0 +1,50 @@
+{
+	"scenarioName": "resolve-case",
+	"requiredScenarioState": "Started",	
+	"newScenarioState": "CaseSolved",
+	"name": "pob-update-case-to-solved",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "",
+						"ClosureCode": "Byte av hårdvara",
+						"CaseStatus": "Solved",
+						"CIInfo2.Ci": "350860",
+						"Id": "910277",
+						"Virtual.Shop_CI_Name": "Dell Latitude 5320"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Status: 'Resolved'",
+							"HandleSeparators": true
+						},
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Enheten utbytt",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

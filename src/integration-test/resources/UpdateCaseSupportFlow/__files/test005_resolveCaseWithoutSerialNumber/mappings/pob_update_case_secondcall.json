@@ -1,0 +1,39 @@
+{
+	"scenarioName": "resolve-case",
+	"requiredScenarioState": "CaseSolved",	
+	"name": "pob-update-case-to-closed",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "",
+						"CaseStatus": "Closed",
+						"Id": "910277"
+					},
+					"Memo": {
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Mjukvara ominstallerad",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

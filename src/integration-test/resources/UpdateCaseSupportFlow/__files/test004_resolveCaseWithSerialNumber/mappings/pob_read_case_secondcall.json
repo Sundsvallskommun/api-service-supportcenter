@@ -1,0 +1,493 @@
+{
+	"scenarioName": "resolve-case",
+	"requiredScenarioState": "CaseSolved",	
+	"name": "pob-read-case",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/cases/910277"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"CasePK": "114974981",
+				"Id": "910277",
+				"Description": "Supportärende test 1",
+				"DeleteDate": "",
+				"Approved": "",
+				"AssignStatus": "0",
+				"Callback": "",
+				"ChildrenCount": "0",
+				"ShouldUpdateChildren": "False",
+				"PercentFinished": "0",
+				"InboundMailCount": "2",
+				"InvoiceDate": "",
+				"ImpactFrom": "",
+				"PercentOccupied": "0",
+				"IsOkForWeb": "",
+				"OrganizationMail": "",
+				"Reference": "",
+				"Revision": "",
+				"CaseStatus": "2",
+				"UserNotifyBy": "",
+				"ContactNotifyBy": "0",
+				"Origin": "0",
+				"CaseSubstatusHistory": "",
+				"EUUpdateCount": "0",
+				"MailStatusColor": "",
+				"UnreadMailCount": "",
+				"TotalTasks": "",
+				"CompletedTasks": "",
+				"AlertPercent": "",
+				"AlertColor": "",
+				"ShortDescription": "",
+				"OpenedBy": {
+					"Type": "User",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/fir01las"
+						}
+					],
+					"Data": {
+						"FirstName": "Firstname",
+						"Id": "fir01las",
+						"LastName": "Lastname"
+					},
+					"Memo": {}
+				},
+				"OpenedByGroup": {
+					"Type": "UserGroup",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/Fakturering"
+						}
+					],
+					"Data": {
+						"Id": "Fakturering",
+						"Description": "Ärenden gällande Fakturering"
+					},
+					"Memo": {}
+				},
+				"CaseType": {
+					"Type": "CaseType",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casetypes/Incident"
+						}
+					],
+					"Data": {
+						"Id": "Incident",
+						"Description": "Incidenter, fel"
+					},
+					"Memo": {}
+				},
+				"CaseCategory": {
+					"Type": "CaseCategory",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Hårdvarufel - Advania"
+						}
+					],
+					"Data": {
+						"Id": "H?rdvarufel - Advania",
+						"Description": "Hårdvarufel som ska till Advania"
+					},
+					"Memo": {}
+				},
+				"ClosureCode": {
+					"Type": "ClosureCode",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/Byte av hårdvara"
+						}
+					],
+					"Data": {
+						"Id": "Byte av hårdvara",
+						"Description": "Byte av hårdvara - incident"
+					},
+					"Memo": {}
+				},
+				"CoordinatorGroup": {
+					"Type": "UserGroup",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/IT Ute"
+						}
+					],
+					"Data": {
+						"Id": "IT Ute",
+						"Description": "IT Utesupport"
+					},
+					"Memo": {}
+				},
+				"ResponsibleGroup": {
+					"Type": "UserGroup",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/Advania"
+						}
+					],
+					"Data": {
+						"Id": "Advania",
+						"Description": "Advania - Autoärenden"
+					},
+					"Memo": {}
+				},
+				"Coordinator": {
+					"Type": "User",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/FILA"
+						}
+					],
+					"Data": {
+						"FirstName": "Firstname",
+						"Id": "FILA",
+						"LastName": "Lastname"
+					},
+					"Memo": {}
+				},
+				"Contact.Customer": {
+					"Type": "Customer",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/fir01las"
+						}
+					],
+					"Data": {
+						"FirstName": "Firstname",
+						"Id": "fir01las",
+						"LastName": "Lastname",
+						"Mobile": "",
+						"Phone": "060-1234567"
+					},
+					"Memo": {}
+				},
+				"Contact.Organization": {
+					"Type": "Organization",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/organizations/2877"
+						}
+					],
+					"Data": {
+						"Id": "2877",
+						"Description": "KS ServiceC IT Support Ute",
+						"Address2": "",
+						"Virtual.DefaultContractId": "10111"
+					},
+					"Memo": {}
+				},
+				"UnregisteredContact.Data1": "",
+				"UnregisteredContact.Data2": "",
+				"UnregisteredContact.Data3": "",
+				"UnregisteredContact.Data4": "",
+				"UnregisteredContact.Data5": "",
+				"UnregisteredContact.Mail": "",
+				"CIInfo.Type": {
+					"Type": "ConfigurationItemType",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+						}
+					],
+					"Data": {
+						"Id": "Bärbar",
+						"Description": "Bärbar datorarbetsplats"
+					},
+					"Memo": {}
+				},
+				"CIInfo.Ci": {
+					"Type": "ConfigurationItem",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitems/307915"
+						}
+					],
+					"Data": {
+						"Id": "307915",
+						"Description": "SC, IT, Tivoliv?gen 10, Firstname Lastname",
+						"OptionalNumber": "WB10123",
+						"SerialNumber": "D75BMQ2",
+						"Virtual.FysiskPlats_Adr_Gatuadress": "Tivolivägen 10",
+						"Virtual.FysiskPlats_Adr_Postnr": "85185",
+						"Virtual.FysiskPlats_Adr_Postort": "Sundsvall"
+					},
+					"Memo": {}
+				},
+				"CIInfo.Item": {
+					"Type": "Item",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/items/100866"
+						}
+					],
+					"Data": {
+						"Id": "100866",
+						"Description": "Dell Latitude 5320",
+						"ItemStatus": "1"
+					},
+					"Memo": {}
+				},
+				"CIInfo.OperationStatus": "",
+				"UnregisteredCI": "",
+				"CIInfo2.Type": {
+					"Type": "ConfigurationItemType",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+						}
+					],
+					"Data": {
+						"Id": "Bärbar",
+						"Description": "Bärbar datorarbetsplats"
+					},
+					"Memo": {}
+				},
+				"CIInfo2.Ci": {
+					"Type": "ConfigurationItem",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitems/350860"
+						}
+					],
+					"Data": {
+						"Id": "350860",
+						"Description": "SC, IT, Firstname Lastname",
+						"OptionalNumber": "WB10123",
+						"SerialNumber": "G159S93",
+						"Virtual.FysiskPlats_Adr_Gatuadress": "",
+						"Virtual.FysiskPlats_Adr_Postnr": "",
+						"Virtual.FysiskPlats_Adr_Postort": ""
+					},
+					"Memo": {}
+				},
+				"CIInfo2.OperationStatus": "",
+				"SLAInfo.Contract": {
+					"Type": "Contract",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/?ontracts/10111"
+						}
+					],
+					"Data": {
+						"Id": "10111",
+						"Description": "KS ServiceC IT Support Ute"
+					},
+					"Memo": {}
+				},
+				"PriorityInfo.Priority": {
+					"Type": "Priority",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities/IT4"
+						}
+					],
+					"Data": {
+						"Id": "IT4",
+						"Description": "Löst inom 8 arbetsdagar"
+					},
+					"Memo": {}
+				},
+				"TimeLimits.NextEscalationDate": "2022-07-11 12:36:44",
+				"TimeLimits.TimeLimitExceeded": "",
+				"TimeLimits.IsEscalationOnHold": "",
+				"TimeLimits.ServiceHours": {
+					"Type": "ServiceHours",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/servicehours/Default"
+						}
+					],
+					"Data": {
+						"Id": "Default",
+						"Description": "Default set up"
+					},
+					"Memo": {}
+				},
+				"Times.OkDate": "",
+				"Times.ActualOkDate": "",
+				"Times.OnsiteDate": "",
+				"Times.ActualOnsiteDate": "",
+				"Times.OpenedDate": "2022-06-29 08:36:44",
+				"Times.SolvedDate": "",
+				"Times.PlannedTime": "0,00",
+				"Times.RemainingTime": "0,00",
+				"Times.UsedTime": "0,00",
+				"Times.RegisteredTime": "0,00",
+				"Times.InProcessDate": "2022-06-29 08:37:04",
+				"Times.ClosedDate": "",
+				"Times.TimeUntilStarted": "0,34",
+				"Times.TimeUntilSolved": "0,00",
+				"Times.TimeInSuspend": "0,00",
+				"Times.SuspendTimeWhileOpened": "",
+				"Times.SuspendTimeWhileInProcess": "",
+				"Virtual.CustomerHasResponded": "False",
+				"Virtual.TriggerId": "",
+				"Virtual.MultiUpdate_SelectedCases": "",
+				"Virtual.MultiUpdate_Text": "",
+				"Virtual.CAS_VIR_EFTER3_Mellan": "",
+				"Virtual.LeveransdatumUtfall": "",
+				"Virtual.ActionType": "",
+				"Virtual.ActionId": "",
+				"Virtual.Shop_Adr_Gatuadress": "",
+				"Virtual.Shop_Adr_Postnr": "",
+				"Virtual.Shop_Kst_Verksamhetsnummer": "",
+				"Virtual.ExternalCaseId": "CS0599170",
+				"Virtual.Shop_Adr_Postort": "",
+				"Virtual.Shop_CI_Description": "",
+				"Virtual.Shop_CI_Name": "",
+				"Virtual.Shop_Epost": "",
+				"Virtual.Shop_ExterntArtikelnummer": "",
+				"Virtual.Shop_ExterntKundnummer": "",
+				"Virtual.Shop_ForvaltningBolag": "",
+				"Virtual.Shop_Fritext": "",
+				"Virtual.Shop_InstallerasAv": "",
+				"Virtual.Shop_Kontaktperson": "",
+				"Virtual.Shop_Kst_Aktivitetsnummer": "",
+				"Virtual.Shop_Kst_Ansvarsnummer": "",
+				"Virtual.Shop_Kst_Motpart": "",
+				"Virtual.Shop_Kst_Objektnummer": "",
+				"Virtual.Shop_Kst_Projektnummer": "",
+				"Virtual.Shop_Kst_Underkonto": "",
+				"Virtual.Shop_Office": "",
+				"Virtual.Shop_PersonligGemensam": "",
+				"Virtual.Shop_ServiceIdExternalSync": "",
+				"Virtual.Shop_Telefonnummer": "",
+				"Virtual.WebserviceResponse": "",
+				"Virtual.Shop_WebbshopOrdernummer": "",
+				"Virtual.CAS_CHANGE_CASE": "",
+				"Virtual.CAS_CHANGE_CASE2": "0",
+				"Virtual.CAS_VIR_LEVDAT": "",
+				"Virtual.CAS_VIR_SEM": "0",
+				"Virtual.CAS_VIR_ADSEM": "",
+				"Virtual.CAS_VIR_SKANNING": "",
+				"Virtual.CAS_VIR_FOLLOW": "",
+				"Virtual.CAS_VIR_KVOTA": "",
+				"Virtual.CAS_VIR_RETAKE": "",
+				"Virtual.CAS_VIR_STAIRS": "",
+				"Virtual.CAS_VIR_ELEVATOR": "",
+				"Virtual.CAS_VIR_SOC": "",
+				"Virtual.CAS_VIR_NETCON": "",
+				"Virtual.CAS_VIR_PORTNO": "",
+				"Virtual.CAS_VIR_PRINTNAME": "",
+				"Virtual.CAS_VIR_NET": "",
+				"Virtual.CAS_VIR_NETIP": "",
+				"Virtual.CAS_VIR_NETMASK": "",
+				"Virtual.CAS_VIR_NETGW": "",
+				"Virtual.CAS_VIR_AXISIP": "",
+				"Virtual.CAS_VIR_AXISMASK": "",
+				"Virtual.CAS_VIR_AXISGW": "",
+				"Virtual.CAS_VIR_DRIVER": "",
+				"Virtual.CAS_VIR_SHORTSERIAL": "",
+				"Virtual.CAS_VIR_EFTER": "",
+				"Virtual.CAS_VIR_BOX": "",
+				"Virtual.CAS_VIR_EFTER2": "",
+				"Virtual.CAS_VIR_EFACK": "",
+				"Virtual.CAS_VIR_PBANK": "",
+				"Virtual.CAS_VIR_FAX": "",
+				"Virtual.CAS_VIR_UNDER": "",
+				"Virtual.CAS_VIR_PLACE": "",
+				"Virtual.CAS_VIR_ANSNR": "",
+				"Virtual.CAS_VIR_VERNR": "",
+				"Virtual.CAS_VIR_AKTNR": "",
+				"Virtual.CAS_VIR_PRONR": "",
+				"Virtual.CAS_VIR_OBJNR": "",
+				"Virtual.CAS_VIR_FOLIP": "",
+				"Virtual.CAS_VIR_FAXNR": "",
+				"Virtual.CAS_VIR_FAXAVS": "",
+				"Virtual.CAS_VIR_FOLTAG": "",
+				"Virtual.UsersForEvaluation": "",
+				"Virtual.CAS_SEND_MAIL_VIRT": "",
+				"Virtual.InvoiceReference": "9OLI06NOR",
+				"Virtual.Tel_CI_Name": "",
+				"Virtual.EscalationStateCustom": "",
+				"Virtual.CaseLockedByUserId": "mad30fry",
+				"Virtual.Tel_Description": "",
+				"Virtual.OriginId2": "",
+				"Virtual.OriginType2": "",
+				"Virtual.Tel_Ny_Tel_IMEI_nr": "",
+				"Virtual.Tel_Ny_Tillv_Phoniro_Bool": "",
+				"Virtual.Tel_Ny_Tillv_Phoniro_Serienr": "",
+				"Virtual.Tel_Ny_Tillv_Phoniro_Bluetoothadress": "",
+				"Virtual.Tel_Ny_Tillv_MEX_Bool": "",
+				"Virtual.Tel_Ny_Tillv_Expressbest_Bool": "",
+				"Virtual.Tel_Byt_Ers_IMEI_nr": "",
+				"Virtual.Tel_Byt_ErsPh_Beskrivning": "",
+				"Virtual.Tel_Byt_ErsPh_IMEI_nr": "",
+				"Virtual.Tel_Byt_ErsPh_Serienr": "",
+				"Virtual.Tel_Byt_ErsPh_Phoniro_Bluetoothadress": "",
+				"Virtual.Tel_Byt_Ab_Telefonnr_CI_Name": "",
+				"Virtual.Tel_Byt_Tjanst_IMEI_nr": "",
+				"Virtual.Tel_Avsl_Tillv_MEX_Bool": "",
+				"Virtual.Tel_Avsl_Anknytning": "",
+				"Virtual.Tel_Byt_Anv_Beskrivning": "",
+				"Virtual.Print_Extrafack_Antal": "",
+				"Virtual.Print_taggar_antal": "",
+				"Virtual.print_kop_taggar_antal": "",
+				"Virtual.print_kop_extrafack_antal": "",
+				"Virtual.CAS_VIR_Servername": "",
+				"Virtual.CAS_EDT_STA2": "",
+				"Virtual.CAS_EDT_SOL2": "2022-07-11 12:36:44",
+				"Virtual.CAS_VIR_SUSP_DATE_TIME": "",
+				"Virtual.IsRfc": "",
+				"Virtual.IsRfcApproved": "",
+				"Virtual.Koneo_solved": "",
+				"Virtual.CAS_VIR_EFACK_KOP": "",
+				"Virtual.CAS_VIR_BOX_KOP": "",
+				"Virtual.CAS_VIR_FOLLOW_KOP": "",
+				"Virtual.CAS_VIR_UNDER_KOP": "",
+				"Virtual.CAS_VIR_FOLTAG_KOP": "",
+				"Virtual.ROO_ACTION": "",
+				"Virtual.MailFailedMaxValue": "",
+				"Virtual.NewMail": "1",
+				"Virtual.CIInfo2Item": {
+					"Type": "Item",
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/items/101346"
+						}
+					],
+					"Data": {
+						"Id": "101346",
+						"Description": "Latitude 5320",
+						"ItemStatus": "1"
+					},
+					"Memo": {}
+				},
+				"Virtual.OriginType": "",
+				"Virtual.OriginId": ""
+			},
+			"Memo": {}
+		}
+	}
+}

@@ -1,0 +1,35 @@
+{
+	"note": {
+		"type": "PROBLEM",
+		"text": "This is a note"
+	},
+	"description": "Beställning av tjänst Test4",
+	"caseType": "Service Request",
+	"caseCategory": "IT Användarhantering",
+	"customerContact": "test02test",
+	"externalArticleNumber": "4343434",
+	"managementCompany": "BoU",
+	"priority": "IT4",
+	"personal": true,
+	"responsibleGroup": "First Line IT",
+	"externalServiceId": "123",
+	"office": true,
+	"freeText": "leverans fredagar",
+	"joinContact": "test01test",
+	"responsibilityNumber": "15220100",
+	"subaccount": "974310",
+	"businessNumber": "920350",
+	"activityNumber": "5662",
+	"projectNumber": "17071",
+	"objectNumber": "6310000",
+	"counterPart": "115",
+	"ciDescription": "Tydlig och bra CI beskrivning",
+	"contactPerson": "Test Testsson",
+	"phoneNumber": "079-11111111",
+	"email": "test.testsson@sundsvall.se",
+	"address": {
+		"street": "Street 1",
+		"postalCode": "851 86",
+		"city": "Sundsvall"
+	}
+}

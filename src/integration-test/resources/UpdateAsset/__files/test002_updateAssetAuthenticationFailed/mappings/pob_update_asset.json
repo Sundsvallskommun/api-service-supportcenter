@@ -1,0 +1,36 @@
+{
+	"name": "pob-update-asset-test2",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/configurationitems",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "ConfigurationItem",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867407",
+						"OptionalNumber": "WB12345NY"
+					},
+					"Memo": {
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 401,
+		"jsonBody": {
+			"Message": "Authorization has been denied for this request."
+		}
+	}
+}

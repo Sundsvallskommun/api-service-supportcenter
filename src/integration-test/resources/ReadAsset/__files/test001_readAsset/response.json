@@ -1,0 +1,16 @@
+[
+  {
+    "deliveryDate": "2022-01-01",
+    "hardwareDescription": "Some description",
+    "hardwareName": "test1234",
+    "hardwareStatus":"2",
+    "id": "15857",
+    "macAddress": "00:00:0a:bb:28:fc",
+    "manufacturer": "X_Dell",
+    "modelName": "Latitude 9000",
+    "modelDescription": "Latitude 9000",
+    "serialNumber": "FRGDZ1J",
+    "supplierStatus": "2",
+    "warrantyEndDate": "2022-01-01"
+  }
+]

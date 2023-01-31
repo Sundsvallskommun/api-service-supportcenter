@@ -1,0 +1,9 @@
+{
+	"caseStatus": "In Process",
+	"caseCategory": "IT Användarhantering",
+	"hardwareName": "Name of the hardware",
+	"note": {
+		"type": "WORKNOTE",
+		"text": "This is a note"
+	}
+}

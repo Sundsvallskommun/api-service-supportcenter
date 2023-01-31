@@ -1,0 +1,27 @@
+version: "3"
+services:
+  ms-supportcenter-sandbox:
+    container_name: ms-supportcenter-sandbox
+    image: 'ms-supportcenter:sandbox'
+    links:
+      - 'ms-supportcenter-wiremock-sandbox:wiremock'
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: src/main/docker/Dockerfile
+    ports:
+      - '9071:8080'
+    environment:
+      INTEGRATION_POB_URL: 'http://wiremock:8080/pob'
+      SPRING_PROFILES_ACTIVE: 'sandbox'
+    depends_on:
+      - ms-supportcenter-wiremock-sandbox
+
+  ms-supportcenter-wiremock-sandbox:
+    container_name: ms-supportcenter-wiremock-sandbox
+    image: wiremock/wiremock
+    restart: always
+    expose:
+      - '8080'
+    volumes:
+      - $PWD/src/test/resources/wiremock:/home/wiremock

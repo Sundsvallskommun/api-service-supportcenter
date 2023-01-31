@@ -1,0 +1,7 @@
+{
+	"serialNumber": "DOESNTEXIST",
+	"note": {
+		"type": "WORKNOTE",
+		"text": "Updated serialNumber that doesn't exist"
+	}
+}

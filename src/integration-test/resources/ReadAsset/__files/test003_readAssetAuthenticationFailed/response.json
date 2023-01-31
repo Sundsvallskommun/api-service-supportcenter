@@ -1,0 +1,5 @@
+{
+	"title": "Bad Gateway",
+	"status": 502,
+	"detail": "pob error: {detail=, status=401 Unauthorized, title=Authorization has been denied for this request.}"
+}

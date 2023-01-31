@@ -1,0 +1,41 @@
+{
+	"scenarioName": "resolve-case",
+	"requiredScenarioState": "CaseSolved",	
+	"name": "pob-update-case-to-closed",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "",
+						"CaseStatus": "Closed",
+						"CIInfo2.Ci": "350860",
+						"Id": "910277",
+						"Virtual.Shop_CI_Name": "Dell Latitude 5320"
+					},
+					"Memo": {
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Enheten utbytt",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

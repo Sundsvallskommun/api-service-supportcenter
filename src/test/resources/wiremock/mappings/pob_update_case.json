@@ -1,0 +1,10 @@
+{
+	"name": "pob-update-case",
+	"request": {
+		"method": "POST",
+		"urlPath": "/pob/cases"
+	},
+	"response": {
+		"status": 200
+	}
+}

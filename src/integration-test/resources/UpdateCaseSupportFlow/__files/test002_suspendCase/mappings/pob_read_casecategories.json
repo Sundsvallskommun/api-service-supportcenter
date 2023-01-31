@@ -1,0 +1,2412 @@
+{
+	"name": "pob-read-case-categories",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/casecategories",
+		"queryParameters": {
+			"Fields": {
+				"equalTo": "Id"
+			},
+			"limit": {
+				"equalTo": "10000"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": [
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Administration"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Avtal"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Borttappad/Stulen"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Licens"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Användarhantering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Ändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Quota"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Ny- & avbeställning av standardiserad tjänst"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Felmeddelande"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Inloggningsproblem"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Uppgradering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Handhavandefel"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Frågor & Information från Användare & Kunder"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Nyinstallation"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Löpande underhåll och drift"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tidrapport"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Uppdatering/Förändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Servicecenter IT"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön & Pension"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Fordonshantering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kontorsservice"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Telesupport"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Service Req"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Fel Lön"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Anställningstid"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Arbgivarintyg"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Avtal"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Behörighet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön FK VAB"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Fråga Årsinkomst"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Förlängning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Hjälp Förhandling"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Intyg Försök"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Koddelar"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Komp"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Kronofogde"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Lån"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Lån Bör"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Lön Förklaring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Org Förändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Rapportbest"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Schema"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Semester"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Självservice Medarbetare"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Skattefrågor"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Föräldraledighet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Allmän Fråga"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Service"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel AnvStöd Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Tab Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Ankn Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel IP Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Mobil Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Applikation Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Övrigt Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Tab SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Tab SR Ny"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Tab SR Uppsägning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Tab SR Övrigt"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Ankn SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Ankn SR Ny"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Ankn SR Uppsägning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Ankn SR Övrigt"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Mobil SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Mobil SR Ny"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Mobil SR Uppsägning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Mobil SR Övrigt"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Bredband"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel SMS"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Telekonferens"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Fakturaärenden"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel AnvStöd"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Vxl.adm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Telefoniprodukter"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Övrigt SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Service"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Fel Beställning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tryckeri SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Post SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Förråd SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Service"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Leasing INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Best Leasing Normal"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Best Leasing Släp"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Best Leasing Special"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Sjukfrånvaro"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön VAB"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Utskrift SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Visitkort SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Korrespondenskort SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Brevpapper A4 SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kuvert SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Svarskuvert SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Plus Giro-blankett SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Rums/namnskylt SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Layout SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Samlingsannons SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tjänstedeklaration SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Skanning SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Utställning SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Tryckeri SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Lampbyte SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Transport SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Flytt SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Montering SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Teknik sammanträdesrum SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Frankering SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kuvertering SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Skanning inkommande post SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Post SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tonerbyte SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Papperspåfyllning SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Materialförråd påfyllnad SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kontorsmaterial försäljning SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Förråd SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tryckeri Inc"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Post INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Förråd INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Utskrift INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Visitkort INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Korrespondenskort INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Brevpapper A4 INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kuvert INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Svarskuvert INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Plus Giro-blankett INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Rums/namnskylt INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Layout INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Samlingsannons INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tjänstedeklaration INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Utställning INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Tryckeri INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Lampbyte INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Transport INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Flytt INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Montering INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Teknik sammanträdesrum INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Frankering INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kuvertering INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Skanning INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Post INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Tonerbyte INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Papperspåfyllning INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Materialflrråd påfyllnad INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Kontorsmaterial försäljning INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Kon Övrigt Förråd INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Tankkort INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Passerkort  INC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Leasing SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Tankkort SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Passerkort SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Nytt Tankkort"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Ersättningskort Tankkort"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Nytt Passerkort"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Ändring Passerkort"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "For Lägga till fastighet Passerkort"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Organisationsbyte"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Tjänstgöringsintyg"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Självservice Chef"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Lön Felaktigt Utbetald Lön"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Pensions frågor"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT RFC"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Ändringar inom Normaldrift"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Incident, Problem"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Service Request"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Gemensamma"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Event"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Bristfällig Dokumentation"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Ej tillgängligt system/tjänst"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Handhavande"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Prestandaförsämring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Defekt"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Lösenord till system som ej bytes av IT-avdelningen"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Kommunikationsproblem"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Övriga fel som inte passar in"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Udda ny- & avbeställningar"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Förändringsförslag"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Skola Online"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Dexter"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT SchoolSoft"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Procapita"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT TES"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Time Care"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Flexite"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT E-dos"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Prator"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Felaktig konfiguration"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Heroma"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Spam"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": ""
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Information"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT RFC - Servicecenter IT"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Ändringar Utanför Normaldrift"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Udda Beställningar"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT TES, Åkte ur systemet med ett felmeddelande"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT TES, Felmeddelande programmet är upptaget"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT TES, Andra problem , beskrivning av problemet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Applikationssupport"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH Service Request"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Ny Användare"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Ny/ändrad behörighet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Ändrad organisation/tillhörighet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Checka in fil"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Utbildning (extra)"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Förändringsförslag"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Allmänt Användarstöd HL"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Allmänt Användarstöd RG"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Allmänt Användarstöd CH"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Allmänt Användarstöd SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Handhavandefel HL"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Handhavandefel RG"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Handhavandefel CH"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Handhavandefel SR"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Felmeddelande"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - 360-knappar i Outlook saknas"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Ingen åtkomst"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "ÄDH - Ärende kan inte avslutas"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Phonirolock & Phonirocare"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Phoniro"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Montering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Demontering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Fel, beskriv"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Virus, botnet m.m."
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Toner ej levererad automatiskt"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Felande läsenhet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Batteribyte"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Defekt mobil"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Trygghetslarm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Installation av trygghetslarm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Demontering av trygghetslarm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Byte av trygghetslarm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Installation av larmtillbehör"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Demontering av larmtillbehör"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Felande larm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT Felande larmtillbehör"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Registervård"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Loggning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Avisering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Felaktiga beslut/registreringar"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Utförarförändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Beställning av hårdvara"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Nyckelfri hemtjänst/trygghetslarm"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Snabbärende - IT Frågor & Information från Användare & kunder"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Service Request"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Nyleverans"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil byte till ny"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil byte samma tjänst"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil avveckling"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Snabbärende - IT Felanmälan mot FC-Support"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil roaming betaltjänster"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Phoniro ersättningstelefon"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Phoniro avsluta"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil - Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Fel Telefon"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Fel Abonnemang"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Handhavande"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Ny beställning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Ny Beställning Express"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Förändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil övriga frågor"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "mobil 1234"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Ny beställning phoniro"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Service Request"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Verksamhetsfrågor"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Loggning/Avisering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Registervård/Systemunderhåll"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Felaktiga registreringar"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Organisationsförändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Användarhantering"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Utbildning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Systemhandledning"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Statistik"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Förändring av dokumentation"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS -  Inloggningsproblem"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - System som ligger nere"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Systemåtkomst användare utanför kommunät"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Fel i systemet"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Tel Växelförändring"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Mobil Phoniro Stulen"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "TVS - Förändring av ärendegång"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Print - Teknisk Byte"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "IT-säkerhetsincident , Ospecificerad"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Snabbärende - Telefoni"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Advania"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Advania - Service request"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Beställning av Hårdvara Advania"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Uppsägning Hårdvara - Advania"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Advania - Incident"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Borttappad/Stulen - Advania"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Hårdvarufel - Advania"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "CaseCategory",
+				"Links": [],
+				"Data": {
+					"Id": "Skadad/Defekt utrustning - Advania"
+				},
+				"Memo": {}
+			}
+		]
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"name": "pob-read-configurationitems",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/configurationitems",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=YYY"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 422,
+		"jsonBody": {
+			"UserMessage": "An error occured",
+			"InternalMessage": "A database redesign is required",
+			"Code": 3,
+			"MoreInfo": "Some other info",
+			"Data": {
+				"SerialNumber": "Failed to fetch serialnumber"
+			}
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+    "name": "pob-update-case-updateCase-secondcall",
+    "request": {
+        "headers": {
+            "Authorization": {
+                "equalTo": "xyz"
+            }
+        },
+        "method": "POST",
+        "urlPath": "/pob/cases",
+        "bodyPatterns": [
+            {
+                "equalToJson": {
+                    "Type": "Case",
+                    "Links": [],
+                    "Data": {
+                        "CaseStatus": "Closed",
+                        "Id": "867414",
+                        "CIInfo2.Ci":"867403"
+                    },
+                    "Memo": null
+                }
+            }
+        ]
+    },
+    "response": {
+        "status": 200
+    }
+}

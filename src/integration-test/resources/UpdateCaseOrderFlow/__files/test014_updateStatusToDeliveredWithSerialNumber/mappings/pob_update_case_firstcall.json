@@ -1,0 +1,39 @@
+{
+	"name": "pob-update-case-updateCase-firstcall",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [
+					],
+					"Data": {
+						"Id": "867414",
+						"CaseStatus": "Solved",
+						"CIInfo2.Ci" : "867403",
+						"ClosureCode": "Levererat Hårdvara - Service request"
+					},
+					"Memo": {
+						"Solution": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "Beställning levererad",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+		]
+	},
+	"response": {
+		"status": 200
+	}
+}

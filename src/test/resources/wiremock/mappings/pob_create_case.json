@@ -1,0 +1,29 @@
+{
+  "name": "pob-create-case",
+  "request": {
+    "method": "PUT",
+    "urlPath": "/pob/cases"
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": [
+      {
+        "TriggerResults": [],
+        "Type": "Case",
+        "Links": [
+          {
+            "Relation": "self",
+            "Href": "pobg6/api/v110/cases/867608"
+          }
+        ],
+        "Data": {
+          "Id": "867608"
+        },
+        "Memo": {}
+      }
+    ]
+  }
+}

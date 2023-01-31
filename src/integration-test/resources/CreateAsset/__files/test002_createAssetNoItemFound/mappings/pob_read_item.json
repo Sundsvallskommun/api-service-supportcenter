@@ -1,0 +1,24 @@
+{
+	"name": "pob-read-items",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/items",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "IdOption=Testmodel"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 200,
+		"jsonBody": []
+	}
+}

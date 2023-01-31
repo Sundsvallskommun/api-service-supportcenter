@@ -1,0 +1,15 @@
+{
+	"name": "pob-get-suspension",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/cases/910277/suspension"
+	},
+	"response": {
+		"status": 404
+	}
+}

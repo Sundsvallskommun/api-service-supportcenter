@@ -1,0 +1,26 @@
+{
+	"name": "pob-read-configurationitems",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "GET",
+		"urlPath": "/pob/configurationitems",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=YYY"
+			}
+		}
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"status": 401,
+		"jsonBody": {
+			"Message": "Authorization has been denied for this request."
+		}
+	}
+}
