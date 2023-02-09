@@ -50,6 +50,7 @@ public class ConfigurationMapper {
 
 	public static PobPayload toPobPayload(String id, UpdateAssetRequest updateAssetRequest) {
 		return new PobPayload()
+			.links(emptyList())
 			.type(TYPE_CONFIGURATION_ITEM)
 			.memo(ofNullable(toMemo(updateAssetRequest.getNote())).orElse(emptyMap()))
 			.data(toData(id, updateAssetRequest));

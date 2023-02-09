@@ -1,5 +1,23 @@
 package se.sundsvall.supportcenter.service.processor;
 
+import generated.client.pob.PobPayload;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.stereotype.Component;
+import org.zalando.problem.Status;
+import org.zalando.problem.ThrowableProblem;
+import se.sundsvall.dept44.exception.ClientProblem;
+import se.sundsvall.dept44.exception.ServerProblem;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.service.SupportCenterStatus;
+
+import java.util.Map;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
@@ -9,25 +27,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUSPENSION;
-
-import java.util.Map;
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.stereotype.Component;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
-
-import generated.client.pob.PobPayload;
-import se.sundsvall.dept44.exception.ClientProblem;
-import se.sundsvall.dept44.exception.ServerProblem;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-import se.sundsvall.supportcenter.service.SupportCenterStatus;
 
 @ExtendWith(MockitoExtension.class)
 class UnsuspendCaseProcessorTest {

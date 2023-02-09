@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -42,6 +43,7 @@ public class UpdateCaseMapper {
 		}
 
 		return List.of(new PobPayload()
+			.links(emptyList())
 			.type(DEFAULT_TYPE)
 			.data(toData(caseId, updateCaseRequest))
 			.memo(toMemo(updateCaseRequest.getNote())));
@@ -65,6 +67,7 @@ public class UpdateCaseMapper {
 					final var statusNote = createStatusNote(customStatusMapping.getStatusNoteType(), updateCaseRequest.getCaseStatus());
 
 					return new PobPayload()
+						.links(emptyList())
 						.type(DEFAULT_TYPE)
 						.data(dataMap)
 						.memo(toMemos(statusNote, toMemo(updateCaseRequest.getNote())));
@@ -73,6 +76,7 @@ public class UpdateCaseMapper {
 		}
 		// There was no custom mapping for this status. Create a PobPayload with a worknote containing the status.
 		return List.of(new PobPayload()
+			.links(emptyList())
 			.type(DEFAULT_TYPE)
 			.data(toData(caseId, updateCaseRequest))
 			.memo(toMemos(createStatusNote(NoteType.WORKNOTE, updateCaseRequest.getCaseStatus()), toMemo(updateCaseRequest.getNote()))));

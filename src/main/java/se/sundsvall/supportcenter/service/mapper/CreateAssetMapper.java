@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DELIVERY_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DESCRIPTION;
@@ -37,14 +38,18 @@ public class CreateAssetMapper {
 
 	public static PobPayload toPobPayloadForCreatingItem(CreateAssetRequest createAssetRequest) {
 		return new PobPayload()
+			.links(emptyList())
 			.type(TYPE_ITEM)
-			.data(toDataForCreatingItem(createAssetRequest));
+			.data(toDataForCreatingItem(createAssetRequest))
+			.memo(emptyMap());
 	}
 
 	public static PobPayload toPobPayloadForCreatingConfigurationItem(String id, CreateAssetRequest createAssetRequest) {
 		return new PobPayload()
+			.links(emptyList())
 			.type(TYPE_CONFIGURATION_ITEM)
-			.data(toDataForCreatingConfigurationItem(id, createAssetRequest));
+			.data(toDataForCreatingConfigurationItem(id, createAssetRequest))
+			.memo(emptyMap());
 	}
 
 	/**

@@ -1,5 +1,10 @@
 package se.sundsvall.supportcenter.service.mapper.model;
 
+import org.junit.jupiter.api.Test;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
+
+import java.util.Map;
+
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEquals;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCode;
@@ -8,12 +13,6 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetter
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 class CustomStatusMappingTest {
 
