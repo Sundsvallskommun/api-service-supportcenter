@@ -12,15 +12,21 @@
 			{
 				"equalToJson": {
 					"Type": "Case",
-					"Links": [
-					],
+					"Links": [],
 					"Data": {
-						"Id": "867414",
+						"ClosureCode": "Levererat Hårdvara - Service request",
 						"CaseStatus": "Solved",
-						"CIInfo2.Ci" : "867403",
-						"ClosureCode": "Levererat Hårdvara - Service request"
+						"CIInfo2.Ci": "867403",
+						"Id": "867414"
 					},
 					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": true,
+							"Style": "2",
+							"Memo": "Delivered",
+							"HandleSeparators": true
+						},
 						"Solution": {
 							"Extension": ".html",
 							"IsValidForWeb": false,

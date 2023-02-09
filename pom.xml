@@ -19,7 +19,9 @@
 		<published.container.port.production>9072</published.container.port.production>
 		<sandbox.db>false</sandbox.db>
 		<!-- Service properties -->
-		<pob.version>1.5</pob.version>
+		<openapi-generator-maven-plugin-version>5.4.0</openapi-generator-maven-plugin-version>
+		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
+		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,13 +47,6 @@
 			<artifactId>json-path</artifactId>
 		</dependency>
 
-		<!-- Generated clients -->
-		<dependency>
-			<groupId>se.sundsvall.generated-clients</groupId>
-			<artifactId>pob</artifactId>
-			<version>${pob.version}</version>
-		</dependency>
-		
 		<!-- Test -->
 		<dependency>
 			<groupId>se.sundsvall.dept44</groupId>
@@ -61,6 +56,36 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin-version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/integrations/pob.yaml</inputSpec>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<output>${generated-sources-path}</output>
+							<generatorName>jaxrs-spec</generatorName>
+							<generateApis>false</generateApis>
+							<configOptions>
+								<sourceFolder>${generated-sources-java-path}</sourceFolder>
+								<generateSupportingFiles>false</generateSupportingFiles>
+								<dateLibrary>java8-localdatetime</dateLibrary>
+								<modelPackage>generated.client.pob</modelPackage>
+								<openApiNullable>false</openApiNullable>
+								<generatePom>false</generatePom>
+								<useBeanValidation>false</useBeanValidation>
+								<useSwaggerAnnotations>false</useSwaggerAnnotations>
+								<interfaceOnly>true</interfaceOnly>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
