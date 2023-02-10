@@ -6,20 +6,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Address model")
 public class Address {
 
 	@NotBlank
-	@Schema(example = "Street 1", required = true, description = "Street address")
+	@Schema(example = "Street 1", description = "Street address", requiredMode = REQUIRED)
 	private String street;
 
 	@NotBlank
-	@Schema(example = "851 86", required = true, description = "Postal code")
+	@Schema(example = "851 86", description = "Postal code", requiredMode = REQUIRED)
 	private String postalCode;
 
 	@NotBlank
-	@Schema(example = "Sundsvall", required = true, description = "City")
+	@Schema(example = "Sundsvall", description = "City", requiredMode = REQUIRED)
 	private String city;
 
 	public static Address create() {

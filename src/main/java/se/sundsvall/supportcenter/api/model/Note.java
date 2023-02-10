@@ -8,14 +8,16 @@ import javax.validation.constraints.NotNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @Schema(description = "Note model")
 public class Note {
 
-	@Schema(required = true)
+	@Schema(requiredMode = REQUIRED)
 	@NotNull(message = "must be provided")
 	private NoteType type;
 
-	@Schema(description = "Note text", required = true, example = "This is a note")
+	@Schema(description = "Note text", example = "This is a note", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String text;
 

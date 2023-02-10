@@ -1,5 +1,15 @@
 package se.sundsvall.supportcenter.service.mapper;
 
+import generated.client.pob.PobPayload;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import se.sundsvall.dept44.test.annotation.resource.Load;
+import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
+import se.sundsvall.supportcenter.api.model.Address;
+import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
+import se.sundsvall.supportcenter.api.model.Note;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.dept44.test.annotation.resource.Load.ResourceType.JSON;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
@@ -30,17 +40,6 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_STREET;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUBACCOUNT;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import generated.client.pob.PobPayload;
-import se.sundsvall.dept44.test.annotation.resource.Load;
-import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
-import se.sundsvall.supportcenter.api.model.Address;
-import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
-import se.sundsvall.supportcenter.api.model.Note;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 @ExtendWith(ResourceLoaderExtension.class)
 class CaseMapperTest {

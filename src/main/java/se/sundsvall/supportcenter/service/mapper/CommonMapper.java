@@ -1,19 +1,22 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import static java.lang.String.format;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
-
-import java.util.Map;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobMemo.StyleEnum;
 import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.lang.String.format;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 public class CommonMapper {
 	
@@ -46,6 +49,28 @@ public class CommonMapper {
 			.memo(note.getText()));
 	}
 
+	/**
+	 * Method for creating a map of PobMemo:s containing sent in note.
+	 *
+	 * @param note the note to convert into a PobMemo.
+	 * @param isValidForWeb if the note is valid for web
+	 * @return a Map with the created PobMemo.
+	 */
+	public static Map<String, PobMemo> toMemo(Note note, boolean isValidForWeb) {
+		if (isNull(note)) {
+			return null;
+		}
+
+		final var memoType = note.getType().toValue();
+
+		return Map.of(memoType, new PobMemo()
+			.extension(DEFAULT_NOTE_EXTENSION)
+			.handleSeparators(DEFAULT_NOTE_HANDLE_SEPARATORS)
+			.isValidForWeb(isValidForWeb)
+			.style(toNoteStyle(note.getType()))
+			.memo(note.getText()));
+	}
+
 	private static StyleEnum toNoteStyle(NoteType noteType) {
 		if (noteType == SUPPLIERNOTE) {
 			return StyleEnum.NUMBER_0;
@@ -55,12 +80,18 @@ public class CommonMapper {
 	
 	/**
 	 * Method for extracting a note from pob payload if it exists
-	 * @param pobPayload
+	 * @param pobPayload the pob payload to extract note from
 	 * @return note in payload or null
 	 */
 	public static Note toNote(PobPayload pobPayload) {
 		final var memo = pobPayload.getMemo();
-		final var noteType = memo.keySet().isEmpty() ? null : NoteType.forValue(memo.keySet().stream().findFirst().orElse(null));
+		final var noteType = ofNullable(memo)
+			.map(Map::keySet)
+			.map(Set::stream)
+			.map(Stream::findFirst)
+			.flatMap(optional -> optional)
+			.map(NoteType::forValue)
+			.orElse(null);
 
 		if (nonNull(noteType)) {
 			return new Note().withType(noteType).withText(getValue(pobPayload, format(NOTE_TEXT_JSON_PATH, noteType.toValue())));

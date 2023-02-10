@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @Schema(description = "CreateCaseRequest model")
 public class CreateCaseRequest {
 
@@ -14,99 +16,99 @@ public class CreateCaseRequest {
 	private Note note;
 
 	@NotBlank
-	@Schema(description = "Description", required = true, example = "Beställning av tjänst Test4")
+	@Schema(description = "Description", example = "Beställning av tjänst Test4", requiredMode = REQUIRED)
 	private String description;
 
 	@NotBlank
-	@Schema(description = "Case type", required = true, example = "Service Request")
+	@Schema(description = "Case type", example = "Service Request", requiredMode = REQUIRED)
 	private String caseType;
 
 	@NotBlank
-	@Schema(description = "Case category", required = true, example = "IT Användarhantering")
+	@Schema(description = "Case category", example = "IT Användarhantering", requiredMode = REQUIRED)
 	private String caseCategory;
 
 	@NotBlank
-	@Schema(description = "Customer contact", required = true, example = "test02test")
+	@Schema(description = "Customer contact", example = "test02test", requiredMode = REQUIRED)
 	private String customerContact;
 
 	@NotBlank
-	@Schema(description = "External article number", required = true, example = "4343434")
+	@Schema(description = "External article number", example = "4343434", requiredMode = REQUIRED)
 	private String externalArticleNumber;
 
 	@NotBlank
-	@Schema(description = "ManagementCompany", required = true, example = "BoU")
+	@Schema(description = "ManagementCompany", example = "BoU", requiredMode = REQUIRED)
 	private String managementCompany;
 
 	@NotBlank
-	@Schema(description = "Priority", required = true, example = "IT4")
+	@Schema(description = "Priority", example = "IT4", requiredMode = REQUIRED)
 	private String priority;
 
 	@NotNull
-	@Schema(description = "Personal", required = true, example = "true")
+	@Schema(description = "Personal", example = "true", requiredMode = REQUIRED)
 	private Boolean personal;
 
 	@NotBlank
-	@Schema(description = "Responsible group", required = true, example = "First Line IT")
+	@Schema(description = "Responsible group", example = "First Line IT", requiredMode = REQUIRED)
 	private String responsibleGroup;
 
 	@NotBlank
-	@Schema(description = "External service id", required = true, example = "123")
+	@Schema(description = "External service id", example = "123", requiredMode = REQUIRED)
 	private String externalServiceId;
 
 	@NotNull
-	@Schema(description = "Office", required = true, example = "true")
+	@Schema(description = "Office", example = "true", requiredMode = REQUIRED)
 	private Boolean office;
 
 	@NotBlank
-	@Schema(description = "Free text", required = true, example = "leverans fredagar")
+	@Schema(description = "Free text", example = "leverans fredagar", requiredMode = REQUIRED)
 	private String freeText;
 
 	@NotBlank
-	@Schema(description = "Join contact", required = true, example = "test01test")
+	@Schema(description = "Join contact", example = "test01test", requiredMode = REQUIRED)
 	private String joinContact;
 
 	@NotBlank
-	@Schema(description = "Responsibility number", required = true, example = "15220100")
+	@Schema(description = "Responsibility number", example = "15220100", requiredMode = REQUIRED)
 	private String responsibilityNumber;
 
 	@NotBlank
-	@Schema(description = "Subaccount", required = true, example = "974310")
+	@Schema(description = "Subaccount", example = "974310", requiredMode = REQUIRED)
 	private String subaccount;
 
 	@NotBlank
-	@Schema(description = "Business number", required = true, example = "920350")
+	@Schema(description = "Business number", example = "920350", requiredMode = REQUIRED)
 	private String businessNumber;
 
 	@NotBlank
-	@Schema(description = "Activity number", required = true, example = "5662")
+	@Schema(description = "Activity number", example = "5662", requiredMode = REQUIRED)
 	private String activityNumber;
 
 	@NotBlank
-	@Schema(description = "Project number", required = true, example = "17071")
+	@Schema(description = "Project number", example = "17071", requiredMode = REQUIRED)
 	private String projectNumber;
 
 	@NotBlank
-	@Schema(description = "Object number", required = true, example = "6310000")
+	@Schema(description = "Object number", example = "6310000", requiredMode = REQUIRED)
 	private String objectNumber;
 
 	@NotBlank
-	@Schema(description = "Counterpart", required = true, example = "115")
+	@Schema(description = "Counterpart", example = "115", requiredMode = REQUIRED)
 	private String counterPart;
 
 	@NotBlank
-	@Schema(description = "CI description", required = true, example = "Tydlig och bra CI beskrivning")
+	@Schema(description = "CI description", example = "Tydlig och bra CI beskrivning", requiredMode = REQUIRED)
 	private String ciDescription;
 
 	@NotBlank
-	@Schema(description = "Contact person", required = true, example = "Test Testsson")
+	@Schema(description = "Contact person", example = "Test Testsson", requiredMode = REQUIRED)
 	private String contactPerson;
 
 	@NotBlank
-	@Schema(description = "Phone number", required = true, example = "070-11111111")
+	@Schema(description = "Phone number", example = "070-11111111", requiredMode = REQUIRED)
 	private String phoneNumber;
 
 	@NotBlank
-	@Schema(description = "Email", required = true, example = "test.testsson@sundsvall.se")
+	@Schema(description = "Email", example = "test.testsson@sundsvall.se", requiredMode = REQUIRED)
 	private String email;
 
 	@Valid
