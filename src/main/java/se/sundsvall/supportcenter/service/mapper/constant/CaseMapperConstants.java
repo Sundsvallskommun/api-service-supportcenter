@@ -80,7 +80,7 @@ public class CaseMapperConstants {
 	public static final String CLOSURE_CODE_DELIVERED_HARDWARE = "Levererat Hårdvara - Service request";
 	public static final String CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT = "Advania - Övriga lösningar Incident";
 	private static final String SEE_INTERNAL_NOTE_FOR_ACTION = "Åtgärdsbeskrivning i interna anteckningar";
-	private static final String SECOND_LINE_IT = "Second Line IT";
+	private static final String IT_SUPPORT = "IT Support";
 	
 	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Map.of(
 		/**
@@ -110,7 +110,7 @@ public class CaseMapperConstants {
 				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED))),
 		DELIVERED_ACTION_NEEDED.getValue(), List.of(
 			CustomStatusMapping.create()
-				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, SECOND_LINE_IT))
+				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT))
 				.withStatusNoteType(WORKNOTE)),
 		/**
 		 * CUBE statuses (Support flow):
@@ -138,7 +138,7 @@ public class CaseMapperConstants {
 		 * @return
 		 */
 		private static Map<String, Object> createAttributesForCancelledStatus() {
-			Map<String, Object> map = from(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, SECOND_LINE_IT));
+			Map<String, Object> map = from(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
 			map.put(KEY_EXTERNAL_CASE_ID, null);
 			return map;
 		}
@@ -149,7 +149,7 @@ public class CaseMapperConstants {
 		 * @return
 		 */
 		private static Map<String, Object> createAtributesForAssignBackStatus() {
-			Map<String, Object> map = from(Map.of(KEY_ACTION_NEEDED, true, KEY_ACTION_NEEDED_DESCRIPTION, SEE_INTERNAL_NOTE_FOR_ACTION, KEY_RESPONSIBLE_GROUP, SECOND_LINE_IT));
+			Map<String, Object> map = from(Map.of(KEY_ACTION_NEEDED, true, KEY_ACTION_NEEDED_DESCRIPTION, SEE_INTERNAL_NOTE_FOR_ACTION, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
 			map.put(KEY_RESPONSIBLE, null);
 			return map;
 		}
