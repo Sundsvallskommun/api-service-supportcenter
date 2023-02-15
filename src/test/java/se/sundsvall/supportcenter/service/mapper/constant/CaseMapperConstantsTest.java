@@ -1,5 +1,19 @@
 package se.sundsvall.supportcenter.service.mapper.constant;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
+import se.sundsvall.supportcenter.service.SupportCenterStatus;
+import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
@@ -12,21 +26,6 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.PICKING;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.service.SupportCenterStatus;
-import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
 
 class CaseMapperConstantsTest {
 
@@ -125,13 +124,13 @@ class CaseMapperConstantsTest {
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_ACTION_NEEDED, true,
 					CaseMapperConstants.KEY_ACTION_NEEDED_DESCRIPTION, "Åtgärdsbeskrivning i interna anteckningar",
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT"),
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support"),
 					List.of(CaseMapperConstants.KEY_RESPONSIBLE))))),
 
 			Arguments.of(CANCELLED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT"),
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support"),
 					List.of(CaseMapperConstants.KEY_EXTERNAL_CASE_ID)))
 						.withStatusNoteType(NoteType.WORKNOTE))),
 
@@ -146,7 +145,7 @@ class CaseMapperConstantsTest {
 			Arguments.of(DELIVERED_ACTION_NEEDED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT")))
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support")))
 						.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DESPATCHED, List.of(

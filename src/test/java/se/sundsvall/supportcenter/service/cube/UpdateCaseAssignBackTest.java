@@ -53,7 +53,7 @@ import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
  *			"Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
  *			"Id": "12345",
  *			"Responsible": null,
- *			"ResponsibleGroup": "Second Line IT"
+ *			"ResponsibleGroup": "IT Support"
  *		},
  *		"memo": {
  *			"CaseInternalNotesCustom": {
@@ -124,7 +124,7 @@ class UpdateCaseAssignBackTest {
 		assertThat(pobPayloadValue.getData()).isNotNull().hasSize(6)
 			.containsEntry(KEY_ID, caseId)
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
-			.containsEntry(KEY_RESPONSIBLE_GROUP, "Second Line IT")
+			.containsEntry(KEY_RESPONSIBLE_GROUP, "IT Support")
 			.containsEntry(KEY_RESPONSIBLE, null)
 			.containsEntry(KEY_ACTION_NEEDED, true)
 			.containsEntry(KEY_ACTION_NEEDED_DESCRIPTION, "Åtgärdsbeskrivning i interna anteckningar");

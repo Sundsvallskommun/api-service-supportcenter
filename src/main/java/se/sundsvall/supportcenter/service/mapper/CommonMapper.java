@@ -3,11 +3,14 @@ package se.sundsvall.supportcenter.service.mapper;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobMemo.StyleEnum;
@@ -32,6 +35,17 @@ public class CommonMapper {
 	 * @return a Map with the created PobMemo.
 	 */
 	public static Map<String, PobMemo> toMemo(Note note) {
+		return toMemo(note, DEFAULT_NOTE_IS_VALID_FOR_WEB);
+	}
+
+	/**
+	 * Method for creating a map of PobMemo:s containing sent in note.
+	 *
+	 * @param note the note to convert into a PobMemo.
+	 * @param isValidForWeb if the note is valid for web
+	 * @return a Map with the created PobMemo.
+	 */
+	public static Map<String, PobMemo> toMemo(Note note, boolean isValidForWeb) {
 		if (isNull(note)) {
 			return null;
 		}
@@ -41,7 +55,7 @@ public class CommonMapper {
 		return Map.of(memoType, new PobMemo()
 			.extension(DEFAULT_NOTE_EXTENSION)
 			.handleSeparators(DEFAULT_NOTE_HANDLE_SEPARATORS)
-			.isValidForWeb(DEFAULT_NOTE_IS_VALID_FOR_WEB)
+			.isValidForWeb(isValidForWeb)
 			.style(toNoteStyle(note.getType()))
 			.memo(note.getText()));
 	}
@@ -55,12 +69,18 @@ public class CommonMapper {
 	
 	/**
 	 * Method for extracting a note from pob payload if it exists
-	 * @param pobPayload
+	 * @param pobPayload the pob payload to extract note from
 	 * @return note in payload or null
 	 */
 	public static Note toNote(PobPayload pobPayload) {
 		final var memo = pobPayload.getMemo();
-		final var noteType = memo.keySet().isEmpty() ? null : NoteType.forValue(memo.keySet().stream().findFirst().orElse(null));
+		final var noteType = ofNullable(memo)
+			.map(Map::keySet)
+			.map(Set::stream)
+			.map(Stream::findFirst)
+			.flatMap(optional -> optional)
+			.map(NoteType::forValue)
+			.orElse(null);
 
 		if (nonNull(noteType)) {
 			return new Note().withType(noteType).withText(getValue(pobPayload, format(NOTE_TEXT_JSON_PATH, noteType.toValue())));

@@ -7,20 +7,22 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @Schema(description = "CreateAssetRequest model")
 public class CreateAssetRequest {
 
 	@Schema(example = "x_dell", description = "Manufacturer")
 	private String manufacturer;
 
-	@Schema(example = "Latitude 9000", description = "Model name", required = true)
+	@Schema(example = "Latitude 9000", description = "Model name", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String modelName;
 
 	@Schema(example = "Latitude 9000", description = "Description of asset")
 	private String modelDescription;
 
-	@Schema(example = "CD23456", description = "Serial number", required = true)
+	@Schema(example = "CD23456", description = "Serial number", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String serialNumber;
 
