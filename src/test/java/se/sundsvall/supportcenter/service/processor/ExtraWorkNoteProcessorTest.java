@@ -1,19 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import generated.client.pob.PobMemo;
-import generated.client.pob.PobPayload;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.stereotype.Component;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.service.SupportCenterStatus;
-
-import java.util.Map;
-import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -23,6 +9,21 @@ import static org.mockito.Mockito.when;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
+
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.stereotype.Component;
+
+import generated.client.pob.PobMemo;
+import generated.client.pob.PobPayload;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.service.SupportCenterStatus;
 
 @ExtendWith(MockitoExtension.class)
 class ExtraWorkNoteProcessorTest {
@@ -43,7 +44,7 @@ class ExtraWorkNoteProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -70,7 +71,7 @@ class ExtraWorkNoteProcessorTest {
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
 		when(mapMock.get(KEY_CASE_STATUS)).thenReturn(STATUS_SOLVED);
 		when(pobPayloadMock.getMemo()).thenReturn(pobMemoMapMock);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -78,7 +79,7 @@ class ExtraWorkNoteProcessorTest {
 		verify(pobPayloadMock).getData();
 		verify(mapMock).get(KEY_CASE_STATUS);
 		verify(pobPayloadMock).getMemo();
-		verify(pobMemoMapMock).putAll(any(Map.class));
+		verify(pobMemoMapMock).putAll(any());
 	}
 
 	@Test
@@ -100,7 +101,7 @@ class ExtraWorkNoteProcessorTest {
 		verify(pobPayloadMock).getData();
 		verify(mapMock).get(KEY_CASE_STATUS);
 		verify(pobPayloadMock).getMemo();
-		verify(pobMemoMapMock).putAll(any(Map.class));
+		verify(pobMemoMapMock).putAll(any());
 	}
 
 	@Test
@@ -113,7 +114,7 @@ class ExtraWorkNoteProcessorTest {
 		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber);
 
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -122,7 +123,7 @@ class ExtraWorkNoteProcessorTest {
 		verify(mapMock).get(KEY_CASE_STATUS);
 		verify(mapMock, never()).put(any(), any());
 	}
-	
+
 	@Test
 	void postProcess() {
 		final var pobKey = "pobKey";
@@ -132,6 +133,5 @@ class ExtraWorkNoteProcessorTest {
 		processor.postProcess(pobKey, caseId, request, pobPayloadMock);
 
 		verifyNoInteractions(pobPayloadMock, mapMock);
-		
 	}
 }
