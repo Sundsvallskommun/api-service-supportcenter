@@ -1,29 +1,5 @@
 package se.sundsvall.supportcenter.service;
 
-import generated.client.pob.PobPayload;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
-import se.sundsvall.supportcenter.api.model.Note;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +21,31 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
+import org.zalando.problem.ThrowableProblem;
+
+import generated.client.pob.PobPayload;
+import se.sundsvall.supportcenter.api.model.Note;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateCaseServiceTest {
@@ -173,7 +174,7 @@ class UpdateCaseServiceTest {
 				.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
 				.containsEntry(KEY_CLOSURE_CODE, closureCode)
 				.containsEntry(KEY_EXTERNAL_CASE_ID, incomingCaseStatus.equals(SupportCenterStatus.CANCELLED.getValue()) ? null : externalCaseId)
-				.containsEntry(KEY_RESPONSIBLE_GROUP, incomingCaseStatus.equals(SupportCenterStatus.CANCELLED.getValue()) ? "Second Line IT" :responsibleGroup)
+				.containsEntry(KEY_RESPONSIBLE_GROUP, incomingCaseStatus.equals(SupportCenterStatus.CANCELLED.getValue()) ? "IT Support" : responsibleGroup)
 				.containsEntry(KEY_RESPONSIBLE, null);
 			assertThat(pobPayloadValue.getMemo()).isNotNull();
 			assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");

@@ -124,13 +124,13 @@ class CaseMapperConstantsTest {
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_ACTION_NEEDED, true,
 					CaseMapperConstants.KEY_ACTION_NEEDED_DESCRIPTION, "Åtgärdsbeskrivning i interna anteckningar",
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT"),
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support"),
 					List.of(CaseMapperConstants.KEY_RESPONSIBLE))))),
 
 			Arguments.of(CANCELLED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT"),
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support"),
 					List.of(CaseMapperConstants.KEY_EXTERNAL_CASE_ID)))
 						.withStatusNoteType(NoteType.WORKNOTE))),
 
@@ -145,7 +145,7 @@ class CaseMapperConstantsTest {
 			Arguments.of(DELIVERED_ACTION_NEEDED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
-					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "Second Line IT")))
+					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support")))
 						.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DESPATCHED, List.of(
