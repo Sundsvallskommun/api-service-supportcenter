@@ -19,7 +19,7 @@
 		<published.container.port.production>9072</published.container.port.production>
 		<sandbox.db>false</sandbox.db>
 		<!-- Service properties -->
-		<openapi-generator-maven-plugin-version>6.3.0</openapi-generator-maven-plugin-version>
+		<openapi-generator-maven-plugin-version>6.4.0</openapi-generator-maven-plugin-version>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
