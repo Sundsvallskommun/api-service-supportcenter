@@ -41,9 +41,9 @@ public class AssetService {
 	public String createAsset(String pobKey, CreateAssetRequest createAssetRequest) {
 
 		var id = "";
-		final var itemIds = getItemsByModelName(pobKey, createAssetRequest.getModelName());
+		final var itemIds = Optional.ofNullable(getItemsByModelName(pobKey, createAssetRequest.getModelName())).orElse(emptyList());
 
-		if (Optional.ofNullable(itemIds).orElse(emptyList()).isEmpty()) {
+		if (itemIds.isEmpty()) {
 			id = createItem(pobKey, createAssetRequest);
 		} else {
 			id = itemIds.stream().findFirst().orElseThrow(() -> Problem.valueOf(Status.BAD_GATEWAY, CI_ID_ERROR_TEMPLATE));
