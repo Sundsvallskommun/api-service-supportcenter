@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>1.26</version>
+		<version>1.28</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.sundsvall</groupId>
@@ -19,7 +19,7 @@
 		<published.container.port.production>9072</published.container.port.production>
 		<sandbox.db>false</sandbox.db>
 		<!-- Service properties -->
-		<openapi-generator-maven-plugin-version>6.3.0</openapi-generator-maven-plugin-version>
+		<openapi-generator-maven-plugin-version>6.4.0</openapi-generator-maven-plugin-version>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
