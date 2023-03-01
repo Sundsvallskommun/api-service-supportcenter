@@ -1,22 +1,5 @@
 package se.sundsvall.supportcenter.service;
 
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
-import se.sundsvall.supportcenter.api.model.Case;
-import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static org.zalando.problem.Status.BAD_REQUEST;
@@ -28,10 +11,24 @@ import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCl
 import static se.sundsvall.supportcenter.service.mapper.UpdateCaseMapper.toPobPayloads;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.zalando.problem.Problem;
+
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import se.sundsvall.supportcenter.api.model.Case;
+import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
+
 @Service
 public class CaseService {
-	private static final Logger LOG = LoggerFactory.getLogger(CaseService.class);
-
 	@Autowired
 	private POBClient pobClient;
 
@@ -44,14 +41,10 @@ public class CaseService {
 	private static final String VALIDATION_ERROR_TEMPLATE = "%s: '%s' is not a valid value";
 
 	public Case getCase(String pobKey, String caseId) {
-		LOG.debug("Received getCase call: caseId='{}'", caseId);
-
 		return toCase(pobClient.getCase(pobKey, caseId));
 	}
 
 	public void updateCase(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest) {
-		LOG.debug("Received updateCase request: id='{}', body='{}'", caseId, updateCaseRequest);
-
 		// Will throw a runtime-exception if validation is unsuccessful.
 		validate(pobKey, updateCaseRequest);
 
@@ -63,7 +56,6 @@ public class CaseService {
 
 			// Call POB.
 			if (shouldUpdatePOB(updateCaseRequest)) {
-				LOG.debug("Sending pobPayload to POB:'{}'", pobPayload);
 				pobClient.updateCase(pobKey, pobPayload);
 			}
 
@@ -73,8 +65,6 @@ public class CaseService {
 	}
 
 	public String createCase(String pobKey, CreateCaseRequest createCaseRequest) {
-		LOG.debug("Received createCase request: body='{}'", createCaseRequest);
-
 		// Will throw a runtime-exception if validation is unsuccessful.
 		validate(pobKey, createCaseRequest);
 
@@ -90,18 +80,14 @@ public class CaseService {
 	}
 
 	public List<String> getCaseCategoryList(String pobKey) {
-		LOG.debug("Received getCaseCategoryList request");
 		return toCaseCategoryList(pobClient.getCaseCategories(pobKey));
 	}
 
 	public List<String> getClosureCodeList(String pobKey) {
-		LOG.debug("Received getClosureCodeList request");
 		return toClosureCodeList(pobClient.getClosureCodes(pobKey));
 	}
 
 	public void validateCaseCategory(String pobKey, String caseCategory) {
-		LOG.debug("Validating caseCategory: caseCategory='{}'", caseCategory);
-
 		// Ensure that provided caseCategory exists in returned caseCategory list from POB.
 		if (getCaseCategoryList(pobKey).stream().noneMatch(x -> x.equals(caseCategory))) {
 			throw Problem.valueOf(BAD_REQUEST, format(VALIDATION_ERROR_TEMPLATE, "caseCategory", caseCategory));
@@ -119,7 +105,8 @@ public class CaseService {
 
 	/**
 	 * All incoming statuses should update POB except 'Awating Info'
-	 * @param updateCaseRequest
+	 * 
+	 * @param updateCaseRequest incoming update request
 	 * @return boolean if POB should be updated or not
 	 */
 	private boolean shouldUpdatePOB(UpdateCaseRequest updateCaseRequest) {
@@ -137,5 +124,4 @@ public class CaseService {
 			.filter(processor -> processor.shouldProcess(updateCaseRequest))
 			.forEach(processor -> processor.postProcess(pobKey, caseId, updateCaseRequest, pobPayload));
 	}
-
 }

@@ -6,8 +6,6 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +31,6 @@ import se.sundsvall.supportcenter.service.ConfigurationService;
 @Tag(name = "Configuration", description = "Configuration operations")
 public class ConfigurationResource {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConfigurationResource.class);
-
 	@Autowired
 	private ConfigurationService configurationService;
 
@@ -47,8 +43,6 @@ public class ConfigurationResource {
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<List<String>> getCaseCategoryList(
 		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey) {
-		LOG.debug("Received getCaseCategoryList request");
-
 		return ok(configurationService.getCaseCategoryList(pobKey));
 	}
 
@@ -61,8 +55,6 @@ public class ConfigurationResource {
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<List<String>> getClosureCodeList(
 		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey) {
-		LOG.debug("Received getClosureCodeList request");
-
 		return ok(configurationService.getClosureCodeList(pobKey));
 	}
 }

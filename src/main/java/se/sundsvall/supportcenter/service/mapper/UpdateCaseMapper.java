@@ -1,15 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobMemo;
-import generated.client.pob.PobPayload;
-import se.sundsvall.supportcenter.api.model.Note;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
@@ -31,6 +21,16 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_DELIVERED;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_STATUS_PART;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_DELIVERED;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import generated.client.pob.PobMemo;
+import generated.client.pob.PobPayload;
+import se.sundsvall.supportcenter.api.model.Note;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 public class UpdateCaseMapper {
 
@@ -131,9 +131,10 @@ public class UpdateCaseMapper {
 
 	/**
 	 * Creates a note of note type
-	 * @param noteType
-	 * @param caseStatus
-	 * @return
+	 * 
+	 * @param noteType   the notetype to use
+	 * @param caseStatus the status to be used
+	 * @return a note instance representing sent in parameters
 	 */
 	private static Note createStatusNote(NoteType noteType, String caseStatus) {
 		if (isNull(noteType)) {
