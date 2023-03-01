@@ -37,6 +37,9 @@ import se.sundsvall.supportcenter.service.SupportCenterStatus;
 @ExtendWith(MockitoExtension.class)
 class SolutionNoteProcessorTest {
 
+	@Captor
+	private ArgumentCaptor<Map<String, PobMemo>> argumentCaptor;
+
 	@Mock
 	private PobPayload pobPayloadMock;
 
@@ -55,9 +58,6 @@ class SolutionNoteProcessorTest {
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
 	}
-
-	@Captor
-	private ArgumentCaptor<Map<String, PobMemo>> argumentCaptor;
 
 	@ParameterizedTest
 	@EnumSource(value = SupportCenterStatus.class)

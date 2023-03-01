@@ -1,6 +1,6 @@
 {
 	"scenarioName": "resolve-case",
-	"requiredScenarioState": "CaseSolved",	
+	"requiredScenarioState": "CaseSolved",
 	"name": "pob-update-case-to-closed",
 	"request": {
 		"headers": {
@@ -22,7 +22,7 @@
 						"Id": "910277",
 						"Virtual.Shop_CI_Name": "Dell Latitude 5320"
 					},
-                    "Memo": null
+					"Memo": null
 				}
 			}
 		]

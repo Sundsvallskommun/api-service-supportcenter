@@ -1,6 +1,6 @@
 {
 	"scenarioName": "resolve-case",
-	"requiredScenarioState": "CaseSolved",	
+	"requiredScenarioState": "CaseSolved",
 	"name": "pob-update-case-to-closed",
 	"request": {
 		"headers": {
@@ -20,7 +20,7 @@
 						"CaseStatus": "Closed",
 						"Id": "910277"
 					},
-                    "Memo": null
+					"Memo": null
 				}
 			}
 		]
