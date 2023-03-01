@@ -20,15 +20,7 @@
 						"CaseStatus": "Closed",
 						"Id": "910277"
 					},
-					"Memo": {
-						"Solution": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "Mjukvara ominstallerad",
-							"HandleSeparators": true
-						}
-					}
+                    "Memo": null
 				}
 			}
 		]

@@ -22,15 +22,7 @@
 						"Id": "910277",
 						"Virtual.Shop_CI_Name": "Dell Latitude 5320"
 					},
-					"Memo": {
-						"Solution": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "Enheten utbytt",
-							"HandleSeparators": true
-						}
-					}
+                    "Memo": null
 				}
 			}
 		]
