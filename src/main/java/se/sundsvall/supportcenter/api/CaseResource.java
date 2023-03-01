@@ -4,9 +4,9 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.created;
 
 import javax.validation.Valid;
 
@@ -58,7 +58,6 @@ public class CaseResource {
 										   @RequestBody @Valid CreateCaseRequest body) {
 
 		var caseId = caseService.createCase(pobKey, body);
-
 		return created(uriComponentsBuilder.path("/cases/{caseId}").buildAndExpand(caseId).toUri())
 				.header(CONTENT_TYPE, ALL_VALUE)
 				.build();
@@ -78,7 +77,6 @@ public class CaseResource {
 		@RequestBody @Valid UpdateCaseRequest body) {
 
 		caseService.updateCase(pobKey, caseId, body);
-
 		return noContent().build();
 	}
 

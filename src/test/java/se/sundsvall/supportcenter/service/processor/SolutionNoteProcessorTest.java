@@ -211,6 +211,5 @@ class SolutionNoteProcessorTest {
 		processor.postProcess(pobKey, caseId, request, pobPayloadMock);
 
 		verifyNoInteractions(pobPayloadMock, dataMapMock);
-		
 	}
 }

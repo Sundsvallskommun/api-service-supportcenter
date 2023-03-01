@@ -20,8 +20,8 @@ public class CaseUtil {
 	/**
 	 * Checks if the key denoted by the provided jsonPath exists and has a value that is not null.
 	 * 
-	 * @param pobPayload
-	 * @param jsonPath
+	 * @param pobPayload the payload to use
+	 * @param jsonPath   the path to verify existance of
 	 * @return true if the key exist and has a non null value.
 	 */
 	public static boolean jsonPathExists(PobPayload pobPayload, String jsonPath) {
@@ -32,8 +32,8 @@ public class CaseUtil {
 	/**
 	 * Extracts the value denoted by the provided jsonPath.
 	 * 
-	 * @param pobPayload
-	 * @param jsonPath
+	 * @param pobPayload         the payload to use
+	 * @param jsonPath           the path extract value from
 	 * @param suppressExceptions whether to suppress exceptions for invalid paths, or not.
 	 * @return the value that corresponds to the provided jsonPath.
 	 */

@@ -1,17 +1,6 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
+import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_CONFIGURATION_ITEM;
@@ -28,6 +17,18 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SUPPLIER_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
+
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 
 public class CreateAssetMapper {
 
@@ -85,7 +86,7 @@ public class CreateAssetMapper {
 		Optional.ofNullable(createAssetRequest.getModelName()).ifPresent(value -> dataMap.put(KEY_ITEM_ID_OPTION, value));
 		Optional.ofNullable(createAssetRequest.getModelDescription()).ifPresent(value -> dataMap.put(KEY_DESCRIPTION, value));
 		Optional.ofNullable(createAssetRequest.getManufacturer()).ifPresent(value -> dataMap.put(KEY_MANUFACTURER, value));
-		dataMap.put(KEY_START_DATE, LocalDateTime.now().format(DATE_TIME_FORMATTER));
+		dataMap.put(KEY_START_DATE, now(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER));
 
 		return dataMap;
 	}

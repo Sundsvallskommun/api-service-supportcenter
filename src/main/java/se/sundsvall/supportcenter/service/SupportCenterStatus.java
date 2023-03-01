@@ -18,7 +18,7 @@ public enum SupportCenterStatus {
 	OPEN("Open"),
 	RESOLVED("Resolved");
 	
-	private String value;
+	private final String value;
 	
 	private SupportCenterStatus(String value) {
 		this.value = value;
