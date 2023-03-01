@@ -78,7 +78,7 @@ public interface POBClient {
 	 * Returns a list of configuration-items by serialNumber. The returned objects only contains the ID-attribute.
 	 * 
 	 * @param pobKey       the key to use for authorization
-	 * @param serialNumber
+	 * @param serialNumber the serial number to filter the results on
 	 * @return a list of configuration-items
 	 */
 	@GetMapping(path = "configurationitems?Filter=SerialNumber={serialNumber}", produces = APPLICATION_JSON_VALUE)
