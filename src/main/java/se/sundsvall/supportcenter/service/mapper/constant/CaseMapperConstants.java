@@ -134,8 +134,10 @@ public class CaseMapperConstants {
 				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED, KEY_EXTERNAL_CASE_ID, ""))));
 	
 		/**
-		 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of() doesn't allow
-		 * @return
+		 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
+		 * doesn't allow
+		 * 
+		 * @return map with values to be set for the CANCELLED status
 		 */
 		private static Map<String, Object> createAttributesForCancelledStatus() {
 			Map<String, Object> map = from(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
@@ -144,9 +146,10 @@ public class CaseMapperConstants {
 		}
 		
 		/**
-		 * Method used for the ASSIGN_BACK status, as this status need key responsible value to be set to null when programmatically 
-		 * adding key responsible group, which Map.of() doesn't allow
-		 * @return
+		 * Method used for the ASSIGN_BACK status, as this status need key responsible value to be set to null when
+		 * programmatically adding key responsible group, which Map.of() doesn't allow
+		 * 
+		 * @return map with values to be set for the ASSIGN_BACK status
 		 */
 		private static Map<String, Object> createAtributesForAssignBackStatus() {
 			Map<String, Object> map = from(Map.of(KEY_ACTION_NEEDED, true, KEY_ACTION_NEEDED_DESCRIPTION, SEE_INTERNAL_NOTE_FOR_ACTION, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
