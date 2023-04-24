@@ -1,0 +1,37 @@
+{
+	"name": "pob-update-case-update-to-order-update",
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"urlPath": "/pob/cases",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "CS123213",
+						"CaseStatus": "In Process",
+						"Id": "867415"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"IsValidForWeb": false,
+							"Style": "2",
+							"Memo": "This is a note | Status: 'OrderUpdated'",
+							"HandleSeparators": true
+						}
+					}
+				}
+			}
+			]
+	},
+	"response": {
+		"status": 200
+	}
+}

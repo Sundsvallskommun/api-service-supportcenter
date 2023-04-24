@@ -21,11 +21,15 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.CANCELLED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACTION_NEEDED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DESPATCHED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ENGINEER_START_WORK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ORDER_NOT_COMPLETED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ORDER_UPDATED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PICKING;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.SCHEDULE_CHANGED;
 
 class CaseMapperConstantsTest {
 
@@ -109,7 +113,11 @@ class CaseMapperConstantsTest {
 			PICKING.getValue(),
 			PROCESSED.getValue(),
 			RESERVED.getValue(),
-			RESOLVED.getValue());
+			RESOLVED.getValue(),
+			ORDER_UPDATED.getValue(),
+			SCHEDULE_CHANGED.getValue(),
+			ENGINEER_START_WORK.getValue(),
+			ORDER_NOT_COMPLETED.getValue());
 	}
 
 	@ParameterizedTest
