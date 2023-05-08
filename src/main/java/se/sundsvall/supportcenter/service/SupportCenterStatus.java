@@ -16,11 +16,15 @@ public enum SupportCenterStatus {
 	AWAITING_INFO("Awaiting info"),
 	CANCELLED("Cancelled"),
 	OPEN("Open"),
-	RESOLVED("Resolved");
+	RESOLVED("Resolved"),
+	ORDER_UPDATED("OrderUpdated"),
+	SCHEDULE_CHANGED("ScheduleChanged"),
+	ENGINEER_START_WORK("EngineerStartWork"),
+	ORDER_NOT_COMPLETED("OrderNotCompleted");
 	
 	private final String value;
 	
-	private SupportCenterStatus(String value) {
+	SupportCenterStatus(String value) {
 		this.value = value;
 	}
 

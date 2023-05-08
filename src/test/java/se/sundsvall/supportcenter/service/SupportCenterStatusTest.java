@@ -9,12 +9,16 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.CANCELLED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACTION_NEEDED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DESPATCHED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ENGINEER_START_WORK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ORDER_NOT_COMPLETED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ORDER_UPDATED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PARTIALLY_DESPATCHED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PICKING;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.SCHEDULE_CHANGED;
 
 class SupportCenterStatusTest {
 
@@ -32,7 +36,11 @@ class SupportCenterStatusTest {
 			PICKING,
 			PROCESSED,
 			RESERVED,
-			RESOLVED);
+			RESOLVED,
+			ORDER_UPDATED,
+			SCHEDULE_CHANGED,
+			ENGINEER_START_WORK,
+			ORDER_NOT_COMPLETED);
 	}
 
 	@Test
@@ -49,5 +57,9 @@ class SupportCenterStatusTest {
 		assertThat(PROCESSED.getValue()).isEqualTo("Processed");
 		assertThat(RESERVED.getValue()).isEqualTo("Reserved");
 		assertThat(RESOLVED.getValue()).isEqualTo("Resolved");
+		assertThat(ORDER_UPDATED.getValue()).isEqualTo("OrderUpdated");
+		assertThat(SCHEDULE_CHANGED.getValue()).isEqualTo("ScheduleChanged");
+		assertThat(ENGINEER_START_WORK.getValue()).isEqualTo("EngineerStartWork");
+		assertThat(ORDER_NOT_COMPLETED.getValue()).isEqualTo("OrderNotCompleted");
 	}
 }
