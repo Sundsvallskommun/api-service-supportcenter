@@ -1,9 +1,9 @@
 package se.sundsvall.supportcenter.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Objects;
 
