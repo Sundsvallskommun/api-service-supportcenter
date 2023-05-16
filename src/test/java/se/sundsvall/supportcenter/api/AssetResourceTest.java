@@ -53,7 +53,7 @@ class AssetResourceTest {
 
 		when(assetServiceMock.createAsset(POBKEY_HEADER_VALUE, createAssetRequest)).thenReturn(pobId);
 
-		webTestClient.post().uri("/assets/")
+		webTestClient.post().uri("/assets")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(createAssetRequest)

@@ -78,7 +78,7 @@ class CaseResourceFailuresTest {
 				.expectBody()
 				.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 				.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-				.jsonPath("$.detail").isEqualTo("Content type '' not supported");
+				.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -249,7 +249,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-			.jsonPath("$.detail").isEqualTo("Content type '' not supported");
+			.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
 
 		verifyNoInteractions(caseServiceMock);
 	}
