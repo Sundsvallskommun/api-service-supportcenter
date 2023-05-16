@@ -38,7 +38,7 @@ public class AssetService {
 	@Autowired
 	private ConfigurationService configurationService;
 
-	public String createAsset(String pobKey, CreateAssetRequest createAssetRequest) {
+	public String createAsset(final String pobKey, final CreateAssetRequest createAssetRequest) {
 
 		var id = "";
 		final var itemIds = Optional.ofNullable(getItemsByModelName(pobKey, createAssetRequest.getModelName())).orElse(emptyList());
@@ -51,11 +51,11 @@ public class AssetService {
 		return createConfigurationItem(pobKey, id, createAssetRequest);
 	}
 
-	public void updateConfigurationItem(String pobKey, String serialNumber, UpdateAssetRequest request) {
+	public void updateConfigurationItem(final String pobKey, final String serialNumber, final UpdateAssetRequest request) {
 		pobClient.updateConfigurationItem(pobKey, toPobPayload(configurationService.getSerialNumberId(pobKey, serialNumber), request));
 	}
 
-	public List<Asset> getConfigurationItemsBySerialNumber(String pobKey, String serialNumber) {
+	public List<Asset> getConfigurationItemsBySerialNumber(final String pobKey, final String serialNumber) {
 
 		var configurationItems = pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
 		var itemId = toItemId(configurationItems);
@@ -69,17 +69,17 @@ public class AssetService {
 		return toAssetList(configurationItems, itemAttributes);
 	}
 
-	private String createItem(String pobKey, CreateAssetRequest request) {
+	private String createItem(final String pobKey, final CreateAssetRequest request) {
 
 		return toItemId(pobClient.createItem(pobKey, toPobPayloadForCreatingItem(request)), TYPE_ITEM, KEY_CONFIGURATION_ITEM);
 	}
 
-	private String createConfigurationItem(String pobKey, String id, CreateAssetRequest request) {
+	private String createConfigurationItem(final String pobKey, final String id, final CreateAssetRequest request) {
 
 		return toItemId(pobClient.createConfigurationItem(pobKey, toPobPayloadForCreatingConfigurationItem(id, request)), TYPE_CONFIGURATION_ITEM, KEY_CONFIGURATION_ITEM);
 	}
 
-	private List<String> getItemsByModelName(String pobKey, String modelName) {
+	private List<String> getItemsByModelName(final String pobKey, final String modelName) {
 		return toItemIdList(pobClient.getItemsByModelName(pobKey, modelName));
 	}
 }

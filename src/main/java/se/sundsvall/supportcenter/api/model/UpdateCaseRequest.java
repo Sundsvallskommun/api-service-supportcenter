@@ -1,10 +1,9 @@
 package se.sundsvall.supportcenter.api.model;
 
-import java.util.Objects;
-
-import javax.validation.Valid;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+
+import java.util.Objects;
 
 @Schema(description = "UpdateCaseRequest model")
 public class UpdateCaseRequest {
