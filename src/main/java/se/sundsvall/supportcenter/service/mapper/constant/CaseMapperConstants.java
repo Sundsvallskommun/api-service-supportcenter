@@ -94,7 +94,7 @@ public class CaseMapperConstants {
 	/**
 	 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
 	 * doesn't allow
-	 * 
+	 *
 	 * @return map with values to be set for the CANCELLED status
 	 */
 	private static Map<String, Object> createAttributesForCancelledStatus() {
@@ -106,7 +106,7 @@ public class CaseMapperConstants {
 	/**
 	 * Method used for the ASSIGN_BACK status, as this status need key responsible value to be set to null when
 	 * programmatically adding key responsible group, which Map.of() doesn't allow
-	 * 
+	 *
 	 * @return map with values to be set for the ASSIGN_BACK status
 	 */
 	private static Map<String, Object> createAtributesForAssignBackStatus() {
@@ -116,8 +116,7 @@ public class CaseMapperConstants {
 	}
 
 	private static Map<String, Object> from(Map<String, Object> map) {
-		final Map<String, Object> hashMap = new HashMap<>(map);
-		return hashMap;
+		return new HashMap<>(map);
 	}
 
 	private static Map<String, List<CustomStatusMapping>> getCubeStatusMap() {
