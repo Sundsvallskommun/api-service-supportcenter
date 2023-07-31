@@ -1,9 +1,5 @@
 # SupportCenter
 
-## Leverantör
-
-Sundsvalls kommun
-
 ## Beskrivning
 SupportCenter är en tjänst som hanterar ärendeuppdateringar mot POB.
 
@@ -14,42 +10,18 @@ Tjänsten integrerar mot:
 
 * POB
 
-### Starta tjänsten
+## Leverantör
 
-|Konfigurationsnyckel|Beskrivning|
-|---|---|
-|`integration.pob.url`|URL till backend-system POB|
+Sundsvalls kommun
 
+## Status
 
-### Paketera och starta tjänsten
-Applikationen kan paketeras genom:
-
-```
-./mvnw package
-```
-Kommandot skapar filen `api-service-supportcenter-<version>.jar` i katalogen `target`. Tjänsten kan nu köras genom kommandot `java -jar target/api-service-supportcenter-<version>.jar`.
-
-### Bygga och starta med Docker
-Exekvera följande kommando för att bygga en Docker-image:
-
-```
-docker build -f src/main/docker/Dockerfile -t api.sundsvall.se/ms-supportcenter:latest .
-```
-
-Exekvera följande kommando för att starta samma Docker-image i en container:
-
-```
-docker run -i --rm -p8080:8080 api.sundsvall.se/ms-supportcenter
-
-```
-
-#### Kör applikationen lokalt
-
-Exekvera följande kommando för att bygga och starta en container i sandbox mode:  
-
-```
-docker-compose -f src/main/docker/docker-compose-sandbox.yaml build && docker-compose -f src/main/docker/docker-compose-sandbox.yaml up
-```
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-supportcenter&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Sundsvallskommun_api-service-supportcenter)
 
 
 ## 
