@@ -1,13 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper.constant;
 
-import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
@@ -24,6 +16,14 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.SCHEDULE_CHANGED;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
 
 public class CaseMapperConstants {
 
@@ -68,7 +68,7 @@ public class CaseMapperConstants {
 	public static final String KEY_EMAIL = "Virtual.Shop_Epost";
 	public static final String KEY_ACTION_NEEDED = "Virtual.ActionNeeded";
 	public static final String KEY_ACTION_NEEDED_DESCRIPTION = "Virtual.ActionNeededDescription";
-	
+
 	// Default-values
 	public static final String DEFAULT_TYPE = "Case";
 
@@ -81,117 +81,114 @@ public class CaseMapperConstants {
 	public static final String STATUS_IN_PROCESS = "In Process";
 	public static final String STATUS_CLOSED = "Closed";
 	public static final String STATUS_DELIVERED = "Delivered";
-	
+
 	public static final String CLOSURE_CODE_CHANGE_OF_HARDWARE = "Byte av hårdvara";
 	public static final String CLOSURE_CODE_DELIVERED_HARDWARE = "Levererat Hårdvara - Service request";
 	public static final String CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT = "Advania - Övriga lösningar Incident";
 	private static final String SEE_INTERNAL_NOTE_FOR_ACTION = "Åtgärdsbeskrivning i interna anteckningar";
 	private static final String IT_SUPPORT = "IT Support";
-	
+
 	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Stream.concat(getCubeStatusMap().entrySet().stream(),
 		getNetsetStatusMap().entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-	
+	/**
+	 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
+	 * doesn't allow
+	 *
+	 * @return map with values to be set for the CANCELLED status
+	 */
+	private static Map<String, Object> createAttributesForCancelledStatus() {
+		final Map<String, Object> map = from(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
+		map.put(KEY_EXTERNAL_CASE_ID, null);
+		return map;
+	}
+
+	/**
+	 * Method used for the ASSIGN_BACK status, as this status need key responsible value to be set to null when
+	 * programmatically adding key responsible group, which Map.of() doesn't allow
+	 *
+	 * @return map with values to be set for the ASSIGN_BACK status
+	 */
+	private static Map<String, Object> createAtributesForAssignBackStatus() {
+		final Map<String, Object> map = from(Map.of(KEY_ACTION_NEEDED, true, KEY_ACTION_NEEDED_DESCRIPTION, SEE_INTERNAL_NOTE_FOR_ACTION, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
+		map.put(KEY_RESPONSIBLE, null);
+		return map;
+	}
+
+	private static Map<String, Object> from(Map<String, Object> map) {
+		return new HashMap<>(map);
+	}
+
+	private static Map<String, List<CustomStatusMapping>> getCubeStatusMap() {
 		/**
-		 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
-		 * doesn't allow
-		 * 
-		 * @return map with values to be set for the CANCELLED status
+		 * CUBE statuses (Support flow):
 		 */
-		private static Map<String, Object> createAttributesForCancelledStatus() {
-			Map<String, Object> map = from(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
-			map.put(KEY_EXTERNAL_CASE_ID, null);
-			return map;
-		}
-		
+		return Map.of(
+			OPEN.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+					.withStatusNoteType(WORKNOTE)),
+			CANCELLED.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(createAttributesForCancelledStatus())
+					.withStatusNoteType(WORKNOTE)),
+			ASSIGN_BACK.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(createAtributesForAssignBackStatus())),
+			RESOLVED.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT, KEY_EXTERNAL_CASE_ID, ""))
+					.withStatusNoteType(WORKNOTE),
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED, KEY_EXTERNAL_CASE_ID, ""))));
+
+	}
+
+	private static Map<String, List<CustomStatusMapping>> getNetsetStatusMap() {
 		/**
-		 * Method used for the ASSIGN_BACK status, as this status need key responsible value to be set to null when
-		 * programmatically adding key responsible group, which Map.of() doesn't allow
-		 * 
-		 * @return map with values to be set for the ASSIGN_BACK status
+		 * NETSET statuses (Order flow):
 		 */
-		private static Map<String, Object> createAtributesForAssignBackStatus() {
-			Map<String, Object> map = from(Map.of(KEY_ACTION_NEEDED, true, KEY_ACTION_NEEDED_DESCRIPTION, SEE_INTERNAL_NOTE_FOR_ACTION, KEY_RESPONSIBLE_GROUP, IT_SUPPORT));
-			map.put(KEY_RESPONSIBLE, null);
-			return map;
-		}
-		
-		private static Map<String, Object> from(Map<String, Object> map) {
-			Map<String, Object> hashMap = new HashMap<>();
-			hashMap.putAll(map);
-			return hashMap;
-		}
-
-		private static Map<String, List<CustomStatusMapping>> getCubeStatusMap() {
-			/**
-			 * CUBE statuses (Support flow):
-			 */
-			return Map.of(
-				OPEN.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
-						.withStatusNoteType(WORKNOTE)),
-				CANCELLED.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(createAttributesForCancelledStatus())
-						.withStatusNoteType(WORKNOTE)),
-				ASSIGN_BACK.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(createAtributesForAssignBackStatus())),
-				RESOLVED.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT, KEY_EXTERNAL_CASE_ID, ""))
-						.withStatusNoteType(WORKNOTE),
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED, KEY_EXTERNAL_CASE_ID, ""))));
-
-		}
-
-		private static Map<String, List<CustomStatusMapping>> getNetsetStatusMap() {
-			/**
-			 * NETSET statuses (Order flow):
-			 */
-			return Map.of(PROCESSED.getValue(), List.of(
+		return Map.of(PROCESSED.getValue(), List.of(
+			CustomStatusMapping.create()
+				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+				.withStatusNoteType(WORKNOTE)),
+			RESERVED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)),
-				RESERVED.getValue(), List.of(
+			PICKING.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)),
-				PICKING.getValue(), List.of(
+			DESPATCHED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)),
-				DESPATCHED.getValue(), List.of(
-				CustomStatusMapping.create()
-					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
-					.withStatusNoteType(WORKNOTE)),
-				DELIVERED.getValue(), List.of(
+			DELIVERED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_DELIVERED_HARDWARE))
 					.withStatusNoteType(SOLUTION),
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED))),
-				DELIVERED_ACTION_NEEDED.getValue(), List.of(
+			DELIVERED_ACTION_NEEDED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT))
 					.withStatusNoteType(WORKNOTE)),
-				ORDER_UPDATED.getValue(), List.of(
+			ORDER_UPDATED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)),
-				SCHEDULE_CHANGED.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
-						.withStatusNoteType(WORKNOTE)),
-				ENGINEER_START_WORK.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
-						.withStatusNoteType(WORKNOTE)),
-				ORDER_NOT_COMPLETED.getValue(), List.of(
-					CustomStatusMapping.create()
-						.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
-						.withStatusNoteType(WORKNOTE)));
-		}
+			SCHEDULE_CHANGED.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+					.withStatusNoteType(WORKNOTE)),
+			ENGINEER_START_WORK.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+					.withStatusNoteType(WORKNOTE)),
+			ORDER_NOT_COMPLETED.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+					.withStatusNoteType(WORKNOTE)));
 	}
+}
