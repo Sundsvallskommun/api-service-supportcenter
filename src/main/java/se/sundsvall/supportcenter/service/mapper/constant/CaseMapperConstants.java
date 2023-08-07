@@ -89,7 +89,7 @@ public class CaseMapperConstants {
 	private static final String IT_SUPPORT = "IT Support";
 
 	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Stream.concat(getCubeStatusMap().entrySet().stream(),
-		getNetsetStatusMap().entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		getNetsetStatusMap().entrySet().stream()).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
 	/**
 	 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
