@@ -17,7 +17,7 @@
 		<published.container.port.test>9070</published.container.port.test>
 		<published.container.port.production>9072</published.container.port.production>
 		<!-- Service properties -->
-		<openapi-generator-maven-plugin-version>7.0.0</openapi-generator-maven-plugin-version>
+		<openapi-generator-maven-plugin-version>7.0.1</openapi-generator-maven-plugin-version>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
