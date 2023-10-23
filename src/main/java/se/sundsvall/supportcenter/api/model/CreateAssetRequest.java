@@ -42,10 +42,15 @@ public class CreateAssetRequest {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
+	@Schema(example = "computer-111", description = "Name of inventory")
+	private String inventoryName;
+
+	@Schema(example = "2281", description = "Municipality id")
+	private String municipalityId;
+
 	public static CreateAssetRequest create() {
 		return new CreateAssetRequest();
 	}
-
 	public String getManufacturer() {
 		return manufacturer;
 	}
@@ -163,6 +168,31 @@ public class CreateAssetRequest {
 		return this;
 	}
 
+	public String getInventoryName() {
+		return inventoryName;
+	}
+
+	public void setInventoryName(String inventoryName) {
+		this.inventoryName = inventoryName;
+	}
+
+	public CreateAssetRequest withInventoryName(String inventoryName) {
+		this.inventoryName = inventoryName;
+		return this;
+	}
+	public String getMunicipalityId() {
+		return municipalityId;
+	}
+
+	public void setMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+	}
+
+	public CreateAssetRequest withMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+		return this;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -172,12 +202,14 @@ public class CreateAssetRequest {
 				   Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber) &&
 				   Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) &&
 				   Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus, that.hardwareStatus) &&
-				   Objects.equals(deliveryDate, that.deliveryDate);
+				   Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(inventoryName, that.inventoryName) &&
+				   Objects.equals(municipalityId, that.municipalityId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate);
+		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate,
+			inventoryName, municipalityId);
 	}
 
 	@Override
@@ -185,7 +217,8 @@ public class CreateAssetRequest {
 		StringBuilder builder = new StringBuilder();
 		builder.append("CreateAssetRequest [manufacturer=").append(manufacturer).append(", modelName=").append(modelName).append(", modelDescription=").append(modelDescription)
 			.append(", serialNumber=").append(serialNumber).append(", macAddress=").append(macAddress).append(", warrantyEndDate=").append(warrantyEndDate).append(", supplierStatus=")
-			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", deliveryDate=").append(deliveryDate).append("]");
+			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", deliveryDate=").append(deliveryDate).append(", inventoryName=").append(inventoryName)
+			.append(", municipalityId=").append(municipalityId).append("]");
 		return builder.toString();
 	}
 }
