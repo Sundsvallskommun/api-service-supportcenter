@@ -46,6 +46,9 @@ public class Asset {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
+	@Schema(example = "2281", description = "Municipality id")
+	private String municipalityId;
+
 	public static Asset create() {
 		return new Asset();
 	}
@@ -171,13 +174,13 @@ public class Asset {
 		return modelDescription;
 	}
 
+	public void setModelDescription(String modelDescription) {
+		this.modelDescription = modelDescription;
+	}
+
 	public Asset withModelDescription(String modelDescription) {
 		this.modelDescription = modelDescription;
 		return this;
-	}
-
-	public void setModelDescription(String modelDescription) {
-		this.modelDescription = modelDescription;
 	}
 
 	public LocalDate getWarrantyEndDate() {
@@ -206,10 +209,23 @@ public class Asset {
 		return this;
 	}
 
+	public String getMunicipalityId() {
+		return municipalityId;
+	}
+
+	public void setMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+	}
+
+	public Asset withMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(hardwareDescription, hardwareName, id, macAddress, serialNumber, supplierStatus, hardwareStatus, modelName, modelDescription, manufacturer,
-			deliveryDate, warrantyEndDate);
+			deliveryDate, warrantyEndDate, municipalityId);
 	}
 
 	@Override
@@ -230,17 +246,19 @@ public class Asset {
 				   && Objects.equals(modelDescription, other.modelDescription)
 				   && Objects.equals(manufacturer, other.manufacturer)
 				   && Objects.equals(deliveryDate, other.deliveryDate)
-				   && Objects.equals(warrantyEndDate, other.warrantyEndDate);
+			&& Objects.equals(warrantyEndDate, other.warrantyEndDate)
+			&& Objects.equals(municipalityId, other.municipalityId);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Asset [id=").append(id).append(", serialNumber=").append(serialNumber).append(", hardwareName=")
-				.append(hardwareName).append(", hardwareDescription=").append(hardwareDescription).append(", macAddress=")
-				.append(macAddress).append(", supplierStatus=").append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus)
+			.append(hardwareName).append(", hardwareDescription=").append(hardwareDescription).append(", macAddress=")
+			.append(macAddress).append(", supplierStatus=").append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus)
 			.append(", modelName=").append(modelName).append(", modelDescription=").append(modelDescription).append(", manufacturer=").append(manufacturer)
-			.append(", deliveryDate=").append(deliveryDate).append(", warrantyEndDate=").append(warrantyEndDate).append("]");
+			.append(", deliveryDate=").append(deliveryDate).append(", warrantyEndDate=").append(warrantyEndDate)
+			.append(", municipalityId=").append(municipalityId).append("]");
 		return builder.toString();
 	}
 }

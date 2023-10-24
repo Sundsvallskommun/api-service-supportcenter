@@ -25,8 +25,10 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SERIAL_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SUPPLIER_STATUS;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.MUNICIPALITY_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
 
@@ -80,7 +82,8 @@ public class GetAssetMapper {
 				.withWarrantyEndDate(toLocalDate((String) data.get(KEY_END_WARRANTY_DATE)))
 				.withModelName((String) ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_ITEM_ID_OPTION))
 				.withModelDescription((String) ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_DESCRIPTION))
-				.withManufacturer(toManufacturer(convertObjectToMap(ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_MANUFACTURER)))))
+				.withManufacturer(toManufacturer(convertObjectToMap(ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_MANUFACTURER))))
+				.withMunicipalityId(toMunicipalityId((String) data.get(KEY_MUNICIPALITY))))
 			.orElse(null);
 	}
 
@@ -104,4 +107,13 @@ public class GetAssetMapper {
 	private static Map<String, Object> convertObjectToMap(Object attributes) {
 		return attributes instanceof Map<?, ?> ? (Map<String, Object>) attributes : emptyMap();
 	}
+
+	private static String toMunicipalityId(String municipality) {
+		return MUNICIPALITY_MAP.entrySet().stream()
+			.filter(entry -> entry.getValue().equalsIgnoreCase(municipality))
+			.findFirst()
+			.map(Map.Entry::getKey)
+			.orElse(null);
+	}
+
 }

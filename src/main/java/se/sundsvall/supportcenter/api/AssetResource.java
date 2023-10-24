@@ -63,7 +63,6 @@ public class AssetResource {
 		final UriComponentsBuilder uriComponentsBuilder,
 		@RequestBody @Valid final CreateAssetRequest body) {
 
-		//TODO Implement handling of inventoryName and municipalityId in service-layer
 		String pobId = assetService.createAsset(pobKey, body);
 		return created(uriComponentsBuilder.path("/assets/{serialNumber}").buildAndExpand(body.getSerialNumber()).toUri())
 			.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
@@ -79,11 +78,8 @@ public class AssetResource {
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<List<Asset>> getAssets(
 		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
-		@Parameter(name = "municipalityId", description = "Municipality id", example = "2281") @RequestParam(name = "municipalityId", required = false) final String municipalityId,
-		@Parameter(name = "inventoryName", description = "Inventory name", example = "computer-222") @RequestParam(name = "inventoryName", required = false) final String inventoryName,
 		@Parameter(name = "serialNumber", description = "The serial number of the asset", example = "4VV3RN2") @RequestParam(name = "serialNumber") final String serialNumber) {
 
-		//TODO Implement handling of inventoryName and municipalityId in service-layer
 		return ok(assetService.getConfigurationItemsBySerialNumber(pobKey, serialNumber));
 	}
 
@@ -100,7 +96,6 @@ public class AssetResource {
 		@Parameter(name = "serialNumber", description = "The serial number of the asset", required = true, example = "4VV3RN2") @PathVariable(name = "serialNumber") final String serialNumber,
 		@RequestBody @Valid final UpdateAssetRequest body) {
 
-		//TODO Implement handling of inventoryName and municipalityId in service-layer
 		assetService.updateConfigurationItem(pobKey, serialNumber, body);
 		return noContent().build();
 	}

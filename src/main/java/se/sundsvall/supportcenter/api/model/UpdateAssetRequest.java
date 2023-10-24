@@ -32,9 +32,6 @@ public class UpdateAssetRequest {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
-	@Schema(example = "computer-111", description = "Name of inventory")
-	private String inventoryName;
-
 	@Schema(example = "2281", description = "Municipality id")
 	private String municipalityId;
 
@@ -133,18 +130,6 @@ public class UpdateAssetRequest {
 		return this;
 	}
 
-	public String getInventoryName() {
-		return inventoryName;
-	}
-
-	public void setInventoryName(String inventoryName) {
-		this.inventoryName = inventoryName;
-	}
-
-	public UpdateAssetRequest withInventoryName(String inventoryName) {
-		this.inventoryName = inventoryName;
-		return this;
-	}
 	public String getMunicipalityId() {
 		return municipalityId;
 	}
@@ -160,7 +145,7 @@ public class UpdateAssetRequest {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(hardwareName, macAddress, note, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, inventoryName, municipalityId);
+		return Objects.hash(hardwareName, macAddress, note, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId);
 	}
 
 	@Override
@@ -175,8 +160,7 @@ public class UpdateAssetRequest {
 		return Objects.equals(hardwareName, other.hardwareName)	&& Objects.equals(macAddress, other.macAddress)
 			&& Objects.equals(note, other.note) && Objects.equals(supplierStatus, other.supplierStatus)
 			&& Objects.equals(hardwareStatus, other.hardwareStatus) && Objects.equals(warrantyEndDate, other.warrantyEndDate)
-			&& Objects.equals(deliveryDate, other.deliveryDate) && Objects.equals(inventoryName, other.inventoryName)
-			&& Objects.equals(municipalityId, other.municipalityId);
+			&& Objects.equals(deliveryDate, other.deliveryDate) && Objects.equals(municipalityId, other.municipalityId);
 	}
 
 	@Override
@@ -185,8 +169,8 @@ public class UpdateAssetRequest {
 		builder.append("UpdateAssetRequest [note=").append(note)
 			.append(", hardwareName=").append(hardwareName).append(", macAddress=").append(macAddress).append(", supplierStatus=")
 			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", warrantyEndDate=")
-			.append(warrantyEndDate).append(", deliveryDate=").append(deliveryDate).append(", inventoryName=").append(inventoryName)
-			.append(", municipalityId=").append(municipalityId).append("]");
+			.append(warrantyEndDate).append(", deliveryDate=").append(deliveryDate).append(", municipalityId=").append(municipalityId)
+			.append("]");
 		return builder.toString();
 	}
 }

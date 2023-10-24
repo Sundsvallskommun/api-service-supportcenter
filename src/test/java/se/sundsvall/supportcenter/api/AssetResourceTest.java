@@ -49,7 +49,6 @@ class AssetResourceTest {
 			.withWarrantyEndDate(LocalDate.now().plusDays(360L))
 			.withSupplierStatus("supplierStatus")
 			.withDeliveryDate(LocalDate.now().plusDays(5L))
-			.withInventoryName("inventoryName")
 			.withMunicipalityId("municipalityId");
 		final var pobId = "pobId";
 
@@ -82,7 +81,6 @@ class AssetResourceTest {
 			.withMacAddress("00:00:0a:bb:28:fc")
 			.withDeliveryDate(deliveryDate)
 			.withWarrantyEndDate(warrantyEndDate)
-			.withInventoryName("inventoryName")
 			.withMunicipalityId("municipalityId");
 
 		webTestClient.patch().uri("/assets/{id}", id)
@@ -101,15 +99,11 @@ class AssetResourceTest {
 
 		// Parameter values
 		final var serialNumber = "12345";
-		final var municipalityId = "2281";
-		final var inventoryName = "computer-1";
 
 		// Mock
 		when(assetServiceMock.getConfigurationItemsBySerialNumber(POBKEY_HEADER_VALUE, serialNumber)).thenReturn(List.of(Asset.create().withSerialNumber(serialNumber)));
 
 		webTestClient.get().uri(uriBuilder -> uriBuilder.path("/assets")
-			.queryParam("municipalityId", municipalityId)
-			.queryParam("inventoryName", inventoryName)
 			.queryParam("serialNumber", serialNumber).build())
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()

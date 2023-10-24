@@ -102,6 +102,8 @@ class GetAssetMapperTest {
 		final var macAddress1 = "macAddress-1";
 		final var supplierStatus1 = "supplierStatus-1";
 		final var hardwareStatus1 = "hardwareStatus-1";
+		final var municipality1 = "Sundsvall";
+		final var municipalityId1 = "2281";
 		final var configurationItemId2 = "222";
 		final var hardwareName2 = "hardwareName-2";
 		final var hardwareDescription2 = "hardwareDescription-2";
@@ -111,6 +113,8 @@ class GetAssetMapperTest {
 		final var hardwareStatus2 = "hardwareStatus-2";
 		final var deliveryDate2 = "2024-01-01 00:00:00";
 		final var warrantyEndDate2 = "2026-01-01 00:00:00";
+		final var municipality2 = "Ånge";
+		final var municipalityId2 = "2260";
 
 		final var manufacturer = "manufacturer";
 
@@ -133,7 +137,8 @@ class GetAssetMapperTest {
 					"Virtual.LeverantorensStatus", supplierStatus1,
 					"CiStatus", hardwareStatus1,
 					"DeliveryDate", deliveryDate1,
-					"EndWarrantyDate", warrantyEndDate1)),
+					"EndWarrantyDate", warrantyEndDate1,
+					"CiKommun", municipality1)),
 			new PobPayload()
 				.type("ConfigurationItem")
 				.data(Map.of(
@@ -145,7 +150,8 @@ class GetAssetMapperTest {
 					"Virtual.LeverantorensStatus", supplierStatus2,
 					"CiStatus", hardwareStatus2,
 					"DeliveryDate", deliveryDate2,
-					"EndWarrantyDate", warrantyEndDate2)));
+					"EndWarrantyDate", warrantyEndDate2,
+					"CiKommun", municipality2)));
 
 		final var itemAttributes = Map.of(
 			KEY_ITEM_ID, itemId,
@@ -171,7 +177,8 @@ class GetAssetMapperTest {
 				Asset::getWarrantyEndDate,
 				Asset::getManufacturer,
 				Asset::getModelDescription,
-				Asset::getModelName)
+				Asset::getModelName,
+				Asset::getMunicipalityId)
 			.containsExactly(
 				tuple(
 					configurationItemId1,
@@ -185,7 +192,8 @@ class GetAssetMapperTest {
 					LocalDate.parse(warrantyEndDate1, DATE_TIME_FORMATTER),
 					manufacturer,
 					modelDescription,
-					modelName),
+					modelName,
+					municipalityId1),
 				tuple(
 					configurationItemId2,
 					hardwareDescription2,
@@ -198,7 +206,8 @@ class GetAssetMapperTest {
 					LocalDate.parse(warrantyEndDate2, DATE_TIME_FORMATTER),
 					manufacturer,
 					modelDescription,
-					modelName));
+					modelName,
+					municipalityId2));
 	}
 
 	@Test
@@ -213,6 +222,8 @@ class GetAssetMapperTest {
 		final var hardwareStatus = "hardwareStatus";
 		final var deliveryDate = "2023-01-01 00:00:00";
 		final var warrantyEndDate = "2025-01-01 00:00:00";
+		final var municipality = "Sundsvall";
+		final var municipalityId = "2281";
 
 		final var configurationItems = List.of(
 			new PobPayload()
@@ -226,7 +237,8 @@ class GetAssetMapperTest {
 					"Virtual.LeverantorensStatus", supplierStatus,
 					"CiStatus", hardwareStatus,
 					"DeliveryDate", deliveryDate,
-					"EndWarrantyDate", warrantyEndDate)));
+					"EndWarrantyDate", warrantyEndDate,
+					"CiKommun", municipality)));
 
 		final var itemAttributes = new HashMap<String, Object>();
 
@@ -247,7 +259,8 @@ class GetAssetMapperTest {
 				Asset::getDeliveryDate,
 				Asset::getWarrantyEndDate,
 				Asset::getManufacturer,
-				Asset::getModelName)
+				Asset::getModelName,
+				Asset::getMunicipalityId)
 			.containsExactly(tuple(
 				configurationItemId,
 				hardwareDescription,
@@ -259,6 +272,7 @@ class GetAssetMapperTest {
 				LocalDate.parse(deliveryDate, DATE_TIME_FORMATTER),
 				LocalDate.parse(warrantyEndDate, DATE_TIME_FORMATTER),
 				null,
-				null));
+				null,
+				municipalityId));
 	}
 }

@@ -1,5 +1,7 @@
 package se.sundsvall.supportcenter.service.mapper.constant;
 
+import java.util.Map;
+
 public class ConfigurationMapperConstants {
 
 	private ConfigurationMapperConstants() {}
@@ -20,8 +22,10 @@ public class ConfigurationMapperConstants {
 	public static final String KEY_END_WARRANTY_DATE = "EndWarrantyDate";
 	public static final String KEY_MAC_ADDRESS = "Virtual.BluetoothAddress";
 	public static final String KEY_SUPPLIER_STATUS = "Virtual.LeverantorensStatus";
+	public static final String KEY_MUNICIPALITY = "CiKommun";
 	public static final String TYPE_CLOSURE_CODE = "ClosureCode";
 	public static final String TYPE_CASE_CATEGORY = "CaseCategory";
 	public static final String TYPE_CONFIGURATION_ITEM = "ConfigurationItem";
 	public static final String TYPE_ITEM = "Item";
+	public static final Map<String, String> MUNICIPALITY_MAP = Map.of("2281", "Sundsvall", "2260", "Ånge");
 }
