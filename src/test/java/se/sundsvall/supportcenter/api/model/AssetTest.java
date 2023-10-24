@@ -48,6 +48,7 @@ class AssetTest {
 		final var manufacturer = "manufacturer";
 		final var deliveryDate = LocalDate.now().plusDays(3);
 		final var warrantyEndDate = LocalDate.now().plusDays(365);
+		final var municipalityId = "municipalityId";
 
 		final var asset = Asset.create()
 			.withId(id)
@@ -61,7 +62,8 @@ class AssetTest {
 			.withModelName(modelName)
 			.withModelDescription(modelDescription)
 			.withDeliveryDate(deliveryDate)
-			.withWarrantyEndDate(warrantyEndDate);
+			.withWarrantyEndDate(warrantyEndDate)
+			.withMunicipalityId(municipalityId);
 
 		assertThat(asset).isNotNull().hasNoNullFieldsOrProperties();
 		assertThat(asset.getId()).isEqualTo(id);
@@ -76,6 +78,7 @@ class AssetTest {
 		assertThat(asset.getModelDescription()).isEqualTo(modelDescription);
 		assertThat(asset.getDeliveryDate()).isEqualTo(deliveryDate);
 		assertThat(asset.getWarrantyEndDate()).isEqualTo(warrantyEndDate);
+		assertThat(asset.getMunicipalityId()).isEqualTo(municipalityId);
 	}
 
 	@Test

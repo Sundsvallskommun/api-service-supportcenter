@@ -20,6 +20,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SERIAL_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_START_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
@@ -65,6 +66,7 @@ class CreateAssetMapperTest {
 		final var macAddress = "macAddress";
 		final var supplierStatus = "supplierStatus";
 		final var hardwareStatus = "hardwareStatus";
+		final var municipalityId = "2281";
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -74,7 +76,8 @@ class CreateAssetMapperTest {
 			.withHardwareStatus(hardwareStatus)
 			.withModelName(modelName)
 			.withDeliveryDate(LocalDate.now().plusDays(2))
-			.withWarrantyEndDate(LocalDate.now().plusDays(360));
+			.withWarrantyEndDate(LocalDate.now().plusDays(360))
+			.withMunicipalityId(municipalityId);
 
 		// Call
 		final var result = CreateAssetMapper.toPobPayloadForCreatingConfigurationItem(itemId, createAssetRequest);
@@ -88,6 +91,7 @@ class CreateAssetMapperTest {
 		assertThat(result.getData()).containsEntry(KEY_HARDWARE_STATUS, hardwareStatus);
 		assertThat(result.getData()).containsEntry(KEY_DELIVERY_DATE, createAssetRequest.getDeliveryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		assertThat(result.getData()).containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		assertThat(result.getData()).containsEntry(KEY_MUNICIPALITY, "Sundsvall");
 	}
 
 
