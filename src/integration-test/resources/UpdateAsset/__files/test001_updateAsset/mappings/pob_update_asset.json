@@ -21,7 +21,8 @@
                         "Virtual.BluetoothAddress": "00:00:0a:c2:30:fb",
                         "Virtual.LeverantorensStatus": "1",
                         "DeliveryDate": "2022-02-20",
-                        "EndWarrantyDate": "2024-02-20"
+                        "EndWarrantyDate": "2024-02-20",
+                        "CiKommun": "Ånge"
                     },
                     "Memo": {
                         "CILeverantorensAnteckningar": {

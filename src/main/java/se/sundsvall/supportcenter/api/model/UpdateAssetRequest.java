@@ -32,6 +32,9 @@ public class UpdateAssetRequest {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
+	@Schema(example = "2281", description = "Municipality id")
+	private String municipalityId;
+
 	public static UpdateAssetRequest create() {
 		return new UpdateAssetRequest();
 	}
@@ -127,9 +130,22 @@ public class UpdateAssetRequest {
 		return this;
 	}
 
+	public String getMunicipalityId() {
+		return municipalityId;
+	}
+
+	public void setMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+	}
+
+	public UpdateAssetRequest withMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(hardwareName, macAddress, note, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate);
+		return Objects.hash(hardwareName, macAddress, note, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId);
 	}
 
 	@Override
@@ -144,7 +160,7 @@ public class UpdateAssetRequest {
 		return Objects.equals(hardwareName, other.hardwareName)	&& Objects.equals(macAddress, other.macAddress)
 			&& Objects.equals(note, other.note) && Objects.equals(supplierStatus, other.supplierStatus)
 			&& Objects.equals(hardwareStatus, other.hardwareStatus) && Objects.equals(warrantyEndDate, other.warrantyEndDate)
-			&& Objects.equals(deliveryDate, other.deliveryDate);
+			&& Objects.equals(deliveryDate, other.deliveryDate) && Objects.equals(municipalityId, other.municipalityId);
 	}
 
 	@Override
@@ -153,7 +169,8 @@ public class UpdateAssetRequest {
 		builder.append("UpdateAssetRequest [note=").append(note)
 			.append(", hardwareName=").append(hardwareName).append(", macAddress=").append(macAddress).append(", supplierStatus=")
 			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", warrantyEndDate=")
-			.append(warrantyEndDate).append(", deliveryDate=").append(deliveryDate).append("]");
+			.append(warrantyEndDate).append(", deliveryDate=").append(deliveryDate).append(", municipalityId=").append(municipalityId)
+			.append("]");
 		return builder.toString();
 	}
 }
