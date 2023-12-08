@@ -1,20 +1,5 @@
 package se.sundsvall.supportcenter.service;
 
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
-import se.sundsvall.supportcenter.api.model.Case;
-import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static org.zalando.problem.Status.BAD_REQUEST;
@@ -26,16 +11,33 @@ import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCl
 import static se.sundsvall.supportcenter.service.mapper.UpdateCaseMapper.toPobPayloads;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.zalando.problem.Problem;
+
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import se.sundsvall.supportcenter.api.model.Case;
+import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
+
 @Service
 public class CaseService {
-	@Autowired
-	private POBClient pobClient;
 
-	@Autowired
-	private ConfigurationService configurationService;
+	private final POBClient pobClient;
+	private final ConfigurationService configurationService;
+	private final List<ProcessorInterface> processors;
 
-	@Autowired
-	private List<ProcessorInterface> processors;
+	public CaseService(POBClient pobClient, ConfigurationService configurationService, List<ProcessorInterface> processors) {
+		this.pobClient = pobClient;
+		this.configurationService = configurationService;
+		this.processors = processors;
+	}
 
 	private static final String VALIDATION_ERROR_TEMPLATE = "%s: '%s' is not a valid value";
 
@@ -68,7 +70,7 @@ public class CaseService {
 		validate(pobKey, createCaseRequest);
 
 		// Convert request to PobPayload and call Pob
-		var results = pobClient.createCase(pobKey, toPobPayload(createCaseRequest));
+		final var results = pobClient.createCase(pobKey, toPobPayload(createCaseRequest));
 
 		return Optional.ofNullable(results).orElse(emptyList()).stream()
 			.filter(Objects::nonNull)
@@ -104,9 +106,9 @@ public class CaseService {
 
 	/**
 	 * All incoming statuses should update POB except 'Awating Info'
-	 * 
-	 * @param updateCaseRequest incoming update request
-	 * @return boolean if POB should be updated or not
+	 *
+	 * @param  updateCaseRequest incoming update request
+	 * @return                   boolean if POB should be updated or not
 	 */
 	private boolean shouldUpdatePOB(final UpdateCaseRequest updateCaseRequest) {
 		return !Objects.equals(AWAITING_INFO.getValue(), updateCaseRequest.getCaseStatus());

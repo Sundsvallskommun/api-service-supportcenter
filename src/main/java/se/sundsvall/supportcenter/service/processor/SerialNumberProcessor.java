@@ -9,7 +9,6 @@ import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -17,27 +16,32 @@ import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBClient;
 import se.sundsvall.supportcenter.service.ConfigurationService;
+
 /**
  * Performs customizations on the PobPayload regarding serial number
  */
 @Component
 public class SerialNumberProcessor implements ProcessorInterface {
+
 	private static final Logger LOG = LoggerFactory.getLogger(SerialNumberProcessor.class);
 	private static final String JSON_PATH_EXISTING_SERIALNUMBER = "$['Data']['CIInfo.Ci']['Data']['SerialNumber']";
 
-	@Autowired
-	private POBClient pobClient;
+	private final POBClient pobClient;
+	private final ConfigurationService configurationService;
 
-	@Autowired
-	private ConfigurationService configurationService;
+	public SerialNumberProcessor(POBClient pobClient, ConfigurationService configurationService) {
+		this.pobClient = pobClient;
+		this.configurationService = configurationService;
+	}
 
 	@Override
 	public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
-		return nonNull(updateCaseRequest); //This processor should be executed for all requests as long as they are not null
+		return nonNull(updateCaseRequest); // This processor should be executed for all requests as long as they are not null
 	}
 
 	/**
-	 * Handle serial number customization on the PobPayload before POB update if serial number has been provided in the service request
+	 * Handle serial number customization on the PobPayload before POB update if serial number has been provided in the
+	 * service request
 	 */
 	@Override
 	public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {

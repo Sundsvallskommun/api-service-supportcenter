@@ -1,0 +1,23 @@
+integration:
+  pob:
+    connectTimeout: 10
+    readTimeout: 60
+logging:
+  level:
+    root: INFO
+openapi:
+  name: ${spring.application.name}
+  title: ${spring.application.name}
+  version: '@project.version@'
+resilience4j:
+  circuitbreaker:
+    instances:
+      pob:
+        ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+spring:
+  application:
+    name: api-supportcenter
+  cache:
+    cache-names: case-categories, closure-codes
+    caffeine:
+      spec: maximumSize=50, expireAfterWrite=86400s

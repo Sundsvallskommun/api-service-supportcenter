@@ -1,0 +1,11 @@
+integration:
+  pob:
+    connectTimeout: 10
+    readTimeout: 20
+    url: http://pob.url
+logging:
+  level:
+    root: INFO
+spring:
+  cache:
+    type: none
