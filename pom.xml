@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>3.4</version>
+		<version>4.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.sundsvall</groupId>
@@ -17,9 +17,7 @@
 		<published.container.port.test>9070</published.container.port.test>
 		<published.container.port.production>9072</published.container.port.production>
 		<!-- Service properties -->
-		<openapi-generator-maven-plugin-version>7.1.0</openapi-generator-maven-plugin-version>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
-		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,9 +53,27 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${build-helper-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>add-generated-source</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${generated-sources-path}/models</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>${openapi-generator-maven-plugin-version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -69,10 +85,10 @@
 							<output>${generated-sources-path}</output>
 							<generatorName>jaxrs-spec</generatorName>
 							<generateApis>false</generateApis>
+							<generateSupportingFiles>false</generateSupportingFiles>
 							<configOptions>
 								<useSpringBoot3>true</useSpringBoot3>
-								<sourceFolder>${generated-sources-java-path}</sourceFolder>
-								<generateSupportingFiles>false</generateSupportingFiles>
+								<sourceFolder>models</sourceFolder>
 								<dateLibrary>java8-localdatetime</dateLibrary>
 								<modelPackage>generated.client.pob</modelPackage>
 								<openApiNullable>false</openApiNullable>

@@ -1,18 +1,5 @@
 package se.sundsvall.supportcenter.service;
 
-import generated.client.pob.PobPayload;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import se.sundsvall.supportcenter.api.model.Asset;
-import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
-import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-
-import java.util.List;
-import java.util.Optional;
-
 import static java.util.Collections.emptyList;
 import static org.springframework.util.StringUtils.hasText;
 import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toPobPayload;
@@ -27,16 +14,31 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
+
+import generated.client.pob.PobPayload;
+import se.sundsvall.supportcenter.api.model.Asset;
+import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
+import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+
 @Service
 public class AssetService {
 
 	private static final String CI_ID_ERROR_TEMPLATE = "No ID was found in POB-configurationitems";
 
-	@Autowired
-	private POBClient pobClient;
+	private final POBClient pobClient;
+	private final ConfigurationService configurationService;
 
-	@Autowired
-	private ConfigurationService configurationService;
+	public AssetService(POBClient pobClient, ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+		this.pobClient = pobClient;
+	}
 
 	public String createAsset(final String pobKey, final CreateAssetRequest createAssetRequest) {
 
@@ -57,14 +59,14 @@ public class AssetService {
 
 	public List<Asset> getConfigurationItemsBySerialNumber(final String pobKey, final String serialNumber) {
 
-		var configurationItems = pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
-		var itemId = toItemId(configurationItems);
+		final var configurationItems = pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
+		final var itemId = toItemId(configurationItems);
 		List<PobPayload> item = null;
 		if (hasText(itemId)) {
 			item = pobClient.getItemsById(pobKey, itemId);
 		}
 
-		var itemAttributes = toMapOfAttributes(item);
+		final var itemAttributes = toMapOfAttributes(item);
 
 		return toAssetList(configurationItems, itemAttributes);
 	}
