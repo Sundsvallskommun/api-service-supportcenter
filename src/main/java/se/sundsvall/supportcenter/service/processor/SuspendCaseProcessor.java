@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import generated.client.pob.PobPayload;
@@ -23,10 +22,14 @@ import se.sundsvall.supportcenter.integration.pob.POBClient;
  */
 @Component
 public class SuspendCaseProcessor implements ProcessorInterface {
+
 	private static final Logger LOG = LoggerFactory.getLogger(SuspendCaseProcessor.class);
 
-	@Autowired
-	private POBClient pobClient;
+	private final POBClient pobClient;
+
+	public SuspendCaseProcessor(POBClient pobClient) {
+		this.pobClient = pobClient;
+	}
 
 	@Override
 	public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
@@ -46,7 +49,7 @@ public class SuspendCaseProcessor implements ProcessorInterface {
 	public void postProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 		// Suspend case processor has nothing to post process
 	}
-	
+
 	private SuspensionInfo generateSuspensionInfo() {
 		return new SuspensionInfo()
 			.suspension("Väntar kundsvar Advania")

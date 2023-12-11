@@ -8,7 +8,6 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.zalando.problem.Status;
 import org.zalando.problem.ThrowableProblem;
@@ -22,10 +21,14 @@ import se.sundsvall.supportcenter.integration.pob.POBClient;
  */
 @Component
 public class UnsuspendCaseProcessor implements ProcessorInterface {
+
 	private static final Logger LOG = LoggerFactory.getLogger(UnsuspendCaseProcessor.class);
 
-	@Autowired
-	private POBClient pobClient;
+	private final POBClient pobClient;
+
+	public UnsuspendCaseProcessor(POBClient pobClient) {
+		this.pobClient = pobClient;
+	}
 
 	@Override
 	public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
@@ -40,7 +43,7 @@ public class UnsuspendCaseProcessor implements ProcessorInterface {
 			LOG.debug("Case '{}' is suspended, will delete suspension and modify payload data for key: '{}'", caseId, KEY_SUSPENSION);
 			pobClient.deleteSuspension(pobKey, caseId); // Delete suspension
 			pobPayload.getData().put(KEY_SUSPENSION, null); // Set suspension status to null on POB payload
-		} catch (ThrowableProblem e) {
+		} catch (final ThrowableProblem e) {
 			// If POB returns other status than 404, re throw the exception
 			if (e.getStatus() != Status.NOT_FOUND) {
 				throw e;
