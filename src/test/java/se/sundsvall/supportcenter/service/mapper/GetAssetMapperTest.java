@@ -138,7 +138,7 @@ class GetAssetMapperTest {
 					"CiStatus", hardwareStatus1,
 					"DeliveryDate", deliveryDate1,
 					"EndWarrantyDate", warrantyEndDate1,
-					"CiKommun", municipality1)),
+					"Virtual.CiKommun", municipality1)),
 			new PobPayload()
 				.type("ConfigurationItem")
 				.data(Map.of(
@@ -151,7 +151,7 @@ class GetAssetMapperTest {
 					"CiStatus", hardwareStatus2,
 					"DeliveryDate", deliveryDate2,
 					"EndWarrantyDate", warrantyEndDate2,
-					"CiKommun", municipality2)));
+					"Virtual.CiKommun", municipality2)));
 
 		final var itemAttributes = Map.of(
 			KEY_ITEM_ID, itemId,
@@ -238,7 +238,7 @@ class GetAssetMapperTest {
 					"CiStatus", hardwareStatus,
 					"DeliveryDate", deliveryDate,
 					"EndWarrantyDate", warrantyEndDate,
-					"CiKommun", municipality)));
+					"Virtual.CiKommun", municipality)));
 
 		final var itemAttributes = new HashMap<String, Object>();
 
