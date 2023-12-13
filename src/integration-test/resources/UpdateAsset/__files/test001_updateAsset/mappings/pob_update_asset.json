@@ -22,7 +22,7 @@
                         "Virtual.LeverantorensStatus": "1",
                         "DeliveryDate": "2022-02-20",
                         "EndWarrantyDate": "2024-02-20",
-                        "CiKommun": "Ånge"
+                        "Virtual.CiKommun": "Ånge"
                     },
                     "Memo": {
                         "CILeverantorensAnteckningar": {
