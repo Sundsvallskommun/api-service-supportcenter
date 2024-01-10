@@ -20,7 +20,7 @@
             "Virtual.LeverantorensStatus": "0",
             "DeliveryDate": "2022-01-01",
             "EndWarrantyDate": "2022-01-01",
-            "Virtual.CiKommun": "Sundsvall"
+            "Virtual.CIKommun": "Sundsvall"
           },
           "Memo": {}
         }
