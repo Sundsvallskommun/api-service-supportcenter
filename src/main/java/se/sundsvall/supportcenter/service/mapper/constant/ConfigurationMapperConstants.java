@@ -22,7 +22,7 @@ public class ConfigurationMapperConstants {
 	public static final String KEY_END_WARRANTY_DATE = "EndWarrantyDate";
 	public static final String KEY_MAC_ADDRESS = "Virtual.BluetoothAddress";
 	public static final String KEY_SUPPLIER_STATUS = "Virtual.LeverantorensStatus";
-	public static final String KEY_MUNICIPALITY = "Virtual.CiKommun";
+	public static final String KEY_MUNICIPALITY = "Virtual.CIKommun";
 	public static final String TYPE_CLOSURE_CODE = "ClosureCode";
 	public static final String TYPE_CASE_CATEGORY = "CaseCategory";
 	public static final String TYPE_CONFIGURATION_ITEM = "ConfigurationItem";
