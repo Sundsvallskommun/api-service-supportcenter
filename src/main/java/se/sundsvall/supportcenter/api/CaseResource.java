@@ -7,6 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -54,12 +55,12 @@ public class CaseResource {
 	@ApiResponse(responseCode = "409", description = "Conflict", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> createCase(UriComponentsBuilder uriComponentsBuilder,
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
-		@RequestBody @Valid CreateCaseRequest body) {
-
+	public ResponseEntity<Void> createCase(
+		@Parameter(name = "pobKey", description = "The POB API-key", required = true)
+		@RequestHeader("pobKey") final String pobKey,
+		@RequestBody @Valid final CreateCaseRequest body) {
 		final var caseId = caseService.createCase(pobKey, body);
-		return created(uriComponentsBuilder.path("/cases/{caseId}").buildAndExpand(caseId).toUri())
+		return created(fromPath("/cases/{caseId}").buildAndExpand(caseId).toUri())
 			.header(CONTENT_TYPE, ALL_VALUE)
 			.build();
 	}

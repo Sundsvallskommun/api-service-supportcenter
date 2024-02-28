@@ -7,6 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.web.util.UriComponentsBuilder.fromPath;
 
 import java.util.List;
 
@@ -64,12 +65,11 @@ public class AssetResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<CreateAssetResponse> createAsset(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
-		final UriComponentsBuilder uriComponentsBuilder,
+		@Parameter(name = "pobKey", description = "The POB API-key", required = true)
+		@RequestHeader("pobKey") final String pobKey,
 		@RequestBody @Valid final CreateAssetRequest body) {
-
 		final String pobId = assetService.createAsset(pobKey, body);
-		return created(uriComponentsBuilder.path("/assets/{serialNumber}").buildAndExpand(body.getSerialNumber()).toUri())
+		return created(fromPath("/assets").query("serialNumber={pobId}").build(pobId))
 			.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
 			.body(CreateAssetResponse.create().withId(pobId));
 	}

@@ -33,9 +33,6 @@ class AssetResourceTest {
 	@Autowired
 	private WebTestClient webTestClient;
 
-	@LocalServerPort
-	private int port;
-
 	@Test
 	void createAsset() {
 
@@ -60,7 +57,7 @@ class AssetResourceTest {
 			.bodyValue(createAssetRequest)
 			.exchange()
 			.expectHeader().contentType(APPLICATION_JSON)
-			.expectHeader().location("http://localhost:".concat(String.valueOf(port)).concat("/assets/serialNumber"))
+			.expectHeader().location("/assets?serialNumber=" + pobId)
 			.expectStatus().isCreated()
 			.expectBody().jsonPath("$.['id']").isEqualTo(pobId);
 

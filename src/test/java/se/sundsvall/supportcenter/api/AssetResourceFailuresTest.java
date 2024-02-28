@@ -135,7 +135,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,org.springframework.web.util.UriComponentsBuilder,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
+			.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}

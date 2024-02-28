@@ -41,9 +41,6 @@ class CaseResourceTest {
 	@Autowired
 	private WebTestClient webTestClient;
 
-	@LocalServerPort
-	private int port;
-
 	@Test
 	void createCase() {
 
@@ -79,8 +76,6 @@ class CaseResourceTest {
 
 		when(caseServiceMock.createCase(POBKEY_HEADER_VALUE, createCaseRequest)).thenReturn("caseId");
 
-		final var expectedLocationURL = format("http://localhost:%s/cases/caseId", port);
-
 		webTestClient.post().uri("/cases")
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.contentType(APPLICATION_JSON)
@@ -88,7 +83,7 @@ class CaseResourceTest {
 				.exchange()
 				.expectStatus().isCreated()
 				.expectHeader().contentType(ALL_VALUE)
-				.expectHeader().value(LOCATION, is(expectedLocationURL))
+				.expectHeader().location("/cases/" + "caseId")
 				.expectBody().isEmpty();
 
 		verify(caseServiceMock).createCase(POBKEY_HEADER_VALUE, createCaseRequest);
