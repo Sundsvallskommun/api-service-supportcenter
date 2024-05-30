@@ -12,10 +12,6 @@
 	<version>1.8</version>
 	<name>api-service-supportcenter</name>
 	<properties>
-		<!-- Pipeline properties -->
-		<docker.image.name>ms-supportcenter</docker.image.name>
-		<published.container.port.test>9070</published.container.port.test>
-		<published.container.port.production>9072</published.container.port.production>
 		<!-- Service properties -->
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 	</properties>
