@@ -32,7 +32,7 @@ public class UpdateAssetRequest {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id")
+	@Schema(example = "2281", description = "Municipality id", hidden = true)
 	private String municipalityId;
 
 	public static UpdateAssetRequest create() {

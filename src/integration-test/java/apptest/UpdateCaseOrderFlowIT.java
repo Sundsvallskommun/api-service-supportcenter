@@ -16,12 +16,13 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 	private static final String REQUEST_FILE = "request.json";
 	private static final String RESPONSE_FILE = "response.json";
+	private static final String PATH = "/2281/cases";
 
 	@Test
 	void test001_assignBack() {
 
 		setupCall()
-			.withServicePath("/cases/867400")
+			.withServicePath(PATH + "/867400")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -34,7 +35,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test002_createCaseReceipt() {
 
 		setupCall()
-			.withServicePath("/cases/867401")
+			.withServicePath(PATH + "/867401")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -47,7 +48,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test003_resolveCase() {
 
 		setupCall()
-			.withServicePath("/cases/867402")
+			.withServicePath(PATH + "/867402")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -60,7 +61,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test004_updateCase() {
 
 		setupCall()
-			.withServicePath("/cases/867403")
+			.withServicePath(PATH + "/867403")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -73,7 +74,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test005_addCommentWorkNote() {
 
 		setupCall()
-			.withServicePath("/cases/867404")
+			.withServicePath(PATH + "/867404")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -86,7 +87,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test006_updateSerialNumberReplaceHardware() {
 
 		setupCall()
-			.withServicePath("/cases/867405")
+			.withServicePath(PATH + "/867405")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -99,7 +100,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test007_updateSerialNumberThatDoesntExistInConfigurationitems() {
 
 		setupCall()
-			.withServicePath("/cases/867406")
+			.withServicePath(PATH + "/867406")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -112,7 +113,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test008_updateSerialNumberNewHardware() {
 
 		setupCall()
-			.withServicePath("/cases/867407")
+			.withServicePath(PATH + "/867407")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -124,7 +125,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test009_updateStatusToProcessed() {
 
 		setupCall()
-			.withServicePath("/cases/867409")
+			.withServicePath(PATH + "/867409")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -136,7 +137,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test010_updateStatusToReserved() {
 
 		setupCall()
-			.withServicePath("/cases/867410")
+			.withServicePath(PATH + "/867410")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -148,7 +149,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test011_updateStatusToPicking() {
 
 		setupCall()
-			.withServicePath("/cases/867411")
+			.withServicePath(PATH + "/867411")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -160,7 +161,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test012_updateStatusToDespatched() {
 
 		setupCall()
-			.withServicePath("/cases/867412")
+			.withServicePath(PATH + "/867412")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -172,7 +173,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test013_updateStatusToDelivered() {
 
 		setupCall()
-			.withServicePath("/cases/867413")
+			.withServicePath(PATH + "/867413")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -184,7 +185,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test014_updateStatusToDeliveredWithSerialNumber() {
 
 		setupCall()
-			.withServicePath("/cases/867414")
+			.withServicePath(PATH + "/867414")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -196,7 +197,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test015_updateStatusToDeliveredActionNeeded() {
 
 		setupCall()
-			.withServicePath("/cases/867415")
+			.withServicePath(PATH + "/867415")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -208,7 +209,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test016_updateStatusToOrderUpdated() {
 
 		setupCall()
-			.withServicePath("/cases/867415")
+			.withServicePath(PATH + "/867415")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -220,7 +221,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test017_updateStatusToScheduleChanged() {
 
 		setupCall()
-			.withServicePath("/cases/867415")
+			.withServicePath(PATH + "/867415")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -232,7 +233,7 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test018_updateStatusToEngineerStartWork() {
 
 		setupCall()
-			.withServicePath("/cases/867415")
+			.withServicePath(PATH + "/867415")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -244,12 +245,11 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	void test019_updateStatusToOrderNotCompleted() {
 
 		setupCall()
-			.withServicePath("/cases/867415")
+			.withServicePath(PATH + "/867415")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 	}
-
 }

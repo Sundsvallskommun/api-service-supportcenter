@@ -15,12 +15,13 @@ class ReadConfigurationIT extends AbstractAppTest {
 	private static final String POBKEY_HEADER_NAME = "pobKey";
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 	private static final String RESPONSE_FILE = "response.json";
+	private static final String PATH = "/2281/configuration";
 
 	@Test
 	void test001_readCaseCategories() {
 
 		setupCall()
-			.withServicePath("/configuration/caseCategories")
+			.withServicePath(PATH + "/caseCategories")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)
@@ -32,7 +33,7 @@ class ReadConfigurationIT extends AbstractAppTest {
 	void test002_readClosureCodes() {
 
 		setupCall()
-			.withServicePath("/configuration/closureCodes")
+			.withServicePath(PATH + "/closureCodes")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)

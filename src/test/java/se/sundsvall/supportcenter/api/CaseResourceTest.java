@@ -76,14 +76,14 @@ class CaseResourceTest {
 
 		when(caseServiceMock.createCase(POBKEY_HEADER_VALUE, createCaseRequest)).thenReturn("caseId");
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.contentType(APPLICATION_JSON)
 				.bodyValue(createCaseRequest)
 				.exchange()
 				.expectStatus().isCreated()
 				.expectHeader().contentType(ALL_VALUE)
-				.expectHeader().location("/cases/" + "caseId")
+				.expectHeader().location("/2281/cases/" + "caseId")
 				.expectBody().isEmpty();
 
 		verify(caseServiceMock).createCase(POBKEY_HEADER_VALUE, createCaseRequest);
@@ -95,7 +95,7 @@ class CaseResourceTest {
 		// Parameter values
 		final var caseId = "12345";
 
-		webTestClient.patch().uri("/cases/{caseId}", caseId)
+		webTestClient.patch().uri("/2281/cases/{caseId}", caseId)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(UpdateCaseRequest.create())
@@ -114,7 +114,7 @@ class CaseResourceTest {
 
 		when(caseServiceMock.getCase(POBKEY_HEADER_VALUE, caseId)).thenReturn(Case.create());
 
-		webTestClient.get().uri("/cases/{caseId}", caseId)
+		webTestClient.get().uri("/2281/cases/{caseId}", caseId)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.exchange()
 				.expectStatus().isOk()

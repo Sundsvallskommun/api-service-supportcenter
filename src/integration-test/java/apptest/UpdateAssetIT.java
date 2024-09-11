@@ -17,12 +17,13 @@ class UpdateAssetIT extends AbstractAppTest {
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 	private static final String REQUEST_FILE = "request.json";
 	private static final String RESPONSE_FILE = "response.json";
+	private static final String PATH = "/2260/assets";
 
 	@Test
 	void test001_updateAsset() {
 
 		setupCall()
-			.withServicePath("/assets/FRGDZ1J")
+			.withServicePath(PATH + "/FRGDZ1J")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -35,7 +36,7 @@ class UpdateAssetIT extends AbstractAppTest {
 	void test002_updateAssetAuthenticationFailed() {
 
 		setupCall()
-			.withServicePath("/assets/ERDOU7R")
+			.withServicePath(PATH + "/ERDOU7R")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)

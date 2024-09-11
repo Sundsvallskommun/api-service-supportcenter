@@ -35,6 +35,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 import se.sundsvall.supportcenter.api.model.CreateAssetResponse;
@@ -43,7 +44,7 @@ import se.sundsvall.supportcenter.service.AssetService;
 
 @RestController
 @Validated
-@RequestMapping("/assets")
+@RequestMapping("/{municipalityId}/assets")
 @Tag(name = "Asset", description = "Asset operations")
 public class AssetResource {
 
@@ -65,13 +66,15 @@ public class AssetResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<CreateAssetResponse> createAsset(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true)
-		@RequestHeader("pobKey") final String pobKey,
-		@RequestBody @Valid final CreateAssetRequest body) {
-		final String pobId = assetService.createAsset(pobKey, body);
-		return created(fromPath("/assets").query("serialNumber={pobId}").build(pobId))
-			.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-			.body(CreateAssetResponse.create().withId(pobId));
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true)
+			@RequestHeader("pobKey") final String pobKey,
+			@RequestBody @Valid final CreateAssetRequest body) {
+
+		final String pobId = assetService.createAsset(pobKey, body.withMunicipalityId(municipalityId));
+		return created(fromPath("/{municipalityId}/assets").query("serialNumber={pobId}").build(municipalityId, pobId))
+				.header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+				.body(CreateAssetResponse.create().withId(pobId));
 	}
 
 	@GetMapping(produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
@@ -82,8 +85,9 @@ public class AssetResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<List<Asset>> getAssets(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
-		@Parameter(name = "serialNumber", description = "The serial number of the asset", example = "4VV3RN2") @RequestParam(name = "serialNumber") final String serialNumber) {
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId  String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
+			@Parameter(name = "serialNumber", description = "The serial number of the asset", example = "4VV3RN2") @RequestParam(name = "serialNumber") final String serialNumber) {
 
 		return ok(assetService.getConfigurationItemsBySerialNumber(pobKey, serialNumber));
 	}
@@ -97,11 +101,12 @@ public class AssetResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Void> updateAsset(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
-		@Parameter(name = "serialNumber", description = "The serial number of the asset", required = true, example = "4VV3RN2") @PathVariable(name = "serialNumber") final String serialNumber,
-		@RequestBody @Valid final UpdateAssetRequest body) {
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId  String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") final String pobKey,
+			@Parameter(name = "serialNumber", description = "The serial number of the asset", required = true, example = "4VV3RN2") @PathVariable(name = "serialNumber") final String serialNumber,
+			@RequestBody @Valid final UpdateAssetRequest body) {
 
-		assetService.updateConfigurationItem(pobKey, serialNumber, body);
+		assetService.updateConfigurationItem(pobKey, serialNumber, body.withMunicipalityId(municipalityId));
 		return noContent().build();
 	}
 }

@@ -26,7 +26,7 @@ class ConfigurationResourceFailuresTest {
 	@Test
 	void getClosureCodeListMissingApiKeyHeader() {
 
-		webTestClient.get().uri("/configuration/closureCodes")
+		webTestClient.get().uri("/2281/configuration/closureCodes")
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
@@ -41,7 +41,7 @@ class ConfigurationResourceFailuresTest {
 	@Test
 	void getCaseCategoryListMissingApiKeyHeader() {
 
-		webTestClient.get().uri("/configuration/caseCategories")
+		webTestClient.get().uri("/2281/configuration/caseCategories")
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
