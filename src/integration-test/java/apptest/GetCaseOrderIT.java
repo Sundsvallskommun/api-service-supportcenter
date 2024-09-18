@@ -19,7 +19,7 @@ class GetCaseOrderIT extends AbstractAppTest {
 	void test001_getCase() {
 
 		setupCall()
-			.withServicePath("/cases/111222")
+			.withServicePath("/2281/cases/111222")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)

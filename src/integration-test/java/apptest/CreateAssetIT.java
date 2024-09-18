@@ -16,12 +16,13 @@ class CreateAssetIT extends AbstractAppTest {
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 	private static final String REQUEST_FILE = "request.json";
 	private static final String RESPONSE_FILE = "response.json";
+	private static final String PATH = "/2281/assets";
 
 	@Test
 	void test001_createAsset() {
 
 		setupCall()
-			.withServicePath("/assets")
+			.withServicePath(PATH)
 			.withHttpMethod(POST)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -34,7 +35,7 @@ class CreateAssetIT extends AbstractAppTest {
 	void test002_createAssetNoItemFound() {
 
 		setupCall()
-			.withServicePath("/assets")
+			.withServicePath(PATH)
 			.withHttpMethod(POST)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -47,7 +48,7 @@ class CreateAssetIT extends AbstractAppTest {
 	void test003_createAssetAuthenticationFailed() {
 
 		setupCall()
-			.withServicePath("/assets")
+			.withServicePath(PATH)
 			.withHttpMethod(POST)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
@@ -60,7 +61,7 @@ class CreateAssetIT extends AbstractAppTest {
 	void test004_createAssetSerialNumberAlreadyExists() {
 
 		setupCall()
-			.withServicePath("/assets")
+			.withServicePath(PATH)
 			.withHttpMethod(POST)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)

@@ -17,12 +17,13 @@ class ReadAssetIT extends AbstractAppTest {
 	private static final String POBKEY_HEADER_NAME = "pobKey";
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 	private static final String RESPONSE_FILE = "response.json";
+	private static final String PATH = "/2281/assets";
 
 	@Test
 	void test001_readAsset() {
 
 		setupCall()
-			.withServicePath("/assets?serialNumber=FRGDZ1J")
+			.withServicePath(PATH + "?serialNumber=FRGDZ1J")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)
@@ -34,7 +35,7 @@ class ReadAssetIT extends AbstractAppTest {
 	void test002_readAssetNotFound() {
 
 		setupCall()
-			.withServicePath("/assets?serialNumber=XXX")
+			.withServicePath(PATH + "?serialNumber=XXX")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)
@@ -46,7 +47,7 @@ class ReadAssetIT extends AbstractAppTest {
 	void test003_readAssetAuthenticationFailed() {
 
 		setupCall()
-			.withServicePath("/assets?serialNumber=YYY")
+			.withServicePath(PATH + "?serialNumber=YYY")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)
@@ -58,7 +59,7 @@ class ReadAssetIT extends AbstractAppTest {
 	void test004_readAssetErrorInPOB() {
 
 		setupCall()
-			.withServicePath("/assets?serialNumber=YYY")
+			.withServicePath(PATH + "?serialNumber=YYY")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)
@@ -70,7 +71,7 @@ class ReadAssetIT extends AbstractAppTest {
 	void test005_readAssetFailsAfterRetry() {
 
 		setupCall()
-			.withServicePath("/assets?serialNumber=YYY")
+			.withServicePath(PATH + "?serialNumber=YYY")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)

@@ -18,6 +18,7 @@
             "Item": "10018",
             "SerialNumber": "FRGDZ1J",
             "Virtual.LeverantorensStatus": "0",
+            "Virtual.CIKommun" : "Sundsvall",
             "DeliveryDate": "2022-01-01",
             "EndWarrantyDate": "2022-01-01"
           },

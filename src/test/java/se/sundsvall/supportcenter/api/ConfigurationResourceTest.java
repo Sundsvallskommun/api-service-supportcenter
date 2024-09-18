@@ -34,7 +34,7 @@ class ConfigurationResourceTest {
 		// Mock
 		when(configurationServiceMock.getClosureCodeList(POBKEY_HEADER_VALUE)).thenReturn(List.of("ClosureCode-1", "ClosureCode-2"));
 
-		webTestClient.get().uri("/configuration/closureCodes")
+		webTestClient.get().uri("/2281/configuration/closureCodes")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isOk()
@@ -49,7 +49,7 @@ class ConfigurationResourceTest {
 	@Test
 	void getClosureCodeListWhenEmpty() {
 
-		webTestClient.get().uri("/configuration/closureCodes")
+		webTestClient.get().uri("/2281/configuration/closureCodes")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isOk()
@@ -67,7 +67,7 @@ class ConfigurationResourceTest {
 		// Mock
 		when(configurationServiceMock.getCaseCategoryList(POBKEY_HEADER_VALUE)).thenReturn(List.of("CaseCategory-1", "CaseCategory-2"));
 
-		webTestClient.get().uri("/configuration/caseCategories")
+		webTestClient.get().uri("/2281/configuration/caseCategories")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isOk()
@@ -82,7 +82,7 @@ class ConfigurationResourceTest {
 	@Test
 	void getCaseCategoryListWhenEmpty() {
 
-		webTestClient.get().uri("/configuration/caseCategories")
+		webTestClient.get().uri("/2281/configuration/caseCategories")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isOk()

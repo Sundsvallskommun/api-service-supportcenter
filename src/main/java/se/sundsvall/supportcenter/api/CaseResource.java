@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.supportcenter.api.model.Case;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
@@ -37,7 +38,7 @@ import se.sundsvall.supportcenter.service.CaseService;
 
 @RestController
 @Validated
-@RequestMapping("/cases")
+@RequestMapping("/{municipalityId}/cases")
 @Tag(name = "Cases", description = "Case operations")
 public class CaseResource {
 
@@ -56,11 +57,13 @@ public class CaseResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Void> createCase(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true)
-		@RequestHeader("pobKey") final String pobKey,
-		@RequestBody @Valid final CreateCaseRequest body) {
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true)
+			@RequestHeader("pobKey") final String pobKey,
+			@RequestBody @Valid final CreateCaseRequest body) {
+
 		final var caseId = caseService.createCase(pobKey, body);
-		return created(fromPath("/cases/{caseId}").buildAndExpand(caseId).toUri())
+		return created(fromPath("/{municipalityId}/cases/{caseId}").buildAndExpand(municipalityId, caseId).toUri())
 			.header(CONTENT_TYPE, ALL_VALUE)
 			.build();
 	}
@@ -74,9 +77,10 @@ public class CaseResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Void> updateCase(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
-		@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId,
-		@RequestBody @Valid UpdateCaseRequest body) {
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId  String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
+			@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId,
+			@RequestBody @Valid UpdateCaseRequest body) {
 
 		caseService.updateCase(pobKey, caseId, body);
 		return noContent().build();
@@ -91,8 +95,9 @@ public class CaseResource {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "502", description = "Bad Gateway", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Case> getCase(
-		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
-		@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId) {
+			@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId String municipalityId,
+			@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
+			@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId) {
 
 		return ok(caseService.getCase(pobKey, caseId));
 	}

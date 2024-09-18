@@ -18,6 +18,7 @@
             "Item": "101389",
             "SerialNumber": "CD23456980",
             "Virtual.LeverantorensStatus": "0",
+            "Virtual.CIKommun" : "Sundsvall",
             "DeliveryDate": "2022-01-01",
             "EndWarrantyDate": "2022-01-01"
           },

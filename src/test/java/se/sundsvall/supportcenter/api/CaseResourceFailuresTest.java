@@ -36,7 +36,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseMissingBody() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.contentType(APPLICATION_JSON)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.exchange()
@@ -46,7 +46,7 @@ class CaseResourceFailuresTest {
 				.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 				.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.createCase(java.lang.String,se.sundsvall.supportcenter.api.model.CreateCaseRequest)");
+				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.createCase(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateCaseRequest)");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -54,7 +54,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseMissingPobKeyHeader() {
 
-		webTestClient.post().uri("/cases").contentType(APPLICATION_JSON)
+		webTestClient.post().uri("/2281/cases").contentType(APPLICATION_JSON)
 				.bodyValue(CreateCaseRequest.create())
 				.exchange()
 				.expectStatus().isBadRequest()
@@ -70,7 +70,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseMissingContentType() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.exchange()
 				.expectStatus().isEqualTo(UNSUPPORTED_MEDIA_TYPE)
@@ -86,7 +86,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseMissingNoteType() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.contentType(APPLICATION_JSON)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.bodyValue(createCaseRequest().withNote(Note.create().withText("text")))
@@ -105,7 +105,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseMissingNoteText() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.contentType(APPLICATION_JSON)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.bodyValue(createCaseRequest().withNote(Note.create().withType(PROBLEM)))
@@ -124,7 +124,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseBlankNoteText() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.contentType(APPLICATION_JSON)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.bodyValue(createCaseRequest().withNote(Note.create().withType(PROBLEM).withText(" ")))
@@ -143,7 +143,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void createCaseNoAttributesSet() {
 
-		webTestClient.post().uri("/cases")
+		webTestClient.post().uri("/2281/cases")
 				.contentType(APPLICATION_JSON)
 				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 				.bodyValue(CreateCaseRequest.create())
@@ -207,7 +207,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseMissingBody() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
@@ -217,7 +217,7 @@ class CaseResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.updateCase(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateCaseRequest)");
+				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.updateCase(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateCaseRequest)");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -225,7 +225,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseMissingPobKeyHeader() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.contentType(APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isBadRequest()
@@ -241,7 +241,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseMissingContentType() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isEqualTo(UNSUPPORTED_MEDIA_TYPE)
@@ -257,7 +257,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseMissingNoteType() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(UpdateCaseRequest.create().withNote(Note.create().withText("text")))
@@ -276,7 +276,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseMissingNoteText() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(UpdateCaseRequest.create().withNote(Note.create().withType(PROBLEM)))
@@ -295,7 +295,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void updateCaseBlankNoteText() {
 
-		webTestClient.patch().uri("/cases/{caseId}", "12345")
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(UpdateCaseRequest.create().withNote(Note.create().withType(PROBLEM).withText(" ")))
@@ -314,7 +314,7 @@ class CaseResourceFailuresTest {
 	@Test
 	void getCaseMissingPobKeyHeader() {
 
-		webTestClient.get().uri("/cases/{caseId}", "12345")
+		webTestClient.get().uri("/2281/cases/{caseId}", "12345")
 				.exchange()
 				.expectStatus().isBadRequest()
 				.expectHeader().contentType(APPLICATION_PROBLEM_JSON)

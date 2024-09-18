@@ -37,7 +37,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetNoAttributesSet() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(CreateAssetRequest.create())
@@ -57,7 +57,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetBlankInStrings() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(CreateAssetRequest.create()
@@ -88,7 +88,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetFaultyMacAddress() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(CreateAssetRequest.create()
@@ -110,7 +110,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetNoContentTypeSet() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isEqualTo(UNSUPPORTED_MEDIA_TYPE)
@@ -126,7 +126,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetMissingBody() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
@@ -135,7 +135,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
+			.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -143,7 +143,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void createAssetNoPobKeySet() {
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.contentType(APPLICATION_JSON)
 			.bodyValue(CreateAssetRequest.create())
 			.exchange()
@@ -163,7 +163,7 @@ class AssetResourceFailuresTest {
 		// Parameter values
 		final var id = "12345";
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
@@ -173,7 +173,7 @@ class AssetResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.AssetResource.updateAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateAssetRequest)");
+				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.AssetResource.updateAsset(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -184,7 +184,7 @@ class AssetResourceFailuresTest {
 		// Parameter values
 		final var id = "12345";
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isBadRequest()
@@ -203,7 +203,7 @@ class AssetResourceFailuresTest {
 		// Parameter values
 		final var id = "12345";
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isEqualTo(UNSUPPORTED_MEDIA_TYPE)
@@ -223,7 +223,7 @@ class AssetResourceFailuresTest {
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withMacAddress("faulty_mac_address");
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(body)
@@ -246,7 +246,7 @@ class AssetResourceFailuresTest {
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withNote(Note.create().withText("text"));
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(body)
@@ -269,7 +269,7 @@ class AssetResourceFailuresTest {
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withNote(Note.create().withType(SUPPLIERNOTE));
 		
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(body)
@@ -292,7 +292,7 @@ class AssetResourceFailuresTest {
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withNote(Note.create().withType(SUPPLIERNOTE).withText(" "));
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.bodyValue(body)
@@ -314,7 +314,7 @@ class AssetResourceFailuresTest {
 		// Parameter values
 		final var serialNumber = "12345";
 
-		webTestClient.get().uri(uriBuilder -> uriBuilder.path("/assets").queryParam("serialNumber", serialNumber).build())
+		webTestClient.get().uri(uriBuilder -> uriBuilder.path("/2281/assets").queryParam("serialNumber", serialNumber).build())
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
@@ -329,7 +329,7 @@ class AssetResourceFailuresTest {
 	@Test
 	void getAssetsMissingRequiredFilterParameter() {
 
-		webTestClient.get().uri("/assets")
+		webTestClient.get().uri("/2281/assets")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()
 			.expectStatus().isBadRequest()

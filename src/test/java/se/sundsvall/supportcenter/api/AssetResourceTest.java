@@ -16,6 +16,7 @@ import se.sundsvall.supportcenter.service.AssetService;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -45,23 +46,22 @@ class AssetResourceTest {
 			.withMacAddress("00:00:0a:bb:28:fc")
 			.withWarrantyEndDate(LocalDate.now().plusDays(360L))
 			.withSupplierStatus("supplierStatus")
-			.withDeliveryDate(LocalDate.now().plusDays(5L))
-			.withMunicipalityId("municipalityId");
+			.withDeliveryDate(LocalDate.now().plusDays(5L));
 		final var pobId = "pobId";
 
-		when(assetServiceMock.createAsset(POBKEY_HEADER_VALUE, createAssetRequest)).thenReturn(pobId);
+		when(assetServiceMock.createAsset(any(), any())).thenReturn(pobId);
 
-		webTestClient.post().uri("/assets")
+		webTestClient.post().uri("/2281/assets")
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(createAssetRequest)
 			.exchange()
 			.expectHeader().contentType(APPLICATION_JSON)
-			.expectHeader().location("/assets?serialNumber=" + pobId)
+			.expectHeader().location("/2281/assets?serialNumber=" + pobId)
 			.expectStatus().isCreated()
 			.expectBody().jsonPath("$.['id']").isEqualTo(pobId);
 
-		verify(assetServiceMock).createAsset(POBKEY_HEADER_VALUE, createAssetRequest);
+		verify(assetServiceMock).createAsset(POBKEY_HEADER_VALUE, createAssetRequest.withMunicipalityId("2281"));
 	}
 
 	@Test
@@ -77,10 +77,9 @@ class AssetResourceTest {
 			.withSupplierStatus("supplierStatus")
 			.withMacAddress("00:00:0a:bb:28:fc")
 			.withDeliveryDate(deliveryDate)
-			.withWarrantyEndDate(warrantyEndDate)
-			.withMunicipalityId("municipalityId");
+			.withWarrantyEndDate(warrantyEndDate);
 
-		webTestClient.patch().uri("/assets/{id}", id)
+		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(updateAssetRequest)
@@ -88,7 +87,7 @@ class AssetResourceTest {
 			.expectStatus().isNoContent()
 			.expectBody().isEmpty();
 
-		verify(assetServiceMock).updateConfigurationItem(POBKEY_HEADER_VALUE, id, updateAssetRequest);
+		verify(assetServiceMock).updateConfigurationItem(POBKEY_HEADER_VALUE, id, updateAssetRequest.withMunicipalityId("2281"));
 	}
 
 	@Test
@@ -100,7 +99,7 @@ class AssetResourceTest {
 		// Mock
 		when(assetServiceMock.getConfigurationItemsBySerialNumber(POBKEY_HEADER_VALUE, serialNumber)).thenReturn(List.of(Asset.create().withSerialNumber(serialNumber)));
 
-		webTestClient.get().uri(uriBuilder -> uriBuilder.path("/assets")
+		webTestClient.get().uri(uriBuilder -> uriBuilder.path("/2281/assets")
 			.queryParam("serialNumber", serialNumber).build())
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.exchange()

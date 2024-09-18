@@ -19,7 +19,7 @@ class CreateCaseOrderIT extends AbstractAppTest {
 	void test001_createCase() {
 
 		setupCall()
-			.withServicePath("/cases")
+			.withServicePath("/2281/cases")
 			.withHttpMethod(POST)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
