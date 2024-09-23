@@ -171,13 +171,13 @@ class UpdateCaseServiceTest {
 			assertThat(pobPayloadValue.getData()).isNotNull()
 				.containsEntry(KEY_ID, caseId)
 				.containsEntry(KEY_CASE_CATEGORY, caseCategory)
-				.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
+				.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(incomingCaseStatus).getFirst().getAttributes().get(KEY_CASE_STATUS))
 				.containsEntry(KEY_CLOSURE_CODE, closureCode)
 				.containsEntry(KEY_EXTERNAL_CASE_ID, incomingCaseStatus.equals(SupportCenterStatus.CANCELLED.getValue()) ? null : externalCaseId)
 				.containsEntry(KEY_RESPONSIBLE_GROUP, incomingCaseStatus.equals(SupportCenterStatus.CANCELLED.getValue()) ? "IT Support" : responsibleGroup)
 				.containsEntry(KEY_RESPONSIBLE, null);
 			assertThat(pobPayloadValue.getMemo()).isNotNull();
-			assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");
+			assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");
 			assertThat(pobPayloadValue.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo(noteText);
 		}
 		
@@ -226,15 +226,15 @@ class UpdateCaseServiceTest {
 		assertThat(pobPayloadValues).hasSize(2);
 
 		// Assert first call.
-		assertThat(pobPayloadValues.get(0).getType()).isEqualTo(DEFAULT_TYPE);
-		assertThat(pobPayloadValues.get(0).getData()).isNotNull()
+		assertThat(pobPayloadValues.getFirst().getType()).isEqualTo(DEFAULT_TYPE);
+		assertThat(pobPayloadValues.getFirst().getData()).isNotNull()
 			.containsEntry(KEY_ID, caseId)
-			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
-			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
+			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CASE_STATUS))
+			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
 			.containsEntry(KEY_EXTERNAL_CASE_ID, ""); // First call should contain an empty string for external case id.
-		assertThat(pobPayloadValues.get(0).getMemo()).hasSize(2);
-		assertThat(pobPayloadValues.get(0).getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + caseStatus + "'");
-		assertThat(pobPayloadValues.get(0).getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo(noteText);
+		assertThat(pobPayloadValues.getFirst().getMemo()).hasSize(2);
+		assertThat(pobPayloadValues.getFirst().getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + caseStatus + "'");
+		assertThat(pobPayloadValues.getFirst().getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo(noteText);
 
 		// Assert second call.
 		assertThat(pobPayloadValues.get(1).getType()).isEqualTo(DEFAULT_TYPE);
@@ -291,13 +291,13 @@ class UpdateCaseServiceTest {
 		assertThat(pobPayloadValue.getData()).isNotNull()
 			.containsEntry(KEY_ID, caseId)
 			.containsEntry(KEY_CASE_CATEGORY, caseCategory)
-			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
+			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(incomingCaseStatus).getFirst().getAttributes().get(KEY_CASE_STATUS))
 			.containsEntry(KEY_CLOSURE_CODE, closureCode)
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
 			.containsEntry(KEY_RESPONSIBLE, null);
 		assertThat(pobPayloadValue.getMemo()).isNotNull();
-		assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");
+		assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");
 		assertThat(pobPayloadValue.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo(noteText);
 	}
 
@@ -393,18 +393,18 @@ class UpdateCaseServiceTest {
 		assertThat(pobPayloadValues).hasSize(2);
 
 		// Assert first call.
-		assertThat(pobPayloadValues.get(0).getType()).isEqualTo(DEFAULT_TYPE);
-		assertThat(pobPayloadValues.get(0).getData()).isNotNull()
+		assertThat(pobPayloadValues.getFirst().getType()).isEqualTo(DEFAULT_TYPE);
+		assertThat(pobPayloadValues.getFirst().getData()).isNotNull()
 			.containsEntry(KEY_ID, caseId)
 			.containsEntry(KEY_CASE_CATEGORY, caseCategory)
-			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
-			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
+			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CASE_STATUS))
+			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
 			.containsEntry(KEY_RESPONSIBLE, null);
-		assertThat(pobPayloadValues.get(0).getMemo()).isNotNull();
-		assertThat(pobPayloadValues.get(0).getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad");
-		assertThat(pobPayloadValues.get(0).getMemo().get(NoteType.PROBLEM.toValue()).getMemo()).isEqualTo(noteText);
+		assertThat(pobPayloadValues.getFirst().getMemo()).isNotNull();
+		assertThat(pobPayloadValues.getFirst().getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad");
+		assertThat(pobPayloadValues.getFirst().getMemo().get(NoteType.PROBLEM.toValue()).getMemo()).isEqualTo(noteText);
 
 		// Assert second call.
 		assertThat(pobPayloadValues.get(1).getType()).isEqualTo(DEFAULT_TYPE);
@@ -500,10 +500,12 @@ class UpdateCaseServiceTest {
 		
 		@Override
 		public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
+			// Do nothing
 		}
 		
 		@Override
 		public void postProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
+			// Do nothing
 		}
 	}
 
@@ -516,10 +518,12 @@ class UpdateCaseServiceTest {
 		
 		@Override
 		public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
+			// Do nothing
 		}
 		
 		@Override
 		public void postProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
+			// Do nothing
 		}
 	}
 }
