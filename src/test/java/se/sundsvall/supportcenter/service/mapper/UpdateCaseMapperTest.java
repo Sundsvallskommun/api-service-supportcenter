@@ -111,16 +111,16 @@ class UpdateCaseMapperTest {
 
 		// Verification
 		assertThat(resultList).hasSize(2);
-		final var firstResult = resultList.get(0);
-		final var secondResult = resultList.get(1);
+		final var firstResult = resultList.getFirst();
+		final var secondResult = resultList.getLast();
 
 		// Assert first call.
 		assertThat(firstResult.getType()).isEqualTo(DEFAULT_TYPE);
 		assertThat(firstResult.getData()).isNotNull()
 			.containsEntry(KEY_ID, caseId)
 			.containsEntry(KEY_CASE_CATEGORY, caseCategory)
-			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CASE_STATUS))
-			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).get(0).getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
+			.containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CASE_STATUS))
+			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
 			.containsEntry(KEY_RESPONSIBLE, null);
@@ -134,11 +134,11 @@ class UpdateCaseMapperTest {
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getHandleSeparators()).isTrue();
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getIsValidForWeb()).isFalse();
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getStyle()).isEqualTo(PobMemo.StyleEnum.NUMBER_2);
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad");
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getExtension()).isEqualTo(".html");
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getHandleSeparators()).isTrue();
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getIsValidForWeb()).isFalse();
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).get(0).getStatusNoteType().toValue()).getStyle()).isEqualTo(PobMemo.StyleEnum.NUMBER_2);
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad");
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getExtension()).isEqualTo(".html");
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getHandleSeparators()).isTrue();
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getIsValidForWeb()).isFalse();
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getStyle()).isEqualTo(PobMemo.StyleEnum.NUMBER_2);
 
 		// Assert second call.
 		assertThat(secondResult.getType()).isEqualTo(DEFAULT_TYPE);

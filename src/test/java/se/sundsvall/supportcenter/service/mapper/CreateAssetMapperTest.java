@@ -116,8 +116,8 @@ class CreateAssetMapperTest {
 
 		// Verification
 		assertThat(result).isNotNull().hasSize(2);
-		assertThat(result.get(0)).isEqualTo("ItemId-1");
-		assertThat(result.get(1)).isEqualTo("ItemId-2");
+		assertThat(result.getFirst()).isEqualTo("ItemId-1");
+		assertThat(result.getLast()).isEqualTo("ItemId-2");
 	}
 
 	@Test
