@@ -1,7 +1,7 @@
 {
-	"caseStatus": "Reserved",
 	"note": {
-		"type": "WORKNOTE",
-		"text": "This is a note"
-	}
+		"text": "This is a note",
+		"type": "WORKNOTE"
+	},
+	"caseStatus": "Reserved"
 }

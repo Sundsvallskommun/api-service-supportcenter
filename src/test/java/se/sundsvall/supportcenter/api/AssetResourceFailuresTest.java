@@ -135,7 +135,8 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
+			.jsonPath("$.detail").isEqualTo(
+				"Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -241,7 +242,7 @@ class AssetResourceFailuresTest {
 
 	@Test
 	void updateAssetMissingNoteType() {
-		
+
 		// Parameter values
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withNote(Note.create().withText("text"));
@@ -268,7 +269,7 @@ class AssetResourceFailuresTest {
 		// Parameter values
 		final var id = "12345";
 		final var body = UpdateAssetRequest.create().withNote(Note.create().withType(SUPPLIERNOTE));
-		
+
 		webTestClient.patch().uri("/2281/assets/{id}", id)
 			.contentType(APPLICATION_JSON)
 			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
@@ -307,7 +308,7 @@ class AssetResourceFailuresTest {
 
 		verifyNoInteractions(assetServiceMock);
 	}
-	
+
 	@Test
 	void getAssetsMissingPobKeyHeader() {
 

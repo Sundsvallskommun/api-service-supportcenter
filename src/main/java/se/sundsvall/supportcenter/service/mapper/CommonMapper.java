@@ -19,20 +19,21 @@ import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 public class CommonMapper {
-	
+
 	private CommonMapper() {}
-	
+
 	private static final String DEFAULT_NOTE_EXTENSION = ".html";
 	private static final boolean DEFAULT_NOTE_HANDLE_SEPARATORS = true;
 	private static final boolean DEFAULT_NOTE_IS_VALID_FOR_WEB = false;
 	private static final StyleEnum DEFAULT_NOTE_STYLE = StyleEnum.NUMBER_2;
-	
+
 	private static final String NOTE_TEXT_JSON_PATH = "$['Memo']['%s']['Memo']";
+
 	/**
 	 * Method for creating a map of PobMemo:s containing sent in note.
 	 * 
-	 * @param note the note to convert into a PobMemo.
-	 * @return a Map with the created PobMemo.
+	 * @param  note the note to convert into a PobMemo.
+	 * @return      a Map with the created PobMemo.
 	 */
 	public static Map<String, PobMemo> toMemo(Note note) {
 		return toMemo(note, DEFAULT_NOTE_IS_VALID_FOR_WEB);
@@ -41,9 +42,9 @@ public class CommonMapper {
 	/**
 	 * Method for creating a map of PobMemo:s containing sent in note.
 	 *
-	 * @param note the note to convert into a PobMemo.
-	 * @param isValidForWeb if the note is valid for web
-	 * @return a Map with the created PobMemo.
+	 * @param  note          the note to convert into a PobMemo.
+	 * @param  isValidForWeb if the note is valid for web
+	 * @return               a Map with the created PobMemo.
 	 */
 	public static Map<String, PobMemo> toMemo(Note note, boolean isValidForWeb) {
 		if (isNull(note)) {
@@ -66,11 +67,12 @@ public class CommonMapper {
 		}
 		return DEFAULT_NOTE_STYLE;
 	}
-	
+
 	/**
 	 * Method for extracting a note from pob payload if it exists
-	 * @param pobPayload the pob payload to extract note from
-	 * @return note in payload or null
+	 * 
+	 * @param  pobPayload the pob payload to extract note from
+	 * @return            note in payload or null
 	 */
 	public static Note toNote(PobPayload pobPayload) {
 		final var memo = pobPayload.getMemo();
@@ -87,7 +89,7 @@ public class CommonMapper {
 		}
 		return null;
 	}
-	
+
 	private static String getValue(PobPayload pobPayload, String jsonPath) {
 		if (jsonPathExists(pobPayload, jsonPath)) {
 			return extractValueFromJsonPath(pobPayload, jsonPath, true);

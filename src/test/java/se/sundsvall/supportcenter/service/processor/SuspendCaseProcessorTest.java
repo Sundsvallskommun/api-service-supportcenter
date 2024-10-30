@@ -26,7 +26,7 @@ class SuspendCaseProcessorTest {
 
 	@Mock
 	private POBClient pobClientMock;
-	
+
 	@Mock
 	private PobPayload pobPayloadMock;
 
@@ -37,7 +37,7 @@ class SuspendCaseProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();

@@ -1,468 +1,410 @@
 {
 	"Type": "Case",
-	"Links": [
-	],
+	"Links": [],
 	"Data": {
-		"CasePK": "113901946",
-		"Id": "867458",
-		"Description": "[Shop] Beställning av tjänst Test 1650354511 TestZZZ220316CreateCaseNetset ab",
-		"DeleteDate": "",
-		"Approved": "",
-		"AssignStatus": "0",
-		"Callback": "5555",
-		"ChildrenCount": "0",
-		"ShouldUpdateChildren": "",
-		"PercentFinished": "0",
-		"InboundMailCount": "0",
-		"InvoiceDate": "",
-		"ImpactFrom": "",
-		"PercentOccupied": "0",
-		"IsOkForWeb": "",
-		"OrganizationMail": "",
-		"Reference": "",
-		"Revision": "",
-		"CaseStatus": "1",
-		"UserNotifyBy": "",
-		"ContactNotifyBy": "0",
 		"Origin": "",
-		"CaseSubstatusHistory": "",
+		"Virtual.CAS_VIR_NETIP": "",
+		"Virtual.CAS_VIR_FOLTAG": "",
+		"Virtual.CAS_VIR_FOLLOW_KOP": "",
+		"Virtual.CAS_VIR_AKTNR": "",
+		"Virtual.Print_taggar_antal": "",
 		"EUUpdateCount": "0",
-		"MailStatusColor": "",
-		"UnreadMailCount": "",
-		"TotalTasks": "",
-		"CompletedTasks": "",
-		"AlertPercent": "",
-		"AlertColor": "",
+		"UserNotifyBy": "",
 		"ShortDescription": "",
+		"Virtual.CAS_VIR_PRINTNAME": "",
+		"Virtual.Tel_Byt_Ab_Telefonnr_CI_Name": "",
+		"Virtual.CAS_VIR_FOLIP": "",
+		"IsOkForWeb": "",
+		"Virtual.CAS_VIR_NETMASK": "",
+		"Virtual.CAS_VIR_NET": "",
+		"Virtual.print_kop_extrafack_antal": "",
+		"Times.RegisteredTime": "0,00",
+		"Virtual.ROO_ACTION": "",
+		"PercentFinished": "0",
+		"Virtual.CAS_VIR_ELEVATOR": "",
+		"ResponsibleGroup": {
+			"Type": "UserGroup",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/usergroups/IT Ute"
+			}],
+			"Data": {
+				"Description": "IT Utesupport",
+				"Id": "IT Ute"
+			},
+			"Memo": {}
+		},
+		"Virtual.IsRfc": "",
+		"Virtual.NewMail": "0",
+		"CIInfo.Type": {
+			"Type": "ConfigurationItemType",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
+			}],
+			"Data": {
+				"Description": "Lätt Bärbar datorarbetsplats",
+				"Id": "Lätt Bärbar"
+			},
+			"Memo": {}
+		},
+		"Virtual.CAS_VIR_SOC": "",
+		"Virtual.CAS_VIR_EFTER3_Mellan": "",
+		"Virtual.Shop_Kst_Ansvarsnummer": "15220100",
+		"AlertColor": "",
+		"Virtual.Print_Extrafack_Antal": "",
+		"Virtual.CAS_CHANGE_CASE": "",
+		"Virtual.Tel_Ny_Tillv_MEX_Bool": "",
+		"Virtual.Koneo_solved": "",
+		"Virtual.OriginType2": "",
+		"Virtual.Tel_Avsl_Tillv_MEX_Bool": "",
+		"CaseSubstatusHistory": "",
+		"Virtual.Shop_PersonligGemensam": "1",
+		"InvoiceDate": "",
+		"Times.InProcessDate": "",
+		"Virtual.Shop_Kst_JoinAccount": {
+			"Type": "Account",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
+			}],
+			"Data": {"Id": "15220100 974310 920350 5662 17071 6310000 115"},
+			"Memo": {}
+		},
+		"Virtual.CAS_VIR_EFACK_KOP": "",
+		"Virtual.CAS_VIR_STAIRS": "",
+		"Virtual.Tel_Byt_Ers_IMEI_nr": "",
+		"Virtual.CAS_EDT_STA2": "",
+		"Contact.Customer": {
+			"Type": "Customer",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/customers/test02test"
+			}],
+			"Data": {
+				"FirstName": "John",
+				"Phone": "",
+				"Id": "test02test",
+				"LastName": "Doetest",
+				"Mobile": ""
+			},
+			"Memo": {}
+		},
+		"Virtual.CAS_VIR_SHORTSERIAL": "",
+		"Virtual.CAS_VIR_BOX": "",
+		"SLAInfo.Service": {
+			"Type": "ServiceCatalog",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/servicecatalogs/Lätt bärbar dator för medarbetare"
+			}],
+			"Data": {
+				"Description": "Lätt bärbar dator, Medarb",
+				"Id": "Lätt bärbar dator för medarbetare"
+			},
+			"Memo": {}
+		},
+		"Times.TimeInSuspend": "0,00",
+		"Times.OnsiteDate": "",
+		"Virtual.Shop_Kst_Motpart": "115",
+		"Virtual.CAS_VIR_NETGW": "",
+		"Virtual.CAS_VIR_FOLLOW": "",
+		"Times.SuspendTimeWhileOpened": "",
+		"Virtual.CAS_VIR_PRONR": "",
+		"Virtual.CAS_VIR_SUSP_DATE_TIME": "",
+		"Virtual.UsersForEvaluation": "",
+		"UnregisteredCI": "",
+		"Virtual.CAS_VIR_KVOTA": "",
+		"Virtual.Shop_Adr_Gatuadress": "Gatan 6",
+		"Virtual.Shop_ForvaltningBolag": "BoU",
+		"Contact.Organization": {
+			"Type": "Organization",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/organizations/7284"
+			}],
+			"Data": {
+				"Virtual.DefaultContractId": "11912",
+				"Description": "VOF GVS Resursbank",
+				"Address2": "",
+				"Id": "7284"
+			},
+			"Memo": {}
+		},
+		"ChildrenCount": "0",
+		"Virtual.CAS_SEND_MAIL_VIRT": "",
+		"Virtual.Tel_Byt_Anv_Beskrivning": "",
+		"Times.OpenedDate": "2022-04-19 09:48:31",
+		"Virtual.Tel_Ny_Tillv_Expressbest_Bool": "",
+		"Approved": "",
+		"Virtual.CAS_VIR_FAXAVS": "",
+		"Virtual.CAS_VIR_AXISIP": "",
+		"CasePK": "113901946",
+		"Times.ActualOnsiteDate": "",
+		"Virtual.Shop_Kst_Objektnummer": "6310000",
+		"Virtual.InvoiceReference": "test02ref",
+		"PriorityInfo.Priority": {
+			"Type": "Priority",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/priorities/IT3"
+			}],
+			"Data": {
+				"Description": "Löst inom 5 arbetsdagar",
+				"Id": "IT3"
+			},
+			"Memo": {}
+		},
+		"Virtual.CAS_VIR_NETCON": "",
+		"Virtual.Shop_Kst_Verksamhetsnummer": "920350",
+		"TimeLimits.IsEscalationOnHold": "",
+		"Virtual.Shop_Kst_Projektnummer": "17071",
+		"Virtual.MultiUpdate_Text": "",
+		"Virtual.CAS_VIR_SEM": "",
+		"Virtual.CAS_VIR_EFACK": "",
+		"UnregisteredContact.Data3": "",
+		"UnregisteredContact.Data4": "",
+		"Virtual.Shop_Fritext": "leverans fredagar",
+		"UnregisteredContact.Data5": "",
+		"Virtual.Shop_Kontaktperson": "Test Testsson",
+		"CIInfo.Ci": {
+			"Type": "ConfigurationItem",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/configurationitems/100052"
+			}],
+			"Data": {
+				"Description": "",
+				"SerialNumber": "9R5CNZl",
+				"OptionalNumber": "test3434",
+				"Id": "100052"
+			},
+			"Memo": {}
+		},
+		"Virtual.ExternalCaseId": "",
+		"CIInfo2.Ci": {
+			"Type": "ConfigurationItem",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/configurationitems/100053"
+			}],
+			"Data": {
+				"Description": "",
+				"SerialNumber": "CQBRVY1",
+				"OptionalNumber": "",
+				"Id": "100053"
+			},
+			"Memo": {}
+		},
+		"Virtual.CAS_CHANGE_CASE2": "2",
+		"Virtual.Tel_Description": "",
+		"Virtual.CAS_VIR_LEVDAT": "",
+		"UnregisteredContact.Mail": "",
+		"PercentOccupied": "0",
+		"Virtual.CAS_VIR_AXISGW": "",
+		"TotalTasks": "",
+		"Virtual.CAS_VIR_EFTER2": "",
+		"Virtual.OriginId": "",
+		"Virtual.Tel_Byt_ErsPh_IMEI_nr": "",
+		"Virtual.Shop_Epost": "test.testsson@sundsvall.se",
+		"Virtual.Tel_Byt_ErsPh_Serienr": "",
+		"Virtual.MailFailedMaxValue": "",
+		"Virtual.Tel_Byt_ErsPh_Beskrivning": "",
+		"UnregisteredContact.Data1": "",
+		"Virtual.CAS_EDT_SOL2": "2022-04-26 09:48:31",
+		"UnregisteredContact.Data2": "",
+		"CompletedTasks": "",
+		"Virtual.Shop_CI_Name": "",
+		"Virtual.Tel_Ny_Tel_IMEI_nr": "",
+		"Times.ActualOkDate": "",
 		"OpenedBy": {
 			"Type": "User",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/users/system_api_advania_cube"
-				}
-			],
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/users/system_api_advania_cube"
+			}],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",
 				"LastName": "Advania Cube"
 			},
-			"Memo": {
-			}
+			"Memo": {}
 		},
+		"Virtual.Shop_Telefonnummer": "079-11111111",
+		"Virtual.CAS_VIR_PBANK": "",
+		"Times.SuspendTimeWhileInProcess": "",
+		"Virtual.CAS_VIR_PORTNO": "",
+		"Virtual.CAS_VIR_UNDER": "",
+		"OrganizationMail": "",
+		"CIInfo.OperationStatus": "",
+		"Virtual.Tel_Byt_Tjanst_IMEI_nr": "",
+		"Virtual.OriginType": "",
+		"Times.TimeUntilStarted": "0,00",
+		"Virtual.CAS_VIR_AXISMASK": "",
+		"Times.ClosedDate": "",
+		"Virtual.EscalationStateCustom": "",
+		"Virtual.Tel_Ny_Tillv_Phoniro_Serienr": "",
+		"TimeLimits.ServiceHours": {
+			"Type": "ServiceHours",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/servicehours/Default"
+			}],
+			"Data": {
+				"Description": "Default set up",
+				"Id": "Default"
+			},
+			"Memo": {}
+		},
+		"Virtual.Shop_ExterntArtikelnummer": "4343434",
+		"Virtual.Shop_Kst_Aktivitetsnummer": "5662",
+		"Times.OkDate": "",
+		"Virtual.CAS_VIR_FOLTAG_KOP": "",
+		"Virtual.Shop_Office": "1",
+		"Virtual.TriggerId": "",
+		"Virtual.WebserviceResponse": "",
+		"CaseStatus": "1",
+		"Id": "867458",
+		"Virtual.CAS_VIR_UNDER_KOP": "",
+		"Description": "[Shop] Beställning av tjänst Test 1650354511 TestZZZ220316CreateCaseNetset ab",
 		"OpenedByGroup": {
 			"Type": "UserGroup",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/usergroups/Advania"
-				}
-			],
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/usergroups/Advania"
+			}],
 			"Data": {
-				"Id": "Advania",
-				"Description": "Advania"
+				"Description": "Advania",
+				"Id": "Advania"
 			},
-			"Memo": {
-			}
-		},
-		"CaseType": {
-			"Type": "CaseType",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/casetypes/Service Request"
-				}
-			],
-			"Data": {
-				"Id": "Service Request",
-				"Description": "Beställningar, frågor"
-			},
-			"Memo": {
-			}
-		},
-		"CaseCategory": {
-			"Type": "CaseCategory",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
-				}
-			],
-			"Data": {
-				"Id": "Beställning av Hårdvara Advania",
-				"Description": "Beställning av Hårdvara Advania"
-			},
-			"Memo": {
-			}
+			"Memo": {}
 		},
 		"CoordinatorGroup": {
 			"Type": "UserGroup",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/usergroups/Advania"
-				}
-			],
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/usergroups/Advania"
+			}],
 			"Data": {
-				"Id": "Advania",
-				"Description": "Advania"
+				"Description": "Advania",
+				"Id": "Advania"
 			},
-			"Memo": {
-			}
+			"Memo": {}
 		},
-		"ResponsibleGroup": {
-			"Type": "UserGroup",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/usergroups/IT Ute"
-				}
-			],
+		"MailStatusColor": "",
+		"Times.SolvedDate": "",
+		"Virtual.CaseLockedByUserId": "",
+		"Virtual.CAS_VIR_ANSNR": "",
+		"Reference": "",
+		"Virtual.CAS_VIR_EFTER": "",
+		"ContactNotifyBy": "0",
+		"CaseCategory": {
+			"Type": "CaseCategory",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
+			}],
 			"Data": {
-				"Id": "IT Ute",
-				"Description": "IT Utesupport"
+				"Description": "Beställning av Hårdvara Advania",
+				"Id": "Beställning av Hårdvara Advania"
 			},
-			"Memo": {
-			}
+			"Memo": {}
 		},
+		"Virtual.Tel_Ny_Tillv_Phoniro_Bluetoothadress": "",
+		"Virtual.Shop_Adr_Postnr": "851 23",
+		"ImpactFrom": "",
+		"ShouldUpdateChildren": "",
+		"AssignStatus": "0",
+		"InboundMailCount": "0",
+		"Virtual.CAS_VIR_BOX_KOP": "",
+		"Virtual.OriginId2": "",
+		"SLAInfo.Contract": {
+			"Type": "Contract",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/сontracts/11912"
+			}],
+			"Data": {
+				"Description": "VOF GVS Resursbank",
+				"Id": "11912"
+			},
+			"Memo": {}
+		},
+		"Virtual.Tel_Byt_ErsPh_Phoniro_Bluetoothadress": "",
+		"Virtual.Tel_Ny_Tillv_Phoniro_Bool": "",
+		"Virtual.CAS_VIR_FAXNR": "",
+		"Times.PlannedTime": "0,00",
+		"Virtual.Shop_Kst_Underkonto": "974310",
+		"Virtual.CAS_VIR_FAX": "",
+		"Virtual.Shop_Adr_Postort": "Sundsvall",
+		"Virtual.Shop_CI_Description": "Tydlig och bra CI beskrivning",
+		"Virtual.IsRfcApproved": "",
+		"Virtual.CAS_VIR_OBJNR": "",
+		"Virtual.Shop_JoinContact": {
+			"Type": "Customer",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/customers/test01test"
+			}],
+			"Data": {
+				"FirstName": "Test",
+				"Phone": "test",
+				"Id": "test01test",
+				"LastName": "Testsson",
+				"Mobile": "test"
+			},
+			"Memo": {}
+		},
+		"Virtual.CAS_VIR_PLACE": "",
+		"CIInfo2.OperationStatus": "",
+		"Virtual.LeveransdatumUtfall": "",
+		"Virtual.CAS_VIR_DRIVER": "",
+		"Revision": "",
+		"Virtual.CAS_VIR_ADSEM": "",
+		"CaseType": {
+			"Type": "CaseType",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/casetypes/Service Request"
+			}],
+			"Data": {
+				"Description": "Beställningar, frågor",
+				"Id": "Service Request"
+			},
+			"Memo": {}
+		},
+		"Virtual.CustomerHasResponded": "",
+		"AlertPercent": "",
+		"Virtual.CAS_VIR_SKANNING": "",
+		"Virtual.CAS_VIR_VERNR": "",
+		"Virtual.Shop_ServiceIdExternalSync": "123",
+		"Times.UsedTime": "0,00",
+		"Virtual.MultiUpdate_SelectedCases": "",
+		"Virtual.Tel_CI_Name": "",
 		"Coordinator": {
 			"Type": "User",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/users/system_api_advania_cube"
-				}
-			],
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/users/system_api_advania_cube"
+			}],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",
 				"LastName": "Advania Cube"
 			},
-			"Memo": {
-			}
+			"Memo": {}
 		},
-		"Contact.Customer": {
-			"Type": "Customer",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/customers/test02test"
-				}
-			],
-			"Data": {
-				"FirstName": "John",
-				"Id": "test02test",
-				"LastName": "Doetest",
-				"Mobile": "",
-				"Phone": ""
-			},
-			"Memo": {
-			}
-		},
-		"Contact.Organization": {
-			"Type": "Organization",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/organizations/7284"
-				}
-			],
-			"Data": {
-				"Id": "7284",
-				"Description": "VOF GVS Resursbank",
-				"Address2": "",
-				"Virtual.DefaultContractId": "11912"
-			},
-			"Memo": {
-			}
-		},
-		"UnregisteredContact.Data1": "",
-		"UnregisteredContact.Data2": "",
-		"UnregisteredContact.Data3": "",
-		"UnregisteredContact.Data4": "",
-		"UnregisteredContact.Data5": "",
-		"UnregisteredContact.Mail": "",
-		"CIInfo.Type": {
-			"Type": "ConfigurationItemType",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
-				}
-			],
-			"Data": {
-				"Id": "Lätt Bärbar",
-				"Description": "Lätt Bärbar datorarbetsplats"
-			},
-			"Memo": {
-			}
-		},
-		"CIInfo.Ci": {
-			"Type": "ConfigurationItem",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/configurationitems/100052"
-				}
-			],
-			"Data": {
-				"Id": "100052",
-				"Description": "",
-				"OptionalNumber": "test3434",
-				"SerialNumber": "9R5CNZl"
-			},
-			"Memo": {
-			}
-		},
-		"CIInfo.OperationStatus": "",
-		"UnregisteredCI": "",
-		"CIInfo2.Ci": {
-			"Type": "ConfigurationItem",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/configurationitems/100053"
-				}
-			],
-			"Data": {
-				"Id": "100053",
-				"Description": "",
-				"OptionalNumber": "",
-				"SerialNumber": "CQBRVY1"
-			},
-			"Memo": {
-			}
-		},
-		"CIInfo2.OperationStatus": "",
-		"SLAInfo.Contract": {
-			"Type": "Contract",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/сontracts/11912"
-				}
-			],
-			"Data": {
-				"Id": "11912",
-				"Description": "VOF GVS Resursbank"
-			},
-			"Memo": {
-			}
-		},
-		"SLAInfo.Service": {
-			"Type": "ServiceCatalog",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/servicecatalogs/Lätt bärbar dator för medarbetare"
-				}
-			],
-			"Data": {
-				"Id": "Lätt bärbar dator för medarbetare",
-				"Description": "Lätt bärbar dator, Medarb"
-			},
-			"Memo": {
-			}
-		},
-		"PriorityInfo.Priority": {
-			"Type": "Priority",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/priorities/IT3"
-				}
-			],
-			"Data": {
-				"Id": "IT3",
-				"Description": "Löst inom 5 arbetsdagar"
-			},
-			"Memo": {
-			}
-		},
-		"TimeLimits.NextEscalationDate": "",
-		"TimeLimits.TimeLimitExceeded": "5",
-		"TimeLimits.IsEscalationOnHold": "",
-		"TimeLimits.ServiceHours": {
-			"Type": "ServiceHours",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/servicehours/Default"
-				}
-			],
-			"Data": {
-				"Id": "Default",
-				"Description": "Default set up"
-			},
-			"Memo": {
-			}
-		},
-		"Times.OkDate": "",
-		"Times.ActualOkDate": "",
-		"Times.OnsiteDate": "",
-		"Times.ActualOnsiteDate": "",
-		"Times.OpenedDate": "2022-04-19 09:48:31",
-		"Times.SolvedDate": "",
-		"Times.PlannedTime": "0,00",
+		"DeleteDate": "",
 		"Times.RemainingTime": "0,00",
-		"Times.UsedTime": "0,00",
-		"Times.RegisteredTime": "0,00",
-		"Times.InProcessDate": "",
-		"Times.ClosedDate": "",
-		"Times.TimeUntilStarted": "0,00",
-		"Times.TimeUntilSolved": "0,00",
-		"Times.TimeInSuspend": "0,00",
-		"Times.SuspendTimeWhileOpened": "",
-		"Times.SuspendTimeWhileInProcess": "",
-		"Virtual.Shop_ForvaltningBolag": "BoU",
-		"Virtual.Shop_PersonligGemensam": "1",
-		"Virtual.Shop_Office": "1",
-		"Virtual.Shop_JoinContact": {
-			"Type": "Customer",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/customers/test01test"
-				}
-			],
-			"Data": {
-				"FirstName": "Test",
-				"Id": "test01test",
-				"LastName": "Testsson",
-				"Mobile": "test",
-				"Phone": "test"
-			},
-			"Memo": {
-			}
-		},
-		"Virtual.Shop_Kst_Ansvarsnummer": "15220100",
-		"Virtual.Shop_Kst_Underkonto": "974310",
-		"Virtual.Shop_Kst_Verksamhetsnummer": "920350",
-		"Virtual.Shop_Kst_Aktivitetsnummer": "5662",
-		"Virtual.Shop_Kst_Projektnummer": "17071",
-		"Virtual.Shop_Kst_Objektnummer": "6310000",
-		"Virtual.Shop_Kst_Motpart": "115",
-		"Virtual.Shop_Kst_JoinAccount": {
-			"Type": "Account",
-			"Links": [
-				{
-					"Relation": "self",
-					"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
-				}
-			],
-			"Data": {
-				"Id": "15220100 974310 920350 5662 17071 6310000 115"
-			},
-			"Memo": {
-			}
-		},
-		"Virtual.Shop_CI_Name": "",
-		"Virtual.Shop_CI_Description": "Tydlig och bra CI beskrivning",
-		"Virtual.Shop_Adr_Gatuadress": "Gatan 6",
-		"Virtual.Shop_Adr_Postnr": "851 23",
-		"Virtual.Shop_Adr_Postort": "Sundsvall",
-		"Virtual.Shop_Telefonnummer": "079-11111111",
-		"Virtual.Shop_Epost": "test.testsson@sundsvall.se",
-		"Virtual.Shop_Kontaktperson": "Test Testsson",
-		"Virtual.WebserviceResponse": "",
-		"Virtual.Shop_ServiceIdExternalSync": "123",
-		"Virtual.ExternalCaseId": "",
-		"Virtual.Shop_ExterntArtikelnummer": "4343434",
-		"Virtual.Shop_Fritext": "leverans fredagar",
-		"Virtual.CustomerHasResponded": "",
-		"Virtual.TriggerId": "",
-		"Virtual.MultiUpdate_SelectedCases": "",
-		"Virtual.MultiUpdate_Text": "",
-		"Virtual.CAS_VIR_EFTER3_Mellan": "",
-		"Virtual.LeveransdatumUtfall": "",
-		"Virtual.CAS_VIR_LEVDAT": "",
-		"Virtual.CAS_VIR_SEM": "",
-		"Virtual.CAS_VIR_ADSEM": "",
-		"Virtual.CAS_VIR_SKANNING": "",
-		"Virtual.CAS_VIR_FOLLOW": "",
-		"Virtual.CAS_VIR_KVOTA": "",
 		"Virtual.CAS_VIR_RETAKE": "",
-		"Virtual.CAS_VIR_STAIRS": "",
-		"Virtual.CAS_VIR_ELEVATOR": "",
-		"Virtual.CAS_VIR_SOC": "",
-		"Virtual.CAS_VIR_NETCON": "",
-		"Virtual.CAS_VIR_PORTNO": "",
-		"Virtual.CAS_VIR_PRINTNAME": "",
-		"Virtual.CAS_VIR_NET": "",
-		"Virtual.CAS_VIR_NETIP": "",
-		"Virtual.CAS_VIR_NETMASK": "",
-		"Virtual.CAS_VIR_NETGW": "",
-		"Virtual.CAS_VIR_AXISIP": "",
-		"Virtual.CAS_VIR_AXISMASK": "",
-		"Virtual.CAS_VIR_AXISGW": "",
-		"Virtual.CAS_VIR_DRIVER": "",
-		"Virtual.CAS_VIR_SHORTSERIAL": "",
-		"Virtual.CAS_VIR_EFTER": "",
-		"Virtual.CAS_VIR_BOX": "",
-		"Virtual.CAS_VIR_EFTER2": "",
-		"Virtual.CAS_VIR_EFACK": "",
-		"Virtual.CAS_VIR_PBANK": "",
-		"Virtual.CAS_VIR_FAX": "",
-		"Virtual.CAS_VIR_UNDER": "",
-		"Virtual.CAS_VIR_PLACE": "",
-		"Virtual.CAS_VIR_ANSNR": "",
-		"Virtual.CAS_VIR_VERNR": "",
-		"Virtual.CAS_VIR_AKTNR": "",
-		"Virtual.CAS_VIR_PRONR": "",
-		"Virtual.CAS_VIR_OBJNR": "",
-		"Virtual.CAS_VIR_FOLIP": "",
-		"Virtual.CAS_VIR_FAXNR": "",
-		"Virtual.CAS_VIR_FAXAVS": "",
-		"Virtual.CAS_VIR_FOLTAG": "",
-		"Virtual.CAS_CHANGE_CASE": "",
-		"Virtual.CAS_CHANGE_CASE2": "2",
-		"Virtual.CAS_SEND_MAIL_VIRT": "",
-		"Virtual.UsersForEvaluation": "",
-		"Virtual.InvoiceReference": "test02ref",
-		"Virtual.EscalationStateCustom": "",
-		"Virtual.Tel_CI_Name": "",
-		"Virtual.Tel_Description": "",
-		"Virtual.OriginId2": "",
-		"Virtual.OriginType2": "",
-		"Virtual.Tel_Ny_Tel_IMEI_nr": "",
-		"Virtual.Tel_Ny_Tillv_Phoniro_Bool": "",
-		"Virtual.Tel_Ny_Tillv_Phoniro_Serienr": "",
-		"Virtual.Tel_Ny_Tillv_Phoniro_Bluetoothadress": "",
-		"Virtual.Tel_Ny_Tillv_MEX_Bool": "",
-		"Virtual.Tel_Ny_Tillv_Expressbest_Bool": "",
-		"Virtual.Tel_Byt_Ers_IMEI_nr": "",
-		"Virtual.Tel_Byt_ErsPh_Beskrivning": "",
-		"Virtual.Tel_Byt_ErsPh_IMEI_nr": "",
-		"Virtual.Tel_Byt_ErsPh_Serienr": "",
-		"Virtual.Tel_Byt_ErsPh_Phoniro_Bluetoothadress": "",
-		"Virtual.Tel_Byt_Ab_Telefonnr_CI_Name": "",
-		"Virtual.Tel_Byt_Tjanst_IMEI_nr": "",
-		"Virtual.Tel_Avsl_Tillv_MEX_Bool": "",
+		"Callback": "5555",
+		"TimeLimits.TimeLimitExceeded": "5",
 		"Virtual.Tel_Avsl_Anknytning": "",
-		"Virtual.Tel_Byt_Anv_Beskrivning": "",
-		"Virtual.CaseLockedByUserId": "",
-		"Virtual.Print_Extrafack_Antal": "",
-		"Virtual.Print_taggar_antal": "",
 		"Virtual.print_kop_taggar_antal": "",
-		"Virtual.print_kop_extrafack_antal": "",
+		"UnreadMailCount": "",
+		"Times.TimeUntilSolved": "0,00",
 		"Virtual.CAS_VIR_Servername": "",
-		"Virtual.ROO_ACTION": "",
-		"Virtual.CAS_EDT_STA2": "",
-		"Virtual.CAS_EDT_SOL2": "2022-04-26 09:48:31",
-		"Virtual.CAS_VIR_SUSP_DATE_TIME": "",
-		"Virtual.IsRfc": "",
-		"Virtual.IsRfcApproved": "",
-		"Virtual.Koneo_solved": "",
-		"Virtual.CAS_VIR_EFACK_KOP": "",
-		"Virtual.CAS_VIR_BOX_KOP": "",
-		"Virtual.CAS_VIR_FOLLOW_KOP": "",
-		"Virtual.CAS_VIR_UNDER_KOP": "",
-		"Virtual.CAS_VIR_FOLTAG_KOP": "",
-		"Virtual.MailFailedMaxValue": "",
-		"Virtual.NewMail": "0",
-		"Virtual.OriginType": "",
-		"Virtual.OriginId": ""
+		"TimeLimits.NextEscalationDate": ""
 	},
-	"Memo": {
-	}
+	"Memo": {}
 }

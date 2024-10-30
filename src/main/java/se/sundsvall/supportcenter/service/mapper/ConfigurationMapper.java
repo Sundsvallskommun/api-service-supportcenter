@@ -80,10 +80,10 @@ public class ConfigurationMapper {
 	/**
 	 * Fetch a list of String values by type. The key of the attribute to return should also be provided.
 	 *
-	 * @param pobPayloadList the list of PobPayload
-	 * @param type           the PobPayload-type
-	 * @param key            the JSON-key (in the data-object) of the value to fetch.
-	 * @return a List of String values
+	 * @param  pobPayloadList the list of PobPayload
+	 * @param  type           the PobPayload-type
+	 * @param  key            the JSON-key (in the data-object) of the value to fetch.
+	 * @return                a List of String values
 	 */
 	private static List<String> fetchListOfValues(List<PobPayload> pobPayloadList, String type, String key) {
 		return ofNullable(pobPayloadList).orElse(emptyList()).stream()

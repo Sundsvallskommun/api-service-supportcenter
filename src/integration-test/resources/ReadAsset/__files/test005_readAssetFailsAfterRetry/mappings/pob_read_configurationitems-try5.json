@@ -1,23 +1,13 @@
 {
-	"name": "try-5",
-	"scenarioName": "retry",
-	"requiredScenarioState": "try-4",
-	"newScenarioState": "try-5",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/configurationitems",
-		"queryParameters": {
-			"Filter": {
-				"equalTo": "SerialNumber=YYY"
-			}
-		}
+		"queryParameters": {"Filter": {"equalTo": "SerialNumber=YYY"}},
+		"urlPath": "/pob/configurationitems"
 	},
-	"response": {
-		"fixedDelayMilliseconds": 3000
-	}
+	"newScenarioState": "try-5",
+	"response": {"fixedDelayMilliseconds": 3000},
+	"name": "try-5",
+	"requiredScenarioState": "try-4",
+	"scenarioName": "retry"
 }

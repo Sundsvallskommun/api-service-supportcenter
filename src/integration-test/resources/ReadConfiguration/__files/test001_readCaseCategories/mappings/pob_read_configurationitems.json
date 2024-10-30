@@ -1,597 +1,498 @@
 {
-	"name": "pob-read-case-categories",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/casecategories",
-		"queryParameters": {
-			"limit": {
-				"equalTo": "10000"
-			}
-		}
+		"queryParameters": {"limit": {"equalTo": "10000"}},
+		"urlPath": "/pob/casecategories"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
+		"headers": {"Content-Type": "application/json"},
 		"jsonBody": [
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "False",
+					"BotPrimary": "",
+					"Description": "Administration",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "2008-06-19 00:00:00",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2890",
 					"Id": "Administration",
-					"Description": "Administration",
-					"DeleteDate": "2008-06-19 00:00:00",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "False",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
 					"BotSecondary": "",
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "True",
+					"BotPrimary": "",
+					"Description": "Avtalsfrågor",
+					"Occupied": "0",
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2892",
 					"Id": "Avtal",
-					"Description": "Avtalsfrågor",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "True",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Event"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Event"
+						}],
 						"Data": {
-							"Id": "Event",
-							"Description": "Autogenererade ärenden eller information från t.ex. externa leverantörer"
+							"Description": "Autogenererade ärenden eller information från t.ex. externa leverantörer",
+							"Id": "Event"
 						},
-						"Memo": {
-						}
-					}
+						"Memo": {}
+					},
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "True",
+					"BotPrimary": "",
+					"Description": "Borttappad eller Stulen",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2893",
 					"Id": "IT Borttappad/Stulen",
-					"Description": "Borttappad eller Stulen",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "True",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+						}],
 						"Data": {
-							"Id": "Incident, Problem",
-							"Description": "Koder för Incident & Problem"
+							"Description": "Koder för Incident & Problem",
+							"Id": "Incident, Problem"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "False",
+					"BotPrimary": "",
+					"Description": "Licenshantering, beställning etc",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "2008-06-19 00:00:00",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2894",
 					"Id": "Licens",
-					"Description": "Licenshantering, beställning etc",
-					"DeleteDate": "2008-06-19 00:00:00",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "False",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Administration"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Administration"
+						}],
 						"Data": {
-							"Id": "Administration",
-							"Description": "Administration"
+							"Description": "Administration",
+							"Id": "Administration"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "False",
+					"BotPrimary": "",
+					"Description": "Hantering av användarkonton, grupper etc.",
+					"Occupied": "0",
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2895",
 					"Id": "IT Användarhantering",
-					"Description": "Hantering av användarkonton, grupper etc.",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "False",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Service Request"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Service Request"
+						}],
 						"Data": {
-							"Id": "Service Request",
-							"Description": "Koder för Service Requests"
+							"Description": "Koder för Service Requests",
+							"Id": "Service Request"
 						},
-						"Memo": {
-						}
-					}
+						"Memo": {}
+					},
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "False",
+					"BotPrimary": "",
+					"Description": "Uppläggning, ändring, och borttagning av användare",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "2008-06-19 00:00:00",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2896",
 					"Id": "Ändring",
-					"Description": "Uppläggning, ändring, och borttagning av användare",
-					"DeleteDate": "2008-06-19 00:00:00",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "False",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
+						}],
 						"Data": {
-							"Id": "IT Användarhantering",
-							"Description": "Hantering av användarkonton, grupper etc."
+							"Description": "Hantering av användarkonton, grupper etc.",
+							"Id": "IT Användarhantering"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "False",
+					"BotPrimary": "",
+					"Description": "Ändring av quota på användare",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "2008-06-19 00:00:00",
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2897",
 					"Id": "Quota",
-					"Description": "Ändring av quota på användare",
-					"DeleteDate": "2008-06-19 00:00:00",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "False",
-					"IsQuick": "False",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
+						}],
 						"Data": {
-							"Id": "IT Användarhantering",
-							"Description": "Hantering av användarkonton, grupper etc."
+							"Description": "Hantering av användarkonton, grupper etc.",
+							"Id": "IT Användarhantering"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"WebUse": "True",
+					"BotPrimary": "",
+					"Description": "Tjänst som finns i Tjänstekatalogen",
+					"Occupied": "0",
+					"Priority": {
+						"Type": "Priority",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,00",
+					"QuickCaseStatus": "",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "0",
+					"DeleteDate": "",
+					"ClosureCode": {
+						"Type": "ClosureCode",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/Koneo Tonerleverans"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"IsQuick": "True",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2898",
 					"Id": "IT Ny- & avbeställning av standardiserad tjänst",
-					"Description": "Tjänst som finns i Tjänstekatalogen",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "True",
-					"IsQuick": "True",
-					"GenerateResourceLog": "0",
-					"DefaultUsedTime": "0,00",
-					"QuickCaseStatus": "",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Service Request"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Service Request"
+						}],
 						"Data": {
-							"Id": "Service Request",
-							"Description": "Koder för Service Requests"
+							"Description": "Koder för Service Requests",
+							"Id": "Service Request"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"Priority": {
-						"Type": "Priority",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/priorities"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					},
-					"ClosureCode": {
-						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/Koneo Tonerleverans"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"BotIsEnabled": "",
+					"ServiceCatalog": {
+						"Type": "ServiceCatalog",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
+						}],
+						"Data": {
+							"Description": "Support som utförs på distans från kund/beställare.",
+							"Id": "Distanssupport"
+						},
+						"Memo": {}
+					},
+					"WebUse": "True",
+					"BotPrimary": "",
+					"Description": "Felmeddelande",
+					"Occupied": "0",
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,16",
+					"QuickCaseStatus": "0",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "2",
+					"DeleteDate": "",
+					"ClosureCode": {
+						"Type": "ClosureCode",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Information/Utbildning"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
 					"CaseCategoryPK": "2899",
 					"Id": "IT Felmeddelande",
-					"Description": "Felmeddelande",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "True",
-					"IsQuick": "False",
-					"GenerateResourceLog": "2",
-					"DefaultUsedTime": "0,16",
-					"QuickCaseStatus": "0",
-					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+						}],
 						"Data": {
-							"Id": "Incident, Problem",
-							"Description": "Koder för Incident & Problem"
+							"Description": "Koder för Incident & Problem",
+							"Id": "Incident, Problem"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
-					"ServiceCatalog": {
-						"Type": "ServiceCatalog",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
-							}
-						],
-						"Data": {
-							"Id": "Distanssupport",
-							"Description": "Support som utförs på distans från kund/beställare."
-						},
-						"Memo": {
-						}
-					},
-					"ClosureCode": {
-						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Information/Utbildning"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
-					}
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"CaseCategoryPK": "2900",
-					"Id": "IT Inloggningsproblem",
-					"Description": "Problem att logga in",
-					"DeleteDate": "",
-					"DefaultAllocationTime": "0,00",
-					"AllocationType": "0",
-					"PlannedHours": "0,00",
-					"ChildrenCount": "0",
-					"Occupied": "0",
-					"WebUse": "True",
-					"IsQuick": "False",
-					"GenerateResourceLog": "2",
-					"DefaultUsedTime": "0,16",
-					"QuickCaseStatus": "0",
 					"BotIsEnabled": "",
-					"BotDoesInputCI": "",
-					"BotHasMoreDetails": "",
-					"BotIsKnowledge": "",
-					"BotPrimary": "",
-					"BotSecondary": "",
-					"ParentCaseCategory": {
-						"Type": "CaseCategory",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-							}
-						],
-						"Data": {
-							"Id": "Incident, Problem",
-							"Description": "Koder för Incident & Problem"
-						},
-						"Memo": {
-						}
-					},
 					"ServiceCatalog": {
 						"Type": "ServiceCatalog",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
+						}],
 						"Data": {
-							"Id": "Distanssupport",
-							"Description": "Support som utförs på distans från kund/beställare."
+							"Description": "Support som utförs på distans från kund/beställare.",
+							"Id": "Distanssupport"
 						},
-						"Memo": {
-						}
+						"Memo": {}
 					},
+					"WebUse": "True",
+					"BotPrimary": "",
+					"Description": "Problem att logga in",
+					"Occupied": "0",
+					"AllocationType": "0",
+					"DefaultUsedTime": "0,16",
+					"QuickCaseStatus": "0",
+					"BotDoesInputCI": "",
+					"BotIsKnowledge": "",
+					"PlannedHours": "0,00",
+					"GenerateResourceLog": "2",
+					"DeleteDate": "",
 					"ClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Användarhantering"
-							}
-						],
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Användarhantering"
+						}],
+						"Data": {},
+						"Memo": {}
+					},
+					"IsQuick": "False",
+					"DefaultAllocationTime": "0,00",
+					"BotHasMoreDetails": "",
+					"CaseCategoryPK": "2900",
+					"Id": "IT Inloggningsproblem",
+					"ParentCaseCategory": {
+						"Type": "CaseCategory",
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+						}],
 						"Data": {
+							"Description": "Koder för Incident & Problem",
+							"Id": "Incident, Problem"
 						},
-						"Memo": {
-						}
-					}
+						"Memo": {}
+					},
+					"BotSecondary": "",
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			}
-		]
-	}
+		],
+		"status": 200
+	},
+	"name": "pob-read-case-categories"
 }

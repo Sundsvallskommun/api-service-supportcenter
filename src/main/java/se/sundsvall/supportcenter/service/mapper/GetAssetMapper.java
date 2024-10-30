@@ -88,7 +88,7 @@ public class GetAssetMapper {
 	}
 
 	private static LocalDate toLocalDate(String date) {
-		return StringUtils.isNotEmpty(date) ? LocalDate.parse(date, DATE_TIME_FORMATTER): null;
+		return StringUtils.isNotEmpty(date) ? LocalDate.parse(date, DATE_TIME_FORMATTER) : null;
 	}
 
 	private static String toManufacturer(Map<String, Object> manufacturerMap) {

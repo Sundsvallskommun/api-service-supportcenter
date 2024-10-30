@@ -107,13 +107,14 @@ public class UpdateCaseMapper {
 	 * - If no PobMemo exists with the same type as the provided Note: Create new PobMemo and add to the returned map.
 	 * </pre>
 	 * 
-	 * @param note the note to convert into a PobMemo.
-	 * @param memos a Map with any existing (newly created) PobMemo:s.
-	 * @return a new Map with the created PobMemo and all existing ones (i.e. already added in the provided map).
+	 * @param  note  the note to convert into a PobMemo.
+	 * @param  memos a Map with any existing (newly created) PobMemo:s.
+	 * @return       a new Map with the created PobMemo and all existing ones (i.e. already added in the provided map).
 	 */
 	private static Map<String, PobMemo> toMemos(Note note, Map<String, PobMemo> memos) {
-		if (isNull(note)) return memos; // If note is null, just return incoming memo map
-		
+		if (isNull(note))
+			return memos; // If note is null, just return incoming memo map
+
 		final var memoMap = new HashMap<>(ofNullable(memos).orElse(emptyMap()));
 		final var memoType = note.getType().toValue();
 
@@ -132,9 +133,9 @@ public class UpdateCaseMapper {
 	/**
 	 * Creates a note of note type
 	 * 
-	 * @param noteType   the notetype to use
-	 * @param caseStatus the status to be used
-	 * @return a note instance representing sent in parameters
+	 * @param  noteType   the notetype to use
+	 * @param  caseStatus the status to be used
+	 * @return            a note instance representing sent in parameters
 	 */
 	private static Note createStatusNote(NoteType noteType, String caseStatus) {
 		if (isNull(noteType)) {

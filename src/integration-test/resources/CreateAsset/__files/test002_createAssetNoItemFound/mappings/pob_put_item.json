@@ -1,49 +1,33 @@
 {
-  "name": "pob-put-configurationitem",
-  "request": {
-    "headers": {
-      "Authorization": {
-        "equalTo": "xyz"
-      }
-    },
-    "method": "PUT",
-    "urlPath": "/pob/items",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "Type": "Item",
-          "Links": [],
-          "Data": {
-            "StartDate": "${json-unit.any-string}",
-            "Description": "Latitude 9000",
-            "IdOption": "Testmodel",
-            "Virtual.Manufacturer": "x_dell"
-          },
-          "Memo": {}
-        }
-      }
-    ]
-  },
-  "response": {
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "status": 201,
-    "jsonBody": [
-      {
-        "TriggerResults": [],
-        "Type": "Item",
-        "Links": [
-          {
-            "Relation": "self",
-            "Href": "pobg6/api/v110/items/101389"
-          }
-        ],
-        "Data": {
-          "Id": "101389"
-        },
-        "Memo": {}
-      }
-    ]
-  }
+	"request": {
+		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"method": "PUT",
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Item",
+			"Links": [],
+			"Data": {
+				"StartDate": "${json-unit.any-string}",
+				"Description": "Latitude 9000",
+				"IdOption": "Testmodel",
+				"Virtual.Manufacturer": "x_dell"
+			},
+			"Memo": {}
+		}}],
+		"urlPath": "/pob/items"
+	},
+	"response": {
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": [{
+			"Type": "Item",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/items/101389"
+			}],
+			"Data": {"Id": "101389"},
+			"TriggerResults": [],
+			"Memo": {}
+		}],
+		"status": 201
+	},
+	"name": "pob-put-configurationitem"
 }

@@ -23,7 +23,7 @@ class UpdateAssetServiceTest {
 
 	@InjectMocks
 	private AssetService assetService;
-	
+
 	@Test
 	void updateConfigurationItem() {
 

@@ -36,20 +36,19 @@ public interface POBClient {
 	/**
 	 * Creates a case in POB.
 	 * 
-	 * @param pobKey  the key to use for authorization
-	 * @param payload payload the object with the item to create.
-	 * @return a list of payload trigger results
+	 * @param  pobKey  the key to use for authorization
+	 * @param  payload payload the object with the item to create.
+	 * @return         a list of payload trigger results
 	 */
 	@PutMapping(path = "cases", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	List<PobPayloadWithTriggerResults> createCase(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
 
-
 	/**
 	 * Get an existing case in POB.
 	 * 
-	 * @param pobKey the key to use for authorization
-	 * @param caseId the ID of the case.
-	 * @return The case
+	 * @param  pobKey the key to use for authorization
+	 * @param  caseId the ID of the case.
+	 * @return        The case
 	 */
 	@GetMapping(path = "cases/{caseId}", produces = APPLICATION_JSON_VALUE)
 	PobPayload getCase(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("caseId") String caseId);
@@ -57,8 +56,8 @@ public interface POBClient {
 	/**
 	 * Returns a list of all available case-categories.
 	 * 
-	 * @param pobKey the key to use for authorization
-	 * @return a list of available case-categories (max 10000)
+	 * @param  pobKey the key to use for authorization
+	 * @return        a list of available case-categories (max 10000)
 	 */
 	@Cacheable("case-categories")
 	@GetMapping(path = "casecategories?Fields=Id&limit=10000", produces = APPLICATION_JSON_VALUE)
@@ -67,8 +66,8 @@ public interface POBClient {
 	/**
 	 * Returns a list of of all available closure-codes.
 	 * 
-	 * @param pobKey the key to use for authorization
-	 * @return a list of available closure-codes (max 10000)
+	 * @param  pobKey the key to use for authorization
+	 * @return        a list of available closure-codes (max 10000)
 	 */
 	@Cacheable("closure-codes")
 	@GetMapping(path = "closurecodes?Fields=Id&limit=10000", produces = APPLICATION_JSON_VALUE)
@@ -77,9 +76,9 @@ public interface POBClient {
 	/**
 	 * Returns a list of configuration-items by serialNumber. The returned objects only contains the ID-attribute.
 	 * 
-	 * @param pobKey       the key to use for authorization
-	 * @param serialNumber the serial number to filter the results on
-	 * @return a list of configuration-items
+	 * @param  pobKey       the key to use for authorization
+	 * @param  serialNumber the serial number to filter the results on
+	 * @return              a list of configuration-items
 	 */
 	@GetMapping(path = "configurationitems?Filter=SerialNumber={serialNumber}", produces = APPLICATION_JSON_VALUE)
 	List<PobPayload> getConfigurationItemsBySerialNumber(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("serialNumber") String serialNumber);
@@ -87,9 +86,9 @@ public interface POBClient {
 	/**
 	 * Returns a list containing a item by id.
 	 *
-	 * @param pobKey the key to use for authorization
-	 * @param id     id of an item
-	 * @return a list containing an item
+	 * @param  pobKey the key to use for authorization
+	 * @param  id     id of an item
+	 * @return        a list containing an item
 	 */
 	@GetMapping(path = "items?Filter=Id={id}", produces = APPLICATION_JSON_VALUE)
 	List<PobPayload> getItemsById(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("id") String id);
@@ -97,9 +96,9 @@ public interface POBClient {
 	/**
 	 * Returns a list of items by model-name. The returned objects only contains the ID-attribute.
 	 *
-	 * @param pobKey    the key to use for authorization
-	 * @param modelName the item model name to filter response on
-	 * @return a list of configuration-items
+	 * @param  pobKey    the key to use for authorization
+	 * @param  modelName the item model name to filter response on
+	 * @return           a list of configuration-items
 	 */
 	@GetMapping(path = "items?Filter=IdOption={modelName}", produces = APPLICATION_JSON_VALUE)
 	List<PobPayload> getItemsByModelName(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("modelName") String modelName);
@@ -107,9 +106,9 @@ public interface POBClient {
 	/**
 	 * Creates an item
 	 *
-	 * @param pobKey  the key to use for authorization
-	 * @param payload the object with the updated configuration attributes
-	 * @return list of pob-payloads with triggered results
+	 * @param  pobKey  the key to use for authorization
+	 * @param  payload the object with the updated configuration attributes
+	 * @return         list of pob-payloads with triggered results
 	 */
 	@PutMapping(path = "items", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	List<PobPayloadWithTriggerResults> createItem(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
@@ -117,9 +116,9 @@ public interface POBClient {
 	/**
 	 * Updates a configuration-item
 	 *
-	 * @param pobKey  the key to use for authorization
-	 * @param payload the object with configuration-items to create
-	 * @return list of pob-payloads with triggered results
+	 * @param  pobKey  the key to use for authorization
+	 * @param  payload the object with configuration-items to create
+	 * @return         list of pob-payloads with triggered results
 	 */
 	@PutMapping(path = "configurationitems", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	List<PobPayloadWithTriggerResults> createConfigurationItem(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
@@ -132,7 +131,7 @@ public interface POBClient {
 	 */
 	@PostMapping(path = "configurationitems", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	Void updateConfigurationItem(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
-	
+
 	/**
 	 * Suspend an existing case in POB.
 	 * 
@@ -146,13 +145,13 @@ public interface POBClient {
 	/**
 	 * Get suspension information for a suspended case in POB, if case is not suspended a 404 will be thrown.
 	 * 
-	 * @param pobKey the key to use for authorization
-	 * @param caseId the ID of the case
-	 * @return Information about the suspension
+	 * @param  pobKey the key to use for authorization
+	 * @param  caseId the ID of the case
+	 * @return        Information about the suspension
 	 */
 	@GetMapping(path = "cases/{caseId}/suspension", produces = APPLICATION_JSON_VALUE)
 	SuspensionInfo getSuspension(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("caseId") String caseId);
-	
+
 	/**
 	 * Unsuspend a suspended case in POB.
 	 * 

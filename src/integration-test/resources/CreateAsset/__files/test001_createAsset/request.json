@@ -1,10 +1,10 @@
 {
-	"manufacturer": "x_dell",
-	"modelName": "Latitude 9000",
 	"modelDescription": "Latitude 9000",
-	"serialNumber": "FRGDZ1J",
+	"modelName": "Latitude 9000",
 	"macAddress": "00:00:0a:bb:28:fc",
-	"warrantyEndDate": "2022-01-01",
+	"serialNumber": "FRGDZ1J",
 	"supplierStatus": "0",
-	"deliveryDate": "2022-01-01"
+	"warrantyEndDate": "2022-01-01",
+	"deliveryDate": "2022-01-01",
+	"manufacturer": "x_dell"
 }

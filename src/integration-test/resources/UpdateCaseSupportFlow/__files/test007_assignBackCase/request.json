@@ -1,8 +1,8 @@
 {
-	"caseStatus": "AssignBack",
-	"externalCaseId": "CS0867597",
 	"note": {
-		"type": "WORKNOTE",
-		"text": "Beskrivning av den åtgärd som måste utföras av Sundsvall"
-	}
+		"text": "Beskrivning av den åtgärd som måste utföras av Sundsvall",
+		"type": "WORKNOTE"
+	},
+	"externalCaseId": "CS0867597",
+	"caseStatus": "AssignBack"
 }

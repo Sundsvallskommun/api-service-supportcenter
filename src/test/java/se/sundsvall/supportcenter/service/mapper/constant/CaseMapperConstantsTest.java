@@ -140,13 +140,13 @@ class CaseMapperConstantsTest {
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
 					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support"),
 					List.of(CaseMapperConstants.KEY_EXTERNAL_CASE_ID)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DELIVERED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
 					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))
-						.withStatusNoteType(NoteType.SOLUTION),
+					.withStatusNoteType(NoteType.SOLUTION),
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED))))),
 
@@ -154,43 +154,42 @@ class CaseMapperConstantsTest {
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS,
 					CaseMapperConstants.KEY_RESPONSIBLE_GROUP, "IT Support")))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DESPATCHED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(OPEN, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(PICKING, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(PROCESSED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(RESERVED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
-						.withStatusNoteType(NoteType.WORKNOTE))),
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(RESOLVED, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
 					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT,
 					CaseMapperConstants.KEY_EXTERNAL_CASE_ID, "")))
-						.withStatusNoteType(NoteType.WORKNOTE),
+					.withStatusNoteType(NoteType.WORKNOTE),
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED,
-					CaseMapperConstants.KEY_EXTERNAL_CASE_ID, "")))))
-		);
+					CaseMapperConstants.KEY_EXTERNAL_CASE_ID, ""))))));
 
 	}
 

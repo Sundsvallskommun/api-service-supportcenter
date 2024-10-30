@@ -31,7 +31,7 @@ class CreateAssetMapperTest {
 	@Test
 	void getPobPayloadForCreatingItem() {
 
-		//Parameter values
+		// Parameter values
 		final var modelName = "modelName";
 		final var modelDescription = "modelDescription";
 		final var manufacturer = "manufacturer";
@@ -58,7 +58,7 @@ class CreateAssetMapperTest {
 	@Test
 	void getPobPayloadForCreatingConfigurationItem() {
 
-		//Parameter values
+		// Parameter values
 		final var itemId = "itemId";
 		final var modelName = "modelName";
 		final var manufacturer = "manufacturer";
@@ -93,7 +93,6 @@ class CreateAssetMapperTest {
 		assertThat(result.getData()).containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		assertThat(result.getData()).containsEntry(KEY_MUNICIPALITY, "Sundsvall");
 	}
-
 
 	@Test
 	void toItemList() {

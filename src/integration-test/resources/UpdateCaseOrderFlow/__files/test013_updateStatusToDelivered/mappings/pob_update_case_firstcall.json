@@ -1,44 +1,34 @@
 {
-    "name": "pob-update-case-updateCase-firstcall",
-    "request": {
-        "headers": {
-            "Authorization": {
-                "equalTo": "xyz"
-            }
-        },
-        "method": "POST",
-        "urlPath": "/pob/cases",
-        "bodyPatterns": [
-            {
-                "equalToJson": {
-                    "Type": "Case",
-                    "Links": [],
-                    "Data": {
-                        "ClosureCode": "Levererat Hårdvara - Service request",
-                        "CaseStatus": "Solved",
-                        "Id": "867413"
-                    },
-                    "Memo": {
-                        "CaseInternalNotesCustom": {
-                            "Extension": ".html",
-                            "IsValidForWeb": true,
-                            "Style": "2",
-                            "Memo": "Delivered",
-                            "HandleSeparators": true
-                        },
-                        "Solution": {
-                            "Extension": ".html",
-                            "IsValidForWeb": false,
-                            "Style": "2",
-                            "Memo": "Beställning levererad",
-                            "HandleSeparators": true
-                        }
-                    }
-                }
-            }
-        ]
-    },
-    "response": {
-        "status": 200
-    }
+	"request": {
+		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"method": "POST",
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"ClosureCode": "Levererat Hårdvara - Service request",
+				"CaseStatus": "Solved",
+				"Id": "867413"
+			},
+			"Memo": {
+				"CaseInternalNotesCustom": {
+					"Extension": ".html",
+					"HandleSeparators": true,
+					"Style": "2",
+					"IsValidForWeb": true,
+					"Memo": "Delivered"
+				},
+				"Solution": {
+					"Extension": ".html",
+					"HandleSeparators": true,
+					"Style": "2",
+					"IsValidForWeb": false,
+					"Memo": "Beställning levererad"
+				}
+			}
+		}}],
+		"urlPath": "/pob/cases"
+	},
+	"response": {"status": 200},
+	"name": "pob-update-case-updateCase-firstcall"
 }

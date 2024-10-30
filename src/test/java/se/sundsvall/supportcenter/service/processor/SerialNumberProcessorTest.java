@@ -45,7 +45,7 @@ class SerialNumberProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -56,7 +56,7 @@ class SerialNumberProcessorTest {
 		assertThat(processor.shouldProcess(UpdateCaseRequest.create())).isTrue();
 		assertThat(processor.shouldProcess(null)).isFalse();
 	}
-	
+
 	@Test
 	void preProcessWhenSerialNumberDiffersFromExisting() {
 
@@ -71,7 +71,7 @@ class SerialNumberProcessorTest {
 		when(pobClientMock.getCase(pobKey, caseId)).thenReturn(new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", Map.of("SerialNumber", "xxx-111")))));
 		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 

@@ -1,39 +1,26 @@
 {
-	"name": "pob-update-case-updateCase",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/cases",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Type": "Case",
-					"Links": [
-					],
-					"Data": {
-						"Id": "867403",
-						"CaseStatus": "In Process",
-						"CaseCategory": "IT Användarhantering",
-						"Virtual.Shop_CI_Name": "Name of the hardware"
-					},
-					"Memo": {
-						"CaseInternalNotesCustom": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "This is a note | Status: 'In Process'",
-							"HandleSeparators": true
-						}
-					}
-				}
-			}
-		]
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"CaseStatus": "In Process",
+				"Id": "867403",
+				"Virtual.Shop_CI_Name": "Name of the hardware",
+				"CaseCategory": "IT Användarhantering"
+			},
+			"Memo": {"CaseInternalNotesCustom": {
+				"Extension": ".html",
+				"HandleSeparators": true,
+				"Style": "2",
+				"IsValidForWeb": false,
+				"Memo": "This is a note | Status: 'In Process'"
+			}}
+		}}],
+		"urlPath": "/pob/cases"
 	},
-	"response": {
-		"status": 200
-	}
+	"response": {"status": 200},
+	"name": "pob-update-case-updateCase"
 }

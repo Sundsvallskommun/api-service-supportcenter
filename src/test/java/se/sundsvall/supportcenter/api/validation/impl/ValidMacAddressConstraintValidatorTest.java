@@ -10,16 +10,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ValidMacAddressConstraintValidatorTest {
 
 	private ValidMacAddressConstraintValidator validator = new ValidMacAddressConstraintValidator();
-	
+
 	@ParameterizedTest
-	@ValueSource(strings = {"00000ABB28FC", "00 00 0A BB 28 FC", "0000 0ABB 28FC", "00:00:0a:bb:28:fc", "0000:0ABB:28FC", "00.00.0A.BB.28.FC", "0000.0ABB.28FC"})
+	@ValueSource(strings = {
+		"00000ABB28FC", "00 00 0A BB 28 FC", "0000 0ABB 28FC", "00:00:0a:bb:28:fc", "0000:0ABB:28FC", "00.00.0A.BB.28.FC", "0000.0ABB.28FC"
+	})
 	@NullSource
 	void testValidMacAddress(String macAddress) {
 		assertThat(validator.isValid(macAddress, null)).isTrue();
 	}
-	
+
 	@ParameterizedTest
-	@ValueSource(strings = {"00:00:0a:bb:28::", "00000ABB28FCFC", "00000ABB28FH", "00000ABB28F", " ", "."})
+	@ValueSource(strings = {
+		"00:00:0a:bb:28::", "00000ABB28FCFC", "00000ABB28FH", "00000ABB28F", " ", "."
+	})
 	@EmptySource
 	void testInvalidMacAddress(String invalidMacAddress) {
 		assertThat(validator.isValid(invalidMacAddress, null)).isFalse();

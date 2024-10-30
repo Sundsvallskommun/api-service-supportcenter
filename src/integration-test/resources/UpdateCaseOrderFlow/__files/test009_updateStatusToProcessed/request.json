@@ -1,7 +1,7 @@
 {
-	"caseStatus": "Processed",
 	"note": {
-		"type": "PROBLEM",
-		"text": "This is a note"
-	}
+		"text": "This is a note",
+		"type": "PROBLEM"
+	},
+	"caseStatus": "Processed"
 }

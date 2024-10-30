@@ -1,45 +1,34 @@
 {
-	"name": "pob-update-case-resolveCase",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/cases",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Type": "Case",
-					"Links": [
-					],
-					"Data": {
-						"Id": "867402",
-						"CaseStatus": "Solved",
-						"ClosureCode": "IT Byte/uppgradering av hårdvara"
-					},
-					"Memo": {
-						"CaseInternalNotesCustom": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "Status: 'Solved'",
-							"HandleSeparators": true
-						},
-						"Solution": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "This is a note",
-							"HandleSeparators": true
-						}
-					}
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"ClosureCode": "IT Byte/uppgradering av hårdvara",
+				"CaseStatus": "Solved",
+				"Id": "867402"
+			},
+			"Memo": {
+				"CaseInternalNotesCustom": {
+					"Extension": ".html",
+					"HandleSeparators": true,
+					"Style": "2",
+					"IsValidForWeb": false,
+					"Memo": "Status: 'Solved'"
+				},
+				"Solution": {
+					"Extension": ".html",
+					"HandleSeparators": true,
+					"Style": "2",
+					"IsValidForWeb": false,
+					"Memo": "This is a note"
 				}
 			}
-		]
+		}}],
+		"urlPath": "/pob/cases"
 	},
-	"response": {
-		"status": 200
-	}
+	"response": {"status": 200},
+	"name": "pob-update-case-resolveCase"
 }

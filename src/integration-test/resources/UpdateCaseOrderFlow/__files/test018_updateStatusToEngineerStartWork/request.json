@@ -1,8 +1,8 @@
 {
 	"note": {
-		"type": "WORKNOTE",
-		"text": "This is a note"
+		"text": "This is a note",
+		"type": "WORKNOTE"
 	},
-	"caseStatus": "EngineerStartWork",
-	"externalCaseId": "CS123213"
+	"externalCaseId": "CS123213",
+	"caseStatus": "EngineerStartWork"
 }

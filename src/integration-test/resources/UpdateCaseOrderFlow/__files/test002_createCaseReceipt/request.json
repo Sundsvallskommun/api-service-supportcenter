@@ -1,7 +1,7 @@
 {
-	"externalCaseId": "INC232323",
 	"note": {
-		"type": "PROBLEM",
-		"text": "This is a note"
-	}
+		"text": "This is a note",
+		"type": "PROBLEM"
+	},
+	"externalCaseId": "INC232323"
 }

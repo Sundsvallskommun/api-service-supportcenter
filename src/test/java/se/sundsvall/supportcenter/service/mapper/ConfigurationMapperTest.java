@@ -108,7 +108,6 @@ class ConfigurationMapperTest {
 		final var deliveryDate = LocalDate.now().plusDays(1);
 		final var warrantyEndDate = LocalDate.now().plusDays(700);
 
-
 		// Parameter values
 		final var updateAssetRequest = UpdateAssetRequest.create()
 			.withHardwareName("hardwareName")
@@ -117,7 +116,7 @@ class ConfigurationMapperTest {
 			.withSupplierStatus("supplierStatus")
 			.withDeliveryDate(deliveryDate)
 			.withWarrantyEndDate(warrantyEndDate);
-		
+
 		final var assetId = "assetId";
 
 		// Call
@@ -132,17 +131,17 @@ class ConfigurationMapperTest {
 		assertThat(result.getData()).containsEntry("DeliveryDate", deliveryDate.format(DATE_FORMATTER));
 		assertThat(result.getData()).containsEntry("EndWarrantyDate", warrantyEndDate.format(DATE_FORMATTER));
 		assertThat(result.getMemo()).extractingByKey("CILeverantorensAnteckningar").extracting(
-			PobMemo::getExtension, 
+			PobMemo::getExtension,
 			PobMemo::getHandleSeparators,
 			PobMemo::getIsValidForWeb,
 			PobMemo::getMemo,
 			PobMemo::getStyle)
-		.containsExactly(
-			".html", 
-			true,
-			false,
-			"text",
-			StyleEnum.NUMBER_0);
+			.containsExactly(
+				".html",
+				true,
+				false,
+				"text",
+				StyleEnum.NUMBER_0);
 	}
 
 	@Test
@@ -157,7 +156,7 @@ class ConfigurationMapperTest {
 			.withSupplierStatus("supplierStatus")
 			.withDeliveryDate(deliveryDate)
 			.withWarrantyEndDate(warrantyEndDate);
-		
+
 		final var assetId = "assetId";
 
 		// Call

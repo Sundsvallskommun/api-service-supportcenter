@@ -28,26 +28,26 @@ class CommonMapperTest {
 	void testToMemoWhenNoteNullAndIsValidForWeb() {
 		assertThat(toMemo(null, true)).isNull();
 	}
-	
+
 	@ParameterizedTest
 	@EnumSource(value = NoteType.class)
 	void testToMemoForEachNoteType(NoteType type) {
 		final var noteText = format("noteText for type %s", type.toValue());
 		final var note = Note.create().withText(noteText).withType(type);
-		
+
 		assertThat(toMemo(note)).containsKey(type.toValue())
-		.extractingByKey(type.toValue()).extracting(
-			PobMemo::getExtension, 
-			PobMemo::getHandleSeparators,
-			PobMemo::getIsValidForWeb,
-			PobMemo::getMemo,
-			PobMemo::getStyle)
-		.containsExactly(
-			".html", 
-			true,
-			false,
-			noteText,
-			type == NoteType.SUPPLIERNOTE ? StyleEnum.NUMBER_0 : StyleEnum.NUMBER_2);
+			.extractingByKey(type.toValue()).extracting(
+				PobMemo::getExtension,
+				PobMemo::getHandleSeparators,
+				PobMemo::getIsValidForWeb,
+				PobMemo::getMemo,
+				PobMemo::getStyle)
+			.containsExactly(
+				".html",
+				true,
+				false,
+				noteText,
+				type == NoteType.SUPPLIERNOTE ? StyleEnum.NUMBER_0 : StyleEnum.NUMBER_2);
 	}
 
 	@ParameterizedTest
@@ -81,18 +81,17 @@ class CommonMapperTest {
 		assertThat(toNote(new PobPayload().memo(emptyMap()))).isNull();
 	}
 
-
 	@ParameterizedTest
 	@EnumSource(value = NoteType.class)
 	void testToNoteWhenEmptyText(NoteType type) {
 		assertThat(toNote(new PobPayload().memo(Map.of(type.toValue(), new PobMemo()))).getText()).isNull();
 	}
-	
+
 	@ParameterizedTest
 	@EnumSource(value = NoteType.class)
 	void testToNoteForEachNoteType(NoteType type) {
 		final var noteText = format("noteText for type %s", type.toValue());
 		assertThat(toNote(new PobPayload().memo(Map.of(type.toValue(), new PobMemo().memo(noteText)))).getText()).isEqualTo(noteText);
-		
+
 	}
 }

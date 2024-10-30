@@ -1,24 +1,14 @@
 {
-	"name": "pob-read-items",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/items",
-		"queryParameters": {
-			"Filter": {
-				"equalTo": "IdOption=Testmodel"
-			}
-		}
+		"queryParameters": {"Filter": {"equalTo": "IdOption=Testmodel"}},
+		"urlPath": "/pob/items"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
-		"jsonBody": []
-	}
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": [],
+		"status": 200
+	},
+	"name": "pob-read-items"
 }

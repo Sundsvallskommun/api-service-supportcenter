@@ -48,6 +48,7 @@ public class CreateAssetRequest {
 	public static CreateAssetRequest create() {
 		return new CreateAssetRequest();
 	}
+
 	public String getManufacturer() {
 		return manufacturer;
 	}
@@ -180,14 +181,16 @@ public class CreateAssetRequest {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CreateAssetRequest that = (CreateAssetRequest) o;
 		return Objects.equals(manufacturer, that.manufacturer) && Objects.equals(modelName, that.modelName) &&
-				   Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber) &&
-				   Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) &&
-				   Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus, that.hardwareStatus) &&
-				   Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId);
+			Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber) &&
+			Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) &&
+			Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus, that.hardwareStatus) &&
+			Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId);
 	}
 
 	@Override

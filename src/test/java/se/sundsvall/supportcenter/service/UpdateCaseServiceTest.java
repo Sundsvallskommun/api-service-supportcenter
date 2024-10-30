@@ -61,10 +61,10 @@ class UpdateCaseServiceTest {
 
 	@Mock
 	private FalseProcessor falseProcessorMock;
-	
+
 	@Spy
 	private List<ProcessorInterface> processorListSpy = new ArrayList<>();
-	
+
 	@InjectMocks
 	private CaseService caseService;
 
@@ -77,7 +77,7 @@ class UpdateCaseServiceTest {
 		processorListSpy.add(trueProcessorMock);
 		processorListSpy.add(falseProcessorMock);
 	}
-	
+
 	@Test
 	void updateCase() {
 		when(trueProcessorMock.shouldProcess(any())).thenReturn(true);
@@ -132,10 +132,12 @@ class UpdateCaseServiceTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "Awaiting info", "Open", "Cancelled" })
+	@ValueSource(strings = {
+		"Awaiting info", "Open", "Cancelled"
+	})
 	void updateCaseForKnownCubeStatuses(String incomingCaseStatus) {
 		when(trueProcessorMock.shouldProcess(any())).thenReturn(true);
-		
+
 		// Parameter values
 		final var pobKey = "pobKey";
 		final var caseId = "12345";
@@ -161,10 +163,10 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		
+
 		if (!incomingCaseStatus.equals(SupportCenterStatus.AWAITING_INFO.getValue())) {
 			verify(pobClientMock, times(incomingCaseStatus.equals(SupportCenterStatus.RESOLVED.getValue()) ? 2 : 1)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
-			
+
 			final var pobPayloadValue = pobPayloadCaptor.getValue();
 			assertThat(pobPayloadValue).isNotNull();
 			assertThat(pobPayloadValue.getType()).isEqualTo(DEFAULT_TYPE);
@@ -180,7 +182,7 @@ class UpdateCaseServiceTest {
 			assertThat(pobPayloadValue.getMemo().get(CUSTOM_STATUS_MAP.get(incomingCaseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Status: '" + incomingCaseStatus + "'");
 			assertThat(pobPayloadValue.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo(noteText);
 		}
-		
+
 		processorListSpy.forEach(processor -> verify(processor, times(2)).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
@@ -248,7 +250,9 @@ class UpdateCaseServiceTest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "Processed", "Reserved", "Picking", "Despatched" })
+	@ValueSource(strings = {
+		"Processed", "Reserved", "Picking", "Despatched"
+	})
 	void updateCaseForKnownNetstatStatuses(String incomingCaseStatus) {
 		when(trueProcessorMock.shouldProcess(any())).thenReturn(true);
 
@@ -449,7 +453,7 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock, never()).validateClosureCode(any(), any());
-		verifyNoInteractions(pobClientMock, falseProcessorMock,  trueProcessorMock);
+		verifyNoInteractions(pobClientMock, falseProcessorMock, trueProcessorMock);
 	}
 
 	@Test
@@ -484,25 +488,25 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		verifyNoInteractions(pobClientMock, falseProcessorMock,  trueProcessorMock);
+		verifyNoInteractions(pobClientMock, falseProcessorMock, trueProcessorMock);
 	}
-	
+
 	/**
-	 * Dummy test processors for verifying calls to processor methods 
+	 * Dummy test processors for verifying calls to processor methods
 	 */
-	
+
 	private static class FalseProcessor implements ProcessorInterface {
-		
+
 		@Override
 		public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
 			return false;
 		}
-		
+
 		@Override
 		public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 			// Do nothing
 		}
-		
+
 		@Override
 		public void postProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 			// Do nothing
@@ -510,17 +514,17 @@ class UpdateCaseServiceTest {
 	}
 
 	private static class TrueProcessor implements ProcessorInterface {
-		
+
 		@Override
 		public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
 			return true;
 		}
-		
+
 		@Override
 		public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 			// Do nothing
 		}
-		
+
 		@Override
 		public void postProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 			// Do nothing

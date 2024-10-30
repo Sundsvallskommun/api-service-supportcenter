@@ -48,7 +48,9 @@ public class CustomStatusMapping {
 	}
 
 	@Override
-	public int hashCode() { return Objects.hash(statusNoteType, attributes); }
+	public int hashCode() {
+		return Objects.hash(statusNoteType, attributes);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

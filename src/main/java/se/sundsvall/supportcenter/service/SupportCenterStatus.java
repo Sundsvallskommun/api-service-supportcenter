@@ -10,7 +10,7 @@ public enum SupportCenterStatus {
 	DESPATCHED("Despatched"),
 	DELIVERED("Delivered"),
 	DELIVERED_ACTION_NEEDED("Delivered - Action Needed"),
-	
+
 	// CUBE statuses (support flow)
 	ASSIGN_BACK("AssignBack"),
 	AWAITING_INFO("Awaiting info"),
@@ -21,9 +21,9 @@ public enum SupportCenterStatus {
 	SCHEDULE_CHANGED("ScheduleChanged"),
 	ENGINEER_START_WORK("EngineerStartWork"),
 	ORDER_NOT_COMPLETED("OrderNotCompleted");
-	
+
 	private final String value;
-	
+
 	SupportCenterStatus(String value) {
 		this.value = value;
 	}

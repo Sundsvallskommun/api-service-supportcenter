@@ -1,17 +1,15 @@
-[
-  {
-    "deliveryDate": "2022-01-01",
-    "hardwareDescription": "Some description",
-    "hardwareName": "test1234",
-    "hardwareStatus":"2",
-    "id": "15857",
-    "macAddress": "00:00:0a:bb:28:fc",
-    "manufacturer": "X_Dell",
-    "modelName": "Latitude 9000",
-    "modelDescription": "Latitude 9000",
-    "serialNumber": "FRGDZ1J",
-    "supplierStatus": "2",
-    "warrantyEndDate": "2022-01-01",
-    "municipalityId": "2281"
-  }
-]
+[{
+	"hardwareDescription": "Some description",
+	"municipalityId": "2281",
+	"serialNumber": "FRGDZ1J",
+	"hardwareStatus": "2",
+	"warrantyEndDate": "2022-01-01",
+	"manufacturer": "X_Dell",
+	"modelDescription": "Latitude 9000",
+	"modelName": "Latitude 9000",
+	"macAddress": "00:00:0a:bb:28:fc",
+	"hardwareName": "test1234",
+	"supplierStatus": "2",
+	"id": "15857",
+	"deliveryDate": "2022-01-01"
+}]

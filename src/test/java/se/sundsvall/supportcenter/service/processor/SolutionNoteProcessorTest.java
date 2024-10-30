@@ -53,7 +53,7 @@ class SolutionNoteProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -86,7 +86,7 @@ class SolutionNoteProcessorTest {
 		when(pobPayloadMock.getData()).thenReturn(dataMapMock);
 		when(dataMapMock.get(KEY_CASE_STATUS)).thenReturn(STATUS_SOLVED);
 		when(pobPayloadMock.getMemo()).thenReturn(memoMap);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -201,7 +201,7 @@ class SolutionNoteProcessorTest {
 		verify(pobPayloadMock, times(2)).getMemo();
 		verify(pobPayloadMock, never()).setMemo(any());
 	}
-	
+
 	@Test
 	void postProcess() {
 		final var pobKey = "pobKey";

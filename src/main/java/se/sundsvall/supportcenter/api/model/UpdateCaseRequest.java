@@ -141,7 +141,9 @@ public class UpdateCaseRequest {
 	}
 
 	@Override
-	public int hashCode() { return Objects.hash(caseCategory, caseStatus, closureCode, externalCaseId, hardwareName, note, responsibleGroup, serialNumber); }
+	public int hashCode() {
+		return Objects.hash(caseCategory, caseStatus, closureCode, externalCaseId, hardwareName, note, responsibleGroup, serialNumber);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

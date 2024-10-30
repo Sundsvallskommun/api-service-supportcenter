@@ -1,52 +1,36 @@
 {
-  "name": "pob-put-configurationitem",
-  "request": {
-    "headers": {
-      "Authorization": {
-        "equalTo": "xyz"
-      }
-    },
-    "method": "PUT",
-    "urlPath": "/pob/configurationitems",
-    "bodyPatterns": [
-      {
-        "equalToJson": {
-          "Type": "ConfigurationItem",
-          "Links": [],
-          "Data": {
-            "Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
-            "Item": "101389",
-            "SerialNumber": "CD23456980",
-            "Virtual.LeverantorensStatus": "0",
-            "Virtual.CIKommun" : "Sundsvall",
-            "DeliveryDate": "2022-01-01",
-            "EndWarrantyDate": "2022-01-01"
-          },
-          "Memo": {}
-        }
-      }
-    ]
-  },
-  "response": {
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "status": 201,
-    "jsonBody": [
-      {
-        "TriggerResults": [],
-        "Type": "ConfigurationItem",
-        "Links": [
-          {
-            "Relation": "self",
-            "Href": "pobg6/api/v110/configurationitems/354378"
-          }
-        ],
-        "Data": {
-          "Id": "354378"
-        },
-        "Memo": {}
-      }
-    ]
-  }
+	"request": {
+		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"method": "PUT",
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "ConfigurationItem",
+			"Links": [],
+			"Data": {
+				"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
+				"Item": "101389",
+				"SerialNumber": "CD23456980",
+				"Virtual.LeverantorensStatus": "0",
+				"Virtual.CIKommun": "Sundsvall",
+				"DeliveryDate": "2022-01-01",
+				"EndWarrantyDate": "2022-01-01"
+			},
+			"Memo": {}
+		}}],
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": [{
+			"Type": "ConfigurationItem",
+			"Links": [{
+				"Relation": "self",
+				"Href": "pobg6/api/v110/configurationitems/354378"
+			}],
+			"Data": {"Id": "354378"},
+			"TriggerResults": [],
+			"Memo": {}
+		}],
+		"status": 201
+	},
+	"name": "pob-put-configurationitem"
 }
