@@ -31,14 +31,14 @@ public class ClosureCodeProcessor implements ProcessorInterface {
 	}
 
 	/**
-	 * Handle closure code customization on the PobPayload for status 'Solved' before POB update if serial number has 
+	 * Handle closure code customization on the PobPayload for status 'Solved' before POB update if serial number has
 	 * been provided in the service request
 	 */
 	@Override
 	public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 		ofNullable(updateCaseRequest.getSerialNumber()).filter(StringUtils::hasText).ifPresent(incomingSerialNumber -> {
 			LOG.debug("SerialNumber provided in request, start processing 'preProcess'-logic: SerialNumber:'{}'", incomingSerialNumber);
-			
+
 			if (Objects.equals(STATUS_SOLVED, pobPayload.getData().get(KEY_CASE_STATUS))) {
 				LOG.debug("POB payload has status '{}', proceeding with modification of closureCode to '{}'", STATUS_SOLVED, CLOSURE_CODE_CHANGE_OF_HARDWARE);
 				pobPayload.getData().put(KEY_CLOSURE_CODE, CLOSURE_CODE_CHANGE_OF_HARDWARE);

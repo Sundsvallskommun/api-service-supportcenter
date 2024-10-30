@@ -51,7 +51,9 @@ public class Note {
 	}
 
 	@Override
-	public int hashCode() { return Objects.hash(text, type); }
+	public int hashCode() {
+		return Objects.hash(text, type);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

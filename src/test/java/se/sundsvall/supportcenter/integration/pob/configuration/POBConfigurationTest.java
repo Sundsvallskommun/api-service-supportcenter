@@ -24,7 +24,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration.CLIENT_ID;
 
-@SpringBootTest(classes = { Application.class, POBConfiguration.class, JacksonEncoder.class })
+@SpringBootTest(classes = {
+	Application.class, POBConfiguration.class, JacksonEncoder.class
+})
 @ActiveProfiles("junit")
 class POBConfigurationTest {
 

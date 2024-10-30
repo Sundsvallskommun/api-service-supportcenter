@@ -1,263 +1,209 @@
 {
-	"name": "pob-read-closure-codes",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/closurecodes",
-		"queryParameters": {
-			"limit": {
-				"equalTo": "10000"
-			}
-		}
+		"queryParameters": {"limit": {"equalTo": "10000"}},
+		"urlPath": "/pob/closurecodes"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
+		"headers": {"Content-Type": "application/json"},
 		"jsonBody": [
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2904",
-					"Id": "IT Information/Utbildning",
+					"Virtual.SOT_VISA_I_APP_VIRT": "True",
 					"Description": "Information eller utbildning",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2904",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "IT Information/Utbildning",
+					"IsManualUptime": "False",
 					"DeleteDate": "",
-					"Virtual.SOT_VISA_I_APP_VIRT": "True"
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2905",
-					"Id": "IT Installation/Certifiering",
+					"Virtual.SOT_VISA_I_APP_VIRT": "True",
 					"Description": "Installation/Certifiering av mjukvara samt certifiering av hårdvara",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2905",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "IT Installation/Certifiering",
+					"IsManualUptime": "False",
 					"DeleteDate": "",
-					"Virtual.SOT_VISA_I_APP_VIRT": "True"
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2906",
-					"Id": "IT Ominstallation",
+					"Virtual.SOT_VISA_I_APP_VIRT": "True",
 					"Description": "Ominstallation",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2906",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "IT Ominstallation",
+					"IsManualUptime": "False",
 					"DeleteDate": "",
-					"Virtual.SOT_VISA_I_APP_VIRT": "True"
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
+					"Description": "Löst genom underhåll av mjukvara/hårdvara",
 					"ClosureCodePK": "2907",
 					"Id": "Underhåll",
-					"Description": "Löst genom underhåll av mjukvara/hårdvara",
 					"IsManualUptime": "False",
-					"ChildrenCount": "0",
 					"DeleteDate": "2008-06-19 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
+					"Description": "Löst genom uppgradering/uppdatering",
 					"ClosureCodePK": "2908",
 					"Id": "Uppgradering/Uppdatering",
-					"Description": "Löst genom uppgradering/uppdatering",
 					"IsManualUptime": "False",
-					"ChildrenCount": "0",
 					"DeleteDate": "2008-06-19 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2909",
-					"Id": "IT Byte/uppgradering av hårdvara",
+					"Virtual.SOT_VISA_I_APP_VIRT": "True",
 					"Description": "Byte/utökning av hårdvara",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2909",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "IT Byte/uppgradering av hårdvara",
+					"IsManualUptime": "False",
 					"DeleteDate": "",
-					"Virtual.SOT_VISA_I_APP_VIRT": "True"
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
+					"Description": "Löst genom underhåll av profil",
 					"ClosureCodePK": "2910",
 					"Id": "Profilunderhåll",
-					"Description": "Löst genom underhåll av profil",
 					"IsManualUptime": "False",
-					"ChildrenCount": "0",
 					"DeleteDate": "2008-06-19 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2911",
-					"Id": "Lösenordsbyte",
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
 					"Description": "Lösenordsbyte",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2911",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "Lösenordsbyte",
+					"IsManualUptime": "False",
 					"DeleteDate": "2010-11-15 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
+					"Description": "Löst citrixproblem",
 					"ClosureCodePK": "2912",
 					"Id": "Citrixproblem",
-					"Description": "Löst citrixproblem",
 					"IsManualUptime": "False",
-					"ChildrenCount": "0",
 					"DeleteDate": "2008-06-19 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			},
 			{
 				"Type": "ClosureCode",
-				"Links": [
-				],
+				"Links": [],
 				"Data": {
-					"ClosureCodePK": "2913",
-					"Id": "Återställning",
+					"Virtual.SOT_VISA_I_APP_VIRT": "",
 					"Description": "Återställning av fil/dokument",
-					"IsManualUptime": "False",
-					"ChildrenCount": "0",
+					"ClosureCodePK": "2913",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
-							}
-						],
-						"Data": {
-						},
-						"Memo": {
-						}
+						"Links": [{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
+						}],
+						"Data": {},
+						"Memo": {}
 					},
+					"Id": "Återställning",
+					"IsManualUptime": "False",
 					"DeleteDate": "2010-11-15 00:00:00",
-					"Virtual.SOT_VISA_I_APP_VIRT": ""
+					"ChildrenCount": "0"
 				},
-				"Memo": {
-				}
+				"Memo": {}
 			}
-		]
-	}
+		],
+		"status": 200
+	},
+	"name": "pob-read-closure-codes"
 }

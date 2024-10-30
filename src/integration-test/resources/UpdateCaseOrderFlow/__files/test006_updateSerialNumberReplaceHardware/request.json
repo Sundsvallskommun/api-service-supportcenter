@@ -1,7 +1,7 @@
 {
-	"serialNumber": "FRGDZ1J",
 	"note": {
-		"type": "WORKNOTE",
-		"text": "Updated serialNumber"
-	}
+		"text": "Updated serialNumber",
+		"type": "WORKNOTE"
+	},
+	"serialNumber": "FRGDZ1J"
 }

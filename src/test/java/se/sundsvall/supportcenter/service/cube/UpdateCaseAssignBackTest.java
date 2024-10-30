@@ -44,27 +44,27 @@ import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
  * 
  * Valid payload example is (memo is optional):
  * 
- *	{
- *		"type": "Case",
- *		"links": [],
- *		"data": {
- *			"Virtual.ExternalCaseId": "External-12345",
- *			"Virtual.ActionNeeded": "true",
- *			"Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
- *			"Id": "12345",
- *			"Responsible": null,
- *			"ResponsibleGroup": "IT Support"
- *		},
- *		"memo": {
- *			"CaseInternalNotesCustom": {
- *				"extension": ".html",
- *				"isValidForWeb": false,
- *				"style": 2,
- *				"memo": "Åter för ytterligare granskning",
- *				"handleSeparators": true
- *			}
- *		}
- *	}
+ * {
+ * "type": "Case",
+ * "links": [],
+ * "data": {
+ * "Virtual.ExternalCaseId": "External-12345",
+ * "Virtual.ActionNeeded": "true",
+ * "Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
+ * "Id": "12345",
+ * "Responsible": null,
+ * "ResponsibleGroup": "IT Support"
+ * },
+ * "memo": {
+ * "CaseInternalNotesCustom": {
+ * "extension": ".html",
+ * "isValidForWeb": false,
+ * "style": 2,
+ * "memo": "Åter för ytterligare granskning",
+ * "handleSeparators": true
+ * }
+ * }
+ * }
  */
 @ExtendWith(MockitoExtension.class)
 class UpdateCaseAssignBackTest {
@@ -77,10 +77,10 @@ class UpdateCaseAssignBackTest {
 
 	@Spy
 	private ProcessorInterface processorSpy = new CaseStatusProcessor();
-	
+
 	@Spy
 	private List<ProcessorInterface> processorListSpy = new ArrayList<>();
-	
+
 	@InjectMocks
 	private CaseService caseService;
 
@@ -92,7 +92,7 @@ class UpdateCaseAssignBackTest {
 		processorListSpy.clear();
 		processorListSpy.add(processorSpy);
 	}
-	
+
 	@Test
 	void updateCaseForKnownCubeStatuses() {
 		// Parameter values
@@ -117,7 +117,7 @@ class UpdateCaseAssignBackTest {
 		verify(pobClientMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		verifyNoMoreInteractions(pobClientMock, processorSpy);
 		verifyNoInteractions(configurationServiceMock);
-		
+
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
 		assertThat(pobPayloadValue.getType()).isEqualTo(DEFAULT_TYPE);

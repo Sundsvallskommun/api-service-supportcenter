@@ -238,14 +238,14 @@ public class Asset {
 			return false;
 		Asset other = (Asset) obj;
 		return Objects.equals(hardwareDescription, other.hardwareDescription) && Objects.equals(hardwareName, other.hardwareName)
-				   && Objects.equals(id, other.id) && Objects.equals(macAddress, other.macAddress)
-				   && Objects.equals(serialNumber, other.serialNumber)
-				   && Objects.equals(supplierStatus, other.supplierStatus)
-				   && Objects.equals(hardwareStatus, other.hardwareStatus)
-				   && Objects.equals(modelName, other.modelName)
-				   && Objects.equals(modelDescription, other.modelDescription)
-				   && Objects.equals(manufacturer, other.manufacturer)
-				   && Objects.equals(deliveryDate, other.deliveryDate)
+			&& Objects.equals(id, other.id) && Objects.equals(macAddress, other.macAddress)
+			&& Objects.equals(serialNumber, other.serialNumber)
+			&& Objects.equals(supplierStatus, other.supplierStatus)
+			&& Objects.equals(hardwareStatus, other.hardwareStatus)
+			&& Objects.equals(modelName, other.modelName)
+			&& Objects.equals(modelDescription, other.modelDescription)
+			&& Objects.equals(manufacturer, other.manufacturer)
+			&& Objects.equals(deliveryDate, other.deliveryDate)
 			&& Objects.equals(warrantyEndDate, other.warrantyEndDate)
 			&& Objects.equals(municipalityId, other.municipalityId);
 	}

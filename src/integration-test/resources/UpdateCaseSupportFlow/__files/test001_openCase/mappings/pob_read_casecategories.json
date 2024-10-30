@@ -1,2412 +1,1806 @@
 {
-	"name": "pob-read-case-categories",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/casecategories",
 		"queryParameters": {
-			"Fields": {
-				"equalTo": "Id"
-			},
-			"limit": {
-				"equalTo": "10000"
-			}
-		}
+			"Fields": {"equalTo": "Id"},
+			"limit": {"equalTo": "10000"}
+		},
+		"urlPath": "/pob/casecategories"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
+		"headers": {"Content-Type": "application/json"},
 		"jsonBody": [
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Administration"
-				},
+				"Data": {"Id": "Administration"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Avtal"
-				},
+				"Data": {"Id": "Avtal"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Borttappad/Stulen"
-				},
+				"Data": {"Id": "IT Borttappad/Stulen"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Licens"
-				},
+				"Data": {"Id": "Licens"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Användarhantering"
-				},
+				"Data": {"Id": "IT Användarhantering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Ändring"
-				},
+				"Data": {"Id": "Ändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Quota"
-				},
+				"Data": {"Id": "Quota"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Ny- & avbeställning av standardiserad tjänst"
-				},
+				"Data": {"Id": "IT Ny- & avbeställning av standardiserad tjänst"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Felmeddelande"
-				},
+				"Data": {"Id": "IT Felmeddelande"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Inloggningsproblem"
-				},
+				"Data": {"Id": "IT Inloggningsproblem"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Uppgradering"
-				},
+				"Data": {"Id": "Uppgradering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Handhavandefel"
-				},
+				"Data": {"Id": "Handhavandefel"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Frågor & Information från Användare & Kunder"
-				},
+				"Data": {"Id": "IT Frågor & Information från Användare & Kunder"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Nyinstallation"
-				},
+				"Data": {"Id": "Nyinstallation"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Löpande underhåll och drift"
-				},
+				"Data": {"Id": "IT Löpande underhåll och drift"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tidrapport"
-				},
+				"Data": {"Id": "Tidrapport"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Uppdatering/Förändring"
-				},
+				"Data": {"Id": "Uppdatering/Förändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Servicecenter IT"
-				},
+				"Data": {"Id": "Servicecenter IT"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön & Pension"
-				},
+				"Data": {"Id": "Lön & Pension"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Fordonshantering"
-				},
+				"Data": {"Id": "Fordonshantering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kontorsservice"
-				},
+				"Data": {"Id": "Kontorsservice"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Telesupport"
-				},
+				"Data": {"Id": "Telesupport"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Service Req"
-				},
+				"Data": {"Id": "Lön Service Req"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Fel Lön"
-				},
+				"Data": {"Id": "Lön Fel Lön"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Anställningstid"
-				},
+				"Data": {"Id": "Lön Anställningstid"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Arbgivarintyg"
-				},
+				"Data": {"Id": "Lön Arbgivarintyg"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Avtal"
-				},
+				"Data": {"Id": "Lön Avtal"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Behörighet"
-				},
+				"Data": {"Id": "Lön Behörighet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön FK VAB"
-				},
+				"Data": {"Id": "Lön FK VAB"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Fråga Årsinkomst"
-				},
+				"Data": {"Id": "Lön Fråga Årsinkomst"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Förlängning"
-				},
+				"Data": {"Id": "Lön Förlängning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Hjälp Förhandling"
-				},
+				"Data": {"Id": "Lön Hjälp Förhandling"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Incident"
-				},
+				"Data": {"Id": "Lön Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Intyg Försök"
-				},
+				"Data": {"Id": "Lön Intyg Försök"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Koddelar"
-				},
+				"Data": {"Id": "Lön Koddelar"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Komp"
-				},
+				"Data": {"Id": "Lön Komp"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Kronofogde"
-				},
+				"Data": {"Id": "Lön Kronofogde"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Lån"
-				},
+				"Data": {"Id": "Lön Lån"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Lån Bör"
-				},
+				"Data": {"Id": "Lön Lån Bör"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Lön Förklaring"
-				},
+				"Data": {"Id": "Lön Lön Förklaring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Org Förändring"
-				},
+				"Data": {"Id": "Lön Org Förändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Rapportbest"
-				},
+				"Data": {"Id": "Lön Rapportbest"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Schema"
-				},
+				"Data": {"Id": "Lön Schema"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Semester"
-				},
+				"Data": {"Id": "Lön Semester"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Självservice Medarbetare"
-				},
+				"Data": {"Id": "Lön Självservice Medarbetare"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Skattefrågor"
-				},
+				"Data": {"Id": "Lön Skattefrågor"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Föräldraledighet"
-				},
+				"Data": {"Id": "Lön Föräldraledighet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Allmän Fråga"
-				},
+				"Data": {"Id": "Lön Allmän Fråga"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Incident"
-				},
+				"Data": {"Id": "Tel Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Service"
-				},
+				"Data": {"Id": "Tel Service"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel AnvStöd Inc"
-				},
+				"Data": {"Id": "Tel AnvStöd Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Tab Inc"
-				},
+				"Data": {"Id": "Tel Tab Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Ankn Inc"
-				},
+				"Data": {"Id": "Tel Ankn Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel IP Inc"
-				},
+				"Data": {"Id": "Tel IP Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Mobil Inc"
-				},
+				"Data": {"Id": "Tel Mobil Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Applikation Inc"
-				},
+				"Data": {"Id": "Tel Applikation Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Övrigt Inc"
-				},
+				"Data": {"Id": "Tel Övrigt Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Tab SR"
-				},
+				"Data": {"Id": "Tel Tab SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Tab SR Ny"
-				},
+				"Data": {"Id": "Tel Tab SR Ny"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Tab SR Uppsägning"
-				},
+				"Data": {"Id": "Tel Tab SR Uppsägning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Tab SR Övrigt"
-				},
+				"Data": {"Id": "Tel Tab SR Övrigt"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Ankn SR"
-				},
+				"Data": {"Id": "Tel Ankn SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Ankn SR Ny"
-				},
+				"Data": {"Id": "Tel Ankn SR Ny"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Ankn SR Uppsägning"
-				},
+				"Data": {"Id": "Tel Ankn SR Uppsägning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Ankn SR Övrigt"
-				},
+				"Data": {"Id": "Tel Ankn SR Övrigt"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Mobil SR"
-				},
+				"Data": {"Id": "Tel Mobil SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Mobil SR Ny"
-				},
+				"Data": {"Id": "Tel Mobil SR Ny"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Mobil SR Uppsägning"
-				},
+				"Data": {"Id": "Tel Mobil SR Uppsägning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Mobil SR Övrigt"
-				},
+				"Data": {"Id": "Tel Mobil SR Övrigt"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Bredband"
-				},
+				"Data": {"Id": "Tel Bredband"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel SMS"
-				},
+				"Data": {"Id": "Tel SMS"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Telekonferens"
-				},
+				"Data": {"Id": "Tel Telekonferens"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Fakturaärenden"
-				},
+				"Data": {"Id": "Tel Fakturaärenden"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel AnvStöd"
-				},
+				"Data": {"Id": "Tel AnvStöd"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Vxl.adm"
-				},
+				"Data": {"Id": "Tel Vxl.adm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Telefoniprodukter"
-				},
+				"Data": {"Id": "Tel Telefoniprodukter"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Övrigt SR"
-				},
+				"Data": {"Id": "Tel Övrigt SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Incident"
-				},
+				"Data": {"Id": "Kon Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Service"
-				},
+				"Data": {"Id": "Kon Service"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Fel Beställning"
-				},
+				"Data": {"Id": "Kon Fel Beställning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tryckeri SR"
-				},
+				"Data": {"Id": "Kon Tryckeri SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Post SR"
-				},
+				"Data": {"Id": "Kon Post SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Förråd SR"
-				},
+				"Data": {"Id": "Kon Förråd SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Incident"
-				},
+				"Data": {"Id": "For Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Service"
-				},
+				"Data": {"Id": "For Service"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Leasing INC"
-				},
+				"Data": {"Id": "For Leasing INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Best Leasing Normal"
-				},
+				"Data": {"Id": "For Best Leasing Normal"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Best Leasing Släp"
-				},
+				"Data": {"Id": "For Best Leasing Släp"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Best Leasing Special"
-				},
+				"Data": {"Id": "For Best Leasing Special"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Sjukfrånvaro"
-				},
+				"Data": {"Id": "Lön Sjukfrånvaro"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön VAB"
-				},
+				"Data": {"Id": "Lön VAB"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Utskrift SR"
-				},
+				"Data": {"Id": "Kon Utskrift SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Visitkort SR"
-				},
+				"Data": {"Id": "Kon Visitkort SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Korrespondenskort SR"
-				},
+				"Data": {"Id": "Kon Korrespondenskort SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Brevpapper A4 SR"
-				},
+				"Data": {"Id": "Kon Brevpapper A4 SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kuvert SR"
-				},
+				"Data": {"Id": "Kon Kuvert SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Svarskuvert SR"
-				},
+				"Data": {"Id": "Kon Svarskuvert SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Plus Giro-blankett SR"
-				},
+				"Data": {"Id": "Kon Plus Giro-blankett SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Rums/namnskylt SR"
-				},
+				"Data": {"Id": "Kon Rums/namnskylt SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Layout SR"
-				},
+				"Data": {"Id": "Kon Layout SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Samlingsannons SR"
-				},
+				"Data": {"Id": "Kon Samlingsannons SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tjänstedeklaration SR"
-				},
+				"Data": {"Id": "Kon Tjänstedeklaration SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Skanning SR"
-				},
+				"Data": {"Id": "Kon Skanning SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Utställning SR"
-				},
+				"Data": {"Id": "Kon Utställning SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Tryckeri SR"
-				},
+				"Data": {"Id": "Kon Övrigt Tryckeri SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Lampbyte SR"
-				},
+				"Data": {"Id": "Kon Lampbyte SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Transport SR"
-				},
+				"Data": {"Id": "Kon Transport SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Flytt SR"
-				},
+				"Data": {"Id": "Kon Flytt SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Montering SR"
-				},
+				"Data": {"Id": "Kon Montering SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Teknik sammanträdesrum SR"
-				},
+				"Data": {"Id": "Kon Teknik sammanträdesrum SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Frankering SR"
-				},
+				"Data": {"Id": "Kon Frankering SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kuvertering SR"
-				},
+				"Data": {"Id": "Kon Kuvertering SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Skanning inkommande post SR"
-				},
+				"Data": {"Id": "Kon Skanning inkommande post SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Post SR"
-				},
+				"Data": {"Id": "Kon Övrigt Post SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tonerbyte SR"
-				},
+				"Data": {"Id": "Kon Tonerbyte SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Papperspåfyllning SR"
-				},
+				"Data": {"Id": "Kon Papperspåfyllning SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Materialförråd påfyllnad SR"
-				},
+				"Data": {"Id": "Kon Materialförråd påfyllnad SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kontorsmaterial försäljning SR"
-				},
+				"Data": {"Id": "Kon Kontorsmaterial försäljning SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Förråd SR"
-				},
+				"Data": {"Id": "Kon Övrigt Förråd SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tryckeri Inc"
-				},
+				"Data": {"Id": "Kon Tryckeri Inc"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Post INC"
-				},
+				"Data": {"Id": "Kon Post INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Förråd INC"
-				},
+				"Data": {"Id": "Kon Förråd INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Utskrift INC"
-				},
+				"Data": {"Id": "Kon Utskrift INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Visitkort INC"
-				},
+				"Data": {"Id": "Kon Visitkort INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Korrespondenskort INC"
-				},
+				"Data": {"Id": "Kon Korrespondenskort INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Brevpapper A4 INC"
-				},
+				"Data": {"Id": "Kon Brevpapper A4 INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kuvert INC"
-				},
+				"Data": {"Id": "Kon Kuvert INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Svarskuvert INC"
-				},
+				"Data": {"Id": "Kon Svarskuvert INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Plus Giro-blankett INC"
-				},
+				"Data": {"Id": "Kon Plus Giro-blankett INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Rums/namnskylt INC"
-				},
+				"Data": {"Id": "Kon Rums/namnskylt INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Layout INC"
-				},
+				"Data": {"Id": "Kon Layout INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Samlingsannons INC"
-				},
+				"Data": {"Id": "Kon Samlingsannons INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tjänstedeklaration INC"
-				},
+				"Data": {"Id": "Kon Tjänstedeklaration INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Utställning INC"
-				},
+				"Data": {"Id": "Kon Utställning INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Tryckeri INC"
-				},
+				"Data": {"Id": "Kon Övrigt Tryckeri INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Lampbyte INC"
-				},
+				"Data": {"Id": "Kon Lampbyte INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Transport INC"
-				},
+				"Data": {"Id": "Kon Transport INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Flytt INC"
-				},
+				"Data": {"Id": "Kon Flytt INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Montering INC"
-				},
+				"Data": {"Id": "Kon Montering INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Teknik sammanträdesrum INC"
-				},
+				"Data": {"Id": "Kon Teknik sammanträdesrum INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Frankering INC"
-				},
+				"Data": {"Id": "Kon Frankering INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kuvertering INC"
-				},
+				"Data": {"Id": "Kon Kuvertering INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Skanning INC"
-				},
+				"Data": {"Id": "Kon Skanning INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Post INC"
-				},
+				"Data": {"Id": "Kon Övrigt Post INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Tonerbyte INC"
-				},
+				"Data": {"Id": "Kon Tonerbyte INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Papperspåfyllning INC"
-				},
+				"Data": {"Id": "Kon Papperspåfyllning INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Materialflrråd påfyllnad INC"
-				},
+				"Data": {"Id": "Kon Materialflrråd påfyllnad INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Kontorsmaterial försäljning INC"
-				},
+				"Data": {"Id": "Kon Kontorsmaterial försäljning INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Kon Övrigt Förråd INC"
-				},
+				"Data": {"Id": "Kon Övrigt Förråd INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Tankkort INC"
-				},
+				"Data": {"Id": "For Tankkort INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Passerkort  INC"
-				},
+				"Data": {"Id": "For Passerkort  INC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Leasing SR"
-				},
+				"Data": {"Id": "For Leasing SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Tankkort SR"
-				},
+				"Data": {"Id": "For Tankkort SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Passerkort SR"
-				},
+				"Data": {"Id": "For Passerkort SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Nytt Tankkort"
-				},
+				"Data": {"Id": "For Nytt Tankkort"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Ersättningskort Tankkort"
-				},
+				"Data": {"Id": "For Ersättningskort Tankkort"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Nytt Passerkort"
-				},
+				"Data": {"Id": "For Nytt Passerkort"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Ändring Passerkort"
-				},
+				"Data": {"Id": "For Ändring Passerkort"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "For Lägga till fastighet Passerkort"
-				},
+				"Data": {"Id": "For Lägga till fastighet Passerkort"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Organisationsbyte"
-				},
+				"Data": {"Id": "IT Organisationsbyte"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Tjänstgöringsintyg"
-				},
+				"Data": {"Id": "Lön Tjänstgöringsintyg"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Självservice Chef"
-				},
+				"Data": {"Id": "Lön Självservice Chef"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Lön Felaktigt Utbetald Lön"
-				},
+				"Data": {"Id": "Lön Felaktigt Utbetald Lön"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Pensions frågor"
-				},
+				"Data": {"Id": "Pensions frågor"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT RFC"
-				},
+				"Data": {"Id": "IT RFC"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Ändringar inom Normaldrift"
-				},
+				"Data": {"Id": "IT Ändringar inom Normaldrift"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Incident, Problem"
-				},
+				"Data": {"Id": "Incident, Problem"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Service Request"
-				},
+				"Data": {"Id": "Service Request"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Gemensamma"
-				},
+				"Data": {"Id": "Gemensamma"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Event"
-				},
+				"Data": {"Id": "Event"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Bristfällig Dokumentation"
-				},
+				"Data": {"Id": "Bristfällig Dokumentation"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Ej tillgängligt system/tjänst"
-				},
+				"Data": {"Id": "IT Ej tillgängligt system/tjänst"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Handhavande"
-				},
+				"Data": {"Id": "IT Handhavande"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Prestandaförsämring"
-				},
+				"Data": {"Id": "IT Prestandaförsämring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Defekt"
-				},
+				"Data": {"Id": "IT Defekt"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Lösenord till system som ej bytes av IT-avdelningen"
-				},
+				"Data": {"Id": "IT Lösenord till system som ej bytes av IT-avdelningen"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Kommunikationsproblem"
-				},
+				"Data": {"Id": "IT Kommunikationsproblem"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Övriga fel som inte passar in"
-				},
+				"Data": {"Id": "IT Övriga fel som inte passar in"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Udda ny- & avbeställningar"
-				},
+				"Data": {"Id": "IT Udda ny- & avbeställningar"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Förändringsförslag"
-				},
+				"Data": {"Id": "Förändringsförslag"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Skola Online"
-				},
+				"Data": {"Id": "IT Skola Online"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Dexter"
-				},
+				"Data": {"Id": "IT Dexter"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT SchoolSoft"
-				},
+				"Data": {"Id": "IT SchoolSoft"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Procapita"
-				},
+				"Data": {"Id": "IT Procapita"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT TES"
-				},
+				"Data": {"Id": "IT TES"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Time Care"
-				},
+				"Data": {"Id": "IT Time Care"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Flexite"
-				},
+				"Data": {"Id": "IT Flexite"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT E-dos"
-				},
+				"Data": {"Id": "IT E-dos"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Prator"
-				},
+				"Data": {"Id": "IT Prator"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Felaktig konfiguration"
-				},
+				"Data": {"Id": "IT Felaktig konfiguration"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Heroma"
-				},
+				"Data": {"Id": "IT Heroma"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Spam"
-				},
+				"Data": {"Id": "Spam"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": ""
-				},
+				"Data": {"Id": ""},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Information"
-				},
+				"Data": {"Id": "Information"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT RFC - Servicecenter IT"
-				},
+				"Data": {"Id": "IT RFC - Servicecenter IT"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Ändringar Utanför Normaldrift"
-				},
+				"Data": {"Id": "IT Ändringar Utanför Normaldrift"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Udda Beställningar"
-				},
+				"Data": {"Id": "IT Udda Beställningar"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT TES, Åkte ur systemet med ett felmeddelande"
-				},
+				"Data": {"Id": "IT TES, Åkte ur systemet med ett felmeddelande"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT TES, Felmeddelande programmet är upptaget"
-				},
+				"Data": {"Id": "IT TES, Felmeddelande programmet är upptaget"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT TES, Andra problem , beskrivning av problemet"
-				},
+				"Data": {"Id": "IT TES, Andra problem , beskrivning av problemet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Applikationssupport"
-				},
+				"Data": {"Id": "Applikationssupport"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH Service Request"
-				},
+				"Data": {"Id": "ÄDH Service Request"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH Incident"
-				},
+				"Data": {"Id": "ÄDH Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Ny Användare"
-				},
+				"Data": {"Id": "ÄDH - Ny Användare"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Ny/ändrad behörighet"
-				},
+				"Data": {"Id": "ÄDH - Ny/ändrad behörighet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Ändrad organisation/tillhörighet"
-				},
+				"Data": {"Id": "ÄDH - Ändrad organisation/tillhörighet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Checka in fil"
-				},
+				"Data": {"Id": "ÄDH - Checka in fil"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Utbildning (extra)"
-				},
+				"Data": {"Id": "ÄDH - Utbildning (extra)"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Förändringsförslag"
-				},
+				"Data": {"Id": "ÄDH - Förändringsförslag"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Allmänt Användarstöd HL"
-				},
+				"Data": {"Id": "ÄDH - Allmänt Användarstöd HL"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Allmänt Användarstöd RG"
-				},
+				"Data": {"Id": "ÄDH - Allmänt Användarstöd RG"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Allmänt Användarstöd CH"
-				},
+				"Data": {"Id": "ÄDH - Allmänt Användarstöd CH"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Allmänt Användarstöd SR"
-				},
+				"Data": {"Id": "ÄDH - Allmänt Användarstöd SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Handhavandefel HL"
-				},
+				"Data": {"Id": "ÄDH - Handhavandefel HL"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Handhavandefel RG"
-				},
+				"Data": {"Id": "ÄDH - Handhavandefel RG"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Handhavandefel CH"
-				},
+				"Data": {"Id": "ÄDH - Handhavandefel CH"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Handhavandefel SR"
-				},
+				"Data": {"Id": "ÄDH - Handhavandefel SR"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Felmeddelande"
-				},
+				"Data": {"Id": "ÄDH - Felmeddelande"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - 360-knappar i Outlook saknas"
-				},
+				"Data": {"Id": "ÄDH - 360-knappar i Outlook saknas"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Ingen åtkomst"
-				},
+				"Data": {"Id": "ÄDH - Ingen åtkomst"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "ÄDH - Ärende kan inte avslutas"
-				},
+				"Data": {"Id": "ÄDH - Ärende kan inte avslutas"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Phonirolock & Phonirocare"
-				},
+				"Data": {"Id": "Phonirolock & Phonirocare"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Phoniro"
-				},
+				"Data": {"Id": "IT Phoniro"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Montering"
-				},
+				"Data": {"Id": "Montering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Demontering"
-				},
+				"Data": {"Id": "Demontering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Fel, beskriv"
-				},
+				"Data": {"Id": "IT Fel, beskriv"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Virus, botnet m.m."
-				},
+				"Data": {"Id": "Virus, botnet m.m."},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Toner ej levererad automatiskt"
-				},
+				"Data": {"Id": "Toner ej levererad automatiskt"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Felande läsenhet"
-				},
+				"Data": {"Id": "IT Felande läsenhet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Batteribyte"
-				},
+				"Data": {"Id": "Batteribyte"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Defekt mobil"
-				},
+				"Data": {"Id": "IT Defekt mobil"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Trygghetslarm"
-				},
+				"Data": {"Id": "Trygghetslarm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Installation av trygghetslarm"
-				},
+				"Data": {"Id": "IT Installation av trygghetslarm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Demontering av trygghetslarm"
-				},
+				"Data": {"Id": "IT Demontering av trygghetslarm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Byte av trygghetslarm"
-				},
+				"Data": {"Id": "IT Byte av trygghetslarm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Installation av larmtillbehör"
-				},
+				"Data": {"Id": "IT Installation av larmtillbehör"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Demontering av larmtillbehör"
-				},
+				"Data": {"Id": "IT Demontering av larmtillbehör"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Felande larm"
-				},
+				"Data": {"Id": "IT Felande larm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT Felande larmtillbehör"
-				},
+				"Data": {"Id": "IT Felande larmtillbehör"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Registervård"
-				},
+				"Data": {"Id": "Registervård"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Loggning"
-				},
+				"Data": {"Id": "Loggning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Avisering"
-				},
+				"Data": {"Id": "Avisering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Felaktiga beslut/registreringar"
-				},
+				"Data": {"Id": "Felaktiga beslut/registreringar"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Utförarförändring"
-				},
+				"Data": {"Id": "Utförarförändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Beställning av hårdvara"
-				},
+				"Data": {"Id": "Beställning av hårdvara"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Nyckelfri hemtjänst/trygghetslarm"
-				},
+				"Data": {"Id": "Nyckelfri hemtjänst/trygghetslarm"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Snabbärende - IT Frågor & Information från Användare & kunder"
-				},
+				"Data": {"Id": "Snabbärende - IT Frågor & Information från Användare & kunder"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil"
-				},
+				"Data": {"Id": "Mobil"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Service Request"
-				},
+				"Data": {"Id": "Mobil Service Request"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Nyleverans"
-				},
+				"Data": {"Id": "Mobil Nyleverans"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil byte till ny"
-				},
+				"Data": {"Id": "Mobil byte till ny"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil byte samma tjänst"
-				},
+				"Data": {"Id": "Mobil byte samma tjänst"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil avveckling"
-				},
+				"Data": {"Id": "Mobil avveckling"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Snabbärende - IT Felanmälan mot FC-Support"
-				},
+				"Data": {"Id": "Snabbärende - IT Felanmälan mot FC-Support"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil roaming betaltjänster"
-				},
+				"Data": {"Id": "Mobil roaming betaltjänster"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Phoniro ersättningstelefon"
-				},
+				"Data": {"Id": "Mobil Phoniro ersättningstelefon"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Phoniro avsluta"
-				},
+				"Data": {"Id": "Mobil Phoniro avsluta"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil - Incident"
-				},
+				"Data": {"Id": "Mobil - Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Fel Telefon"
-				},
+				"Data": {"Id": "Mobil Fel Telefon"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Fel Abonnemang"
-				},
+				"Data": {"Id": "Mobil Fel Abonnemang"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Handhavande"
-				},
+				"Data": {"Id": "Mobil Handhavande"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Ny beställning"
-				},
+				"Data": {"Id": "Mobil Ny beställning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Ny Beställning Express"
-				},
+				"Data": {"Id": "Mobil Ny Beställning Express"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Förändring"
-				},
+				"Data": {"Id": "Mobil Förändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil övriga frågor"
-				},
+				"Data": {"Id": "Mobil övriga frågor"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "mobil 1234"
-				},
+				"Data": {"Id": "mobil 1234"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Ny beställning phoniro"
-				},
+				"Data": {"Id": "Mobil Ny beställning phoniro"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS"
-				},
+				"Data": {"Id": "TVS"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Service Request"
-				},
+				"Data": {"Id": "TVS - Service Request"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Verksamhetsfrågor"
-				},
+				"Data": {"Id": "TVS - Verksamhetsfrågor"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Loggning/Avisering"
-				},
+				"Data": {"Id": "TVS - Loggning/Avisering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Registervård/Systemunderhåll"
-				},
+				"Data": {"Id": "TVS - Registervård/Systemunderhåll"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Felaktiga registreringar"
-				},
+				"Data": {"Id": "TVS - Felaktiga registreringar"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Organisationsförändring"
-				},
+				"Data": {"Id": "TVS - Organisationsförändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Användarhantering"
-				},
+				"Data": {"Id": "TVS - Användarhantering"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Utbildning"
-				},
+				"Data": {"Id": "TVS - Utbildning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Systemhandledning"
-				},
+				"Data": {"Id": "TVS - Systemhandledning"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Statistik"
-				},
+				"Data": {"Id": "TVS - Statistik"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Förändring av dokumentation"
-				},
+				"Data": {"Id": "TVS - Förändring av dokumentation"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Incident"
-				},
+				"Data": {"Id": "TVS - Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS -  Inloggningsproblem"
-				},
+				"Data": {"Id": "TVS -  Inloggningsproblem"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - System som ligger nere"
-				},
+				"Data": {"Id": "TVS - System som ligger nere"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Systemåtkomst användare utanför kommunät"
-				},
+				"Data": {"Id": "TVS - Systemåtkomst användare utanför kommunät"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Fel i systemet"
-				},
+				"Data": {"Id": "TVS - Fel i systemet"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Tel Växelförändring"
-				},
+				"Data": {"Id": "Tel Växelförändring"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Mobil Phoniro Stulen"
-				},
+				"Data": {"Id": "Mobil Phoniro Stulen"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "TVS - Förändring av ärendegång"
-				},
+				"Data": {"Id": "TVS - Förändring av ärendegång"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Print - Teknisk Byte"
-				},
+				"Data": {"Id": "Print - Teknisk Byte"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "IT-säkerhetsincident , Ospecificerad"
-				},
+				"Data": {"Id": "IT-säkerhetsincident , Ospecificerad"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Snabbärende - Telefoni"
-				},
+				"Data": {"Id": "Snabbärende - Telefoni"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Advania"
-				},
+				"Data": {"Id": "Advania"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Advania - Service request"
-				},
+				"Data": {"Id": "Advania - Service request"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Beställning av Hårdvara Advania"
-				},
+				"Data": {"Id": "Beställning av Hårdvara Advania"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Uppsägning Hårdvara - Advania"
-				},
+				"Data": {"Id": "Uppsägning Hårdvara - Advania"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Advania - Incident"
-				},
+				"Data": {"Id": "Advania - Incident"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Borttappad/Stulen - Advania"
-				},
+				"Data": {"Id": "Borttappad/Stulen - Advania"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Hårdvarufel - Advania"
-				},
+				"Data": {"Id": "Hårdvarufel - Advania"},
 				"Memo": {}
 			},
 			{
 				"Type": "CaseCategory",
 				"Links": [],
-				"Data": {
-					"Id": "Skadad/Defekt utrustning - Advania"
-				},
+				"Data": {"Id": "Skadad/Defekt utrustning - Advania"},
 				"Memo": {}
 			}
-		]
-	}
+		],
+		"status": 200
+	},
+	"name": "pob-read-case-categories"
 }

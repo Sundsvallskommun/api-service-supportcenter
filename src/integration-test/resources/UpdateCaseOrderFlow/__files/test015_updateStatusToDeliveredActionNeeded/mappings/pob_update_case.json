@@ -1,38 +1,25 @@
 {
-	"name": "pob-update-case-updateCase",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/cases",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Type": "Case",
-					"Links": [
-					],
-					"Data": {
-						"Id": "867415",
-						"CaseStatus": "In Process",
-						"ResponsibleGroup": "IT Support"
-					},
-					"Memo": {
-						"CaseInternalNotesCustom": {
-							"Extension": ".html",
-							"IsValidForWeb": false,
-							"Style": "2",
-							"Memo": "Status: 'Delivered - Action Needed'",
-							"HandleSeparators": true
-						}
-					}
-				}
-			}
-		]
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"CaseStatus": "In Process",
+				"Id": "867415",
+				"ResponsibleGroup": "IT Support"
+			},
+			"Memo": {"CaseInternalNotesCustom": {
+				"Extension": ".html",
+				"HandleSeparators": true,
+				"Style": "2",
+				"IsValidForWeb": false,
+				"Memo": "Status: 'Delivered - Action Needed'"
+			}}
+		}}],
+		"urlPath": "/pob/cases"
 	},
-	"response": {
-		"status": 200
-	}
+	"response": {"status": 200},
+	"name": "pob-update-case-updateCase"
 }

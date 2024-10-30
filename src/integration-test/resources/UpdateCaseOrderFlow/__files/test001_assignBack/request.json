@@ -1,7 +1,7 @@
 {
 	"note": {
-		"type": "PROBLEM",
-		"text": "This is a note"
+		"text": "This is a note",
+		"type": "PROBLEM"
 	},
 	"caseStatus": "In Process",
 	"responsibleGroup": "First Line IT"

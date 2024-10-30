@@ -1,25 +1,14 @@
 {
-	"name": "pob-read-items",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/items",
-		"queryParameters": {
-			"Filter": {
-				"equalTo": "IdOption=Testmodel"
-			}
-		}
-	},"response": {
-	"headers": {
-		"Content-Type": "application/json"
+		"queryParameters": {"Filter": {"equalTo": "IdOption=Testmodel"}},
+		"urlPath": "/pob/items"
 	},
-	"status": 401,
-	"jsonBody": {
-		"Message": "Authorization has been denied for this request."
-	}
-}
+	"response": {
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": {"Message": "Authorization has been denied for this request."},
+		"status": 401
+	},
+	"name": "pob-read-items"
 }

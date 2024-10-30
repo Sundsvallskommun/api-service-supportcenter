@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+
 /**
  * Performs customizations on the PobPayload regarding solution memo
  */
@@ -26,7 +27,7 @@ public class SolutionNoteProcessor implements ProcessorInterface {
 
 	@Override
 	public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
-		return nonNull(updateCaseRequest); //This processor should be executed for all requests as long as they are not null
+		return nonNull(updateCaseRequest); // This processor should be executed for all requests as long as they are not null
 	}
 
 	/**

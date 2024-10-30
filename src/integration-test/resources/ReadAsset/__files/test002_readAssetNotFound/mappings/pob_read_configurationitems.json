@@ -1,25 +1,14 @@
 {
-	"name": "pob-read-configurationitems",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "GET",
-		"urlPath": "/pob/configurationitems",
-		"queryParameters": {
-			"Filter": {
-				"equalTo": "SerialNumber=XXX"
-			}
-		}
+		"queryParameters": {"Filter": {"equalTo": "SerialNumber=XXX"}},
+		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
-		"jsonBody": [
-		]
-	}
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": [],
+		"status": 200
+	},
+	"name": "pob-read-configurationitems"
 }

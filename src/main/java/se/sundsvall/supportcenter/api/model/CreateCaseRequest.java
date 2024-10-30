@@ -339,7 +339,6 @@ public class CreateCaseRequest {
 		return this;
 	}
 
-
 	public String getProjectNumber() {
 		return projectNumber;
 	}
@@ -460,7 +459,7 @@ public class CreateCaseRequest {
 	@Override
 	public int hashCode() {
 		return Objects.hash(note, description, caseType, caseCategory, customerContact, externalArticleNumber, managementCompany, priority, personal, responsibleGroup, externalServiceId, office, freeText,
-				joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, address);
+			joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, address);
 	}
 
 	@Override
@@ -473,32 +472,32 @@ public class CreateCaseRequest {
 			return false;
 		CreateCaseRequest other = (CreateCaseRequest) obj;
 		return Objects.equals(note, other.note) && Objects.equals(description, other.description) && Objects.equals(caseType, other.caseType) && Objects.equals(caseCategory, other.caseCategory)
-				&& Objects.equals(customerContact, other.customerContact) && Objects.equals(externalArticleNumber, other.externalArticleNumber) && Objects.equals(managementCompany, other.managementCompany)
-				&& Objects.equals(priority, other.priority) && Objects.equals(personal, other.personal) && Objects.equals(responsibleGroup, other.responsibleGroup)
-				&& Objects.equals(externalServiceId, other.externalServiceId) && Objects.equals(office, other.office) && Objects.equals(freeText, other.freeText)
-				&& Objects.equals(joinContact, other.joinContact) && Objects.equals(responsibilityNumber, other.responsibilityNumber) && Objects.equals(subaccount, other.subaccount)
-				&& Objects.equals(businessNumber, other.businessNumber) && Objects.equals(activityNumber, other.activityNumber) &&
-				Objects.equals(projectNumber, other.projectNumber) && Objects.equals(objectNumber, other.objectNumber)
-				&& Objects.equals(counterPart, other.counterPart) && Objects.equals(ciDescription, other.ciDescription) && Objects.equals(contactPerson, other.contactPerson)
-				&& Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(email, other.email) && Objects.equals(address, other.address);
+			&& Objects.equals(customerContact, other.customerContact) && Objects.equals(externalArticleNumber, other.externalArticleNumber) && Objects.equals(managementCompany, other.managementCompany)
+			&& Objects.equals(priority, other.priority) && Objects.equals(personal, other.personal) && Objects.equals(responsibleGroup, other.responsibleGroup)
+			&& Objects.equals(externalServiceId, other.externalServiceId) && Objects.equals(office, other.office) && Objects.equals(freeText, other.freeText)
+			&& Objects.equals(joinContact, other.joinContact) && Objects.equals(responsibilityNumber, other.responsibilityNumber) && Objects.equals(subaccount, other.subaccount)
+			&& Objects.equals(businessNumber, other.businessNumber) && Objects.equals(activityNumber, other.activityNumber) &&
+			Objects.equals(projectNumber, other.projectNumber) && Objects.equals(objectNumber, other.objectNumber)
+			&& Objects.equals(counterPart, other.counterPart) && Objects.equals(ciDescription, other.ciDescription) && Objects.equals(contactPerson, other.contactPerson)
+			&& Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(email, other.email) && Objects.equals(address, other.address);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("CreateCaseRequest [note=").append(note).append(", description=").append(description)
-				.append(", caseType=").append(caseType).append(", caseCategory=").append(caseCategory).append(", customerContact=").append(customerContact)
-				.append(", externalArticleNumber=").append(externalArticleNumber).append(", priority=").append(priority)
-				.append(", managementCompany=").append(managementCompany)
-				.append(", personal=").append(personal).append(", responsibleGroup=").append(responsibleGroup)
-				.append(", externalServiceId=").append(externalServiceId).append(", office=").append(office)
-				.append(", freeText=").append(freeText).append(", joinContact=").append(joinContact)
-				.append(", responsibilityNumber=").append(responsibilityNumber).append(", subaccount=").append(subaccount)
-				.append(", businessNumber=").append(businessNumber).append(", activityNumber=").append(activityNumber)
-				.append(", projectNumber=").append(projectNumber).append(", objectNumber=").append(objectNumber).append(", counterPart=").append(counterPart)
-				.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
-				.append(", contactPerson=").append(contactPerson).append(", phoneNumber=").append(phoneNumber)
-				.append(", email=").append(email).append(", address=").append(address).append("]");
+			.append(", caseType=").append(caseType).append(", caseCategory=").append(caseCategory).append(", customerContact=").append(customerContact)
+			.append(", externalArticleNumber=").append(externalArticleNumber).append(", priority=").append(priority)
+			.append(", managementCompany=").append(managementCompany)
+			.append(", personal=").append(personal).append(", responsibleGroup=").append(responsibleGroup)
+			.append(", externalServiceId=").append(externalServiceId).append(", office=").append(office)
+			.append(", freeText=").append(freeText).append(", joinContact=").append(joinContact)
+			.append(", responsibilityNumber=").append(responsibilityNumber).append(", subaccount=").append(subaccount)
+			.append(", businessNumber=").append(businessNumber).append(", activityNumber=").append(activityNumber)
+			.append(", projectNumber=").append(projectNumber).append(", objectNumber=").append(objectNumber).append(", counterPart=").append(counterPart)
+			.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
+			.append(", contactPerson=").append(contactPerson).append(", phoneNumber=").append(phoneNumber)
+			.append(", email=").append(email).append(", address=").append(address).append("]");
 		return builder.toString();
 	}
 }

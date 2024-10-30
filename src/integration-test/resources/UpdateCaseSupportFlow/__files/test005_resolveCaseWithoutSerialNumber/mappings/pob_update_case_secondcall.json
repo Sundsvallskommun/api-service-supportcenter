@@ -1,31 +1,21 @@
 {
-	"scenarioName": "resolve-case",
-	"requiredScenarioState": "CaseSolved",
-	"name": "pob-update-case-to-closed",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/cases",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Type": "Case",
-					"Links": [],
-					"Data": {
-						"Virtual.ExternalCaseId": "",
-						"CaseStatus": "Closed",
-						"Id": "910277"
-					},
-					"Memo": null
-				}
-			}
-		]
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "Case",
+			"Links": [],
+			"Data": {
+				"Virtual.ExternalCaseId": "",
+				"CaseStatus": "Closed",
+				"Id": "910277"
+			},
+			"Memo": null
+		}}],
+		"urlPath": "/pob/cases"
 	},
-	"response": {
-		"status": 200
-	}
+	"response": {"status": 200},
+	"name": "pob-update-case-to-closed",
+	"requiredScenarioState": "CaseSolved",
+	"scenarioName": "resolve-case"
 }

@@ -1,37 +1,23 @@
 {
-	"name": "pob-update-asset-test2",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/configurationitems",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Type": "ConfigurationItem",
-					"Links": [
-					],
-					"Data": {
-						"Virtual.CIKommun" : "Ånge",
-						"Id": "867407",
-						"OptionalNumber": "WB12345NY"
-					},
-					"Memo": {
-					}
-				}
-			}
-		]
+		"bodyPatterns": [{"equalToJson": {
+			"Type": "ConfigurationItem",
+			"Links": [],
+			"Data": {
+				"Virtual.CIKommun": "Ånge",
+				"OptionalNumber": "WB12345NY",
+				"Id": "867407"
+			},
+			"Memo": {}
+		}}],
+		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 401,
-		"jsonBody": {
-			"Message": "Authorization has been denied for this request."
-		}
-	}
+		"headers": {"Content-Type": "application/json"},
+		"jsonBody": {"Message": "Authorization has been denied for this request."},
+		"status": 401
+	},
+	"name": "pob-update-asset-test2"
 }

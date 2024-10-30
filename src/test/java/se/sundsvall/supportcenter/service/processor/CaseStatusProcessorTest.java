@@ -42,7 +42,7 @@ class CaseStatusProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -70,7 +70,7 @@ class CaseStatusProcessorTest {
 		final var request = UpdateCaseRequest.create();
 
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -78,7 +78,7 @@ class CaseStatusProcessorTest {
 		verify(pobPayloadMock, times(2)).getData();
 		verify(mapMock).remove(KEY_CASE_STATUS);
 	}
-	
+
 	@Test
 	void postProcess() {
 		final var pobKey = "pobKey";

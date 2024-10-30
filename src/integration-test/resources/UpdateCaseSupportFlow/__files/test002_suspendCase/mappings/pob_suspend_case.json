@@ -1,40 +1,30 @@
 {
-	"name": "pob-suspend-case",
 	"request": {
-		"headers": {
-			"Authorization": {
-				"equalTo": "xyz"
-			}
-		},
+		"headers": {"Authorization": {"equalTo": "xyz"}},
 		"method": "POST",
-		"urlPath": "/pob/cases/910277/suspension",
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"Suspension": "Väntar kundsvar Advania",
-					"Description": null,
-					"Time": null,
-					"TimeLimitsAction": "2",
-					"UsePeriod": true,
-					"Period": 1095,
-					"Units": "2"
-				}
-			}
-		]
+		"bodyPatterns": [{"equalToJson": {
+			"Description": null,
+			"UsePeriod": true,
+			"Suspension": "Väntar kundsvar Advania",
+			"Period": 1095,
+			"Time": null,
+			"TimeLimitsAction": "2",
+			"Units": "2"
+		}}],
+		"urlPath": "/pob/cases/910277/suspension"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
+		"headers": {"Content-Type": "application/json"},
 		"jsonBody": {
-			"Suspension": "Väntar kundsvar Advania",
 			"Description": null,
+			"UsePeriod": true,
+			"Suspension": "Väntar kundsvar Advania",
+			"Period": 1095,
 			"Time": "2025-06-30T07:00:00",
 			"TimeLimitsAction": 2,
-			"UsePeriod": true,
-			"Period": 1095,
 			"Units": 2
-		}
-	}
+		},
+		"status": 200
+	},
+	"name": "pob-suspend-case"
 }

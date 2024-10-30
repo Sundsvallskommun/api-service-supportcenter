@@ -32,14 +32,14 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 class UnsuspendCaseProcessorTest {
 
 	private static final String POB_KEY = "pobKey";
-	
+
 	private static final String CASE_ID = "12345";
-	
+
 	private static final UpdateCaseRequest REQUEST = UpdateCaseRequest.create();
 
 	@Mock
 	private POBClient pobClientMock;
-	
+
 	@Mock
 	private PobPayload pobPayloadMock;
 
@@ -53,7 +53,7 @@ class UnsuspendCaseProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -81,7 +81,7 @@ class UnsuspendCaseProcessorTest {
 		verify(pobClientMock).deleteSuspension(POB_KEY, CASE_ID);
 		verify(pobPayloadMock).getData();
 		verify(mapMock).put(KEY_SUSPENSION, null);
-		
+
 		verifyNoMoreInteractions(pobClientMock, pobPayloadMock, mapMock);
 	}
 
@@ -89,7 +89,7 @@ class UnsuspendCaseProcessorTest {
 	void preProcessWhenCaseIsNotSuspended() {
 		// Mocks
 		when(pobClientMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(new ClientProblem(Status.NOT_FOUND, "Not Found: Testexception"));
-		
+
 		// Call
 		processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);
 
@@ -99,17 +99,17 @@ class UnsuspendCaseProcessorTest {
 		verify(pobPayloadMock, never()).getData();
 		verify(mapMock, never()).put(KEY_SUSPENSION, null);
 	}
-	
+
 	@Test
 	void preProcessWhenNon404ExceptionIsThrown() {
 		final var exception = new ServerProblem(Status.INTERNAL_SERVER_ERROR, "Internal Server Error: Testexception");
-		
+
 		// Mocks
 		when(pobClientMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(exception);
-		
+
 		// Call
 		final var e = assertThrows(ThrowableProblem.class, () -> processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock));
-		
+
 		// Verification
 		assertThat(e).isSameAs(exception);
 		verify(pobClientMock).getSuspension(POB_KEY, CASE_ID);
@@ -117,7 +117,7 @@ class UnsuspendCaseProcessorTest {
 		verify(pobPayloadMock, never()).getData();
 		verify(mapMock, never()).put(KEY_SUSPENSION, null);
 	}
-	
+
 	@Test
 	void postProcess() {
 		processor.postProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);

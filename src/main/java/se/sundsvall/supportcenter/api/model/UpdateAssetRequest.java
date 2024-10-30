@@ -12,10 +12,10 @@ public class UpdateAssetRequest {
 
 	@Valid
 	private Note note;
-	
+
 	@Schema(example = "Latitude 9000", description = "Hardware name")
 	private String hardwareName;
-	
+
 	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
 	@ValidMacAddress
 	private String macAddress;
@@ -157,7 +157,7 @@ public class UpdateAssetRequest {
 		if (getClass() != obj.getClass())
 			return false;
 		UpdateAssetRequest other = (UpdateAssetRequest) obj;
-		return Objects.equals(hardwareName, other.hardwareName)	&& Objects.equals(macAddress, other.macAddress)
+		return Objects.equals(hardwareName, other.hardwareName) && Objects.equals(macAddress, other.macAddress)
 			&& Objects.equals(note, other.note) && Objects.equals(supplierStatus, other.supplierStatus)
 			&& Objects.equals(hardwareStatus, other.hardwareStatus) && Objects.equals(warrantyEndDate, other.warrantyEndDate)
 			&& Objects.equals(deliveryDate, other.deliveryDate) && Objects.equals(municipalityId, other.municipalityId);

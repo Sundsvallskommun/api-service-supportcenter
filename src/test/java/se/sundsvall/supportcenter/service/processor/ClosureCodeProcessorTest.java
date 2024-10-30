@@ -42,7 +42,7 @@ class ClosureCodeProcessorTest {
 	void isAssignableFrom() {
 		assertThat(ProcessorInterface.class).isAssignableFrom(processor.getClass());
 	}
-	
+
 	@Test
 	void hasComponentAnnotation() {
 		assertThat(processor.getClass().getAnnotation(Component.class)).isNotNull();
@@ -68,7 +68,7 @@ class ClosureCodeProcessorTest {
 
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
 		when(mapMock.get(KEY_CASE_STATUS)).thenReturn(STATUS_SOLVED);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -88,7 +88,7 @@ class ClosureCodeProcessorTest {
 		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber);
 
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
-		
+
 		// Call
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
@@ -115,7 +115,7 @@ class ClosureCodeProcessorTest {
 		verify(mapMock, never()).get(any());
 		verify(mapMock, never()).put(any(), any());
 	}
-	
+
 	@Test
 	void postProcess() {
 		final var pobKey = "pobKey";
@@ -125,6 +125,6 @@ class ClosureCodeProcessorTest {
 		processor.postProcess(pobKey, caseId, request, pobPayloadMock);
 
 		verifyNoInteractions(pobPayloadMock, mapMock);
-		
+
 	}
 }

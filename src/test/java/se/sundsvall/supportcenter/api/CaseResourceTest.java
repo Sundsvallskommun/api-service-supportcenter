@@ -47,44 +47,44 @@ class CaseResourceTest {
 		when(caseServiceMock.getCaseCategoryList(POBKEY_HEADER_VALUE)).thenReturn(List.of("caseCategory"));
 
 		final var createCaseRequest = CreateCaseRequest.create()
-				.withNote(Note.create().withText("text").withType(NoteType.WORKNOTE))
-				.withDescription("description")
-				.withCaseType("caseType")
-				.withCaseCategory("caseCategory")
-				.withCustomerContact("customerContact")
-				.withExternalArticleNumber("externalArticleNumber")
-				.withPriority("priority")
-				.withPersonal(false)
-				.withResponsibleGroup("responsibleGroup")
-				.withExternalServiceId("externalServiceId")
-				.withOffice(true)
-				.withFreeText("freeText")
-				.withJoinContact("joinContact")
-				.withResponsibilityNumber("responsibilityNumber")
-				.withSubaccount("subaccount")
-				.withActivityNumber("activityNumber")
-				.withManagementCompany("managementCompany")
-				.withBusinessNumber("businessNumber")
-				.withProjectNumber("projectNumber")
-				.withObjectNumber("objectNumber")
-				.withCounterPart("counterPart")
-				.withCiDescription("ciDescription")
-				.withContactPerson("contactPerson")
-				.withPhoneNumber("phoneNumber")
-				.withEmail("email")
-				.withAddress(Address.create().withCity("city").withPostalCode("postalCode").withStreet("street"));
+			.withNote(Note.create().withText("text").withType(NoteType.WORKNOTE))
+			.withDescription("description")
+			.withCaseType("caseType")
+			.withCaseCategory("caseCategory")
+			.withCustomerContact("customerContact")
+			.withExternalArticleNumber("externalArticleNumber")
+			.withPriority("priority")
+			.withPersonal(false)
+			.withResponsibleGroup("responsibleGroup")
+			.withExternalServiceId("externalServiceId")
+			.withOffice(true)
+			.withFreeText("freeText")
+			.withJoinContact("joinContact")
+			.withResponsibilityNumber("responsibilityNumber")
+			.withSubaccount("subaccount")
+			.withActivityNumber("activityNumber")
+			.withManagementCompany("managementCompany")
+			.withBusinessNumber("businessNumber")
+			.withProjectNumber("projectNumber")
+			.withObjectNumber("objectNumber")
+			.withCounterPart("counterPart")
+			.withCiDescription("ciDescription")
+			.withContactPerson("contactPerson")
+			.withPhoneNumber("phoneNumber")
+			.withEmail("email")
+			.withAddress(Address.create().withCity("city").withPostalCode("postalCode").withStreet("street"));
 
 		when(caseServiceMock.createCase(POBKEY_HEADER_VALUE, createCaseRequest)).thenReturn("caseId");
 
 		webTestClient.post().uri("/2281/cases")
-				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
-				.contentType(APPLICATION_JSON)
-				.bodyValue(createCaseRequest)
-				.exchange()
-				.expectStatus().isCreated()
-				.expectHeader().contentType(ALL_VALUE)
-				.expectHeader().location("/2281/cases/" + "caseId")
-				.expectBody().isEmpty();
+			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(createCaseRequest)
+			.exchange()
+			.expectStatus().isCreated()
+			.expectHeader().contentType(ALL_VALUE)
+			.expectHeader().location("/2281/cases/" + "caseId")
+			.expectBody().isEmpty();
 
 		verify(caseServiceMock).createCase(POBKEY_HEADER_VALUE, createCaseRequest);
 	}
@@ -115,10 +115,10 @@ class CaseResourceTest {
 		when(caseServiceMock.getCase(POBKEY_HEADER_VALUE, caseId)).thenReturn(Case.create());
 
 		webTestClient.get().uri("/2281/cases/{caseId}", caseId)
-				.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
-				.exchange()
-				.expectStatus().isOk()
-				.expectBody().jsonPath("$").isMap();
+			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody().jsonPath("$").isMap();
 
 		verify(caseServiceMock).getCase(POBKEY_HEADER_VALUE, caseId);
 	}

@@ -77,7 +77,7 @@ class GetAssetsServiceTest {
 		manufacturerMap.put("Type", "Organization");
 		manufacturerMap.put("Data", manufacturerData);
 
-		final var configurationData =  Map.of(KEY_CONFIGURATION_ITEM, configurationItemId,
+		final var configurationData = Map.of(KEY_CONFIGURATION_ITEM, configurationItemId,
 			KEY_ITEM, item,
 			KEY_DELIVERY_DATE, deliveryDate,
 			KEY_END_WARRANTY_DATE, warrantyEndDate,

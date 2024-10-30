@@ -58,8 +58,8 @@ public class CreateAssetMapper {
 	/**
 	 * Fetch a list of itemIds.
 	 *
-	 * @param pobPayloadList the list of PobPayload
-	 * @return a List of itemIds
+	 * @param  pobPayloadList the list of PobPayload
+	 * @return                a List of itemIds
 	 */
 	public static List<String> toItemIdList(List<PobPayload> pobPayloadList) {
 		return Optional.ofNullable(pobPayloadList).orElse(emptyList()).stream()

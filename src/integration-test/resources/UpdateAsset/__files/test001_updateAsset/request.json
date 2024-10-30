@@ -1,13 +1,13 @@
 {
 	"note": {
-		"type": "SUPPLIERNOTE",
-		"text": "This is a supplier note"
+		"text": "This is a supplier note",
+		"type": "SUPPLIERNOTE"
 	},
-	"hardwareName": "WB12345NY",
-	"hardwareStatus": "2",
 	"macAddress": "00:00:0a:c2:30:fb",
+	"municipalityId": "2260",
+	"hardwareName": "WB12345NY",
 	"supplierStatus": "1",
-	"deliveryDate": "2022-02-20",
+	"hardwareStatus": "2",
 	"warrantyEndDate": "2024-02-20",
-	"municipalityId": "2260"
+	"deliveryDate": "2022-02-20"
 }
