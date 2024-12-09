@@ -14,14 +14,12 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
 
+import generated.client.pob.PobPayload;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
-
-import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;

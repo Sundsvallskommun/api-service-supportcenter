@@ -1,12 +1,22 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"Filter": {"equalTo": "SerialNumber=XXX"}},
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=XXX"
+			}
+		},
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": [],
 		"status": 200
 	},

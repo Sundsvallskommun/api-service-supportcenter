@@ -1,11 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobMemo;
-import org.junit.jupiter.api.Test;
-import se.sundsvall.supportcenter.api.model.Note;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.CUSTOM_STATUS_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
@@ -17,6 +11,12 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
+
+import generated.client.pob.PobMemo;
+import org.junit.jupiter.api.Test;
+import se.sundsvall.supportcenter.api.model.Note;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 class UpdateCaseMapperTest {
 

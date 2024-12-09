@@ -1,5 +1,12 @@
 package se.sundsvall.supportcenter.api;
 
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.PROBLEM;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,13 +19,6 @@ import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.service.CaseService;
-
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.PROBLEM;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("junit")

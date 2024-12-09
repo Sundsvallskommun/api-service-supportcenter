@@ -1,13 +1,12 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
-
 import java.time.LocalDate;
 import java.util.Objects;
-
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
 
 @Schema(description = "CreateAssetRequest model")
 public class CreateAssetRequest {

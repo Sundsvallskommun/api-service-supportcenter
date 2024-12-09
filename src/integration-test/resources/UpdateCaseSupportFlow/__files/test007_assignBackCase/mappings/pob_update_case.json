@@ -1,28 +1,40 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {
-				"Virtual.ExternalCaseId": "CS0867597",
-				"Virtual.ActionNeeded": true,
-				"Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
-				"Id": "867597",
-				"Responsible": null,
-				"ResponsibleGroup": "IT Support"
-			},
-			"Memo": {"CaseInternalNotesCustom": {
-				"Extension": ".html",
-				"HandleSeparators": true,
-				"Style": "2",
-				"IsValidForWeb": false,
-				"Memo": "Beskrivning av den åtgärd som måste utföras av Sundsvall"
-			}}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "CS0867597",
+						"Virtual.ActionNeeded": true,
+						"Virtual.ActionNeededDescription": "Åtgärdsbeskrivning i interna anteckningar",
+						"Id": "867597",
+						"Responsible": null,
+						"ResponsibleGroup": "IT Support"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Beskrivning av den åtgärd som måste utföras av Sundsvall"
+						}
+					}
+				}
+			}
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-assign-back-case"
 }

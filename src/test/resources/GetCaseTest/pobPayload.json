@@ -13,10 +13,12 @@
 		"EUUpdateCount": "0",
 		"OpenedBy": {
 			"Type": "User",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/users/system_api_advania_cube"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/users/system_api_advania_cube"
+				}
+			],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",
@@ -49,10 +51,12 @@
 		"Virtual.print_kop_extrafack_antal": "",
 		"TimeLimits.ServiceHours": {
 			"Type": "ServiceHours",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/servicehours/Default"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/servicehours/Default"
+				}
+			],
 			"Data": {
 				"Description": "Default set up",
 				"Id": "Default"
@@ -70,10 +74,12 @@
 		"Virtual.CAS_VIR_ELEVATOR": "",
 		"ResponsibleGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/First Line IT"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/First Line IT"
+				}
+			],
 			"Data": {
 				"Description": "First Line IT",
 				"Id": "responsibleGroup"
@@ -97,10 +103,12 @@
 		"Virtual.Tel_Ny_Tillv_MEX_Bool": "",
 		"OpenedByGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/Advania"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/Advania"
+				}
+			],
 			"Data": {
 				"Description": "Advania",
 				"Id": "Advania"
@@ -110,10 +118,12 @@
 		"Virtual.Koneo_solved": "",
 		"CoordinatorGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/Advania"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/Advania"
+				}
+			],
 			"Data": {
 				"Description": "Advania",
 				"Id": "Advania"
@@ -138,10 +148,12 @@
 		"Virtual.CAS_EDT_STA2": "",
 		"Contact.Customer": {
 			"Type": "Customer",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/customers/test02test"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/customers/test02test"
+				}
+			],
 			"Data": {
 				"FirstName": "John",
 				"Phone": "",
@@ -156,10 +168,12 @@
 		"ContactNotifyBy": "0",
 		"CaseCategory": {
 			"Type": "CaseCategory",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/casecategories/IT Anv▒ndarhantering"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/casecategories/IT Anv▒ndarhantering"
+				}
+			],
 			"Data": {
 				"Description": "Hantering av användarkonton, grupper etc.",
 				"Id": "caseCategory"
@@ -186,10 +200,12 @@
 		"Virtual.OriginId2": "",
 		"SLAInfo.Contract": {
 			"Type": "Contract",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/?ontracts/11912"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/?ontracts/11912"
+				}
+			],
 			"Data": {
 				"Description": "VOF GVS Resursbank",
 				"Id": "11912"
@@ -207,10 +223,12 @@
 		"Virtual.Shop_ForvaltningBolag": "managementCompany",
 		"Contact.Organization": {
 			"Type": "Organization",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/organizations/7284"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/organizations/7284"
+				}
+			],
 			"Data": {
 				"Virtual.DefaultContractId": "11912",
 				"Description": "VOF GVS Resursbank",
@@ -236,10 +254,12 @@
 		"Times.ActualOnsiteDate": "",
 		"Virtual.Shop_JoinContact": {
 			"Type": "Customer",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/customers/test01test"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/customers/test01test"
+				}
+			],
 			"Data": {
 				"FirstName": "Test",
 				"Phone": "test",
@@ -255,10 +275,12 @@
 		"CIInfo2.OperationStatus": "",
 		"PriorityInfo.Priority": {
 			"Type": "Priority",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/priorities/IT4"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/priorities/IT4"
+				}
+			],
 			"Data": {
 				"Description": "Läst inom 8 arbetsdagar",
 				"Id": "priority"
@@ -271,10 +293,12 @@
 		"Virtual.CAS_VIR_ADSEM": "",
 		"CaseType": {
 			"Type": "CaseType",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/casetypes/Service Request"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/casetypes/Service Request"
+				}
+			],
 			"Data": {
 				"Description": "Beställningar, frågor",
 				"Id": "caseType"
@@ -315,10 +339,12 @@
 		"Virtual.OriginId": "",
 		"Coordinator": {
 			"Type": "User",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/users/system_api_advania_cube"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/users/system_api_advania_cube"
+				}
+			],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",
@@ -348,11 +374,13 @@
 		"Virtual.CAS_VIR_Servername": "",
 		"TimeLimits.NextEscalationDate": "2022-09-06 10:35:52"
 	},
-	"Memo": {"Problem": {
-		"Extension": ".html",
-		"HandleSeparators": true,
-		"Style": "2",
-		"IsValidForWeb": false,
-		"Memo": "This is a note"
-	}}
+	"Memo": {
+		"Problem": {
+			"Extension": ".html",
+			"HandleSeparators": true,
+			"Style": "2",
+			"IsValidForWeb": false,
+			"Memo": "This is a note"
+		}
+	}
 }

@@ -1,25 +1,37 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {
-				"Virtual.ExternalCaseId": "CS123213",
-				"CaseStatus": "In Process",
-				"Id": "867415"
-			},
-			"Memo": {"CaseInternalNotesCustom": {
-				"Extension": ".html",
-				"HandleSeparators": true,
-				"Style": "2",
-				"IsValidForWeb": false,
-				"Memo": "This is a note | Status: 'OrderUpdated'"
-			}}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "CS123213",
+						"CaseStatus": "In Process",
+						"Id": "867415"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "This is a note | Status: 'OrderUpdated'"
+						}
+					}
+				}
+			}
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-case-update-to-order-update"
 }

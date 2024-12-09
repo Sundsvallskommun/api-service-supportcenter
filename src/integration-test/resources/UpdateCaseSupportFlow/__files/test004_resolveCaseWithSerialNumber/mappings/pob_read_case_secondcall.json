@@ -1,11 +1,17 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
 		"urlPath": "/pob/cases/910277"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": {
 			"Type": "Case",
 			"Links": [],
@@ -32,10 +38,12 @@
 				"Virtual.CAS_VIR_ELEVATOR": "",
 				"ResponsibleGroup": {
 					"Type": "UserGroup",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/usergroups/Advania"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/Advania"
+						}
+					],
 					"Data": {
 						"Description": "Advania - Autoärenden",
 						"Id": "Advania"
@@ -46,10 +54,12 @@
 				"Virtual.NewMail": "1",
 				"CIInfo.Type": {
 					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+						}
+					],
 					"Data": {
 						"Description": "Bärbar datorarbetsplats",
 						"Id": "Bärbar"
@@ -66,10 +76,12 @@
 				"Virtual.Koneo_solved": "",
 				"CIInfo.Item": {
 					"Type": "Item",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/items/100866"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/items/100866"
+						}
+					],
 					"Data": {
 						"ItemStatus": "1",
 						"Description": "Dell Latitude 5320",
@@ -82,10 +94,12 @@
 				"CaseSubstatusHistory": "",
 				"CIInfo2.Type": {
 					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+						}
+					],
 					"Data": {
 						"Description": "Bärbar datorarbetsplats",
 						"Id": "Bärbar"
@@ -101,10 +115,12 @@
 				"Virtual.CAS_EDT_STA2": "",
 				"Contact.Customer": {
 					"Type": "Customer",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/customers/fir01las"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/fir01las"
+						}
+					],
 					"Data": {
 						"FirstName": "Firstname",
 						"Phone": "060-1234567",
@@ -131,10 +147,12 @@
 				"Virtual.Shop_ForvaltningBolag": "",
 				"Contact.Organization": {
 					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/2877"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/organizations/2877"
+						}
+					],
 					"Data": {
 						"Virtual.DefaultContractId": "10111",
 						"Description": "KS ServiceC IT Support Ute",
@@ -157,10 +175,12 @@
 				"Virtual.InvoiceReference": "9OLI06NOR",
 				"ClosureCode": {
 					"Type": "ClosureCode",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/closurecodes/Byte av hårdvara"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/closurecodes/Byte av hårdvara"
+						}
+					],
 					"Data": {
 						"Description": "Byte av hårdvara - incident",
 						"Id": "Byte av hårdvara"
@@ -169,10 +189,12 @@
 				},
 				"PriorityInfo.Priority": {
 					"Type": "Priority",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/priorities/IT4"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/priorities/IT4"
+						}
+					],
 					"Data": {
 						"Description": "Löst inom 8 arbetsdagar",
 						"Id": "IT4"
@@ -193,10 +215,12 @@
 				"Virtual.Shop_Kontaktperson": "",
 				"CIInfo.Ci": {
 					"Type": "ConfigurationItem",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitems/307915"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitems/307915"
+						}
+					],
 					"Data": {
 						"Description": "SC, IT, Tivoliv?gen 10, Firstname Lastname",
 						"SerialNumber": "D75BMQ2",
@@ -212,10 +236,12 @@
 				"Virtual.ExternalCaseId": "CS0599170",
 				"CIInfo2.Ci": {
 					"Type": "ConfigurationItem",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitems/350860"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitems/350860"
+						}
+					],
 					"Data": {
 						"Description": "SC, IT, Firstname Lastname",
 						"SerialNumber": "G159S93",
@@ -250,10 +276,12 @@
 				"Times.ActualOkDate": "",
 				"OpenedBy": {
 					"Type": "User",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/users/fir01las"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/fir01las"
+						}
+					],
 					"Data": {
 						"FirstName": "Firstname",
 						"Id": "fir01las",
@@ -277,10 +305,12 @@
 				"Virtual.Tel_Ny_Tillv_Phoniro_Serienr": "",
 				"TimeLimits.ServiceHours": {
 					"Type": "ServiceHours",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/servicehours/Default"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/servicehours/Default"
+						}
+					],
 					"Data": {
 						"Description": "Default set up",
 						"Id": "Default"
@@ -300,10 +330,12 @@
 				"Description": "Supportärende test 1",
 				"Virtual.CIInfo2Item": {
 					"Type": "Item",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/items/101346"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/items/101346"
+						}
+					],
 					"Data": {
 						"ItemStatus": "1",
 						"Description": "Latitude 5320",
@@ -313,10 +345,12 @@
 				},
 				"OpenedByGroup": {
 					"Type": "UserGroup",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/usergroups/Fakturering"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/Fakturering"
+						}
+					],
 					"Data": {
 						"Description": "Ärenden gällande Fakturering",
 						"Id": "Fakturering"
@@ -325,10 +359,12 @@
 				},
 				"CoordinatorGroup": {
 					"Type": "UserGroup",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/usergroups/IT Ute"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/IT Ute"
+						}
+					],
 					"Data": {
 						"Description": "IT Utesupport",
 						"Id": "IT Ute"
@@ -345,10 +381,12 @@
 				"ContactNotifyBy": "0",
 				"CaseCategory": {
 					"Type": "CaseCategory",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/casecategories/Hårdvarufel - Advania"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Hårdvarufel - Advania"
+						}
+					],
 					"Data": {
 						"Description": "Hårdvarufel som ska till Advania",
 						"Id": "H?rdvarufel - Advania"
@@ -365,10 +403,12 @@
 				"Virtual.OriginId2": "",
 				"SLAInfo.Contract": {
 					"Type": "Contract",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/?ontracts/10111"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/?ontracts/10111"
+						}
+					],
 					"Data": {
 						"Description": "KS ServiceC IT Support Ute",
 						"Id": "10111"
@@ -393,10 +433,12 @@
 				"Virtual.CAS_VIR_ADSEM": "",
 				"CaseType": {
 					"Type": "CaseType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/casetypes/Incident"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casetypes/Incident"
+						}
+					],
 					"Data": {
 						"Description": "Incidenter, fel",
 						"Id": "Incident"
@@ -416,10 +458,12 @@
 				"Virtual.Tel_CI_Name": "",
 				"Coordinator": {
 					"Type": "User",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/users/FILA"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/FILA"
+						}
+					],
 					"Data": {
 						"FirstName": "Firstname",
 						"Id": "FILA",

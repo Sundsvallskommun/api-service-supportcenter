@@ -1,21 +1,20 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobMemo;
-import generated.client.pob.PobMemo.StyleEnum;
-import generated.client.pob.PobPayload;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import se.sundsvall.supportcenter.api.model.Note;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-
-import java.util.Map;
-
 import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.mapper.CommonMapper.toMemo;
 import static se.sundsvall.supportcenter.service.mapper.CommonMapper.toNote;
+
+import generated.client.pob.PobMemo;
+import generated.client.pob.PobMemo.StyleEnum;
+import generated.client.pob.PobPayload;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import se.sundsvall.supportcenter.api.model.Note;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 class CommonMapperTest {
 

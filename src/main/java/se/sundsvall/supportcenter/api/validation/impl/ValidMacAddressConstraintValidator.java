@@ -1,13 +1,12 @@
 package se.sundsvall.supportcenter.api.validation.impl;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
-
-import java.util.regex.Pattern;
-
 import static java.util.Objects.isNull;
 import static java.util.regex.Pattern.compile;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import java.util.regex.Pattern;
+import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
 
 public class ValidMacAddressConstraintValidator implements ConstraintValidator<ValidMacAddress, String> {
 

@@ -11,15 +11,13 @@ import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCl
 import static se.sundsvall.supportcenter.service.mapper.UpdateCaseMapper.toPobPayloads;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
 
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
-
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
 import se.sundsvall.supportcenter.api.model.Case;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;

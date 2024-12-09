@@ -1,9 +1,15 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "DELETE",
 		"urlPath": "/pob/cases/867591/suspension"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-delete-suspension"
 }

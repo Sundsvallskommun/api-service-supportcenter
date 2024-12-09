@@ -2,7 +2,6 @@ package se.sundsvall.supportcenter.service.mapper.model;
 
 import java.util.Map;
 import java.util.Objects;
-
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 public class CustomStatusMapping {

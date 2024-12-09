@@ -1,127 +1,143 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "PUT",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {
-				"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
-				"Item": "10018",
-				"SerialNumber": "FRGDZ1J",
-				"Virtual.LeverantorensStatus": "0",
-				"Virtual.CIKommun": "Sundsvall",
-				"DeliveryDate": "2022-01-01",
-				"EndWarrantyDate": "2022-01-01"
-			},
-			"Memo": {}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "ConfigurationItem",
+					"Links": [],
+					"Data": {
+						"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
+						"Item": "10018",
+						"SerialNumber": "FRGDZ1J",
+						"Virtual.LeverantorensStatus": "0",
+						"Virtual.CIKommun": "Sundsvall",
+						"DeliveryDate": "2022-01-01",
+						"EndWarrantyDate": "2022-01-01"
+					},
+					"Memo": {}
+				}
+			}
+		],
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
-		"jsonBody": [{
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {
-				"Virtual.IsPersonal": "False",
-				"AssetNo": "",
-				"DeliveryDate": "2005-12-06 00:00:00",
-				"InstallationDate": "",
-				"Virtual.CIParentsConcat": "",
-				"Virtual.InstallerasAv": "",
-				"ShortDescription": "",
-				"Item": {
-					"Type": "Item",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/items/10018"
-					}],
-					"Data": {
-						"ItemStatus": "2",
-						"Description": "Dell Latitude D510                  ",
-						"Id": "10018"
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"Virtual.IsPersonal": "False",
+					"AssetNo": "",
+					"DeliveryDate": "2005-12-06 00:00:00",
+					"InstallationDate": "",
+					"Virtual.CIParentsConcat": "",
+					"Virtual.InstallerasAv": "",
+					"ShortDescription": "",
+					"Item": {
+						"Type": "Item",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/items/10018"
+							}
+						],
+						"Data": {
+							"ItemStatus": "2",
+							"Description": "Dell Latitude D510                  ",
+							"Id": "10018"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.SerialNumber2": "",
-				"Virtual.Ovrigt": "",
-				"CiStatus": "2",
-				"IsOkForWebUse": "False",
-				"TypeDescription": "",
-				"Virtual.Avvikelse": "",
-				"ConfigurationItemPK": "622109",
-				"Virtual.VIRT_REMINDER_PERIOD": "",
-				"LastCaseDate": "2022-03-23 15:01:55",
-				"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
-				"Virtual.ManualOverrideNoSlaTrygghetslarm": "",
-				"Virtual.MgmtSource_Detail": "",
-				"SwStatus": "0",
-				"Virtual.CIStatusChangeDate": "2022-04-05 09:49:15",
-				"Brand": "",
-				"SerialNumber": "FRGDZ1J",
-				"Virtual.VIRT_REMINDER_DATE": "",
-				"Virtual.ActionIdOfRemovedSla": "",
-				"Virtual.ManuelltIntaktsKontoCCMSla": "False",
-				"Virtual.FysiskPlats_Adr_Postnr": "",
-				"UptimeImpactPercentage": "0",
-				"Id": "867403",
-				"AlertPercent": "",
-				"Virtual.FysiskPlats_Adr_Postort": "",
-				"AlertColor": "",
-				"CIType": {
-					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
-					}],
-					"Data": {
-						"Description": "Bärbar datorarbetsplats",
-						"Id": "Bärbar"
+					"Virtual.SerialNumber2": "",
+					"Virtual.Ovrigt": "",
+					"CiStatus": "2",
+					"IsOkForWebUse": "False",
+					"TypeDescription": "",
+					"Virtual.Avvikelse": "",
+					"ConfigurationItemPK": "622109",
+					"Virtual.VIRT_REMINDER_PERIOD": "",
+					"LastCaseDate": "2022-03-23 15:01:55",
+					"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
+					"Virtual.ManualOverrideNoSlaTrygghetslarm": "",
+					"Virtual.MgmtSource_Detail": "",
+					"SwStatus": "0",
+					"Virtual.CIStatusChangeDate": "2022-04-05 09:49:15",
+					"Brand": "",
+					"SerialNumber": "FRGDZ1J",
+					"Virtual.VIRT_REMINDER_DATE": "",
+					"Virtual.ActionIdOfRemovedSla": "",
+					"Virtual.ManuelltIntaktsKontoCCMSla": "False",
+					"Virtual.FysiskPlats_Adr_Postnr": "",
+					"UptimeImpactPercentage": "0",
+					"Id": "867403",
+					"AlertPercent": "",
+					"Virtual.FysiskPlats_Adr_Postort": "",
+					"AlertColor": "",
+					"CIType": {
+						"Type": "ConfigurationItemType",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+							}
+						],
+						"Data": {
+							"Description": "Bärbar datorarbetsplats",
+							"Id": "Bärbar"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
+					"Virtual.EQU_ADSL_PRICE": "",
+					"IsUptimeReport": "False",
+					"Description": "Some description",
+					"WebTooltip": "",
+					"Virtual.IsContactLocalAdmin": "False",
+					"PCName": "",
+					"Virtual.FysiskPlats_Adr_Gatuadress": "",
+					"PurchasePrice": "",
+					"TypeNumber": "",
+					"IsBamActive": "False",
+					"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
+					"CalibrationDate": "",
+					"Virtual.VIRT_REMINDER_RESP": "",
+					"Virtual.ActionId": "",
+					"Virtual.HasContactRDRights": "",
+					"Virtual.EQU_NETWORK2": "",
+					"Virtual.PersonligGemensam": "",
+					"Virtual.EQU_NETWORK1": "172.16.55.82",
+					"Virtual.MDM_MobileDeviceMgmt": "",
+					"Virtual.LeverantorensStatus": "2",
+					"LastCaseId": "867441",
+					"OperationStatus": "1",
+					"Virtual.PathToDocumentation": "",
+					"Virtual.MgmtSource": "",
+					"IsItService": "False",
+					"LicType": "",
+					"Virtual.EQU_INKOPSPRIS": "",
+					"Virtual.ActionTriggerTime": "",
+					"OptionalNumber": "test1234",
+					"EndWarrantyDate": "2008-12-05 00:00:00",
+					"DefaultProtocol": "",
+					"DeleteDate": "",
+					"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
+					"ExpirationDate": "",
+					"Virtual.Domain": "",
+					"LastChangeDate": "",
+					"MonitorStatus": "0",
+					"Virtual.DataloadSyncInfo": ""
 				},
-				"Virtual.EQU_ADSL_PRICE": "",
-				"IsUptimeReport": "False",
-				"Description": "Some description",
-				"WebTooltip": "",
-				"Virtual.IsContactLocalAdmin": "False",
-				"PCName": "",
-				"Virtual.FysiskPlats_Adr_Gatuadress": "",
-				"PurchasePrice": "",
-				"TypeNumber": "",
-				"IsBamActive": "False",
-				"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
-				"CalibrationDate": "",
-				"Virtual.VIRT_REMINDER_RESP": "",
-				"Virtual.ActionId": "",
-				"Virtual.HasContactRDRights": "",
-				"Virtual.EQU_NETWORK2": "",
-				"Virtual.PersonligGemensam": "",
-				"Virtual.EQU_NETWORK1": "172.16.55.82",
-				"Virtual.MDM_MobileDeviceMgmt": "",
-				"Virtual.LeverantorensStatus": "2",
-				"LastCaseId": "867441",
-				"OperationStatus": "1",
-				"Virtual.PathToDocumentation": "",
-				"Virtual.MgmtSource": "",
-				"IsItService": "False",
-				"LicType": "",
-				"Virtual.EQU_INKOPSPRIS": "",
-				"Virtual.ActionTriggerTime": "",
-				"OptionalNumber": "test1234",
-				"EndWarrantyDate": "2008-12-05 00:00:00",
-				"DefaultProtocol": "",
-				"DeleteDate": "",
-				"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
-				"ExpirationDate": "",
-				"Virtual.Domain": "",
-				"LastChangeDate": "",
-				"MonitorStatus": "0",
-				"Virtual.DataloadSyncInfo": ""
-			},
-			"Memo": {}
-		}],
+				"Memo": {}
+			}
+		],
 		"status": 200
 	},
 	"name": "pob-put-configurationitem"

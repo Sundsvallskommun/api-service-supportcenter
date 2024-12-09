@@ -7,12 +7,11 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
+import generated.client.pob.PobPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBClient;
 import se.sundsvall.supportcenter.service.ConfigurationService;

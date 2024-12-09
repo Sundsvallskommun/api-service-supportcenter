@@ -1,18 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import generated.client.pob.PobPayload;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.stereotype.Component;
-import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
-import se.sundsvall.supportcenter.service.ConfigurationService;
-
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -22,6 +9,18 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO2;
+
+import generated.client.pob.PobPayload;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.stereotype.Component;
+import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.service.ConfigurationService;
 
 @ExtendWith(MockitoExtension.class)
 class SerialNumberProcessorTest {

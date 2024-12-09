@@ -1,34 +1,44 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {
-				"ClosureCode": "Levererat Hårdvara - Service request",
-				"CaseStatus": "Solved",
-				"Id": "867413"
-			},
-			"Memo": {
-				"CaseInternalNotesCustom": {
-					"Extension": ".html",
-					"HandleSeparators": true,
-					"Style": "2",
-					"IsValidForWeb": true,
-					"Memo": "Delivered"
-				},
-				"Solution": {
-					"Extension": ".html",
-					"HandleSeparators": true,
-					"Style": "2",
-					"IsValidForWeb": false,
-					"Memo": "Beställning levererad"
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"ClosureCode": "Levererat Hårdvara - Service request",
+						"CaseStatus": "Solved",
+						"Id": "867413"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": true,
+							"Memo": "Delivered"
+						},
+						"Solution": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Beställning levererad"
+						}
+					}
 				}
 			}
-		}}],
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-case-updateCase-firstcall"
 }

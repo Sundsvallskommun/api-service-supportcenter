@@ -1,21 +1,35 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {"Id": "867404"},
-			"Memo": {"CaseInternalNotesCustom": {
-				"Extension": ".html",
-				"HandleSeparators": true,
-				"Style": "2",
-				"IsValidForWeb": false,
-				"Memo": "This is a worknote"
-			}}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Id": "867404"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "This is a worknote"
+						}
+					}
+				}
+			}
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-case-addCommentWorkNote"
 }

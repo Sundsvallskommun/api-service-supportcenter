@@ -1,11 +1,17 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
 		"urlPath": "/pob/cases/867407"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": {
 			"Type": "Case",
 			"Links": [],
@@ -21,10 +27,12 @@
 				"Virtual.Shop_PersonligGemensam": "1",
 				"Contact.Organization": {
 					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/7284"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/organizations/7284"
+						}
+					],
 					"Data": {
 						"Virtual.DefaultContractId": "11912",
 						"Description": "VOF GVS Resursbank",
@@ -35,11 +43,15 @@
 				},
 				"Virtual.Shop_Kst_JoinAccount": {
 					"Type": "Account",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
-					}],
-					"Data": {"Id": "15220100 974310 920350 5662 17071 6310000 115"},
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
+						}
+					],
+					"Data": {
+						"Id": "15220100 974310 920350 5662 17071 6310000 115"
+					},
 					"Memo": {}
 				},
 				"Virtual.Shop_Adr_Postort": "Sundsvall",
@@ -47,10 +59,12 @@
 				"Virtual.Shop_Kst_Aktivitetsnummer": "5662",
 				"Contact.Customer": {
 					"Type": "Customer",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/customers/test02test"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/test02test"
+						}
+					],
 					"Data": {
 						"FirstName": "John",
 						"Phone": "",
@@ -65,10 +79,12 @@
 				"Virtual.Shop_CI_Description": "Tydlig och bra CI beskrivning",
 				"Coordinator": {
 					"Type": "User",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/users/system_api_advania_cube"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/users/system_api_advania_cube"
+						}
+					],
 					"Data": {
 						"FirstName": "System API",
 						"Id": "system_api_advania_cube",
@@ -78,10 +94,12 @@
 				},
 				"ResponsibleGroup": {
 					"Type": "UserGroup",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/usergroups/IT Ute"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/usergroups/IT Ute"
+						}
+					],
 					"Data": {
 						"Description": "IT Utesupport",
 						"Id": "IT Ute"
@@ -90,10 +108,12 @@
 				},
 				"CaseCategory": {
 					"Type": "CaseCategory",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
+						}
+					],
 					"Data": {
 						"Description": "Beställning av Hårdvara Advania",
 						"Id": "Beställning av Hårdvara Advania"
@@ -103,10 +123,12 @@
 				"Virtual.Shop_Epost": "test.testsson@sundsvall.se",
 				"Virtual.Shop_JoinContact": {
 					"Type": "Customer",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/customers/test01test"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/customers/test01test"
+						}
+					],
 					"Data": {
 						"FirstName": "Test",
 						"Phone": "test",
@@ -121,10 +143,12 @@
 				"Virtual.WebserviceResponse": "",
 				"CIInfo.Type": {
 					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
+						}
+					],
 					"Data": {
 						"Description": "Lätt Bärbar datorarbetsplats",
 						"Id": "Lätt Bärbar"
@@ -134,10 +158,12 @@
 				"CIInfo2.OperationStatus": "",
 				"CaseType": {
 					"Type": "CaseType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/casetypes/Service Request"
-					}],
+					"Links": [
+						{
+							"Relation": "self",
+							"Href": "pobg6/api/v110/casetypes/Service Request"
+						}
+					],
 					"Data": {
 						"Description": "Beställningar, frågor",
 						"Id": "Service Request"

@@ -1,12 +1,22 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"limit": {"equalTo": "10000"}},
+		"queryParameters": {
+			"limit": {
+				"equalTo": "10000"
+			}
+		},
 		"urlPath": "/pob/closurecodes"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": [
 			{
 				"Type": "ClosureCode",
@@ -17,10 +27,12 @@
 					"ClosureCodePK": "2904",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -40,10 +52,12 @@
 					"ClosureCodePK": "2905",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Gemensamma"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -63,10 +77,12 @@
 					"ClosureCodePK": "2906",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -114,10 +130,12 @@
 					"ClosureCodePK": "2909",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Incident, Problem"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -151,10 +169,12 @@
 					"ClosureCodePK": "2911",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -188,10 +208,12 @@
 					"ClosureCodePK": "2913",
 					"ParentClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/Servicecenter IT"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},

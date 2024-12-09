@@ -1,19 +1,29 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {
-				"CaseStatus": "Closed",
-				"CIInfo2.Ci": "867403",
-				"Id": "867414"
-			},
-			"Memo": null
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"CaseStatus": "Closed",
+						"CIInfo2.Ci": "867403",
+						"Id": "867414"
+					},
+					"Memo": null
+				}
+			}
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-case-updateCase-secondcall"
 }

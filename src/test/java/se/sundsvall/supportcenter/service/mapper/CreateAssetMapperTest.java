@@ -1,16 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import org.junit.jupiter.api.Test;
-import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DELIVERY_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DESCRIPTION;
@@ -25,6 +14,16 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_START_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
+
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 
 class CreateAssetMapperTest {
 

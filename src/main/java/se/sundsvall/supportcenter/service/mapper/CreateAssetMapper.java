@@ -20,6 +20,8 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
 
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -27,9 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 
 public class CreateAssetMapper {

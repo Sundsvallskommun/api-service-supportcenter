@@ -22,12 +22,11 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_STATUS_PART;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_DELIVERED;
 
+import generated.client.pob.PobMemo;
+import generated.client.pob.PobPayload;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import generated.client.pob.PobMemo;
-import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;

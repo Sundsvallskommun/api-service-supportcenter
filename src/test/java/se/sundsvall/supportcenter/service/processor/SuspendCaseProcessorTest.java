@@ -1,7 +1,15 @@
 package se.sundsvall.supportcenter.service.processor;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
+
 import generated.client.pob.PobPayload;
 import generated.client.pob.SuspensionInfo;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,15 +19,6 @@ import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBClient;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
-
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
 
 @ExtendWith(MockitoExtension.class)
 class SuspendCaseProcessorTest {
