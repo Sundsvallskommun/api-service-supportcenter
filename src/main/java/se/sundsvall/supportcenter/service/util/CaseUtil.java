@@ -8,7 +8,6 @@ import static java.util.Objects.nonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import generated.client.pob.PobPayload;
 
 public class CaseUtil {

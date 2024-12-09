@@ -1,18 +1,32 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"Filter": {"equalTo": "SerialNumber=FRGDZ1J"}},
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=FRGDZ1J"
+			}
+		},
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
-		"jsonBody": [{
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {"Id": "15857"},
-			"Memo": {}
-		}],
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"Id": "15857"
+				},
+				"Memo": {}
+			}
+		],
 		"status": 200
 	},
 	"name": "pob-read-configurationitems"

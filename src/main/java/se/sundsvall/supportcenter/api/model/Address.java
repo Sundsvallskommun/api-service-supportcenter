@@ -1,12 +1,11 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-
 import java.util.Objects;
-
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Address model")

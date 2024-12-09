@@ -1,19 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper.constant;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.service.SupportCenterStatus;
-import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
@@ -30,6 +16,19 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.SCHEDULE_CHANGED;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
+import se.sundsvall.supportcenter.service.SupportCenterStatus;
+import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
 
 class CaseMapperConstantsTest {
 

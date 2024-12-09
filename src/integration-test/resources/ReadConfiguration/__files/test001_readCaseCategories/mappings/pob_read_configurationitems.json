@@ -1,12 +1,22 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"limit": {"equalTo": "10000"}},
+		"queryParameters": {
+			"limit": {
+				"equalTo": "10000"
+			}
+		},
 		"urlPath": "/pob/casecategories"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": [
 			{
 				"Type": "CaseCategory",
@@ -19,10 +29,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -68,10 +80,12 @@
 					"Id": "Avtal",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Event"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Event"
+							}
+						],
 						"Data": {
 							"Description": "Autogenererade ärenden eller information från t.ex. externa leverantörer",
 							"Id": "Event"
@@ -94,10 +108,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -116,10 +132,12 @@
 					"Id": "IT Borttappad/Stulen",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+							}
+						],
 						"Data": {
 							"Description": "Koder för Incident & Problem",
 							"Id": "Incident, Problem"
@@ -142,10 +160,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -164,10 +184,12 @@
 					"Id": "Licens",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Administration"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Administration"
+							}
+						],
 						"Data": {
 							"Description": "Administration",
 							"Id": "Administration"
@@ -203,10 +225,12 @@
 					"Id": "IT Användarhantering",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Service Request"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Service Request"
+							}
+						],
 						"Data": {
 							"Description": "Koder för Service Requests",
 							"Id": "Service Request"
@@ -229,10 +253,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -251,10 +277,12 @@
 					"Id": "Ändring",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
+							}
+						],
 						"Data": {
 							"Description": "Hantering av användarkonton, grupper etc.",
 							"Id": "IT Användarhantering"
@@ -277,10 +305,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -299,10 +329,12 @@
 					"Id": "Quota",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/IT Användarhantering"
+							}
+						],
 						"Data": {
 							"Description": "Hantering av användarkonton, grupper etc.",
 							"Id": "IT Användarhantering"
@@ -325,10 +357,12 @@
 					"Occupied": "0",
 					"Priority": {
 						"Type": "Priority",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/priorities"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/priorities"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -342,10 +376,12 @@
 					"DeleteDate": "",
 					"ClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/Koneo Tonerleverans"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/Koneo Tonerleverans"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -356,10 +392,12 @@
 					"Id": "IT Ny- & avbeställning av standardiserad tjänst",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Service Request"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Service Request"
+							}
+						],
 						"Data": {
 							"Description": "Koder för Service Requests",
 							"Id": "Service Request"
@@ -378,10 +416,12 @@
 					"BotIsEnabled": "",
 					"ServiceCatalog": {
 						"Type": "ServiceCatalog",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
+							}
+						],
 						"Data": {
 							"Description": "Support som utförs på distans från kund/beställare.",
 							"Id": "Distanssupport"
@@ -402,10 +442,12 @@
 					"DeleteDate": "",
 					"ClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Information/Utbildning"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Information/Utbildning"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -416,10 +458,12 @@
 					"Id": "IT Felmeddelande",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+							}
+						],
 						"Data": {
 							"Description": "Koder för Incident & Problem",
 							"Id": "Incident, Problem"
@@ -438,10 +482,12 @@
 					"BotIsEnabled": "",
 					"ServiceCatalog": {
 						"Type": "ServiceCatalog",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/servicecatalogs/Distanssupport"
+							}
+						],
 						"Data": {
 							"Description": "Support som utförs på distans från kund/beställare.",
 							"Id": "Distanssupport"
@@ -462,10 +508,12 @@
 					"DeleteDate": "",
 					"ClosureCode": {
 						"Type": "ClosureCode",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/closurecodes/IT Användarhantering"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/closurecodes/IT Användarhantering"
+							}
+						],
 						"Data": {},
 						"Memo": {}
 					},
@@ -476,10 +524,12 @@
 					"Id": "IT Inloggningsproblem",
 					"ParentCaseCategory": {
 						"Type": "CaseCategory",
-						"Links": [{
-							"Relation": "self",
-							"Href": "pobg6/api/v110/casecategories/Incident, Problem"
-						}],
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/casecategories/Incident, Problem"
+							}
+						],
 						"Data": {
 							"Description": "Koder för Incident & Problem",
 							"Id": "Incident, Problem"

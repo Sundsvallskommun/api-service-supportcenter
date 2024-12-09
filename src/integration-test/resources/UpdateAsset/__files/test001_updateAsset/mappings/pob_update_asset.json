@@ -1,30 +1,42 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {
-				"Virtual.BluetoothAddress": "00:00:0a:c2:30:fb",
-				"Virtual.LeverantorensStatus": "1",
-				"Virtual.CIKommun": "Ånge",
-				"CiStatus": "2",
-				"OptionalNumber": "WB12345NY",
-				"Id": "867403",
-				"DeliveryDate": "2022-02-20",
-				"EndWarrantyDate": "2024-02-20"
-			},
-			"Memo": {"CILeverantorensAnteckningar": {
-				"Extension": ".html",
-				"HandleSeparators": true,
-				"Style": "0",
-				"IsValidForWeb": false,
-				"Memo": "This is a supplier note"
-			}}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "ConfigurationItem",
+					"Links": [],
+					"Data": {
+						"Virtual.BluetoothAddress": "00:00:0a:c2:30:fb",
+						"Virtual.LeverantorensStatus": "1",
+						"Virtual.CIKommun": "Ånge",
+						"CiStatus": "2",
+						"OptionalNumber": "WB12345NY",
+						"Id": "867403",
+						"DeliveryDate": "2022-02-20",
+						"EndWarrantyDate": "2024-02-20"
+					},
+					"Memo": {
+						"CILeverantorensAnteckningar": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "0",
+							"IsValidForWeb": false,
+							"Memo": "This is a supplier note"
+						}
+					}
+				}
+			}
+		],
 		"urlPath": "/pob/configurationitems"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-asset-test1"
 }

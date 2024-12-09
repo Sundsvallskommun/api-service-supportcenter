@@ -1,26 +1,38 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "Case",
-			"Links": [],
-			"Data": {
-				"Virtual.ExternalCaseId": "CS0599170",
-				"CaseStatus": "In Process",
-				"Id": "910277",
-				"CaseCategory": "Hårdvarufel - Advania"
-			},
-			"Memo": {"CaseInternalNotesCustom": {
-				"Extension": ".html",
-				"HandleSeparators": true,
-				"Style": "2",
-				"IsValidForWeb": false,
-				"Memo": "Status: 'Open'"
-			}}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "CS0599170",
+						"CaseStatus": "In Process",
+						"Id": "910277",
+						"CaseCategory": "Hårdvarufel - Advania"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Status: 'Open'"
+						}
+					}
+				}
+			}
+		],
 		"urlPath": "/pob/cases"
 	},
-	"response": {"status": 200},
+	"response": {
+		"status": 200
+	},
 	"name": "pob-update-case"
 }

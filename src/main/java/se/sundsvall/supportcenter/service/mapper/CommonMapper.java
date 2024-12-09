@@ -8,13 +8,12 @@ import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobMemo.StyleEnum;
 import generated.client.pob.PobPayload;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 

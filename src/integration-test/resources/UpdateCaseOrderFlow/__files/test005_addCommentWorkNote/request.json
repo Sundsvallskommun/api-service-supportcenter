@@ -1,4 +1,6 @@
-{"note": {
-	"text": "This is a worknote",
-	"type": "WORKNOTE"
-}}
+{
+	"note": {
+		"text": "This is a worknote",
+		"type": "WORKNOTE"
+	}
+}

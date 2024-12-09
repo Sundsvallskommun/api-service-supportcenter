@@ -2,7 +2,6 @@ package se.sundsvall.supportcenter.api.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.LocalDate;
 import java.util.Objects;
 

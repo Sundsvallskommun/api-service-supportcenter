@@ -7,11 +7,9 @@ import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCl
 import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toConfigurationItemList;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zalando.problem.Problem;
-
 import se.sundsvall.supportcenter.integration.pob.POBClient;
 
 @Service

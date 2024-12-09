@@ -1,85 +1,101 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"Filter": {"equalTo": "IdOption=Latitude 9000"}},
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "IdOption=Latitude 9000"
+			}
+		},
 		"urlPath": "/pob/items"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
-		"jsonBody": [{
-			"Type": "Item",
-			"Links": [],
-			"Data": {
-				"Virtual.ITE_SYSADMIN_EMAIL": "",
-				"AbcGroup": "",
-				"CurrencyFactor": "0,00",
-				"ItemStatus": "",
-				"Description": "Latitude 9000",
-				"QuantityIn": "0,00",
-				"IdOption": "Latitude 9000",
-				"CurrencyRate": "0,00000",
-				"CiItemType": {
-					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
-					}],
-					"Data": {
-						"Description": "Lätt Bärbar datorarbetsplats",
-						"Id": "Lätt Bärbar"
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "Item",
+				"Links": [],
+				"Data": {
+					"Virtual.ITE_SYSADMIN_EMAIL": "",
+					"AbcGroup": "",
+					"CurrencyFactor": "0,00",
+					"ItemStatus": "",
+					"Description": "Latitude 9000",
+					"QuantityIn": "0,00",
+					"IdOption": "Latitude 9000",
+					"CurrencyRate": "0,00000",
+					"CiItemType": {
+						"Type": "ConfigurationItemType",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
+							}
+						],
+						"Data": {
+							"Description": "Lätt Bärbar datorarbetsplats",
+							"Id": "Lätt Bärbar"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.ITE_OPER_MAN_RES_NAME": "",
-				"ItemPK": "113915178",
-				"Virtual.ITE_OPER_MAN_EMAIL": "",
-				"MinQuantity": "0,00",
-				"TypeNo": "",
-				"OrderQuantity": "0,00",
-				"Virtual.ITE_OPER_MAN_TEL": "",
-				"StartDate": "2022-10-05 00:00:00",
-				"StdPrice": "0,00",
-				"QuantityOut": "0,00",
-				"ExpDate": "",
-				"Virtual.ITE_SYSADMIN_TEL": "",
-				"Virtual.Manufacturer": {
-					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/X_Dell"
-					}],
-					"Data": {
-						"Virtual.DefaultContractId": "",
-						"Description": "Hårdvaruleverantör, datorer och servrar",
-						"Address2": "",
-						"Id": "X_Dell"
+					"Virtual.ITE_OPER_MAN_RES_NAME": "",
+					"ItemPK": "113915178",
+					"Virtual.ITE_OPER_MAN_EMAIL": "",
+					"MinQuantity": "0,00",
+					"TypeNo": "",
+					"OrderQuantity": "0,00",
+					"Virtual.ITE_OPER_MAN_TEL": "",
+					"StartDate": "2022-10-05 00:00:00",
+					"StdPrice": "0,00",
+					"QuantityOut": "0,00",
+					"ExpDate": "",
+					"Virtual.ITE_SYSADMIN_TEL": "",
+					"Virtual.Manufacturer": {
+						"Type": "Organization",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/X_Dell"
+							}
+						],
+						"Data": {
+							"Virtual.DefaultContractId": "",
+							"Description": "Hårdvaruleverantör, datorer och servrar",
+							"Address2": "",
+							"Id": "X_Dell"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
+					"VirtualItem": "",
+					"AvgPrice": "0,00",
+					"VatProcent": "0,00",
+					"FromWarehouse": "",
+					"GenCi": "",
+					"DeleteDate": "",
+					"Virtual.ITE_SYSADMIN_NAME": "",
+					"DeliveryTime": "",
+					"Virtual.ITE_OPER_MAN_NAME": "",
+					"PmConfig": "",
+					"ImageFileName": "",
+					"Virtual.ITE_SYSOWNER_TEL": "",
+					"Virtual.ITE_OPER_MAN_RES_EMAIL": "",
+					"Id": "10018",
+					"SalePrice": "0,00",
+					"ProcPrice": "0,00",
+					"PmwebOk": "",
+					"Stock": "0,00",
+					"Virtual.ITE_SYSOWNER_NAME": "",
+					"Virtual.ITE_SYSOWNER_EMAIL": ""
 				},
-				"VirtualItem": "",
-				"AvgPrice": "0,00",
-				"VatProcent": "0,00",
-				"FromWarehouse": "",
-				"GenCi": "",
-				"DeleteDate": "",
-				"Virtual.ITE_SYSADMIN_NAME": "",
-				"DeliveryTime": "",
-				"Virtual.ITE_OPER_MAN_NAME": "",
-				"PmConfig": "",
-				"ImageFileName": "",
-				"Virtual.ITE_SYSOWNER_TEL": "",
-				"Virtual.ITE_OPER_MAN_RES_EMAIL": "",
-				"Id": "10018",
-				"SalePrice": "0,00",
-				"ProcPrice": "0,00",
-				"PmwebOk": "",
-				"Stock": "0,00",
-				"Virtual.ITE_SYSOWNER_NAME": "",
-				"Virtual.ITE_SYSOWNER_EMAIL": ""
-			},
-			"Memo": {}
-		}],
+				"Memo": {}
+			}
+		],
 		"status": 200
 	},
 	"name": "pob-read-item"

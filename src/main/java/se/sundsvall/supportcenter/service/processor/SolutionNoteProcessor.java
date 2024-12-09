@@ -6,16 +6,14 @@ import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
+import generated.client.pob.PobMemo;
+import generated.client.pob.PobPayload;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import generated.client.pob.PobMemo;
-import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 
 /**

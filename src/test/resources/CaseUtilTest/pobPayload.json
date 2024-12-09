@@ -24,10 +24,12 @@
 		"Virtual.CAS_VIR_ELEVATOR": "",
 		"ResponsibleGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/IT Ute"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/IT Ute"
+				}
+			],
 			"Data": {
 				"Description": "IT Utesupport",
 				"Id": "IT Ute"
@@ -38,10 +40,12 @@
 		"Virtual.NewMail": "0",
 		"CIInfo.Type": {
 			"Type": "ConfigurationItemType",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
+				}
+			],
 			"Data": {
 				"Description": "Lätt Bärbar datorarbetsplats",
 				"Id": "Lätt Bärbar"
@@ -64,11 +68,15 @@
 		"Times.InProcessDate": "",
 		"Virtual.Shop_Kst_JoinAccount": {
 			"Type": "Account",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
-			}],
-			"Data": {"Id": "15220100 974310 920350 5662 17071 6310000 115"},
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/accounts/15220100 974310 920350 5662 17071 6310000 115"
+				}
+			],
+			"Data": {
+				"Id": "15220100 974310 920350 5662 17071 6310000 115"
+			},
 			"Memo": {}
 		},
 		"Virtual.CAS_VIR_EFACK_KOP": "",
@@ -77,10 +85,12 @@
 		"Virtual.CAS_EDT_STA2": "",
 		"Contact.Customer": {
 			"Type": "Customer",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/customers/test02test"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/customers/test02test"
+				}
+			],
 			"Data": {
 				"FirstName": "John",
 				"Phone": "",
@@ -94,10 +104,12 @@
 		"Virtual.CAS_VIR_BOX": "",
 		"SLAInfo.Service": {
 			"Type": "ServiceCatalog",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/servicecatalogs/Lätt bärbar dator för medarbetare"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/servicecatalogs/Lätt bärbar dator för medarbetare"
+				}
+			],
 			"Data": {
 				"Description": "Lätt bärbar dator, Medarb",
 				"Id": "Lätt bärbar dator för medarbetare"
@@ -119,10 +131,12 @@
 		"Virtual.Shop_ForvaltningBolag": "BoU",
 		"Contact.Organization": {
 			"Type": "Organization",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/organizations/7284"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/organizations/7284"
+				}
+			],
 			"Data": {
 				"Virtual.DefaultContractId": "11912",
 				"Description": "VOF GVS Resursbank",
@@ -145,10 +159,12 @@
 		"Virtual.InvoiceReference": "test02ref",
 		"PriorityInfo.Priority": {
 			"Type": "Priority",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/priorities/IT3"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/priorities/IT3"
+				}
+			],
 			"Data": {
 				"Description": "Löst inom 5 arbetsdagar",
 				"Id": "IT3"
@@ -169,10 +185,12 @@
 		"Virtual.Shop_Kontaktperson": "Test Testsson",
 		"CIInfo.Ci": {
 			"Type": "ConfigurationItem",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/configurationitems/100052"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/configurationitems/100052"
+				}
+			],
 			"Data": {
 				"Description": "",
 				"SerialNumber": "9R5CNZl",
@@ -184,10 +202,12 @@
 		"Virtual.ExternalCaseId": "",
 		"CIInfo2.Ci": {
 			"Type": "ConfigurationItem",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/configurationitems/100053"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/configurationitems/100053"
+				}
+			],
 			"Data": {
 				"Description": "",
 				"SerialNumber": "CQBRVY1",
@@ -219,10 +239,12 @@
 		"Times.ActualOkDate": "",
 		"OpenedBy": {
 			"Type": "User",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/users/system_api_advania_cube"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/users/system_api_advania_cube"
+				}
+			],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",
@@ -246,10 +268,12 @@
 		"Virtual.Tel_Ny_Tillv_Phoniro_Serienr": "",
 		"TimeLimits.ServiceHours": {
 			"Type": "ServiceHours",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/servicehours/Default"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/servicehours/Default"
+				}
+			],
 			"Data": {
 				"Description": "Default set up",
 				"Id": "Default"
@@ -269,10 +293,12 @@
 		"Description": "[Shop] Beställning av tjänst Test 1650354511 TestZZZ220316CreateCaseNetset ab",
 		"OpenedByGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/Advania"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/Advania"
+				}
+			],
 			"Data": {
 				"Description": "Advania",
 				"Id": "Advania"
@@ -281,10 +307,12 @@
 		},
 		"CoordinatorGroup": {
 			"Type": "UserGroup",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/usergroups/Advania"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/usergroups/Advania"
+				}
+			],
 			"Data": {
 				"Description": "Advania",
 				"Id": "Advania"
@@ -300,10 +328,12 @@
 		"ContactNotifyBy": "0",
 		"CaseCategory": {
 			"Type": "CaseCategory",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/casecategories/Beställning av Hårdvara Advania"
+				}
+			],
 			"Data": {
 				"Description": "Beställning av Hårdvara Advania",
 				"Id": "Beställning av Hårdvara Advania"
@@ -320,10 +350,12 @@
 		"Virtual.OriginId2": "",
 		"SLAInfo.Contract": {
 			"Type": "Contract",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/сontracts/11912"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/сontracts/11912"
+				}
+			],
 			"Data": {
 				"Description": "VOF GVS Resursbank",
 				"Id": "11912"
@@ -342,10 +374,12 @@
 		"Virtual.CAS_VIR_OBJNR": "",
 		"Virtual.Shop_JoinContact": {
 			"Type": "Customer",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/customers/test01test"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/customers/test01test"
+				}
+			],
 			"Data": {
 				"FirstName": "Test",
 				"Phone": "test",
@@ -363,10 +397,12 @@
 		"Virtual.CAS_VIR_ADSEM": "",
 		"CaseType": {
 			"Type": "CaseType",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/casetypes/Service Request"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/casetypes/Service Request"
+				}
+			],
 			"Data": {
 				"Description": "Beställningar, frågor",
 				"Id": "Service Request"
@@ -383,10 +419,12 @@
 		"Virtual.Tel_CI_Name": "",
 		"Coordinator": {
 			"Type": "User",
-			"Links": [{
-				"Relation": "self",
-				"Href": "pobg6/api/v110/users/system_api_advania_cube"
-			}],
+			"Links": [
+				{
+					"Relation": "self",
+					"Href": "pobg6/api/v110/users/system_api_advania_cube"
+				}
+			],
 			"Data": {
 				"FirstName": "System API",
 				"Id": "system_api_advania_cube",

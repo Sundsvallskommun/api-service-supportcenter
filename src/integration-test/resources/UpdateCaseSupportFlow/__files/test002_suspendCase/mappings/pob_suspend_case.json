@@ -1,20 +1,30 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "POST",
-		"bodyPatterns": [{"equalToJson": {
-			"Description": null,
-			"UsePeriod": true,
-			"Suspension": "Väntar kundsvar Advania",
-			"Period": 1095,
-			"Time": null,
-			"TimeLimitsAction": "2",
-			"Units": "2"
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Description": null,
+					"UsePeriod": true,
+					"Suspension": "Väntar kundsvar Advania",
+					"Period": 1095,
+					"Time": null,
+					"TimeLimitsAction": "2",
+					"Units": "2"
+				}
+			}
+		],
 		"urlPath": "/pob/cases/910277/suspension"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": {
 			"Description": null,
 			"UsePeriod": true,

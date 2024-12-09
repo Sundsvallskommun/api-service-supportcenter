@@ -1,7 +1,6 @@
 package se.sundsvall.supportcenter.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.Objects;
 
 @Schema(description = "CreateAssetResponse model")

@@ -1,16 +1,28 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"Filter": {"equalTo": "SerialNumber=YYY"}},
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=YYY"
+			}
+		},
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"jsonBody": {
 			"InternalMessage": "A database redesign is required",
 			"UserMessage": "An error occured",
-			"Data": {"SerialNumber": "Failed to fetch serialnumber"},
+			"Data": {
+				"SerialNumber": "Failed to fetch serialnumber"
+			},
 			"MoreInfo": "Some other info",
 			"Code": 3
 		},

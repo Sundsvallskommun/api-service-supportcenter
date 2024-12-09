@@ -4,13 +4,11 @@ import static java.util.Objects.nonNull;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 
+import generated.client.pob.PobPayload;
 import java.util.Objects;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import generated.client.pob.PobPayload;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 
 /**

@@ -1,16 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobPayload;
-import se.sundsvall.supportcenter.api.model.Asset;
-import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
-
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
@@ -31,6 +20,16 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CASE_CATEGORY;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CLOSURE_CODE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
+
+import generated.client.pob.PobPayload;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import se.sundsvall.supportcenter.api.model.Asset;
+import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 
 public class ConfigurationMapper {
 

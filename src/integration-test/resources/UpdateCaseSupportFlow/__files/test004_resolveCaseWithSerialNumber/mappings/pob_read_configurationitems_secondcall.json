@@ -1,246 +1,286 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "GET",
-		"queryParameters": {"Filter": {"equalTo": "SerialNumber=G159S93"}},
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=G159S93"
+			}
+		},
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
-		"jsonBody": [{
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {
-				"Account": {
-					"Type": "Account",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/accounts/15420100 974310 920340                    115"
-					}],
-					"Data": {"Id": "15420100 974310 920340                    115"},
-					"Memo": {}
-				},
-				"Virtual.IsPersonal": "True",
-				"AssetNo": "",
-				"DeliveryDate": "2021-06-09 00:00:00",
-				"InstallationDate": "",
-				"Virtual.Phys_Customer": {
-					"Type": "Customer",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/customers/fir01las"
-					}],
-					"Data": {
-						"FirstName": "Firstname",
-						"Phone": "060-1234567",
-						"Id": "fir01las",
-						"LastName": "Lastname",
-						"Mobile": ""
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"Account": {
+						"Type": "Account",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/accounts/15420100 974310 920340                    115"
+							}
+						],
+						"Data": {
+							"Id": "15420100 974310 920340                    115"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.CIParentsConcat": "",
-				"Virtual.InstallerasAv": "0",
-				"ShortDescription": "",
-				"Item": {
-					"Type": "Item",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/items/101346"
-					}],
-					"Data": {
-						"ItemStatus": "1",
-						"Description": "Latitude 5320 2-in-1",
-						"Id": "101346"
+					"Virtual.IsPersonal": "True",
+					"AssetNo": "",
+					"DeliveryDate": "2021-06-09 00:00:00",
+					"InstallationDate": "",
+					"Virtual.Phys_Customer": {
+						"Type": "Customer",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/customers/fir01las"
+							}
+						],
+						"Data": {
+							"FirstName": "Firstname",
+							"Phone": "060-1234567",
+							"Id": "fir01las",
+							"LastName": "Lastname",
+							"Mobile": ""
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.Verksamhetskritiskt": "",
-				"Virtual.SerialNumber2": "",
-				"Virtual.OS_Item": {
-					"Type": "Item",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/items/100296"
-					}],
-					"Data": {
-						"ItemStatus": "1",
-						"Description": "Microsoft Windows 10 Enterprise",
-						"Id": "100296"
+					"Virtual.CIParentsConcat": "",
+					"Virtual.InstallerasAv": "0",
+					"ShortDescription": "",
+					"Item": {
+						"Type": "Item",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/items/101346"
+							}
+						],
+						"Data": {
+							"ItemStatus": "1",
+							"Description": "Latitude 5320 2-in-1",
+							"Id": "101346"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.Ovrigt": "",
-				"CiStatus": "1",
-				"IsOkForWebUse": "",
-				"TypeDescription": "",
-				"Virtual.Avvikelse": "",
-				"ConfigurationItemPK": "113192860",
-				"Virtual.VIRT_REMINDER_PERIOD": "",
-				"LastCaseDate": "2022-06-02 13:37:17",
-				"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
-				"Virtual.ManualOverrideNoSlaTrygghetslarm": "False",
-				"Virtual.MgmtSource_Detail": "7a sccm aktiva sras007",
-				"Virtual.Phys_Location": {
-					"Type": "Location",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/location/Servicecenter IT, f.d. IT-service"
-					}],
-					"Data": {
-						"Addr1": "Tivolivägen 8-10",
-						"Addr2": "852 34 Sundsvall",
-						"Id": "Servicecenter IT, f.d. IT-service"
+					"Virtual.Verksamhetskritiskt": "",
+					"Virtual.SerialNumber2": "",
+					"Virtual.OS_Item": {
+						"Type": "Item",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/items/100296"
+							}
+						],
+						"Data": {
+							"ItemStatus": "1",
+							"Description": "Microsoft Windows 10 Enterprise",
+							"Id": "100296"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"SwStatus": "",
-				"Virtual.CIStatusChangeDate": "2021-06-21 15:13:43",
-				"Brand": "",
-				"SerialNumber": "G159S93",
-				"Virtual.VIRT_REMINDER_DATE": "",
-				"Virtual.ActionIdOfRemovedSla": "",
-				"Virtual.OwnedBy": "0",
-				"Virtual.ContractSla": {
-					"Type": "Contract",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/?ontracts/10111"
-					}],
-					"Data": {
-						"Description": "KS ServiceC IT Support Ute",
-						"Id": "10111"
+					"Virtual.Ovrigt": "",
+					"CiStatus": "1",
+					"IsOkForWebUse": "",
+					"TypeDescription": "",
+					"Virtual.Avvikelse": "",
+					"ConfigurationItemPK": "113192860",
+					"Virtual.VIRT_REMINDER_PERIOD": "",
+					"LastCaseDate": "2022-06-02 13:37:17",
+					"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
+					"Virtual.ManualOverrideNoSlaTrygghetslarm": "False",
+					"Virtual.MgmtSource_Detail": "7a sccm aktiva sras007",
+					"Virtual.Phys_Location": {
+						"Type": "Location",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/location/Servicecenter IT, f.d. IT-service"
+							}
+						],
+						"Data": {
+							"Addr1": "Tivolivägen 8-10",
+							"Addr2": "852 34 Sundsvall",
+							"Id": "Servicecenter IT, f.d. IT-service"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.FysiskPlats_Adr_Postnr": "",
-				"Virtual.ManuelltIntaktsKontoCCMSla": "False",
-				"UptimeImpactPercentage": "",
-				"Id": "350860",
-				"AlertPercent": "",
-				"Virtual.FysiskPlats_Adr_Postort": "",
-				"AlertColor": "",
-				"CIType": {
-					"Type": "ConfigurationItemType",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
-					}],
-					"Data": {
-						"Description": "Bärbar datorarbetsplats",
-						"Id": "B?rbar"
+					"SwStatus": "",
+					"Virtual.CIStatusChangeDate": "2021-06-21 15:13:43",
+					"Brand": "",
+					"SerialNumber": "G159S93",
+					"Virtual.VIRT_REMINDER_DATE": "",
+					"Virtual.ActionIdOfRemovedSla": "",
+					"Virtual.OwnedBy": "0",
+					"Virtual.ContractSla": {
+						"Type": "Contract",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/?ontracts/10111"
+							}
+						],
+						"Data": {
+							"Description": "KS ServiceC IT Support Ute",
+							"Id": "10111"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.Phys_Organization": {
-					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/2877"
-					}],
-					"Data": {
-						"Virtual.DefaultContractId": "10111",
-						"Description": "KS ServiceC IT Support Ute",
-						"Address2": "",
-						"Id": "2877"
+					"Virtual.FysiskPlats_Adr_Postnr": "",
+					"Virtual.ManuelltIntaktsKontoCCMSla": "False",
+					"UptimeImpactPercentage": "",
+					"Id": "350860",
+					"AlertPercent": "",
+					"Virtual.FysiskPlats_Adr_Postort": "",
+					"AlertColor": "",
+					"CIType": {
+						"Type": "ConfigurationItemType",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+							}
+						],
+						"Data": {
+							"Description": "Bärbar datorarbetsplats",
+							"Id": "B?rbar"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.EQU_ADSL_PRICE": "",
-				"IsUptimeReport": "",
-				"Description": "SC, IT, Firstname Lastname",
-				"WebTooltip": "",
-				"Organization": {
-					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/2877"
-					}],
-					"Data": {
-						"Virtual.DefaultContractId": "10111",
-						"Description": "KS ServiceC IT Support Ute",
-						"Address2": "",
-						"Id": "2877"
+					"Virtual.Phys_Organization": {
+						"Type": "Organization",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/2877"
+							}
+						],
+						"Data": {
+							"Virtual.DefaultContractId": "10111",
+							"Description": "KS ServiceC IT Support Ute",
+							"Address2": "",
+							"Id": "2877"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.IsContactLocalAdmin": "False",
-				"PCName": "Microsoft Windows 10 Enterprise",
-				"Virtual.FysiskPlats_Adr_Gatuadress": "",
-				"PurchasePrice": "13385,00000",
-				"TypeNumber": " ",
-				"IsBamActive": "",
-				"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
-				"CalibrationDate": "",
-				"Virtual.VIRT_REMINDER_RESP": "",
-				"Virtual.ActionId": "",
-				"Virtual.HasContactRDRights": "True",
-				"Virtual.EQU_NETWORK2": "",
-				"Virtual.PersonligGemensam": "",
-				"Virtual.EQU_NETWORK1": "fa80::98b4:1622:41c9:c06c,111.16.200.013",
-				"Virtual.MDM_MobileDeviceMgmt": "",
-				"LastCaseId": "905336",
-				"OperationStatus": "1",
-				"Virtual.PathToDocumentation": "",
-				"Supplier": {
-					"Type": "Organization",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/organizations/X_Dell"
-					}],
-					"Data": {
-						"Virtual.DefaultContractId": "",
-						"Description": "Hårdvaruleverantör, datorer och servrar",
-						"Address2": "",
-						"Id": "X_Dell"
+					"Virtual.EQU_ADSL_PRICE": "",
+					"IsUptimeReport": "",
+					"Description": "SC, IT, Firstname Lastname",
+					"WebTooltip": "",
+					"Organization": {
+						"Type": "Organization",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/2877"
+							}
+						],
+						"Data": {
+							"Virtual.DefaultContractId": "10111",
+							"Description": "KS ServiceC IT Support Ute",
+							"Address2": "",
+							"Id": "2877"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
-				},
-				"Virtual.MgmtSource": "cm",
-				"IsItService": "",
-				"Virtual.ActionType": "",
-				"CostCentre": {
-					"Type": "CostCentre",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/errors/1"
-					}],
-					"Data": {"Id": "15400100 934400 920340                    115"},
-					"Memo": {}
-				},
-				"Virtual.ContractExpirationDate": "2025-06-30 00:00:00",
-				"LicType": "",
-				"Virtual.EQU_INKOPSPRIS": "",
-				"Virtual.ActionTriggerTime": "",
-				"OptionalNumber": "WB10123",
-				"EndWarrantyDate": "2024-05-25 00:00:00",
-				"DefaultProtocol": "31",
-				"DeleteDate": "",
-				"Contact": {
-					"Type": "Customer",
-					"Links": [{
-						"Relation": "self",
-						"Href": "pobg6/api/v110/customers/fir01las"
-					}],
-					"Data": {
-						"FirstName": "Firstname",
-						"Phone": "060-1234567",
-						"Id": "fir01las",
-						"LastName": "Lastname",
-						"Mobile": ""
+					"Virtual.IsContactLocalAdmin": "False",
+					"PCName": "Microsoft Windows 10 Enterprise",
+					"Virtual.FysiskPlats_Adr_Gatuadress": "",
+					"PurchasePrice": "13385,00000",
+					"TypeNumber": " ",
+					"IsBamActive": "",
+					"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
+					"CalibrationDate": "",
+					"Virtual.VIRT_REMINDER_RESP": "",
+					"Virtual.ActionId": "",
+					"Virtual.HasContactRDRights": "True",
+					"Virtual.EQU_NETWORK2": "",
+					"Virtual.PersonligGemensam": "",
+					"Virtual.EQU_NETWORK1": "fa80::98b4:1622:41c9:c06c,111.16.200.013",
+					"Virtual.MDM_MobileDeviceMgmt": "",
+					"LastCaseId": "905336",
+					"OperationStatus": "1",
+					"Virtual.PathToDocumentation": "",
+					"Supplier": {
+						"Type": "Organization",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/X_Dell"
+							}
+						],
+						"Data": {
+							"Virtual.DefaultContractId": "",
+							"Description": "Hårdvaruleverantör, datorer och servrar",
+							"Address2": "",
+							"Id": "X_Dell"
+						},
+						"Memo": {}
 					},
-					"Memo": {}
+					"Virtual.MgmtSource": "cm",
+					"IsItService": "",
+					"Virtual.ActionType": "",
+					"CostCentre": {
+						"Type": "CostCentre",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/errors/1"
+							}
+						],
+						"Data": {
+							"Id": "15400100 934400 920340                    115"
+						},
+						"Memo": {}
+					},
+					"Virtual.ContractExpirationDate": "2025-06-30 00:00:00",
+					"LicType": "",
+					"Virtual.EQU_INKOPSPRIS": "",
+					"Virtual.ActionTriggerTime": "",
+					"OptionalNumber": "WB10123",
+					"EndWarrantyDate": "2024-05-25 00:00:00",
+					"DefaultProtocol": "31",
+					"DeleteDate": "",
+					"Contact": {
+						"Type": "Customer",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/customers/fir01las"
+							}
+						],
+						"Data": {
+							"FirstName": "Firstname",
+							"Phone": "060-1234567",
+							"Id": "fir01las",
+							"LastName": "Lastname",
+							"Mobile": ""
+						},
+						"Memo": {}
+					},
+					"Virtual.BluetoothAddress": "C025A524ED20",
+					"ExpirationDate": "",
+					"Virtual.Domain": "PERSONAL",
+					"LastChangeDate": "",
+					"Virtual.Samhallsviktigt": "",
+					"MonitorStatus": "0",
+					"Virtual.DataloadSyncInfo": ""
 				},
-				"Virtual.BluetoothAddress": "C025A524ED20",
-				"ExpirationDate": "",
-				"Virtual.Domain": "PERSONAL",
-				"LastChangeDate": "",
-				"Virtual.Samhallsviktigt": "",
-				"MonitorStatus": "0",
-				"Virtual.DataloadSyncInfo": ""
-			},
-			"Memo": {}
-		}],
+				"Memo": {}
+			}
+		],
 		"status": 200
 	},
 	"name": "pob-read-configurationitems",

@@ -1,13 +1,12 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import se.sundsvall.supportcenter.api.model.enums.NoteType;
-
 import java.util.Objects;
-
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 @Schema(description = "Note model")
 public class Note {

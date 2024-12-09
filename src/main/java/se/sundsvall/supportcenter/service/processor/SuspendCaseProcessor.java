@@ -4,16 +4,14 @@ import static java.lang.Boolean.TRUE;
 import static java.util.Objects.nonNull;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
 
-import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import generated.client.pob.PobPayload;
 import generated.client.pob.SuspensionInfo;
 import generated.client.pob.SuspensionInfo.TimeLimitsActionEnum;
 import generated.client.pob.SuspensionInfo.UnitsEnum;
+import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBClient;
 

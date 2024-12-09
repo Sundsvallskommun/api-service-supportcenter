@@ -1,14 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import generated.client.pob.PobPayload;
-import se.sundsvall.supportcenter.api.model.Address;
-import se.sundsvall.supportcenter.api.model.Case;
-import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
@@ -45,6 +36,14 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUBACCOUNT;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
+
+import generated.client.pob.PobPayload;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import se.sundsvall.supportcenter.api.model.Address;
+import se.sundsvall.supportcenter.api.model.Case;
+import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 
 public class CaseMapper {
 

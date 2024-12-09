@@ -1,26 +1,38 @@
 {
 	"request": {
-		"headers": {"Authorization": {"equalTo": "xyz"}},
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
 		"method": "PUT",
-		"bodyPatterns": [{"equalToJson": {
-			"Type": "ConfigurationItem",
-			"Links": [],
-			"Data": {
-				"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
-				"Item": "10018",
-				"SerialNumber": "FRGDZ1J",
-				"Virtual.LeverantorensStatus": "0",
-				"Virtual.CIKommun": "Sundsvall",
-				"DeliveryDate": "2022-01-01",
-				"EndWarrantyDate": "2022-01-01"
-			},
-			"Memo": {}
-		}}],
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "ConfigurationItem",
+					"Links": [],
+					"Data": {
+						"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
+						"Item": "10018",
+						"SerialNumber": "FRGDZ1J",
+						"Virtual.LeverantorensStatus": "0",
+						"Virtual.CIKommun": "Sundsvall",
+						"DeliveryDate": "2022-01-01",
+						"EndWarrantyDate": "2022-01-01"
+					},
+					"Memo": {}
+				}
+			}
+		],
 		"urlPath": "/pob/configurationitems"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
-		"jsonBody": {"Message": "Serienummer måste vara unikt (serienummer finns redan, {Id:  354384 Serialnumber:  FRGDZ1J}). Aktuellt CI-id: 354385"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": {
+			"Message": "Serienummer måste vara unikt (serienummer finns redan, {Id:  354384 Serialnumber:  FRGDZ1J}). Aktuellt CI-id: 354385"
+		},
 		"status": 400
 	},
 	"name": "pob-put-configurationitem"
