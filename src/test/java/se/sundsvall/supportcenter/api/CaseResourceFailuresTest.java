@@ -10,8 +10,8 @@ import static se.sundsvall.supportcenter.api.model.enums.NoteType.PROBLEM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.sundsvall.supportcenter.Application;
 import se.sundsvall.supportcenter.api.model.Address;
@@ -27,7 +27,7 @@ class CaseResourceFailuresTest {
 	private static final String POBKEY_HEADER_NAME = "pobKey";
 	private static final String POBKEY_HEADER_VALUE = "xyz";
 
-	@MockBean
+	@MockitoBean
 	private CaseService caseServiceMock;
 
 	@Autowired
