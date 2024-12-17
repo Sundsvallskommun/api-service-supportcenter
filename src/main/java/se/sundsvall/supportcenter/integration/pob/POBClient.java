@@ -7,6 +7,7 @@ import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfig
 import generated.client.pob.PobPayload;
 import generated.client.pob.PobPayloadWithTriggerResults;
 import generated.client.pob.SuspensionInfo;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.pob.url}", configuration = POBConfiguration.class)
+@CircuitBreaker(name = CLIENT_ID)
 public interface POBClient {
 
 	/**
 	 * Updates an existing case in POB.
-	 * 
+	 *
 	 * @param pobKey  the key to use for authorization
 	 * @param payload the object with the updated case-attributes.
 	 */
@@ -33,7 +35,7 @@ public interface POBClient {
 
 	/**
 	 * Creates a case in POB.
-	 * 
+	 *
 	 * @param  pobKey  the key to use for authorization
 	 * @param  payload payload the object with the item to create.
 	 * @return         a list of payload trigger results
@@ -43,7 +45,7 @@ public interface POBClient {
 
 	/**
 	 * Get an existing case in POB.
-	 * 
+	 *
 	 * @param  pobKey the key to use for authorization
 	 * @param  caseId the ID of the case.
 	 * @return        The case
@@ -53,7 +55,7 @@ public interface POBClient {
 
 	/**
 	 * Returns a list of all available case-categories.
-	 * 
+	 *
 	 * @param  pobKey the key to use for authorization
 	 * @return        a list of available case-categories (max 10000)
 	 */
@@ -63,7 +65,7 @@ public interface POBClient {
 
 	/**
 	 * Returns a list of of all available closure-codes.
-	 * 
+	 *
 	 * @param  pobKey the key to use for authorization
 	 * @return        a list of available closure-codes (max 10000)
 	 */
@@ -73,7 +75,7 @@ public interface POBClient {
 
 	/**
 	 * Returns a list of configuration-items by serialNumber. The returned objects only contains the ID-attribute.
-	 * 
+	 *
 	 * @param  pobKey       the key to use for authorization
 	 * @param  serialNumber the serial number to filter the results on
 	 * @return              a list of configuration-items
@@ -132,7 +134,7 @@ public interface POBClient {
 
 	/**
 	 * Suspend an existing case in POB.
-	 * 
+	 *
 	 * @param pobKey  the key to use for authorization
 	 * @param caseId  the ID of the case
 	 * @param payload object with suspension information
@@ -142,7 +144,7 @@ public interface POBClient {
 
 	/**
 	 * Get suspension information for a suspended case in POB, if case is not suspended a 404 will be thrown.
-	 * 
+	 *
 	 * @param  pobKey the key to use for authorization
 	 * @param  caseId the ID of the case
 	 * @return        Information about the suspension
@@ -152,7 +154,7 @@ public interface POBClient {
 
 	/**
 	 * Unsuspend a suspended case in POB.
-	 * 
+	 *
 	 * @param pobKey the key to use for authorization
 	 * @param caseId the ID of the case
 	 */
