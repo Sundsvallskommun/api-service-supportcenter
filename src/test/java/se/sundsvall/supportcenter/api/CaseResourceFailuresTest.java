@@ -46,7 +46,7 @@ class CaseResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.createCase(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateCaseRequest)");
+				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.createCase(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateCaseRequest)");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -217,7 +217,7 @@ class CaseResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.updateCase(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateCaseRequest)");
+				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.updateCase(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateCaseRequest)");
 
 		verifyNoInteractions(caseServiceMock);
 	}

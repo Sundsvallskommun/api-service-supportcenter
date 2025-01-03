@@ -2,9 +2,7 @@ package se.sundsvall.supportcenter.service.mapper.constant;
 
 import java.util.Map;
 
-public class ConfigurationMapperConstants {
-
-	private ConfigurationMapperConstants() {}
+public final class ConfigurationMapperConstants {
 
 	public static final String KEY_CLOSURE_CODE = "Id";
 	public static final String KEY_CASE_CATEGORY = "Id";
@@ -28,4 +26,6 @@ public class ConfigurationMapperConstants {
 	public static final String TYPE_CONFIGURATION_ITEM = "ConfigurationItem";
 	public static final String TYPE_ITEM = "Item";
 	public static final Map<String, String> MUNICIPALITY_MAP = Map.of("2281", "Sundsvall", "2260", "Ånge");
+
+	private ConfigurationMapperConstants() {}
 }

@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import generated.client.pob.PobPayload;
 
-public class CaseUtil {
+public final class CaseUtil {
 
 	private static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(UPPER_CAMEL_CASE).create();
 

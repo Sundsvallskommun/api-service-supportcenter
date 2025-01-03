@@ -135,7 +135,7 @@ class AssetResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
+				"Required request body is missing: org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -173,7 +173,7 @@ class AssetResourceFailuresTest {
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
 			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.AssetResource.updateAsset(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateAssetRequest)");
+				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.AssetResource.updateAsset(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateAssetRequest)");
 
 		verifyNoInteractions(assetServiceMock);
 	}

@@ -24,9 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
 
-public class CaseMapperConstants {
-
-	private CaseMapperConstants() {}
+public final class CaseMapperConstants {
 
 	// Data-keys
 	public static final String KEY_ID = "Id";
@@ -86,6 +84,8 @@ public class CaseMapperConstants {
 	public static final String CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT = "Advania - Övriga lösningar Incident";
 	private static final String SEE_INTERNAL_NOTE_FOR_ACTION = "Åtgärdsbeskrivning i interna anteckningar";
 	private static final String IT_SUPPORT = "IT Support";
+
+	private CaseMapperConstants() {}
 
 	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Stream.concat(getCubeStatusMap().entrySet().stream(),
 		getNetsetStatusMap().entrySet().stream()).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));

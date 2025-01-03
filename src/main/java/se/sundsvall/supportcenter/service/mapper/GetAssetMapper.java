@@ -31,7 +31,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import se.sundsvall.supportcenter.api.model.Asset;
 
-public class GetAssetMapper {
+public final class GetAssetMapper {
 
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

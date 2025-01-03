@@ -17,16 +17,15 @@ import java.util.stream.Stream;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
-public class CommonMapper {
-
-	private CommonMapper() {}
+public final class CommonMapper {
 
 	private static final String DEFAULT_NOTE_EXTENSION = ".html";
 	private static final boolean DEFAULT_NOTE_HANDLE_SEPARATORS = true;
 	private static final boolean DEFAULT_NOTE_IS_VALID_FOR_WEB = false;
 	private static final StyleEnum DEFAULT_NOTE_STYLE = StyleEnum.NUMBER_2;
-
 	private static final String NOTE_TEXT_JSON_PATH = "$['Memo']['%s']['Memo']";
+
+	private CommonMapper() {}
 
 	/**
 	 * Method for creating a map of PobMemo:s containing sent in note.

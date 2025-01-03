@@ -31,7 +31,7 @@ import java.util.Optional;
 import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 
-public class ConfigurationMapper {
+public final class ConfigurationMapper {
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
