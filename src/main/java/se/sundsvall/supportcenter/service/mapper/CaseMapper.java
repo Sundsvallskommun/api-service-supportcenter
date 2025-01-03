@@ -45,9 +45,7 @@ import se.sundsvall.supportcenter.api.model.Address;
 import se.sundsvall.supportcenter.api.model.Case;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 
-public class CaseMapper {
-
-	private CaseMapper() {}
+public final class CaseMapper {
 
 	private static final String JSON_PATH_CASE_TYPE = "$['Data']['CaseType']['Data']['Id']";
 	private static final String JSON_PATH_CASE_CATEGORY = "$['Data']['CaseCategory']['Data']['Id']";
@@ -55,6 +53,8 @@ public class CaseMapper {
 	private static final String JSON_PATH_CUSTOMER_CONTACT = "$['Data']['Contact.Customer']['Data']['Id']";
 	private static final String JSON_PATH_PRIORITY = "$['Data']['PriorityInfo.Priority']['Data']['Id']";
 	private static final String JSON_PATH_JOIN_CONTACT = "$['Data']['Virtual.Shop_JoinContact']['Data']['Id']";
+
+	private CaseMapper() {}
 
 	public static PobPayload toPobPayload(CreateCaseRequest createCaseRequest) {
 

@@ -31,7 +31,7 @@ import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
-public class UpdateCaseMapper {
+public final class UpdateCaseMapper {
 
 	private UpdateCaseMapper() {}
 
@@ -111,8 +111,9 @@ public class UpdateCaseMapper {
 	 * @return       a new Map with the created PobMemo and all existing ones (i.e. already added in the provided map).
 	 */
 	private static Map<String, PobMemo> toMemos(Note note, Map<String, PobMemo> memos) {
-		if (isNull(note))
+		if (isNull(note)) {
 			return memos; // If note is null, just return incoming memo map
+		}
 
 		final var memoMap = new HashMap<>(ofNullable(memos).orElse(emptyMap()));
 		final var memoType = note.getType().toValue();
