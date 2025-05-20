@@ -103,6 +103,7 @@ class GetAssetMapperTest {
 		final var hardwareStatus1 = "hardwareStatus-1";
 		final var municipality1 = "Sundsvall";
 		final var municipalityId1 = "2281";
+		final var leaseStatus1 = "leaseStatus-1";
 		final var configurationItemId2 = "222";
 		final var hardwareName2 = "hardwareName-2";
 		final var hardwareDescription2 = "hardwareDescription-2";
@@ -114,6 +115,7 @@ class GetAssetMapperTest {
 		final var warrantyEndDate2 = "2026-01-01 00:00:00";
 		final var municipality2 = "Ånge";
 		final var municipalityId2 = "2260";
+		final var leaseStatus2 = "leaseStatus-2";
 
 		final var manufacturer = "manufacturer";
 
@@ -124,33 +126,39 @@ class GetAssetMapperTest {
 		manufacturerMap.put("Type", "Organization");
 		manufacturerMap.put("Data", data);
 
+		var dataMap1 = new HashMap<String, Object>();
+		dataMap1.put("Id", configurationItemId1);
+		dataMap1.put("Description", hardwareDescription1);
+		dataMap1.put("OptionalNumber", hardwareName1);
+		dataMap1.put("SerialNumber", serialNumber1);
+		dataMap1.put("Virtual.BluetoothAddress", macAddress1);
+		dataMap1.put("Virtual.LeverantorensStatus", supplierStatus1);
+		dataMap1.put("CiStatus", hardwareStatus1);
+		dataMap1.put("DeliveryDate", deliveryDate1);
+		dataMap1.put("EndWarrantyDate", warrantyEndDate1);
+		dataMap1.put("Virtual.CIKommun", municipality1);
+		dataMap1.put("Virtual.LeaseStatus", leaseStatus1);
+
+		var dataMap2 = new HashMap<String, Object>();
+		dataMap2.put("Id", configurationItemId2);
+		dataMap2.put("Description", hardwareDescription2);
+		dataMap2.put("OptionalNumber", hardwareName2);
+		dataMap2.put("SerialNumber", serialNumber2);
+		dataMap2.put("Virtual.BluetoothAddress", macAddress2);
+		dataMap2.put("Virtual.LeverantorensStatus", supplierStatus2);
+		dataMap2.put("CiStatus", hardwareStatus2);
+		dataMap2.put("DeliveryDate", deliveryDate2);
+		dataMap2.put("EndWarrantyDate", warrantyEndDate2);
+		dataMap2.put("Virtual.CIKommun", municipality2);
+		dataMap2.put("Virtual.LeaseStatus", leaseStatus2);
+
 		final var configurationItems = List.of(
 			new PobPayload()
 				.type("ConfigurationItem")
-				.data(Map.of(
-					"Id", configurationItemId1,
-					"Description", hardwareDescription1,
-					"OptionalNumber", hardwareName1,
-					"SerialNumber", serialNumber1,
-					"Virtual.BluetoothAddress", macAddress1,
-					"Virtual.LeverantorensStatus", supplierStatus1,
-					"CiStatus", hardwareStatus1,
-					"DeliveryDate", deliveryDate1,
-					"EndWarrantyDate", warrantyEndDate1,
-					"Virtual.CIKommun", municipality1)),
+				.data(dataMap1),
 			new PobPayload()
 				.type("ConfigurationItem")
-				.data(Map.of(
-					"Id", configurationItemId2,
-					"Description", hardwareDescription2,
-					"OptionalNumber", hardwareName2,
-					"SerialNumber", serialNumber2,
-					"Virtual.BluetoothAddress", macAddress2,
-					"Virtual.LeverantorensStatus", supplierStatus2,
-					"CiStatus", hardwareStatus2,
-					"DeliveryDate", deliveryDate2,
-					"EndWarrantyDate", warrantyEndDate2,
-					"Virtual.CIKommun", municipality2)));
+				.data(dataMap2));
 
 		final var itemAttributes = Map.of(
 			KEY_ITEM_ID, itemId,
@@ -177,7 +185,8 @@ class GetAssetMapperTest {
 				Asset::getManufacturer,
 				Asset::getModelDescription,
 				Asset::getModelName,
-				Asset::getMunicipalityId)
+				Asset::getMunicipalityId,
+				Asset::getLeaseStatus)
 			.containsExactly(
 				tuple(
 					configurationItemId1,
@@ -192,7 +201,8 @@ class GetAssetMapperTest {
 					manufacturer,
 					modelDescription,
 					modelName,
-					municipalityId1),
+					municipalityId1,
+					leaseStatus1),
 				tuple(
 					configurationItemId2,
 					hardwareDescription2,
@@ -206,7 +216,8 @@ class GetAssetMapperTest {
 					manufacturer,
 					modelDescription,
 					modelName,
-					municipalityId2));
+					municipalityId2,
+					leaseStatus2));
 	}
 
 	@Test
@@ -223,21 +234,25 @@ class GetAssetMapperTest {
 		final var warrantyEndDate = "2025-01-01 00:00:00";
 		final var municipality = "Sundsvall";
 		final var municipalityId = "2281";
+		final var leaseStatus = "leaseStatus";
+
+		final var dataMap = new HashMap<String, Object>();
+		dataMap.put("Id", configurationItemId);
+		dataMap.put("Description", hardwareDescription);
+		dataMap.put("OptionalNumber", hardwareName);
+		dataMap.put("SerialNumber", serialNumber);
+		dataMap.put("Virtual.BluetoothAddress", macAddress);
+		dataMap.put("Virtual.LeverantorensStatus", supplierStatus);
+		dataMap.put("CiStatus", hardwareStatus);
+		dataMap.put("DeliveryDate", deliveryDate);
+		dataMap.put("EndWarrantyDate", warrantyEndDate);
+		dataMap.put("Virtual.CIKommun", municipality);
+		dataMap.put("Virtual.LeaseStatus", leaseStatus);
 
 		final var configurationItems = List.of(
 			new PobPayload()
 				.type("ConfigurationItem")
-				.data(Map.of(
-					"Id", configurationItemId,
-					"Description", hardwareDescription,
-					"OptionalNumber", hardwareName,
-					"SerialNumber", serialNumber,
-					"Virtual.BluetoothAddress", macAddress,
-					"Virtual.LeverantorensStatus", supplierStatus,
-					"CiStatus", hardwareStatus,
-					"DeliveryDate", deliveryDate,
-					"EndWarrantyDate", warrantyEndDate,
-					"Virtual.CIKommun", municipality)));
+				.data(dataMap));
 
 		final var itemAttributes = new HashMap<String, Object>();
 
@@ -259,7 +274,8 @@ class GetAssetMapperTest {
 				Asset::getWarrantyEndDate,
 				Asset::getManufacturer,
 				Asset::getModelName,
-				Asset::getMunicipalityId)
+				Asset::getMunicipalityId,
+				Asset::getLeaseStatus)
 			.containsExactly(tuple(
 				configurationItemId,
 				hardwareDescription,
@@ -272,6 +288,7 @@ class GetAssetMapperTest {
 				LocalDate.parse(warrantyEndDate, DATE_TIME_FORMATTER),
 				null,
 				null,
-				municipalityId));
+				municipalityId,
+				leaseStatus));
 	}
 }

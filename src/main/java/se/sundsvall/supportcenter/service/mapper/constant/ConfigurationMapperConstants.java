@@ -21,6 +21,7 @@ public final class ConfigurationMapperConstants {
 	public static final String KEY_MAC_ADDRESS = "Virtual.BluetoothAddress";
 	public static final String KEY_SUPPLIER_STATUS = "Virtual.LeverantorensStatus";
 	public static final String KEY_MUNICIPALITY = "Virtual.CIKommun";
+	public static final String KEY_LEASE_STATUS = "Virtual.LeaseStatus";
 	public static final String TYPE_CLOSURE_CODE = "ClosureCode";
 	public static final String TYPE_CASE_CATEGORY = "CaseCategory";
 	public static final String TYPE_CONFIGURATION_ITEM = "ConfigurationItem";
