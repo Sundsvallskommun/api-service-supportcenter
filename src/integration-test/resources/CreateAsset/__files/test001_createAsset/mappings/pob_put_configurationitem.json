@@ -18,7 +18,8 @@
 						"Virtual.LeverantorensStatus": "0",
 						"Virtual.CIKommun": "Sundsvall",
 						"DeliveryDate": "2022-01-01",
-						"EndWarrantyDate": "2022-01-01"
+						"EndWarrantyDate": "2022-01-01",
+						"Virtual.LeaseStatus": "ACTIVE"
 					},
 					"Memo": {}
 				}
@@ -133,7 +134,8 @@
 					"Virtual.Domain": "",
 					"LastChangeDate": "",
 					"MonitorStatus": "0",
-					"Virtual.DataloadSyncInfo": ""
+					"Virtual.DataloadSyncInfo": "",
+					"Virtual.LeaseStatus": "ACTIVE"
 				},
 				"Memo": {}
 			}

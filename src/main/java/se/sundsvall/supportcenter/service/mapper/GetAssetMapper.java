@@ -11,6 +11,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
@@ -82,7 +83,8 @@ public final class GetAssetMapper {
 				.withModelName((String) ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_ITEM_ID_OPTION))
 				.withModelDescription((String) ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_DESCRIPTION))
 				.withManufacturer(toManufacturer(convertObjectToMap(ofNullable(itemAttributes).orElse(emptyMap()).get(KEY_MANUFACTURER))))
-				.withMunicipalityId(toMunicipalityId((String) data.get(KEY_MUNICIPALITY))))
+				.withMunicipalityId(toMunicipalityId((String) data.get(KEY_MUNICIPALITY)))
+				.withLeaseStatus((String) data.get(KEY_LEASE_STATUS)))
 			.orElse(null);
 	}
 

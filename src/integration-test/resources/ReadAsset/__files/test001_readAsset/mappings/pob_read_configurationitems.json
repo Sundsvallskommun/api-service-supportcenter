@@ -121,7 +121,8 @@
 					"Virtual.Domain": "",
 					"LastChangeDate": "",
 					"MonitorStatus": "0",
-					"Virtual.DataloadSyncInfo": ""
+					"Virtual.DataloadSyncInfo": "",
+					"Virtual.LeaseStatus": "ACTIVE"
 				},
 				"Memo": {}
 			}

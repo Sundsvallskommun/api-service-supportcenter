@@ -43,6 +43,7 @@ class UpdateAssetRequestTest {
 		final var deliveryDate = LocalDate.now().plusDays(1);
 		final var warrantyEndDate = LocalDate.now().plusDays(700);
 		final var municipalityId = "municipalityId";
+		final var leaseStatus = "leaseStatus";
 
 		final var updateCaseRequest = UpdateAssetRequest.create()
 			.withNote(note)
@@ -52,7 +53,8 @@ class UpdateAssetRequestTest {
 			.withHardwareStatus(hardwareStatus)
 			.withDeliveryDate(deliveryDate)
 			.withWarrantyEndDate(warrantyEndDate)
-			.withMunicipalityId(municipalityId);
+			.withMunicipalityId(municipalityId)
+			.withLeaseStatus(leaseStatus);
 
 		assertThat(updateCaseRequest).isNotNull().hasNoNullFieldsOrProperties();
 		assertThat(updateCaseRequest.getNote()).isEqualTo(note);
@@ -63,6 +65,7 @@ class UpdateAssetRequestTest {
 		assertThat(updateCaseRequest.getDeliveryDate()).isEqualTo(deliveryDate);
 		assertThat(updateCaseRequest.getWarrantyEndDate()).isEqualTo(warrantyEndDate);
 		assertThat(updateCaseRequest.getMunicipalityId()).isEqualTo(municipalityId);
+		assertThat(updateCaseRequest.getLeaseStatus()).isEqualTo(leaseStatus);
 	}
 
 	@Test

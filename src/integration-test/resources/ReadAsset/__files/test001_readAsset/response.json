@@ -12,6 +12,7 @@
 		"hardwareName": "test1234",
 		"supplierStatus": "2",
 		"id": "15857",
-		"deliveryDate": "2022-01-01"
+		"deliveryDate": "2022-01-01",
+		"leaseStatus": "ACTIVE"
 	}
 ]

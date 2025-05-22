@@ -8,13 +8,12 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_CLOSURE_CODE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DELIVERY_DATE;
-import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_DESCRIPTION;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_END_WARRANTY_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
-import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SERIAL_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SUPPLIER_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.MUNICIPALITY_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CASE_CATEGORY;
@@ -27,8 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 
 public final class ConfigurationMapper {
@@ -55,25 +52,6 @@ public final class ConfigurationMapper {
 			.type(TYPE_CONFIGURATION_ITEM)
 			.memo(ofNullable(toMemo(updateAssetRequest.getNote())).orElse(emptyMap()))
 			.data(toData(id, updateAssetRequest));
-	}
-
-	public static List<Asset> toAssetList(List<PobPayload> pobPayloadList) {
-		return Optional.ofNullable(pobPayloadList).orElse(emptyList()).stream()
-			.map(ConfigurationMapper::toAsset)
-			.toList();
-	}
-
-	private static Asset toAsset(PobPayload pobPayload) {
-		return Optional.ofNullable(pobPayload.getData())
-			.map(data -> Asset.create()
-				.withId((String) data.get(KEY_CONFIGURATION_ITEM))
-				.withMacAddress((String) data.get(KEY_MAC_ADDRESS))
-				.withSupplierStatus((String) data.get(KEY_SUPPLIER_STATUS))
-				.withHardwareStatus((String) data.get(KEY_HARDWARE_STATUS))
-				.withHardwareDescription((String) data.get(KEY_DESCRIPTION))
-				.withHardwareName((String) data.get(KEY_HARDWARE_NAME))
-				.withSerialNumber((String) data.get(KEY_SERIAL_NUMBER)))
-			.orElse(null);
 	}
 
 	/**
@@ -105,6 +83,7 @@ public final class ConfigurationMapper {
 		ofNullable(updateAssetRequest.getDeliveryDate()).ifPresent(value -> dataMap.put(KEY_DELIVERY_DATE, value.format(DATE_FORMATTER)));
 		ofNullable(updateAssetRequest.getWarrantyEndDate()).ifPresent(value -> dataMap.put(KEY_END_WARRANTY_DATE, value.format(DATE_FORMATTER)));
 		ofNullable(updateAssetRequest.getMunicipalityId()).ifPresent(value -> dataMap.put(KEY_MUNICIPALITY, MUNICIPALITY_MAP.get(value)));
+		ofNullable(updateAssetRequest.getLeaseStatus()).ifPresent(value -> dataMap.put(KEY_LEASE_STATUS, value));
 		return dataMap;
 	}
 }

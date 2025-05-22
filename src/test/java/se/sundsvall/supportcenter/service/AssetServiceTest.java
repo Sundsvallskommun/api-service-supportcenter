@@ -12,9 +12,11 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SERIAL_NUMBER;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_START_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SUPPLIER_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
@@ -64,6 +66,7 @@ class AssetServiceTest {
 		final var supplierStatus = "supplierStatus";
 		final var hardwareStatus = "hardwareStatus";
 		final var itemId = "itemId";
+		final var leaseStatus = "leaseStatus";
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -74,14 +77,14 @@ class AssetServiceTest {
 			.withWarrantyEndDate(LocalDate.now().plusDays(360))
 			.withSupplierStatus(supplierStatus)
 			.withHardwareStatus(hardwareStatus)
-			.withDeliveryDate(LocalDate.now().plusDays(5));
+			.withDeliveryDate(LocalDate.now().plusDays(5))
+			.withLeaseStatus(leaseStatus);
 
 		// Mock
 		when(pobClientMock.getItemsByModelName(pobKey, modelName)).thenReturn(setupListOfPobPayload("Item", List.of("Id", "IdOption", "Description", "Virtual.Manufacturer", "StartDate"),
 			List.of(itemId, modelName, modelDescription, manufacturer, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))));
 
 		// Call
-
 		assetService.createAsset(pobKey, createAssetRequest);
 
 		// Verification
@@ -99,7 +102,8 @@ class AssetServiceTest {
 			.containsEntry(KEY_HARDWARE_STATUS, hardwareStatus)
 			.containsEntry(KEY_ITEM, itemId)
 			.containsEntry(KEY_DELIVERY_DATE, createAssetRequest.getDeliveryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-			.containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			.containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.containsEntry(KEY_LEASE_STATUS, leaseStatus);
 	}
 
 	@Test
@@ -114,6 +118,7 @@ class AssetServiceTest {
 		final var macAddress = "macAddress";
 		final var supplierStatus = "supplierStatus";
 		final var hardwareStatus = "hardwareStatus";
+		final var leaseStatus = "leaseStatus";
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -124,7 +129,8 @@ class AssetServiceTest {
 			.withWarrantyEndDate(LocalDate.now().plusDays(360))
 			.withSupplierStatus(supplierStatus)
 			.withHardwareStatus(hardwareStatus)
-			.withDeliveryDate(LocalDate.now().plusDays(5));
+			.withDeliveryDate(LocalDate.now().plusDays(5))
+			.withLeaseStatus(leaseStatus);
 
 		// Mock
 		when(pobClientMock.getItemsByModelName(pobKey, modelName)).thenReturn(emptyList());
@@ -140,9 +146,11 @@ class AssetServiceTest {
 		assertThat(pobPayloadValueItem).isNotNull();
 		assertThat(pobPayloadValueItem.getType()).isEqualTo(TYPE_ITEM);
 		assertThat(pobPayloadValueItem.getData()).isNotNull()
-			.containsEntry(KEY_DESCRIPTION, modelDescription)
-			.containsEntry(KEY_ITEM_ID_OPTION, modelName)
-			.containsEntry(KEY_MANUFACTURER, manufacturer);
+			.containsExactlyInAnyOrderEntriesOf(Map.of(
+				KEY_START_DATE, pobPayloadValueItem.getData().get(KEY_START_DATE),
+				KEY_DESCRIPTION, modelDescription,
+				KEY_ITEM_ID_OPTION, modelName,
+				KEY_MANUFACTURER, manufacturer));
 
 		verify(pobClientMock).createConfigurationItem(eq(pobKey), pobPayloadCaptorConfigurationItem.capture());
 		verifyNoMoreInteractions(pobClientMock);
@@ -157,7 +165,8 @@ class AssetServiceTest {
 			.containsEntry(KEY_SUPPLIER_STATUS, supplierStatus)
 			.containsEntry(KEY_HARDWARE_STATUS, hardwareStatus)
 			.containsEntry(KEY_DELIVERY_DATE, createAssetRequest.getDeliveryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-			.containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			.containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+			.containsEntry(KEY_LEASE_STATUS, leaseStatus);
 
 	}
 
