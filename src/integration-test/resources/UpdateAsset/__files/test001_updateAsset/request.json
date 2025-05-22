@@ -9,5 +9,6 @@
 	"supplierStatus": "1",
 	"hardwareStatus": "2",
 	"warrantyEndDate": "2024-02-20",
-	"deliveryDate": "2022-02-20"
+	"deliveryDate": "2022-02-20",
+	"leaseStatus": "ACTIVE"
 }

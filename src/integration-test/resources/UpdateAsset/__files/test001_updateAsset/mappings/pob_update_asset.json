@@ -19,7 +19,8 @@
 						"OptionalNumber": "WB12345NY",
 						"Id": "867403",
 						"DeliveryDate": "2022-02-20",
-						"EndWarrantyDate": "2024-02-20"
+						"EndWarrantyDate": "2024-02-20",
+						"Virtual.LeaseStatus": "ACTIVE"
 					},
 					"Memo": {
 						"CILeverantorensAnteckningar": {
