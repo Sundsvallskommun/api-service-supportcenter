@@ -14,26 +14,26 @@ public class UpdateAssetRequest {
 	@Valid
 	private Note note;
 
-	@Schema(example = "Latitude 9000", description = "Hardware name")
+	@Schema(example = "Latitude 9000", description = "Hardware name", requiredMode = NOT_REQUIRED)
 	private String hardwareName;
 
-	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
+	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit", requiredMode = NOT_REQUIRED)
 	@ValidMacAddress
 	private String macAddress;
 
-	@Schema(example = "0", description = "Supplier status")
+	@Schema(example = "0", description = "Supplier status", requiredMode = NOT_REQUIRED)
 	private String supplierStatus;
 
-	@Schema(example = "0", description = "Hardware status")
+	@Schema(example = "0", description = "Hardware status", requiredMode = NOT_REQUIRED)
 	private String hardwareStatus;
 
-	@Schema(example = "2022-01-01", description = "Warranty end date")
+	@Schema(example = "2022-01-01", description = "Warranty end date", requiredMode = NOT_REQUIRED)
 	private LocalDate warrantyEndDate;
 
-	@Schema(example = "2022-01-01", description = "Delivery date")
+	@Schema(example = "2022-01-01", description = "Delivery date", requiredMode = NOT_REQUIRED)
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id", hidden = true)
+	@Schema(example = "2281", description = "Municipality id", hidden = true, requiredMode = NOT_REQUIRED)
 	private String municipalityId;
 
 	@Schema(example = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)

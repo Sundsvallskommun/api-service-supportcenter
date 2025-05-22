@@ -1,7 +1,5 @@
 package se.sundsvall.supportcenter.api.model;
 
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
@@ -47,10 +45,10 @@ public class Asset {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id", accessMode = Schema.AccessMode.READ_ONLY)
+	@Schema(example = "2281", description = "Municipality id")
 	private String municipalityId;
 
-	@Schema(example = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)
+	@Schema(example = "status1", description = "Lease status")
 	private String leaseStatus;
 
 	public static Asset create() {
