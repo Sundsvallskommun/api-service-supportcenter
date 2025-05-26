@@ -1,5 +1,7 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -12,27 +14,30 @@ public class UpdateAssetRequest {
 	@Valid
 	private Note note;
 
-	@Schema(example = "Latitude 9000", description = "Hardware name")
+	@Schema(example = "Latitude 9000", description = "Hardware name", requiredMode = NOT_REQUIRED)
 	private String hardwareName;
 
-	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
+	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit", requiredMode = NOT_REQUIRED)
 	@ValidMacAddress
 	private String macAddress;
 
-	@Schema(example = "0", description = "Supplier status")
+	@Schema(example = "0", description = "Supplier status", requiredMode = NOT_REQUIRED)
 	private String supplierStatus;
 
-	@Schema(example = "0", description = "Hardware status")
+	@Schema(example = "0", description = "Hardware status", requiredMode = NOT_REQUIRED)
 	private String hardwareStatus;
 
-	@Schema(example = "2022-01-01", description = "Warranty end date")
+	@Schema(example = "2022-01-01", description = "Warranty end date", requiredMode = NOT_REQUIRED)
 	private LocalDate warrantyEndDate;
 
-	@Schema(example = "2022-01-01", description = "Delivery date")
+	@Schema(example = "2022-01-01", description = "Delivery date", requiredMode = NOT_REQUIRED)
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id", hidden = true)
+	@Schema(example = "2281", description = "Municipality id", hidden = true, requiredMode = NOT_REQUIRED)
 	private String municipalityId;
+
+	@Schema(example = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)
+	private String leaseStatus;
 
 	public static UpdateAssetRequest create() {
 		return new UpdateAssetRequest();
@@ -48,6 +53,19 @@ public class UpdateAssetRequest {
 
 	public UpdateAssetRequest withNote(Note note) {
 		this.note = note;
+		return this;
+	}
+
+	public String getLeaseStatus() {
+		return leaseStatus;
+	}
+
+	public void setLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
+	}
+
+	public UpdateAssetRequest withLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
 		return this;
 	}
 
@@ -143,33 +161,32 @@ public class UpdateAssetRequest {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(hardwareName, macAddress, note, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UpdateAssetRequest other = (UpdateAssetRequest) obj;
-		return Objects.equals(hardwareName, other.hardwareName) && Objects.equals(macAddress, other.macAddress)
-			&& Objects.equals(note, other.note) && Objects.equals(supplierStatus, other.supplierStatus)
-			&& Objects.equals(hardwareStatus, other.hardwareStatus) && Objects.equals(warrantyEndDate, other.warrantyEndDate)
-			&& Objects.equals(deliveryDate, other.deliveryDate) && Objects.equals(municipalityId, other.municipalityId);
-	}
-
-	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UpdateAssetRequest [note=").append(note)
-			.append(", hardwareName=").append(hardwareName).append(", macAddress=").append(macAddress).append(", supplierStatus=")
-			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", warrantyEndDate=")
-			.append(warrantyEndDate).append(", deliveryDate=").append(deliveryDate).append(", municipalityId=").append(municipalityId)
-			.append("]");
-		return builder.toString();
+		return "UpdateAssetRequest{" +
+			"note=" + note +
+			", hardwareName='" + hardwareName + '\'' +
+			", macAddress='" + macAddress + '\'' +
+			", supplierStatus='" + supplierStatus + '\'' +
+			", hardwareStatus='" + hardwareStatus + '\'' +
+			", warrantyEndDate=" + warrantyEndDate +
+			", deliveryDate=" + deliveryDate +
+			", municipalityId='" + municipalityId + '\'' +
+			", leaseStatus='" + leaseStatus + '\'' +
+			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass())
+			return false;
+		UpdateAssetRequest that = (UpdateAssetRequest) o;
+		return Objects.equals(note, that.note) && Objects.equals(hardwareName, that.hardwareName) && Objects.equals(macAddress, that.macAddress) && Objects.equals(supplierStatus, that.supplierStatus)
+			&& Objects.equals(hardwareStatus, that.hardwareStatus) && Objects.equals(warrantyEndDate, that.warrantyEndDate) && Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId,
+				that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(note, hardwareName, macAddress, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId, leaseStatus);
 	}
 }

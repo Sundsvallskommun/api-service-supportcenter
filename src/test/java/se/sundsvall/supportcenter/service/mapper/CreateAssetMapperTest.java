@@ -7,6 +7,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
@@ -66,6 +67,7 @@ class CreateAssetMapperTest {
 		final var supplierStatus = "supplierStatus";
 		final var hardwareStatus = "hardwareStatus";
 		final var municipalityId = "2281";
+		final var leaseStatus = "leaseStatus";
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -76,7 +78,8 @@ class CreateAssetMapperTest {
 			.withModelName(modelName)
 			.withDeliveryDate(LocalDate.now().plusDays(2))
 			.withWarrantyEndDate(LocalDate.now().plusDays(360))
-			.withMunicipalityId(municipalityId);
+			.withMunicipalityId(municipalityId)
+			.withLeaseStatus(leaseStatus);
 
 		// Call
 		final var result = CreateAssetMapper.toPobPayloadForCreatingConfigurationItem(itemId, createAssetRequest);
@@ -91,6 +94,7 @@ class CreateAssetMapperTest {
 		assertThat(result.getData()).containsEntry(KEY_DELIVERY_DATE, createAssetRequest.getDeliveryDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		assertThat(result.getData()).containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		assertThat(result.getData()).containsEntry(KEY_MUNICIPALITY, "Sundsvall");
+		assertThat(result.getData()).containsEntry(KEY_LEASE_STATUS, leaseStatus);
 	}
 
 	@Test

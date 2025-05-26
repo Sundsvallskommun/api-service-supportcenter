@@ -10,6 +10,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
@@ -87,7 +88,6 @@ public final class CreateAssetMapper {
 		Optional.ofNullable(createAssetRequest.getModelName()).ifPresent(value -> dataMap.put(KEY_ITEM_ID_OPTION, value));
 		Optional.ofNullable(createAssetRequest.getModelDescription()).ifPresent(value -> dataMap.put(KEY_DESCRIPTION, value));
 		Optional.ofNullable(createAssetRequest.getManufacturer()).ifPresent(value -> dataMap.put(KEY_MANUFACTURER, value));
-		Optional.ofNullable(createAssetRequest.getManufacturer()).ifPresent(value -> dataMap.put(KEY_MANUFACTURER, value));
 		dataMap.put(KEY_START_DATE, now(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER));
 
 		return dataMap;
@@ -95,14 +95,15 @@ public final class CreateAssetMapper {
 
 	private static Map<String, Object> toDataForCreatingConfigurationItem(String id, CreateAssetRequest createAssetRequest) {
 		final var dataMap = new HashMap<String, Object>();
+		Optional.ofNullable(id).ifPresent(value -> dataMap.put(KEY_ITEM, value));
 		Optional.ofNullable(createAssetRequest.getSerialNumber()).ifPresent(value -> dataMap.put(KEY_SERIAL_NUMBER, value));
 		Optional.ofNullable(createAssetRequest.getMacAddress()).ifPresent(value -> dataMap.put(KEY_MAC_ADDRESS, value));
-		Optional.ofNullable(id).ifPresent(value -> dataMap.put(KEY_ITEM, value));
 		Optional.ofNullable(createAssetRequest.getSupplierStatus()).ifPresent(value -> dataMap.put(KEY_SUPPLIER_STATUS, value));
 		Optional.ofNullable(createAssetRequest.getHardwareStatus()).ifPresent(value -> dataMap.put(KEY_HARDWARE_STATUS, value));
 		Optional.ofNullable(createAssetRequest.getDeliveryDate()).ifPresent(value -> dataMap.put(KEY_DELIVERY_DATE, value.format(DATE_FORMATTER)));
 		Optional.ofNullable(createAssetRequest.getWarrantyEndDate()).ifPresent(value -> dataMap.put(KEY_END_WARRANTY_DATE, value.format(DATE_FORMATTER)));
 		Optional.ofNullable(createAssetRequest.getMunicipalityId()).ifPresent(value -> dataMap.put(KEY_MUNICIPALITY, MUNICIPALITY_MAP.get(value)));
+		Optional.ofNullable(createAssetRequest.getLeaseStatus()).ifPresent(value -> dataMap.put(KEY_LEASE_STATUS, value));
 
 		return dataMap;
 	}

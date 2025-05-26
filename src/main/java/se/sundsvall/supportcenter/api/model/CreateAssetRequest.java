@@ -1,5 +1,6 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,38 +12,41 @@ import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
 @Schema(description = "CreateAssetRequest model")
 public class CreateAssetRequest {
 
-	@Schema(example = "x_dell", description = "Manufacturer")
+	@Schema(example = "x_dell", description = "Manufacturer", requiredMode = NOT_REQUIRED)
 	private String manufacturer;
 
 	@Schema(example = "Latitude 9000", description = "Model name", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String modelName;
 
-	@Schema(example = "Latitude 9000", description = "Description of asset")
+	@Schema(example = "Latitude 9000", description = "Description of asset", requiredMode = NOT_REQUIRED)
 	private String modelDescription;
 
 	@Schema(example = "CD23456", description = "Serial number", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String serialNumber;
 
-	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
+	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit", requiredMode = NOT_REQUIRED)
 	@ValidMacAddress
 	private String macAddress;
 
-	@Schema(example = "2022-01-01", description = "Warranty end date")
+	@Schema(example = "2022-01-01", description = "Warranty end date", requiredMode = NOT_REQUIRED)
 	private LocalDate warrantyEndDate;
 
-	@Schema(example = "0", description = "Supplier status")
+	@Schema(example = "0", description = "Supplier status", requiredMode = NOT_REQUIRED)
 	private String supplierStatus;
 
-	@Schema(example = "0", description = "Hardware status")
+	@Schema(example = "0", description = "Hardware status", requiredMode = NOT_REQUIRED)
 	private String hardwareStatus;
 
-	@Schema(example = "2022-01-01", description = "Delivery date")
+	@Schema(example = "2022-01-01", description = "Delivery date", requiredMode = NOT_REQUIRED)
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id", hidden = true)
+	@Schema(example = "2281", description = "Municipality id", hidden = true, requiredMode = NOT_REQUIRED)
 	private String municipalityId;
+
+	@Schema(example = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)
+	private String leaseStatus;
 
 	public static CreateAssetRequest create() {
 		return new CreateAssetRequest();
@@ -58,6 +62,19 @@ public class CreateAssetRequest {
 
 	public CreateAssetRequest withManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
+		return this;
+	}
+
+	public String getLeaseStatus() {
+		return leaseStatus;
+	}
+
+	public void setLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
+	}
+
+	public CreateAssetRequest withLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
 		return this;
 	}
 
@@ -179,32 +196,34 @@ public class CreateAssetRequest {
 	}
 
 	@Override
+	public String toString() {
+		return "CreateAssetRequest{" +
+			"manufacturer='" + manufacturer + '\'' +
+			", modelName='" + modelName + '\'' +
+			", modelDescription='" + modelDescription + '\'' +
+			", serialNumber='" + serialNumber + '\'' +
+			", macAddress='" + macAddress + '\'' +
+			", warrantyEndDate=" + warrantyEndDate +
+			", supplierStatus='" + supplierStatus + '\'' +
+			", hardwareStatus='" + hardwareStatus + '\'' +
+			", deliveryDate=" + deliveryDate +
+			", municipalityId='" + municipalityId + '\'' +
+			", leaseStatus='" + leaseStatus + '\'' +
+			'}';
+	}
+
+	@Override
 	public boolean equals(Object o) {
-		if (this == o)
-			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
 		CreateAssetRequest that = (CreateAssetRequest) o;
-		return Objects.equals(manufacturer, that.manufacturer) && Objects.equals(modelName, that.modelName) &&
-			Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber) &&
-			Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) &&
-			Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus, that.hardwareStatus) &&
-			Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId);
+		return Objects.equals(manufacturer, that.manufacturer) && Objects.equals(modelName, that.modelName) && Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber)
+			&& Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) && Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus,
+				that.hardwareStatus) && Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate,
-			municipalityId);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CreateAssetRequest [manufacturer=").append(manufacturer).append(", modelName=").append(modelName).append(", modelDescription=").append(modelDescription)
-			.append(", serialNumber=").append(serialNumber).append(", macAddress=").append(macAddress).append(", warrantyEndDate=").append(warrantyEndDate).append(", supplierStatus=")
-			.append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus).append(", deliveryDate=").append(deliveryDate).append(", municipalityId=").append(municipalityId)
-			.append("]");
-		return builder.toString();
+		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate, municipalityId, leaseStatus);
 	}
 }

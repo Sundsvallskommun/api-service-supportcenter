@@ -6,5 +6,6 @@
 	"supplierStatus": "0",
 	"warrantyEndDate": "2022-01-01",
 	"deliveryDate": "2022-01-01",
-	"manufacturer": "x_dell"
+	"manufacturer": "x_dell",
+	"leaseStatus": "ACTIVE"
 }

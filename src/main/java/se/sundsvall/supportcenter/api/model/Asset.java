@@ -45,8 +45,11 @@ public class Asset {
 	@Schema(example = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id", accessMode = Schema.AccessMode.READ_ONLY)
+	@Schema(example = "2281", description = "Municipality id")
 	private String municipalityId;
+
+	@Schema(example = "status1", description = "Lease status")
+	private String leaseStatus;
 
 	public static Asset create() {
 		return new Asset();
@@ -62,6 +65,19 @@ public class Asset {
 
 	public Asset withId(String id) {
 		this.id = id;
+		return this;
+	}
+
+	public String getLeaseStatus() {
+		return leaseStatus;
+	}
+
+	public void setLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
+	}
+
+	public Asset withLeaseStatus(String leaseStatus) {
+		this.leaseStatus = leaseStatus;
 		return this;
 	}
 
@@ -222,42 +238,38 @@ public class Asset {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(hardwareDescription, hardwareName, id, macAddress, serialNumber, supplierStatus, hardwareStatus, modelName, modelDescription, manufacturer,
-			deliveryDate, warrantyEndDate, municipalityId);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Asset other = (Asset) obj;
-		return Objects.equals(hardwareDescription, other.hardwareDescription) && Objects.equals(hardwareName, other.hardwareName)
-			&& Objects.equals(id, other.id) && Objects.equals(macAddress, other.macAddress)
-			&& Objects.equals(serialNumber, other.serialNumber)
-			&& Objects.equals(supplierStatus, other.supplierStatus)
-			&& Objects.equals(hardwareStatus, other.hardwareStatus)
-			&& Objects.equals(modelName, other.modelName)
-			&& Objects.equals(modelDescription, other.modelDescription)
-			&& Objects.equals(manufacturer, other.manufacturer)
-			&& Objects.equals(deliveryDate, other.deliveryDate)
-			&& Objects.equals(warrantyEndDate, other.warrantyEndDate)
-			&& Objects.equals(municipalityId, other.municipalityId);
-	}
-
-	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Asset [id=").append(id).append(", serialNumber=").append(serialNumber).append(", hardwareName=")
-			.append(hardwareName).append(", hardwareDescription=").append(hardwareDescription).append(", macAddress=")
-			.append(macAddress).append(", supplierStatus=").append(supplierStatus).append(", hardwareStatus=").append(hardwareStatus)
-			.append(", modelName=").append(modelName).append(", modelDescription=").append(modelDescription).append(", manufacturer=").append(manufacturer)
-			.append(", deliveryDate=").append(deliveryDate).append(", warrantyEndDate=").append(warrantyEndDate)
-			.append(", municipalityId=").append(municipalityId).append("]");
-		return builder.toString();
+		return "Asset{" +
+			"id='" + id + '\'' +
+			", serialNumber='" + serialNumber + '\'' +
+			", hardwareName='" + hardwareName + '\'' +
+			", hardwareDescription='" + hardwareDescription + '\'' +
+			", macAddress='" + macAddress + '\'' +
+			", supplierStatus='" + supplierStatus + '\'' +
+			", hardwareStatus='" + hardwareStatus + '\'' +
+			", manufacturer='" + manufacturer + '\'' +
+			", modelName='" + modelName + '\'' +
+			", modelDescription='" + modelDescription + '\'' +
+			", warrantyEndDate=" + warrantyEndDate +
+			", deliveryDate=" + deliveryDate +
+			", municipalityId='" + municipalityId + '\'' +
+			", leaseStatus='" + leaseStatus + '\'' +
+			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Asset asset = (Asset) o;
+		return Objects.equals(id, asset.id) && Objects.equals(serialNumber, asset.serialNumber) && Objects.equals(hardwareName, asset.hardwareName) && Objects.equals(hardwareDescription, asset.hardwareDescription)
+			&& Objects.equals(macAddress, asset.macAddress) && Objects.equals(supplierStatus, asset.supplierStatus) && Objects.equals(hardwareStatus, asset.hardwareStatus) && Objects.equals(manufacturer,
+				asset.manufacturer) && Objects.equals(modelName, asset.modelName) && Objects.equals(modelDescription, asset.modelDescription) && Objects.equals(warrantyEndDate, asset.warrantyEndDate) && Objects.equals(
+					deliveryDate, asset.deliveryDate) && Objects.equals(municipalityId, asset.municipalityId) && Objects.equals(leaseStatus, asset.leaseStatus);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, serialNumber, hardwareName, hardwareDescription, macAddress, supplierStatus, hardwareStatus, manufacturer, modelName, modelDescription, warrantyEndDate, deliveryDate, municipalityId, leaseStatus);
 	}
 }
