@@ -6,8 +6,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import generated.client.pob.SuspensionInfo;
 import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +19,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.annotation.Cacheable;
-
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import generated.client.pob.SuspensionInfo;
 
 @ExtendWith(MockitoExtension.class)
 class POBIntegrationTest {
