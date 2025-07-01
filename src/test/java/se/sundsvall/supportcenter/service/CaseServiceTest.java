@@ -55,14 +55,14 @@ import se.sundsvall.supportcenter.api.model.Address;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(ResourceLoaderExtension.class)
 class CaseServiceTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
@@ -79,14 +79,14 @@ class CaseServiceTest {
 		final var pobKey = "pobKey";
 		final var caseId = "caseId";
 
-		when(pobClientMock.getCase(pobKey, caseId)).thenReturn(pobPayload);
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(pobPayload);
 
 		// Call
 		final var aCase = caseService.getCase(pobKey, caseId);
 
 		// Verification
-		verify(pobClientMock).getCase(pobKey, caseId);
-		verifyNoMoreInteractions(pobClientMock);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		assertThat(aCase).isNotNull();
 		assertThat(aCase.getCaseId()).isEqualTo("caseId");
@@ -183,8 +183,8 @@ class CaseServiceTest {
 		caseService.createCase(pobKey, request);
 
 		// Verification
-		verify(pobClientMock).createCase(eq(pobKey), pobPayloadCaptor.capture());
-		verifyNoMoreInteractions(pobClientMock);
+		verify(pobIntegrationMock).createCase(eq(pobKey), pobPayloadCaptor.capture());
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
@@ -264,6 +264,6 @@ class CaseServiceTest {
 
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
-		verifyNoInteractions(pobClientMock);
+		verifyNoInteractions(pobIntegrationMock);
 	}
 }

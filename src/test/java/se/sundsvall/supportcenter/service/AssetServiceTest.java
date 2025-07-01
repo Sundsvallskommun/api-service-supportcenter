@@ -36,13 +36,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @ExtendWith(MockitoExtension.class)
 class AssetServiceTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@InjectMocks
 	private AssetService assetService;
@@ -81,16 +81,16 @@ class AssetServiceTest {
 			.withLeaseStatus(leaseStatus);
 
 		// Mock
-		when(pobClientMock.getItemsByModelName(pobKey, modelName)).thenReturn(setupListOfPobPayload("Item", List.of("Id", "IdOption", "Description", "Virtual.Manufacturer", "StartDate"),
+		when(pobIntegrationMock.getItemsByModelName(pobKey, modelName)).thenReturn(setupListOfPobPayload("Item", List.of("Id", "IdOption", "Description", "Virtual.Manufacturer", "StartDate"),
 			List.of(itemId, modelName, modelDescription, manufacturer, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))));
 
 		// Call
 		assetService.createAsset(pobKey, createAssetRequest);
 
 		// Verification
-		verify(pobClientMock).getItemsByModelName(pobKey, modelName);
-		verify(pobClientMock).createConfigurationItem(eq(pobKey), pobPayloadCaptorConfigurationItem.capture());
-		verifyNoMoreInteractions(pobClientMock);
+		verify(pobIntegrationMock).getItemsByModelName(pobKey, modelName);
+		verify(pobIntegrationMock).createConfigurationItem(eq(pobKey), pobPayloadCaptorConfigurationItem.capture());
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValueConfigurationItem = pobPayloadCaptorConfigurationItem.getValue();
 		assertThat(pobPayloadValueConfigurationItem).isNotNull();
@@ -133,14 +133,14 @@ class AssetServiceTest {
 			.withLeaseStatus(leaseStatus);
 
 		// Mock
-		when(pobClientMock.getItemsByModelName(pobKey, modelName)).thenReturn(emptyList());
+		when(pobIntegrationMock.getItemsByModelName(pobKey, modelName)).thenReturn(emptyList());
 
 		// Call
 		assetService.createAsset(pobKey, createAssetRequest);
 
 		// Verification
-		verify(pobClientMock).getItemsByModelName(pobKey, modelName);
-		verify(pobClientMock).createItem(eq(pobKey), pobPayloadCaptorItem.capture());
+		verify(pobIntegrationMock).getItemsByModelName(pobKey, modelName);
+		verify(pobIntegrationMock).createItem(eq(pobKey), pobPayloadCaptorItem.capture());
 
 		final var pobPayloadValueItem = pobPayloadCaptorItem.getValue();
 		assertThat(pobPayloadValueItem).isNotNull();
@@ -152,8 +152,8 @@ class AssetServiceTest {
 				KEY_ITEM_ID_OPTION, modelName,
 				KEY_MANUFACTURER, manufacturer));
 
-		verify(pobClientMock).createConfigurationItem(eq(pobKey), pobPayloadCaptorConfigurationItem.capture());
-		verifyNoMoreInteractions(pobClientMock);
+		verify(pobIntegrationMock).createConfigurationItem(eq(pobKey), pobPayloadCaptorConfigurationItem.capture());
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValueConfigurationItem = pobPayloadCaptorConfigurationItem.getValue();
 
@@ -172,8 +172,8 @@ class AssetServiceTest {
 
 	private List<PobPayload> setupListOfPobPayload(String type, List<String> keys, List<String> values) {
 		final var result = new ArrayList<PobPayload>();
-		int i = 0;
-		for (String value : values) {
+		var i = 0;
+		for (final String value : values) {
 			result.add(new PobPayload()
 				.type(type)
 				.data(Map.of(keys.get(i), value)));

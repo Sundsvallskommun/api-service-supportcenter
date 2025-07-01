@@ -23,19 +23,19 @@ import org.zalando.problem.Status;
 import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @Service
 public class AssetService {
 
 	private static final String CI_ID_ERROR_TEMPLATE = "No ID was found in POB-configurationitems";
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 	private final ConfigurationService configurationService;
 
-	public AssetService(POBClient pobClient, ConfigurationService configurationService) {
+	public AssetService(POBIntegration pobIntegration, ConfigurationService configurationService) {
 		this.configurationService = configurationService;
-		this.pobClient = pobClient;
+		this.pobIntegration = pobIntegration;
 	}
 
 	public String createAsset(final String pobKey, final CreateAssetRequest createAssetRequest) {
@@ -52,16 +52,16 @@ public class AssetService {
 	}
 
 	public void updateConfigurationItem(final String pobKey, final String serialNumber, final UpdateAssetRequest request) {
-		pobClient.updateConfigurationItem(pobKey, toPobPayload(configurationService.getSerialNumberId(pobKey, serialNumber), request));
+		pobIntegration.updateConfigurationItem(pobKey, toPobPayload(configurationService.getSerialNumberId(pobKey, serialNumber), request));
 	}
 
 	public List<Asset> getConfigurationItemsBySerialNumber(final String pobKey, final String serialNumber) {
 
-		final var configurationItems = pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
+		final var configurationItems = pobIntegration.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
 		final var itemId = toItemId(configurationItems);
 		List<PobPayload> item = null;
 		if (hasText(itemId)) {
-			item = pobClient.getItemsById(pobKey, itemId);
+			item = pobIntegration.getItemsById(pobKey, itemId);
 		}
 
 		final var itemAttributes = toMapOfAttributes(item);
@@ -71,15 +71,15 @@ public class AssetService {
 
 	private String createItem(final String pobKey, final CreateAssetRequest request) {
 
-		return toItemId(pobClient.createItem(pobKey, toPobPayloadForCreatingItem(request)), TYPE_ITEM, KEY_CONFIGURATION_ITEM);
+		return toItemId(pobIntegration.createItem(pobKey, toPobPayloadForCreatingItem(request)), TYPE_ITEM, KEY_CONFIGURATION_ITEM);
 	}
 
 	private String createConfigurationItem(final String pobKey, final String id, final CreateAssetRequest request) {
 
-		return toItemId(pobClient.createConfigurationItem(pobKey, toPobPayloadForCreatingConfigurationItem(id, request)), TYPE_CONFIGURATION_ITEM, KEY_CONFIGURATION_ITEM);
+		return toItemId(pobIntegration.createConfigurationItem(pobKey, toPobPayloadForCreatingConfigurationItem(id, request)), TYPE_CONFIGURATION_ITEM, KEY_CONFIGURATION_ITEM);
 	}
 
 	private List<String> getItemsByModelName(final String pobKey, final String modelName) {
-		return toItemIdList(pobClient.getItemsByModelName(pobKey, modelName));
+		return toItemIdList(pobIntegration.getItemsByModelName(pobKey, modelName));
 	}
 }

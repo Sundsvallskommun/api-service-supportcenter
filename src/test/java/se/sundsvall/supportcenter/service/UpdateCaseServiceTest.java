@@ -42,14 +42,14 @@ import org.zalando.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateCaseServiceTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
@@ -61,7 +61,7 @@ class UpdateCaseServiceTest {
 	private FalseProcessor falseProcessorMock;
 
 	@Spy
-	private List<ProcessorInterface> processorListSpy = new ArrayList<>();
+	private final List<ProcessorInterface> processorListSpy = new ArrayList<>();
 
 	@InjectMocks
 	private CaseService caseService;
@@ -106,13 +106,13 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		verify(pobClientMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verify(pobIntegrationMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		processorListSpy.forEach(processor -> verify(processor, times(2)).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
@@ -163,7 +163,7 @@ class UpdateCaseServiceTest {
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
 
 		if (!incomingCaseStatus.equals(SupportCenterStatus.AWAITING_INFO.getValue())) {
-			verify(pobClientMock, times(incomingCaseStatus.equals(SupportCenterStatus.RESOLVED.getValue()) ? 2 : 1)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+			verify(pobIntegrationMock, times(incomingCaseStatus.equals(SupportCenterStatus.RESOLVED.getValue()) ? 2 : 1)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 
 			final var pobPayloadValue = pobPayloadCaptor.getValue();
 			assertThat(pobPayloadValue).isNotNull();
@@ -186,7 +186,7 @@ class UpdateCaseServiceTest {
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 	}
 
 	@Test
@@ -214,13 +214,13 @@ class UpdateCaseServiceTest {
 
 		// Verification
 		verify(configurationServiceMock, never()).validateCaseCategory(any(), any());
-		verify(pobClientMock, times(2)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verify(pobIntegrationMock, times(2)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		processorListSpy.forEach(processor -> verify(processor, times(4)).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock, times(2)).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock, times(2)).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValues = pobPayloadCaptor.getAllValues();
 		assertThat(pobPayloadValues).hasSize(2);
@@ -279,13 +279,13 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		verify(pobClientMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verify(pobIntegrationMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		processorListSpy.forEach(processor -> verify(processor, times(2)).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
@@ -333,13 +333,13 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		verify(pobClientMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verify(pobIntegrationMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		processorListSpy.forEach(processor -> verify(processor, times(2)).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
@@ -383,13 +383,13 @@ class UpdateCaseServiceTest {
 
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
-		verify(pobClientMock, times(2)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verify(pobIntegrationMock, times(2)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
 		processorListSpy.forEach(processor -> verify(processor, atLeastOnce()).shouldProcess(request));
 		verify(falseProcessorMock, never()).preProcess(any(), any(), any(), any());
 		verify(falseProcessorMock, never()).postProcess(any(), any(), any(), any());
 		verify(trueProcessorMock, times(2)).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(trueProcessorMock, times(2)).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verifyNoMoreInteractions(pobClientMock);
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValues = pobPayloadCaptor.getAllValues();
 		assertThat(pobPayloadValues).hasSize(2);
@@ -451,7 +451,7 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock, never()).validateClosureCode(any(), any());
-		verifyNoInteractions(pobClientMock, falseProcessorMock, trueProcessorMock);
+		verifyNoInteractions(pobIntegrationMock, falseProcessorMock, trueProcessorMock);
 	}
 
 	@Test
@@ -486,7 +486,7 @@ class UpdateCaseServiceTest {
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 		verify(configurationServiceMock).validateClosureCode(pobKey, closureCode);
-		verifyNoInteractions(pobClientMock, falseProcessorMock, trueProcessorMock);
+		verifyNoInteractions(pobIntegrationMock, falseProcessorMock, trueProcessorMock);
 	}
 
 	/**

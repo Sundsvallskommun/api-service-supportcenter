@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 /**
  * Performs action to suspend case
@@ -23,10 +23,10 @@ public class SuspendCaseProcessor implements ProcessorInterface {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SuspendCaseProcessor.class);
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 
-	public SuspendCaseProcessor(POBClient pobClient) {
-		this.pobClient = pobClient;
+	public SuspendCaseProcessor(POBIntegration pobIntegration) {
+		this.pobIntegration = pobIntegration;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class SuspendCaseProcessor implements ProcessorInterface {
 	@Override
 	public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 		LOG.debug("Start processing 'preProcess'-logic to suspend case with caseId:'{}'", caseId);
-		pobClient.suspendCase(pobKey, caseId, generateSuspensionInfo());
+		pobIntegration.suspendCase(pobKey, caseId, generateSuspensionInfo());
 	}
 
 	@Override

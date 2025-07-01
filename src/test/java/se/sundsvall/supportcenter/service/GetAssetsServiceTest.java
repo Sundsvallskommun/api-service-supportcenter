@@ -32,7 +32,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.supportcenter.api.model.Asset;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @ExtendWith(MockitoExtension.class)
 class GetAssetsServiceTest {
@@ -40,7 +40,7 @@ class GetAssetsServiceTest {
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@InjectMocks
 	private AssetService assetService;
@@ -87,16 +87,16 @@ class GetAssetsServiceTest {
 			KEY_DESCRIPTION, (Object) hardwareDescription);
 
 		// Mock
-		when(pobClientMock.getConfigurationItemsBySerialNumber(pobKey, serialNumber)).thenReturn(setupListOfPobPayload(configurationData));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumber(pobKey, serialNumber)).thenReturn(setupListOfPobPayload(configurationData));
 
-		when(pobClientMock.getItemsById(pobKey, itemId)).thenReturn(setupItemPobPayload(List.of(KEY_ITEM_ID_OPTION, KEY_DESCRIPTION), List.of(modelName, modelDescription), manufacturerMap));
+		when(pobIntegrationMock.getItemsById(pobKey, itemId)).thenReturn(setupItemPobPayload(List.of(KEY_ITEM_ID_OPTION, KEY_DESCRIPTION), List.of(modelName, modelDescription), manufacturerMap));
 
 		// Call
 		final var result = assetService.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
 
 		// Verification
-		verify(pobClientMock).getConfigurationItemsBySerialNumber(pobKey, serialNumber);
-		verify(pobClientMock).getItemsById(pobKey, itemId);
+		verify(pobIntegrationMock).getConfigurationItemsBySerialNumber(pobKey, serialNumber);
+		verify(pobIntegrationMock).getItemsById(pobKey, itemId);
 
 		assertThat(result).extracting(Asset::getId).containsExactly(configurationItemId);
 		assertThat(result).extracting(Asset::getModelName).containsExactly(modelName);
@@ -122,7 +122,7 @@ class GetAssetsServiceTest {
 		final var keyIterator = keys.iterator();
 		final var item = new PobPayload().type(TYPE_ITEM);
 		final Map<String, Object> data = new HashMap<>();
-		for (String value : values) {
+		for (final String value : values) {
 			data.put(keyIterator.next(), value);
 		}
 

@@ -21,18 +21,18 @@ import org.zalando.problem.Problem;
 import se.sundsvall.supportcenter.api.model.Case;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 
 @Service
 public class CaseService {
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 	private final ConfigurationService configurationService;
 	private final List<ProcessorInterface> processors;
 
-	public CaseService(POBClient pobClient, ConfigurationService configurationService, List<ProcessorInterface> processors) {
-		this.pobClient = pobClient;
+	public CaseService(POBIntegration pobIntegration, ConfigurationService configurationService, List<ProcessorInterface> processors) {
+		this.pobIntegration = pobIntegration;
 		this.configurationService = configurationService;
 		this.processors = processors;
 	}
@@ -40,7 +40,7 @@ public class CaseService {
 	private static final String VALIDATION_ERROR_TEMPLATE = "%s: '%s' is not a valid value";
 
 	public Case getCase(final String pobKey, final String caseId) {
-		return toCase(pobClient.getCase(pobKey, caseId));
+		return toCase(pobIntegration.getCase(pobKey, caseId));
 	}
 
 	public void updateCase(final String pobKey, final String caseId, final UpdateCaseRequest updateCaseRequest) {
@@ -55,7 +55,7 @@ public class CaseService {
 
 			// Call POB.
 			if (shouldUpdatePOB(updateCaseRequest)) {
-				pobClient.updateCase(pobKey, pobPayload);
+				pobIntegration.updateCase(pobKey, pobPayload);
 			}
 
 			// Perform potential post process actions.
@@ -68,7 +68,7 @@ public class CaseService {
 		validate(pobKey, createCaseRequest);
 
 		// Convert request to PobPayload and call Pob
-		final var results = pobClient.createCase(pobKey, toPobPayload(createCaseRequest));
+		final var results = pobIntegration.createCase(pobKey, toPobPayload(createCaseRequest));
 
 		return Optional.ofNullable(results).orElse(emptyList()).stream()
 			.filter(Objects::nonNull)
@@ -79,11 +79,11 @@ public class CaseService {
 	}
 
 	public List<String> getCaseCategoryList(final String pobKey) {
-		return toCaseCategoryList(pobClient.getCaseCategories(pobKey));
+		return toCaseCategoryList(pobIntegration.getCaseCategories(pobKey));
 	}
 
 	public List<String> getClosureCodeList(final String pobKey) {
-		return toClosureCodeList(pobClient.getClosureCodes(pobKey));
+		return toClosureCodeList(pobIntegration.getClosureCodes(pobKey));
 	}
 
 	public void validateCaseCategory(final String pobKey, final String caseCategory) {

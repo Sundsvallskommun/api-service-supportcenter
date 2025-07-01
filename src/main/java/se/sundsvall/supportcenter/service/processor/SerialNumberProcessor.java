@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.ConfigurationService;
 
 /**
@@ -25,11 +25,11 @@ public class SerialNumberProcessor implements ProcessorInterface {
 	private static final Logger LOG = LoggerFactory.getLogger(SerialNumberProcessor.class);
 	private static final String JSON_PATH_EXISTING_SERIALNUMBER = "$['Data']['CIInfo.Ci']['Data']['SerialNumber']";
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 	private final ConfigurationService configurationService;
 
-	public SerialNumberProcessor(POBClient pobClient, ConfigurationService configurationService) {
-		this.pobClient = pobClient;
+	public SerialNumberProcessor(POBIntegration pobIntegration, ConfigurationService configurationService) {
+		this.pobIntegration = pobIntegration;
 		this.configurationService = configurationService;
 	}
 
@@ -51,7 +51,7 @@ public class SerialNumberProcessor implements ProcessorInterface {
 			final var serialNumberId = configurationService.getSerialNumberId(pobKey, incomingSerialNumber);
 
 			// Get current case.
-			final var fetchedCase = pobClient.getCase(pobKey, caseId);
+			final var fetchedCase = pobIntegration.getCase(pobKey, caseId);
 
 			// Check if CIInfo.Ci exists and that it's serialNumber != the provided serialNumber.
 			// If above is true: Set serialNumberId in CIInfo2.Ci (replaced hardware).
