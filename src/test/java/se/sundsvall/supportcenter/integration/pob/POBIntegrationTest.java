@@ -6,10 +6,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import generated.client.pob.PobPayload;
-import generated.client.pob.PobPayloadWithTriggerResults;
-import generated.client.pob.SuspensionInfo;
 import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -20,11 +18,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.annotation.Cacheable;
 
+import generated.client.pob.PobPayload;
+import generated.client.pob.PobPayloadWithTriggerResults;
+import generated.client.pob.SuspensionInfo;
+
 @ExtendWith(MockitoExtension.class)
 class POBIntegrationTest {
 
-	private final static String POB_KEY = RandomStringUtils.secure().nextAlphabetic(10);
-	private final static List<PobPayloadWithTriggerResults> POB_RESPONSE = List.of(new PobPayloadWithTriggerResults());
+	private static final String POB_KEY = RandomStringUtils.secure().nextAlphabetic(10);
+	private static final List<PobPayloadWithTriggerResults> POB_RESPONSE = List.of(new PobPayloadWithTriggerResults());
 
 	@Mock
 	private PobPayload payloadMock;
@@ -183,6 +185,8 @@ class POBIntegrationTest {
 
 	@Test
 	void updateConfigurationItem() {
+		integration.updateConfigurationItem(POB_KEY, payloadMock);
 
+		verify(clientMock).updateConfigurationItem(POB_KEY, payloadMock);
 	}
 }
