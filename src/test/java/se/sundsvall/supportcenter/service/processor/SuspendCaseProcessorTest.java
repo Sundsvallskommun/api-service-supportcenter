@@ -17,14 +17,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
 
 @ExtendWith(MockitoExtension.class)
 class SuspendCaseProcessorTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private PobPayload pobPayloadMock;
@@ -63,7 +63,7 @@ class SuspendCaseProcessorTest {
 		processor.preProcess(pobKey, caseId, request, pobPayloadMock);
 
 		// Verification
-		verify(pobClientMock).suspendCase(eq(pobKey), eq(caseId), any(SuspensionInfo.class));
+		verify(pobIntegrationMock).suspendCase(eq(pobKey), eq(caseId), any(SuspensionInfo.class));
 		verifyNoInteractions(pobPayloadMock);
 	}
 
@@ -75,6 +75,6 @@ class SuspendCaseProcessorTest {
 
 		processor.postProcess(pobKey, caseId, request, pobPayloadMock);
 
-		verifyNoInteractions(pobClientMock, pobPayloadMock);
+		verifyNoInteractions(pobIntegrationMock, pobPayloadMock);
 	}
 }

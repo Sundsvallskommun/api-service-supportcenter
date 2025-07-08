@@ -9,7 +9,6 @@ import generated.client.pob.PobPayloadWithTriggerResults;
 import generated.client.pob.SuspensionInfo;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,7 @@ public interface POBClient {
 	 * @param pobKey  the key to use for authorization
 	 * @param payload the object with the updated case-attributes.
 	 */
-	@PostMapping(path = "cases", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(path = "cases", consumes = APPLICATION_JSON_VALUE)
 	Void updateCase(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
 
 	/**
@@ -59,7 +58,6 @@ public interface POBClient {
 	 * @param  pobKey the key to use for authorization
 	 * @return        a list of available case-categories (max 10000)
 	 */
-	@Cacheable("case-categories")
 	@GetMapping(path = "casecategories?Fields=Id&limit=10000", produces = APPLICATION_JSON_VALUE)
 	List<PobPayload> getCaseCategories(@RequestHeader(AUTHORIZATION) String pobKey);
 
@@ -69,7 +67,6 @@ public interface POBClient {
 	 * @param  pobKey the key to use for authorization
 	 * @return        a list of available closure-codes (max 10000)
 	 */
-	@Cacheable("closure-codes")
 	@GetMapping(path = "closurecodes?Fields=Id&limit=10000", produces = APPLICATION_JSON_VALUE)
 	List<PobPayload> getClosureCodes(@RequestHeader(AUTHORIZATION) String pobKey);
 
@@ -129,7 +126,7 @@ public interface POBClient {
 	 * @param pobKey  the key to use for authorization
 	 * @param payload the object with the updated configuration attributes
 	 */
-	@PostMapping(path = "configurationitems", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(path = "configurationitems", consumes = APPLICATION_JSON_VALUE)
 	Void updateConfigurationItem(@RequestHeader(AUTHORIZATION) String pobKey, @RequestBody PobPayload payload);
 
 	/**
@@ -139,7 +136,7 @@ public interface POBClient {
 	 * @param caseId  the ID of the case
 	 * @param payload object with suspension information
 	 */
-	@PostMapping(path = "cases/{caseId}/suspension", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	@PostMapping(path = "cases/{caseId}/suspension", consumes = APPLICATION_JSON_VALUE)
 	Void suspendCase(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("caseId") String caseId, @RequestBody SuspensionInfo payload);
 
 	/**
@@ -158,6 +155,6 @@ public interface POBClient {
 	 * @param pobKey the key to use for authorization
 	 * @param caseId the ID of the case
 	 */
-	@DeleteMapping(path = "cases/{caseId}/suspension", produces = APPLICATION_JSON_VALUE)
+	@DeleteMapping(path = "cases/{caseId}/suspension")
 	Void deleteSuspension(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable("caseId") String caseId);
 }

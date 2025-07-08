@@ -19,14 +19,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.ConfigurationService;
 
 @ExtendWith(MockitoExtension.class)
 class SerialNumberProcessorTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
@@ -67,7 +67,7 @@ class SerialNumberProcessorTest {
 		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber);
 
 		// Set up existingCase to match this jsonPath: $['Data']['CIInfo.Ci']['Data']['SerialNumber']
-		when(pobClientMock.getCase(pobKey, caseId)).thenReturn(new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", Map.of("SerialNumber", "xxx-111")))));
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", Map.of("SerialNumber", "xxx-111")))));
 		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
 
@@ -78,10 +78,10 @@ class SerialNumberProcessorTest {
 		verify(configurationServiceMock, never()).validateCaseCategory(any(), any());
 		verify(configurationServiceMock, never()).validateClosureCode(any(), any());
 		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNumber);
-		verify(pobClientMock).getCase(pobKey, caseId);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
 		verify(pobPayloadMock).getData();
 		verify(mapMock).put(KEY_CI_INFO2, serialNumberId);
-		verifyNoMoreInteractions(configurationServiceMock, pobClientMock, pobPayloadMock, mapMock);
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 	@Test
@@ -95,7 +95,7 @@ class SerialNumberProcessorTest {
 		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber);
 
 		// Set up existingCase to match this jsonPath: $['Data']['CIInfo.Ci']['Data']['SerialNumber']
-		when(pobClientMock.getCase(pobKey, caseId)).thenReturn(new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", Map.of("SerialNumber", serialNumber)))));
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", Map.of("SerialNumber", serialNumber)))));
 		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
 
@@ -104,10 +104,10 @@ class SerialNumberProcessorTest {
 
 		// Verification
 		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNumber);
-		verify(pobClientMock).getCase(pobKey, caseId);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
 		verify(pobPayloadMock).getData();
 		verify(mapMock).put(KEY_CI_INFO, serialNumberId);
-		verifyNoMoreInteractions(configurationServiceMock, pobClientMock, pobPayloadMock, mapMock);
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 	@Test
@@ -120,7 +120,7 @@ class SerialNumberProcessorTest {
 		final var serialNumberId = "123456789";
 		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber);
 
-		when(pobClientMock.getCase(pobKey, caseId)).thenReturn(new PobPayload()); // I.e. no existing "CIInfo.Ci"
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(new PobPayload()); // I.e. no existing "CIInfo.Ci"
 		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
 		when(pobPayloadMock.getData()).thenReturn(mapMock);
 
@@ -129,10 +129,10 @@ class SerialNumberProcessorTest {
 
 		// Verification
 		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNumber);
-		verify(pobClientMock).getCase(pobKey, caseId);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
 		verify(pobPayloadMock).getData();
 		verify(mapMock).put(KEY_CI_INFO, serialNumberId);
-		verifyNoMoreInteractions(configurationServiceMock, pobClientMock, pobPayloadMock, mapMock);
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 	@Test
@@ -149,8 +149,8 @@ class SerialNumberProcessorTest {
 
 		// Verification
 		verify(configurationServiceMock, never()).getSerialNumberId(any(), any());
-		verify(pobClientMock, never()).getCase(any(), any());
-		verifyNoMoreInteractions(configurationServiceMock, pobClientMock, pobPayloadMock, mapMock);
+		verify(pobIntegrationMock, never()).getCase(any(), any());
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 	@Test
@@ -161,7 +161,7 @@ class SerialNumberProcessorTest {
 
 		processor.postProcess(pobKey, caseId, request, pobPayloadMock);
 
-		verifyNoInteractions(configurationServiceMock, pobClientMock, pobPayloadMock, mapMock);
+		verifyNoInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 }

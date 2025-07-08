@@ -24,7 +24,7 @@ import org.zalando.problem.ThrowableProblem;
 import se.sundsvall.dept44.exception.ClientProblem;
 import se.sundsvall.dept44.exception.ServerProblem;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +37,7 @@ class UnsuspendCaseProcessorTest {
 	private static final UpdateCaseRequest REQUEST = UpdateCaseRequest.create();
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private PobPayload pobPayloadMock;
@@ -76,25 +76,25 @@ class UnsuspendCaseProcessorTest {
 		processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);
 
 		// Verification
-		verify(pobClientMock).getSuspension(POB_KEY, CASE_ID);
-		verify(pobClientMock).deleteSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock).getSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock).deleteSuspension(POB_KEY, CASE_ID);
 		verify(pobPayloadMock).getData();
 		verify(mapMock).put(KEY_SUSPENSION, null);
 
-		verifyNoMoreInteractions(pobClientMock, pobPayloadMock, mapMock);
+		verifyNoMoreInteractions(pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 
 	@Test
 	void preProcessWhenCaseIsNotSuspended() {
 		// Mocks
-		when(pobClientMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(new ClientProblem(Status.NOT_FOUND, "Not Found: Testexception"));
+		when(pobIntegrationMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(new ClientProblem(Status.NOT_FOUND, "Not Found: Testexception"));
 
 		// Call
 		processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);
 
 		// Verification
-		verify(pobClientMock).getSuspension(POB_KEY, CASE_ID);
-		verify(pobClientMock, never()).deleteSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock).getSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock, never()).deleteSuspension(POB_KEY, CASE_ID);
 		verify(pobPayloadMock, never()).getData();
 		verify(mapMock, never()).put(KEY_SUSPENSION, null);
 	}
@@ -104,15 +104,15 @@ class UnsuspendCaseProcessorTest {
 		final var exception = new ServerProblem(Status.INTERNAL_SERVER_ERROR, "Internal Server Error: Testexception");
 
 		// Mocks
-		when(pobClientMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(exception);
+		when(pobIntegrationMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(exception);
 
 		// Call
 		final var e = assertThrows(ThrowableProblem.class, () -> processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock));
 
 		// Verification
 		assertThat(e).isSameAs(exception);
-		verify(pobClientMock).getSuspension(POB_KEY, CASE_ID);
-		verify(pobClientMock, never()).deleteSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock).getSuspension(POB_KEY, CASE_ID);
+		verify(pobIntegrationMock, never()).deleteSuspension(POB_KEY, CASE_ID);
 		verify(pobPayloadMock, never()).getData();
 		verify(mapMock, never()).put(KEY_SUSPENSION, null);
 	}
@@ -121,6 +121,6 @@ class UnsuspendCaseProcessorTest {
 	void postProcess() {
 		processor.postProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);
 
-		verifyNoInteractions(pobClientMock, pobPayloadMock, mapMock);
+		verifyNoInteractions(pobIntegrationMock, pobPayloadMock, mapMock);
 	}
 }

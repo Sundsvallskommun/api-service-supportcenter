@@ -10,7 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zalando.problem.Problem;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @Service
 public class ConfigurationService {
@@ -18,18 +18,18 @@ public class ConfigurationService {
 	private static final String VALIDATION_ERROR_TEMPLATE = "%s: '%s' is not a valid value";
 	private static final String SERIAL_NUMBER_ERROR_TEMPLATE = "No ID for serialNumber: '%s' was found in POB-configurationitems";
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 
-	public ConfigurationService(POBClient pobClient) {
-		this.pobClient = pobClient;
+	public ConfigurationService(POBIntegration pobIntegration) {
+		this.pobIntegration = pobIntegration;
 	}
 
 	public List<String> getCaseCategoryList(final String pobKey) {
-		return toCaseCategoryList(pobClient.getCaseCategories(pobKey));
+		return toCaseCategoryList(pobIntegration.getCaseCategories(pobKey));
 	}
 
 	public List<String> getClosureCodeList(final String pobKey) {
-		return toClosureCodeList(pobClient.getClosureCodes(pobKey));
+		return toClosureCodeList(pobIntegration.getClosureCodes(pobKey));
 	}
 
 	public void validateCaseCategory(final String pobKey, final String caseCategory) {
@@ -47,7 +47,7 @@ public class ConfigurationService {
 	}
 
 	public String getSerialNumberId(final String pobKey, final String serialNumber) {
-		return toConfigurationItemList(pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber)).stream()
+		return toConfigurationItemList(pobIntegration.getConfigurationItemsBySerialNumber(pobKey, serialNumber)).stream()
 			.filter(StringUtils::hasText)
 			.findAny()
 			.orElseThrow(() -> Problem.valueOf(BAD_REQUEST, format(SERIAL_NUMBER_ERROR_TEMPLATE, serialNumber)));

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.zalando.problem.Status;
 import org.zalando.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 /**
  * Performs action to remove suspension for case
@@ -22,10 +22,10 @@ public class UnsuspendCaseProcessor implements ProcessorInterface {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UnsuspendCaseProcessor.class);
 
-	private final POBClient pobClient;
+	private final POBIntegration pobIntegration;
 
-	public UnsuspendCaseProcessor(POBClient pobClient) {
-		this.pobClient = pobClient;
+	public UnsuspendCaseProcessor(POBIntegration pobIntegration) {
+		this.pobIntegration = pobIntegration;
 	}
 
 	@Override
@@ -37,9 +37,9 @@ public class UnsuspendCaseProcessor implements ProcessorInterface {
 	public void preProcess(String pobKey, String caseId, UpdateCaseRequest updateCaseRequest, PobPayload pobPayload) {
 		LOG.debug("Start processing 'preProcess'-logic to unsuspend case with caseId:'{}'", caseId);
 		try {
-			pobClient.getSuspension(pobKey, caseId); // If request returns answer (not 404), an ongoing suspension exists
+			pobIntegration.getSuspension(pobKey, caseId); // If request returns answer (not 404), an ongoing suspension exists
 			LOG.debug("Case '{}' is suspended, will delete suspension and modify payload data for key: '{}'", caseId, KEY_SUSPENSION);
-			pobClient.deleteSuspension(pobKey, caseId); // Delete suspension
+			pobIntegration.deleteSuspension(pobKey, caseId); // Delete suspension
 			pobPayload.getData().put(KEY_SUSPENSION, null); // Set suspension status to null on POB payload
 		} catch (final ThrowableProblem e) {
 			// If POB returns other status than 404, re throw the exception

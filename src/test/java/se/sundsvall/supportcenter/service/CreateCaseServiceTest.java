@@ -51,13 +51,13 @@ import se.sundsvall.supportcenter.api.model.Address;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCaseServiceTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
@@ -131,8 +131,8 @@ class CreateCaseServiceTest {
 		caseService.createCase(pobKey, request);
 
 		// Verification
-		verify(pobClientMock).createCase(eq(pobKey), pobPayloadCaptor.capture());
-		verifyNoMoreInteractions(pobClientMock);
+		verify(pobIntegrationMock).createCase(eq(pobKey), pobPayloadCaptor.capture());
+		verifyNoMoreInteractions(pobIntegrationMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();
 		assertThat(pobPayloadValue).isNotNull();
@@ -212,6 +212,6 @@ class CreateCaseServiceTest {
 
 		// Verification
 		verify(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
-		verifyNoInteractions(pobClientMock);
+		verifyNoInteractions(pobIntegrationMock);
 	}
 }

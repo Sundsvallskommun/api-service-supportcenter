@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.CaseService;
 import se.sundsvall.supportcenter.service.ConfigurationService;
 import se.sundsvall.supportcenter.service.processor.CaseStatusProcessor;
@@ -39,9 +39,9 @@ import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 
 /**
  * Class for testing that cube support flow logic produces valid POB payload when setting status of case to 'AssignBack'
- * 
+ *
  * Valid payload example is (memo is optional):
- * 
+ *
  * {
  * "type": "Case",
  * "links": [],
@@ -68,16 +68,16 @@ import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 class UpdateCaseAssignBackTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
 
 	@Spy
-	private ProcessorInterface processorSpy = new CaseStatusProcessor();
+	private final ProcessorInterface processorSpy = new CaseStatusProcessor();
 
 	@Spy
-	private List<ProcessorInterface> processorListSpy = new ArrayList<>();
+	private final List<ProcessorInterface> processorListSpy = new ArrayList<>();
 
 	@InjectMocks
 	private CaseService caseService;
@@ -112,8 +112,8 @@ class UpdateCaseAssignBackTest {
 		verify(processorSpy, times(2)).shouldProcess(request);
 		verify(processorSpy).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
 		verify(processorSpy).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
-		verify(pobClientMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
-		verifyNoMoreInteractions(pobClientMock, processorSpy);
+		verify(pobIntegrationMock).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		verifyNoMoreInteractions(pobIntegrationMock, processorSpy);
 		verifyNoInteractions(configurationServiceMock);
 
 		final var pobPayloadValue = pobPayloadCaptor.getValue();

@@ -9,14 +9,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
-import se.sundsvall.supportcenter.integration.pob.POBClient;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.mapper.ConfigurationMapper;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateAssetServiceTest {
 
 	@Mock
-	private POBClient pobClientMock;
+	private POBIntegration pobIntegrationMock;
 
 	@Mock
 	private ConfigurationService configurationServiceMock;
@@ -42,6 +42,6 @@ class UpdateAssetServiceTest {
 
 		// Verification
 		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNbr);
-		verify(pobClientMock).updateConfigurationItem(pobKey, ConfigurationMapper.toPobPayload(id, updateAssetRequest));
+		verify(pobIntegrationMock).updateConfigurationItem(pobKey, ConfigurationMapper.toPobPayload(id, updateAssetRequest));
 	}
 }
