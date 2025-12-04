@@ -53,6 +53,8 @@ class CaseTest {
 		final var contactPerson = "contactPerson";
 		final var phoneNumber = "phoneNumber";
 		final var email = "email";
+		final var imeiNumber = "imeiNumber";
+		final var modelName = "modelName";
 		final var address = Address.create().withCity("city").withPostalCode("postalCode").withStreet("street");
 
 		final var aCase = Case.create()
@@ -82,6 +84,8 @@ class CaseTest {
 			.withContactPerson(contactPerson)
 			.withPhoneNumber(phoneNumber)
 			.withEmail(email)
+			.withImeiNumber(imeiNumber)
+			.withModelName(modelName)
 			.withAddress(address);
 
 		assertThat(aCase).hasNoNullFieldsOrProperties();
@@ -111,6 +115,8 @@ class CaseTest {
 		assertThat(aCase.getContactPerson()).isEqualTo(contactPerson);
 		assertThat(aCase.getPhoneNumber()).isEqualTo(phoneNumber);
 		assertThat(aCase.getEmail()).isEqualTo(email);
+		assertThat(aCase.getImeiNumber()).isEqualTo(imeiNumber);
+		assertThat(aCase.getModelName()).isEqualTo(modelName);
 		assertThat(aCase.getAddress()).isEqualTo(address);
 	}
 

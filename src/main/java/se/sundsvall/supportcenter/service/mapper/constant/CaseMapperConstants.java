@@ -32,6 +32,7 @@ public final class CaseMapperConstants {
 	public static final String KEY_CASE_STATUS = "CaseStatus";
 	public static final String KEY_CLOSURE_CODE = "ClosureCode";
 	public static final String KEY_SHOP_CI_NAME = "Virtual.Shop_CI_Name";
+	public static final String KEY_ITEM_NAME = "Virtual.ItemName";
 	public static final String KEY_EXTERNAL_CASE_ID = "Virtual.ExternalCaseId";
 	public static final String KEY_RESPONSIBLE = "Responsible";
 	public static final String KEY_RESPONSIBLE_GROUP = "ResponsibleGroup";

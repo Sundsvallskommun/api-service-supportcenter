@@ -85,6 +85,12 @@ public class Case {
 	@Schema(description = "Email", example = "test.testsson@sundsvall.se")
 	private String email;
 
+	@Schema(description = "IMEI number", example = "123456789012345")
+	private String imeiNumber;
+
+	@Schema(description = "Model name", example = "iPhone 14 Pro")
+	private String modelName;
+
 	@Valid
 	private Address address;
 
@@ -417,6 +423,32 @@ public class Case {
 		return this;
 	}
 
+	public String getImeiNumber() {
+		return imeiNumber;
+	}
+
+	public void setImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+	}
+
+	public Case withImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+		return this;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public Case withModelName(String modelName) {
+		this.modelName = modelName;
+		return this;
+	}
+
 	public Note getNote() {
 		return note;
 	}
@@ -446,7 +478,7 @@ public class Case {
 	@Override
 	public int hashCode() {
 		return Objects.hash(caseId, note, description, caseType, caseCategory, customerContact, externalArticleNumber, managementCompany, priority, personal, responsibleGroup, externalServiceId, office, freeText,
-			joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, address);
+			joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, imeiNumber, modelName, address);
 	}
 
 	@Override
@@ -466,7 +498,7 @@ public class Case {
 			&& Objects.equals(businessNumber, other.businessNumber) && Objects.equals(activityNumber, other.activityNumber) && Objects.equals(projectNumber, other.projectNumber)
 			&& Objects.equals(objectNumber, other.objectNumber) && Objects.equals(counterPart, other.counterPart) && Objects.equals(ciDescription, other.ciDescription)
 			&& Objects.equals(contactPerson, other.contactPerson) && Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(email, other.email)
-			&& Objects.equals(address, other.address);
+			&& Objects.equals(imeiNumber, other.imeiNumber) && Objects.equals(modelName, other.modelName) && Objects.equals(address, other.address);
 	}
 
 	@Override
@@ -483,7 +515,7 @@ public class Case {
 			.append(", activityNumber=").append(activityNumber).append(", objectNumber=").append(objectNumber)
 			.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
 			.append(", contactPerson=").append(contactPerson)
-			.append(", phoneNumber=").append(phoneNumber).append(", email=").append(email).append(", address=").append(address).append("]");
+			.append(", phoneNumber=").append(phoneNumber).append(", email=").append(email).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append(", address=").append(address).append("]");
 		return builder.toString();
 	}
 }

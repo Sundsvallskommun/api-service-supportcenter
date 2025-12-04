@@ -31,6 +31,12 @@ public class UpdateCaseRequest {
 	@Schema(description = "Serial number", example = "FRGDZ1J")
 	private String serialNumber;
 
+	@Schema(description = "IMEI number", example = "123456789012345")
+	private String imeiNumber;
+
+	@Schema(description = "Model name", example = "iPhone 14 Pro")
+	private String modelName;
+
 	public static UpdateCaseRequest create() {
 		return new UpdateCaseRequest();
 	}
@@ -139,9 +145,35 @@ public class UpdateCaseRequest {
 		return this;
 	}
 
+	public String getImeiNumber() {
+		return imeiNumber;
+	}
+
+	public void setImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+	}
+
+	public UpdateCaseRequest withImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+		return this;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public UpdateCaseRequest withModelName(String modelName) {
+		this.modelName = modelName;
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(caseCategory, caseStatus, closureCode, externalCaseId, hardwareName, note, responsibleGroup, serialNumber);
+		return Objects.hash(caseCategory, caseStatus, closureCode, externalCaseId, hardwareName, note, responsibleGroup, serialNumber, imeiNumber, modelName);
 	}
 
 	@Override
@@ -155,7 +187,7 @@ public class UpdateCaseRequest {
 		UpdateCaseRequest other = (UpdateCaseRequest) obj;
 		return Objects.equals(caseCategory, other.caseCategory) && Objects.equals(caseStatus, other.caseStatus) && Objects.equals(closureCode, other.closureCode) && Objects.equals(
 			externalCaseId, other.externalCaseId) && Objects.equals(hardwareName, other.hardwareName) && Objects.equals(note, other.note) && Objects.equals(
-				responsibleGroup, other.responsibleGroup) && Objects.equals(serialNumber, other.serialNumber);
+				responsibleGroup, other.responsibleGroup) && Objects.equals(serialNumber, other.serialNumber) && Objects.equals(imeiNumber, other.imeiNumber) && Objects.equals(modelName, other.modelName);
 	}
 
 	@Override
@@ -163,7 +195,7 @@ public class UpdateCaseRequest {
 		StringBuilder builder = new StringBuilder();
 		builder.append("UpdateCaseRequest [note=").append(note).append(", externalCaseId=").append(externalCaseId).append(", caseStatus=").append(caseStatus).append(
 			", caseCategory=").append(caseCategory).append(", closureCode=").append(closureCode).append(", hardwareName=").append(hardwareName).append(
-				", responsibleGroup=").append(responsibleGroup).append(", serialNumber=").append(serialNumber).append("]");
+				", responsibleGroup=").append(responsibleGroup).append(", serialNumber=").append(serialNumber).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append("]");
 		return builder.toString();
 	}
 }

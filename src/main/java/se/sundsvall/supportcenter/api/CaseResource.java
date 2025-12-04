@@ -84,7 +84,7 @@ class CaseResource {
 	ResponseEntity<Void> updateCase(
 		@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId String municipalityId,
 		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
-		@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId,
+		@PathVariable @Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") String caseId,
 		@RequestBody @Valid UpdateCaseRequest body) {
 
 		caseService.updateCase(pobKey, caseId, body);
@@ -105,7 +105,7 @@ class CaseResource {
 	ResponseEntity<Case> getCase(
 		@Parameter(name = "municipalityId", description = "Municipality Id", example = "2281") @PathVariable @ValidMunicipalityId String municipalityId,
 		@Parameter(name = "pobKey", description = "The POB API-key", required = true) @RequestHeader("pobKey") String pobKey,
-		@Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") @PathVariable(name = "caseId") String caseId) {
+		@PathVariable @Parameter(name = "caseId", description = "The Case-ID", required = true, example = "81471222") String caseId) {
 
 		return ok(caseService.getCase(pobKey, caseId));
 	}

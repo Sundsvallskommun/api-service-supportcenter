@@ -1,0 +1,38 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"CIInfo.Ci": "15857",
+						"Id": "867408",
+						"Virtual.Shop_CI_Name": "702548572062338",
+						"Virtual.ItemName": "Apple iPhone 14 Pro"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Updated imei and modelName"
+						}
+					}
+				}
+			}
+		],
+		"urlPath": "/pob/cases"
+	},
+	"response": {
+		"status": 200
+	},
+	"name": "pob-update-case-updateSerialNumber"
+}

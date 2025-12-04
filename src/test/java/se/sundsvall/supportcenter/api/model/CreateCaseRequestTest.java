@@ -51,6 +51,8 @@ class CreateCaseRequestTest {
 		final var contactPerson = "contactPerson";
 		final var phoneNumber = "phoneNumber";
 		final var email = "email";
+		final var imeiNumber = "imeiNumber";
+		final var modelName = "modelName";
 		final var address = Address.create().withCity("city").withPostalCode("postalCode").withStreet("street");
 
 		final var createCaseRequest = CreateCaseRequest.create()
@@ -79,6 +81,8 @@ class CreateCaseRequestTest {
 			.withContactPerson(contactPerson)
 			.withPhoneNumber(phoneNumber)
 			.withEmail(email)
+			.withImeiNumber(imeiNumber)
+			.withModelName(modelName)
 			.withAddress(address);
 
 		assertThat(createCaseRequest).hasNoNullFieldsOrProperties();
@@ -107,6 +111,8 @@ class CreateCaseRequestTest {
 		assertThat(createCaseRequest.getContactPerson()).isEqualTo(contactPerson);
 		assertThat(createCaseRequest.getPhoneNumber()).isEqualTo(phoneNumber);
 		assertThat(createCaseRequest.getEmail()).isEqualTo(email);
+		assertThat(createCaseRequest.getImeiNumber()).isEqualTo(imeiNumber);
+		assertThat(createCaseRequest.getModelName()).isEqualTo(modelName);
 		assertThat(createCaseRequest.getAddress()).isEqualTo(address);
 	}
 

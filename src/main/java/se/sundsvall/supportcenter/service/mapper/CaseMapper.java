@@ -21,6 +21,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_SERVICE_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_FREE_TEXT;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ITEM_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_JOIN_CONTACT;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_MANAGEMENT_COMPANY;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_OBJECT_NUMBER;
@@ -32,6 +33,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_PROJECT_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_NUMBER;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_STREET;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUBACCOUNT;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
@@ -96,6 +98,8 @@ public final class CaseMapper {
 		ofNullable(createCaseRequest.getContactPerson()).ifPresent(value -> dataMap.put(KEY_CONTACT_PERSON, value));
 		ofNullable(createCaseRequest.getPhoneNumber()).ifPresent(value -> dataMap.put(KEY_PHONE_NUMBER, value));
 		ofNullable(createCaseRequest.getEmail()).ifPresent(value -> dataMap.put(KEY_EMAIL, value));
+		ofNullable(createCaseRequest.getImeiNumber()).ifPresent(value -> dataMap.put(KEY_SHOP_CI_NAME, value));
+		ofNullable(createCaseRequest.getModelName()).ifPresent(value -> dataMap.put(KEY_ITEM_NAME, value));
 
 		return dataMap;
 	}
@@ -130,6 +134,8 @@ public final class CaseMapper {
 			.withCiDescription((String) data.get(KEY_CI_DESCRIPTION))
 			.withPhoneNumber((String) data.get(KEY_PHONE_NUMBER))
 			.withEmail((String) data.get(KEY_EMAIL))
+			.withImeiNumber((String) data.get(KEY_SHOP_CI_NAME))
+			.withModelName((String) data.get(KEY_ITEM_NAME))
 			.withAddress(Address.create()
 				.withStreet((String) data.get(KEY_STREET))
 				.withPostalCode((String) data.get(KEY_POSTAL_CODE))

@@ -15,6 +15,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CLOSURE_CODE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_CASE_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ITEM_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
@@ -93,6 +94,8 @@ public final class UpdateCaseMapper {
 			dataMap.put(KEY_RESPONSIBLE, null); // Responsible must be cleared if ResponsibleGroup is set.
 			dataMap.put(KEY_RESPONSIBLE_GROUP, value);
 		});
+		ofNullable(updateCaseRequest.getImeiNumber()).ifPresent(value -> dataMap.put(KEY_SHOP_CI_NAME, value));
+		ofNullable(updateCaseRequest.getModelName()).ifPresent(value -> dataMap.put(KEY_ITEM_NAME, value));
 		return dataMap;
 	}
 

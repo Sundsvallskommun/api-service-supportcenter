@@ -1,5 +1,6 @@
 package se.sundsvall.supportcenter.api.model;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -109,6 +110,12 @@ public class CreateCaseRequest {
 	@NotBlank
 	@Schema(description = "Email", example = "test.testsson@sundsvall.se", requiredMode = REQUIRED)
 	private String email;
+
+	@Schema(description = "IMEI number", example = "123456789012345", requiredMode = NOT_REQUIRED)
+	private String imeiNumber;
+
+	@Schema(description = "Model name", example = "iPhone 14 Pro", requiredMode = NOT_REQUIRED)
+	private String modelName;
 
 	@Valid
 	private Address address;
@@ -429,6 +436,32 @@ public class CreateCaseRequest {
 		return this;
 	}
 
+	public String getImeiNumber() {
+		return imeiNumber;
+	}
+
+	public void setImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+	}
+
+	public CreateCaseRequest withImeiNumber(String imeiNumber) {
+		this.imeiNumber = imeiNumber;
+		return this;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public CreateCaseRequest withModelName(String modelName) {
+		this.modelName = modelName;
+		return this;
+	}
+
 	public Note getNote() {
 		return note;
 	}
@@ -458,7 +491,7 @@ public class CreateCaseRequest {
 	@Override
 	public int hashCode() {
 		return Objects.hash(note, description, caseType, caseCategory, customerContact, externalArticleNumber, managementCompany, priority, personal, responsibleGroup, externalServiceId, office, freeText,
-			joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, address);
+			joinContact, responsibilityNumber, subaccount, businessNumber, activityNumber, projectNumber, objectNumber, counterPart, ciDescription, contactPerson, phoneNumber, email, imeiNumber, modelName, address);
 	}
 
 	@Override
@@ -478,7 +511,7 @@ public class CreateCaseRequest {
 			&& Objects.equals(businessNumber, other.businessNumber) && Objects.equals(activityNumber, other.activityNumber) &&
 			Objects.equals(projectNumber, other.projectNumber) && Objects.equals(objectNumber, other.objectNumber)
 			&& Objects.equals(counterPart, other.counterPart) && Objects.equals(ciDescription, other.ciDescription) && Objects.equals(contactPerson, other.contactPerson)
-			&& Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(email, other.email) && Objects.equals(address, other.address);
+			&& Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(email, other.email) && Objects.equals(imeiNumber, other.imeiNumber) && Objects.equals(modelName, other.modelName) && Objects.equals(address, other.address);
 	}
 
 	@Override
@@ -496,7 +529,7 @@ public class CreateCaseRequest {
 			.append(", projectNumber=").append(projectNumber).append(", objectNumber=").append(objectNumber).append(", counterPart=").append(counterPart)
 			.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
 			.append(", contactPerson=").append(contactPerson).append(", phoneNumber=").append(phoneNumber)
-			.append(", email=").append(email).append(", address=").append(address).append("]");
+			.append(", email=").append(email).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append(", address=").append(address).append("]");
 		return builder.toString();
 	}
 }

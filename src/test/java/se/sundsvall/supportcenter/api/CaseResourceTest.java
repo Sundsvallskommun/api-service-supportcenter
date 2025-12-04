@@ -67,6 +67,8 @@ class CaseResourceTest {
 			.withContactPerson("contactPerson")
 			.withPhoneNumber("phoneNumber")
 			.withEmail("email")
+			.withImeiNumber("imei")
+			.withModelName("modelName")
 			.withAddress(Address.create().withCity("city").withPostalCode("postalCode").withStreet("street"));
 
 		when(caseServiceMock.createCase(POBKEY_HEADER_VALUE, createCaseRequest)).thenReturn("caseId");

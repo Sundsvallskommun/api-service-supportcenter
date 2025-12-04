@@ -35,6 +35,8 @@ class UpdateCaseRequestTest {
 		final var note = Note.create().withType(NoteType.PROBLEM).withText("text");
 		final var responsibleGroup = "responsibleGroup";
 		final var serialNumber = "serialNumber";
+		final var imeiNumber = "imeiNumber";
+		final var modelName = "modelName";
 		final var updateCaseRequest = UpdateCaseRequest.create()
 			.withCaseCategory(caseCategory)
 			.withCaseStatus(caseStatus)
@@ -43,7 +45,9 @@ class UpdateCaseRequestTest {
 			.withHardwareName(hardwareName)
 			.withNote(note)
 			.withResponsibleGroup(responsibleGroup)
-			.withSerialNumber(serialNumber);
+			.withSerialNumber(serialNumber)
+			.withImeiNumber(imeiNumber)
+			.withModelName(modelName);
 
 		assertThat(updateCaseRequest).isNotNull().hasNoNullFieldsOrProperties();
 		assertThat(updateCaseRequest.getCaseCategory()).isEqualTo(caseCategory);
@@ -54,6 +58,8 @@ class UpdateCaseRequestTest {
 		assertThat(updateCaseRequest.getNote()).isEqualTo(note);
 		assertThat(updateCaseRequest.getResponsibleGroup()).isEqualTo(responsibleGroup);
 		assertThat(updateCaseRequest.getSerialNumber()).isEqualTo(serialNumber);
+		assertThat(updateCaseRequest.getImeiNumber()).isEqualTo(imeiNumber);
+		assertThat(updateCaseRequest.getModelName()).isEqualTo(modelName);
 	}
 
 	@Test

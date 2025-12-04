@@ -370,7 +370,8 @@
 		"UnreadMailCount": "",
 		"Times.TimeUntilSolved": "0,00",
 		"CompletedTasks": "",
-		"Virtual.Shop_CI_Name": "",
+		"Virtual.Shop_CI_Name": "imeiNumber",
+		"Virtual.ItemName": "modelName",
 		"Virtual.CAS_VIR_Servername": "",
 		"TimeLimits.NextEscalationDate": "2022-09-06 10:35:52"
 	},
