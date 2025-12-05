@@ -8,6 +8,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CLOSURE_CODE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_CASE_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ITEM_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
@@ -297,6 +298,35 @@ class UpdateCaseMapperTest {
 		assertThat(result.getData()).isNotNull()
 			.doesNotContainKey(KEY_RESPONSIBLE_GROUP)
 			.doesNotContainKey(KEY_RESPONSIBLE);
+		assertThat(result.getMemo()).isNull();
+	}
+
+	@Test
+	void toPobPayloadWithImeiNumberAndModelName() {
+
+		// Parameter values.
+		final var caseId = "caseId";
+		final var imeiNumber = "imeiNumber";
+		final var modelName = "modelName";
+
+		final var updateCaseRequest = UpdateCaseRequest.create()
+			.withImeiNumber(imeiNumber)
+			.withModelName(modelName);
+
+		// Call
+		final var resultList = UpdateCaseMapper.toPobPayloads(caseId, updateCaseRequest);
+
+		// Verification
+		assertThat(resultList).hasSize(1);
+		final var result = resultList.stream().findFirst().get();
+
+		assertThat(result).isNotNull();
+		assertThat(result.getLinks()).isNotNull().isEmpty();
+		assertThat(result.getType()).isEqualTo(DEFAULT_TYPE);
+		assertThat(result.getData()).isNotNull()
+			.containsEntry(KEY_ID, caseId)
+			.containsEntry(KEY_SHOP_CI_NAME, imeiNumber)
+			.containsEntry(KEY_ITEM_NAME, modelName);
 		assertThat(result.getMemo()).isNull();
 	}
 }

@@ -69,6 +69,7 @@ class CaseMapperConstantsTest {
 		assertThat(CaseMapperConstants.KEY_RESPONSIBLE_GROUP).isEqualTo("ResponsibleGroup");
 		assertThat(CaseMapperConstants.KEY_RESPONSIBLE_NUMBER).isEqualTo("Virtual.Shop_Kst_Ansvarsnummer");
 		assertThat(CaseMapperConstants.KEY_SHOP_CI_NAME).isEqualTo("Virtual.Shop_CI_Name");
+		assertThat(CaseMapperConstants.KEY_ITEM_NAME).isEqualTo("Virtual.ItemName");
 		assertThat(CaseMapperConstants.KEY_STREET).isEqualTo("Virtual.Shop_Adr_Gatuadress");
 		assertThat(CaseMapperConstants.KEY_SUBACCOUNT).isEqualTo("Virtual.Shop_Kst_Underkonto");
 		assertThat(CaseMapperConstants.KEY_SUSPENSION).isEqualTo("Suspension");

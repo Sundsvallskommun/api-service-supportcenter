@@ -1,10 +1,12 @@
 package openapi;
 
+import static java.nio.file.Files.writeString;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.web.util.UriComponentsBuilder.fromPath;
-import static se.sundsvall.dept44.util.ResourceUtils.asString;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
@@ -15,10 +17,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import se.sundsvall.dept44.util.ResourceUtils;
 import se.sundsvall.supportcenter.Application;
 
+import net.javacrumbs.jsonunit.core.Option;
+
 @ActiveProfiles("it")
-@SpringBootTest(webEnvironment = RANDOM_PORT, classes = { Application.class }, properties = {
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Application.class}, properties = {
 	"spring.main.banner-mode=off",
 	"logging.level.se.sundsvall.dept44.payload=OFF"
 })
@@ -39,12 +46,14 @@ class OpenApiSpecificationIT {
 	private TestRestTemplate restTemplate;
 
 	@Test
-	void compareOpenApiSpecifications() {
-		final var existingOpenApiSpecification = asString(openApiResource);
+	void compareOpenApiSpecifications() throws IOException {
+		final var existingOpenApiSpecification = ResourceUtils.asString(openApiResource);
 		final var currentOpenApiSpecification = getCurrentOpenApiSpecification();
 
+		writeString(Path.of("target/openapi.yml"), currentOpenApiSpecification);
+
 		assertThatJson(toJson(currentOpenApiSpecification))
-			.withOptions(IGNORING_ARRAY_ORDER)
+			.withOptions(List.of(Option.IGNORING_ARRAY_ORDER))
 			.whenIgnoringPaths("servers")
 			.isEqualTo(toJson(existingOpenApiSpecification));
 	}
@@ -55,7 +64,7 @@ class OpenApiSpecificationIT {
 	 * @return the current OpenAPI specification
 	 */
 	private String getCurrentOpenApiSpecification() {
-		final var uri = fromPath("/api-docs.yaml")
+		final var uri = UriComponentsBuilder.fromPath("/api-docs.yaml")
 			.buildAndExpand(openApiName, openApiVersion)
 			.toUri();
 

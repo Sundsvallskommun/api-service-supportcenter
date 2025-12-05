@@ -1,13 +1,14 @@
 package apptest;
 
-import org.junit.jupiter.api.Test;
-import se.sundsvall.dept44.test.AbstractAppTest;
-import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
-import se.sundsvall.supportcenter.Application;
-
 import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
+
+import org.junit.jupiter.api.Test;
+
+import se.sundsvall.dept44.test.AbstractAppTest;
+import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
+import se.sundsvall.supportcenter.Application;
 
 @WireMockAppTestSuite(files = "classpath:/UpdateCaseOrderFlow/", classes = Application.class)
 class UpdateCaseOrderFlowIT extends AbstractAppTest {
@@ -246,6 +247,18 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 
 		setupCall()
 			.withServicePath(PATH + "/867415")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test020_updateImeiAndModelName() {
+
+		setupCall()
+			.withServicePath(PATH + "/867408")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)

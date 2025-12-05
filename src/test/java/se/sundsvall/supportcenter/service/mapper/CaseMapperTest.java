@@ -17,6 +17,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_ARTICLE_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_SERVICE_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_FREE_TEXT;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ITEM_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_JOIN_CONTACT;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_MANAGEMENT_COMPANY;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_OBJECT_NUMBER;
@@ -28,6 +29,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_PROJECT_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_NUMBER;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_STREET;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUBACCOUNT;
 
@@ -73,6 +75,8 @@ class CaseMapperTest {
 		final var contactPerson = "contactPerson";
 		final var phoneNumber = "phoneNumber";
 		final var email = "email";
+		final var imeiNumber = "imeiNumber";
+		final var modelName = "modelName";
 		final var address = Address.create().withCity("city").withPostalCode("postalCode").withStreet("street");
 
 		final var request = CreateCaseRequest.create()
@@ -101,6 +105,8 @@ class CaseMapperTest {
 			.withContactPerson(contactPerson)
 			.withPhoneNumber(phoneNumber)
 			.withEmail(email)
+			.withImeiNumber(imeiNumber)
+			.withModelName(modelName)
 			.withAddress(address);
 
 		// Call
@@ -136,6 +142,8 @@ class CaseMapperTest {
 			.containsEntry(KEY_CONTACT_PERSON, contactPerson)
 			.containsEntry(KEY_PHONE_NUMBER, phoneNumber)
 			.containsEntry(KEY_EMAIL, email)
+			.containsEntry(KEY_SHOP_CI_NAME, imeiNumber)
+			.containsEntry(KEY_ITEM_NAME, modelName)
 			.containsEntry(KEY_STREET, address.getStreet())
 			.containsEntry(KEY_CITY, address.getCity())
 			.containsEntry(KEY_POSTAL_CODE, address.getPostalCode());
@@ -176,6 +184,8 @@ class CaseMapperTest {
 		assertThat(aCase.getContactPerson()).isEqualTo("contactPerson");
 		assertThat(aCase.getPhoneNumber()).isEqualTo("phoneNumber");
 		assertThat(aCase.getEmail()).isEqualTo("email");
+		assertThat(aCase.getImeiNumber()).isEqualTo("imeiNumber");
+		assertThat(aCase.getModelName()).isEqualTo("modelName");
 		assertThat(aCase.getAddress().getStreet()).isEqualTo("street");
 		assertThat(aCase.getAddress().getCity()).isEqualTo("city");
 		assertThat(aCase.getAddress().getPostalCode()).isEqualTo("postalCode");
