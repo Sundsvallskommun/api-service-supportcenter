@@ -1,12 +1,13 @@
 # SupportCenter
 
-_SupportCenter is a microservice for managing and updating cases within the POB (Point of Business) system. It ensures efficient handling of case updates, status changes, and synchronization with POB._
+_SupportCenter is a microservice for managing and updating cases within the POB (Point of Business) system. It ensures
+efficient handling of case updates, status changes, and synchronization with POB._
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Java 21 or higher**
+- **Java 25 or higher**
 - **Maven**
 - **Git**
 - **[Dependent Microservices](#dependencies)**
@@ -27,7 +28,8 @@ _SupportCenter is a microservice for managing and updating cases within the POB 
 
 3. **Ensure dependent services are running:**
 
-   If this microservice depends on other services, make sure they are up and accessible. See [Dependencies](#dependencies) for more details.
+   If this microservice depends on other services, make sure they are up and accessible.
+   See [Dependencies](#dependencies) for more details.
 
 4. **Build and run the application:**
 
@@ -66,7 +68,8 @@ curl -X GET http://localhost:8080/api/2281/assets
 
 ## Configuration
 
-Configuration is crucial for the application to run successfully. Ensure all necessary settings are configured in `application.yml`.
+Configuration is crucial for the application to run successfully. Ensure all necessary settings are configured in
+`application.yml`.
 
 ### Key Configuration Parameters
 
@@ -97,7 +100,8 @@ Configuration is crucial for the application to run successfully. Ensure all nec
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/Sundsvallskommun/.github/blob/main/.github/CONTRIBUTING.md) for guidelines.
+Contributions are welcome! Please
+see [CONTRIBUTING.md](https://github.com/Sundsvallskommun/.github/blob/main/.github/CONTRIBUTING.md) for guidelines.
 
 ## License
 

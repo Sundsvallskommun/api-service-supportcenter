@@ -10,31 +10,31 @@ public class UpdateCaseRequest {
 	@Valid
 	private Note note;
 
-	@Schema(description = "External case-ID", example = "INC232323")
+	@Schema(description = "External case-ID", examples = "INC232323")
 	private String externalCaseId;
 
-	@Schema(description = "Case status", example = "In Process")
+	@Schema(description = "Case status", examples = "In Process")
 	private String caseStatus;
 
-	@Schema(description = "Case category", example = "IT Användarhantering")
+	@Schema(description = "Case category", examples = "IT Användarhantering")
 	private String caseCategory;
 
-	@Schema(description = "Closure code", example = "IT Byte/uppgradering av hårdvara")
+	@Schema(description = "Closure code", examples = "IT Byte/uppgradering av hårdvara")
 	private String closureCode;
 
 	@Schema(description = "Hardware name")
 	private String hardwareName;
 
-	@Schema(description = "Responsible group", example = "First Line IT")
+	@Schema(description = "Responsible group", examples = "First Line IT")
 	private String responsibleGroup;
 
-	@Schema(description = "Serial number", example = "FRGDZ1J")
+	@Schema(description = "Serial number", examples = "FRGDZ1J")
 	private String serialNumber;
 
-	@Schema(description = "IMEI number", example = "123456789012345")
+	@Schema(description = "IMEI number", examples = "123456789012345")
 	private String imeiNumber;
 
-	@Schema(description = "Model name", example = "iPhone 14 Pro")
+	@Schema(description = "Model name", examples = "iPhone 14 Pro")
 	private String modelName;
 
 	public static UpdateCaseRequest create() {

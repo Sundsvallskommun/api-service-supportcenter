@@ -7,88 +7,88 @@ import java.util.Objects;
 @Schema(description = "Case model")
 public class Case {
 
-	@Schema(description = "Case id", example = "81471222")
+	@Schema(description = "Case id", examples = "81471222")
 	private String caseId;
 
 	@Valid
 	private Note note;
 
-	@Schema(description = "Description", example = "Beställning av tjänst Test4")
+	@Schema(description = "Description", examples = "Beställning av tjänst Test4")
 	private String description;
 
-	@Schema(description = "Case type", example = "Service Request")
+	@Schema(description = "Case type", examples = "Service Request")
 	private String caseType;
 
-	@Schema(description = "Case category", example = "IT Användarhantering")
+	@Schema(description = "Case category", examples = "IT Användarhantering")
 	private String caseCategory;
 
-	@Schema(description = "Customer contact", example = "test02test")
+	@Schema(description = "Customer contact", examples = "test02test")
 	private String customerContact;
 
 	@Schema(description = "External article number")
 	private String externalArticleNumber;
 
-	@Schema(description = "ManagementCompany", example = "BoU")
+	@Schema(description = "ManagementCompany", examples = "BoU")
 	private String managementCompany;
 
-	@Schema(description = "Priority", example = "IT4")
+	@Schema(description = "Priority", examples = "IT4")
 	private String priority;
 
-	@Schema(description = "Personal", example = "true")
+	@Schema(description = "Personal", examples = "true")
 	private Boolean personal;
 
-	@Schema(description = "Responsible group", example = "First Line IT")
+	@Schema(description = "Responsible group", examples = "First Line IT")
 	private String responsibleGroup;
 
-	@Schema(description = "External service id", example = "123")
+	@Schema(description = "External service id", examples = "123")
 	private String externalServiceId;
 
-	@Schema(description = "Office", example = "true")
+	@Schema(description = "Office", examples = "true")
 	private Boolean office;
 
-	@Schema(description = "Free text", example = "leverans fredagar")
+	@Schema(description = "Free text", examples = "leverans fredagar")
 	private String freeText;
 
-	@Schema(description = "Join contact", example = "test01test")
+	@Schema(description = "Join contact", examples = "test01test")
 	private String joinContact;
 
-	@Schema(description = "Responsibility number", example = "15220100")
+	@Schema(description = "Responsibility number", examples = "15220100")
 	private String responsibilityNumber;
 
-	@Schema(description = "Subaccount", example = "974310")
+	@Schema(description = "Subaccount", examples = "974310")
 	private String subaccount;
 
-	@Schema(description = "Business number", example = "920350")
+	@Schema(description = "Business number", examples = "920350")
 	private String businessNumber;
 
-	@Schema(description = "Activity number", example = "5662")
+	@Schema(description = "Activity number", examples = "5662")
 	private String activityNumber;
 
-	@Schema(description = "Project number", example = "17071")
+	@Schema(description = "Project number", examples = "17071")
 	private String projectNumber;
 
-	@Schema(description = "Object number", example = "6310000")
+	@Schema(description = "Object number", examples = "6310000")
 	private String objectNumber;
 
-	@Schema(description = "Counterpart", example = "115")
+	@Schema(description = "Counterpart", examples = "115")
 	private String counterPart;
 
-	@Schema(description = "CI description", example = "Tydlig och bra CI beskrivning")
+	@Schema(description = "CI description", examples = "Tydlig och bra CI beskrivning")
 	private String ciDescription;
 
-	@Schema(description = "Contact person", example = "Test Testsson")
+	@Schema(description = "Contact person", examples = "Test Testsson")
 	private String contactPerson;
 
-	@Schema(description = "Phone number", example = "070-11111111")
+	@Schema(description = "Phone number", examples = "070-11111111")
 	private String phoneNumber;
 
-	@Schema(description = "Email", example = "test.testsson@sundsvall.se")
+	@Schema(description = "Email", examples = "test.testsson@sundsvall.se")
 	private String email;
 
-	@Schema(description = "IMEI number", example = "123456789012345")
+	@Schema(description = "IMEI number", examples = "123456789012345")
 	private String imeiNumber;
 
-	@Schema(description = "Model name", example = "iPhone 14 Pro")
+	@Schema(description = "Model name", examples = "iPhone 14 Pro")
 	private String modelName;
 
 	@Valid
