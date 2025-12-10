@@ -1,13 +1,13 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: api-supportcenter
-  contact: {}
+  contact: { }
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
   version: "2.2"
 servers:
-  - url: http://localhost:65101
+  - url: http://localhost:58879
     description: Generated server url
 tags:
   - name: Configuration
@@ -546,6 +546,12 @@ components:
     Problem:
       type: object
       properties:
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -554,22 +560,15 @@ components:
           format: uri
         parameters:
           type: object
-          additionalProperties:
-            type: object
-        status:
-          $ref: "#/components/schemas/StatusType"
-        title:
-          type: string
-        detail:
-          type: string
+          additionalProperties: { }
     StatusType:
       type: object
       properties:
-        reasonPhrase:
-          type: string
         statusCode:
           type: integer
           format: int32
+        reasonPhrase:
+          type: string
     ConstraintViolationProblem:
       type: object
       properties:
@@ -610,15 +609,14 @@ components:
           type: string
         message:
           type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
         parameters:
           type: object
-          additionalProperties:
-            type: object
-        detail:
-          type: string
+          additionalProperties: { }
         suppressed:
           type: array
           items:
@@ -655,8 +653,7 @@ components:
     ThrowableProblem:
       type: object
       properties:
-        cause:
-          $ref: "#/components/schemas/ThrowableProblem"
+        cause: { }
         stackTrace:
           type: array
           items:
@@ -681,6 +678,12 @@ components:
                 type: boolean
         message:
           type: string
+        status:
+          $ref: "#/components/schemas/StatusType"
+        title:
+          type: string
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -689,14 +692,7 @@ components:
           format: uri
         parameters:
           type: object
-          additionalProperties:
-            type: object
-        status:
-          $ref: "#/components/schemas/StatusType"
-        title:
-          type: string
-        detail:
-          type: string
+          additionalProperties: { }
         suppressed:
           type: array
           items:
@@ -738,29 +734,191 @@ components:
         message:
           type: string
     Address:
+      type: object
+      description: Address model
+      properties:
+        street:
+          type: string
+          description: Street address
+          examples:
+            - Street 1
+          minLength: 1
+        postalCode:
+          type: string
+          description: Postal code
+          examples:
+            - 851 86
+          minLength: 1
+        city:
+          type: string
+          description: City
+          examples:
+            - Sundsvall
+          minLength: 1
       required:
         - city
         - postalCode
         - street
-      type: object
-      properties:
-        street:
-          minLength: 1
-          type: string
-          description: Street address
-          example: Street 1
-        postalCode:
-          minLength: 1
-          type: string
-          description: Postal code
-          example: 851 86
-        city:
-          minLength: 1
-          type: string
-          description: City
-          example: Sundsvall
-      description: Address model
     CreateCaseRequest:
+      type: object
+      description: CreateCaseRequest model
+      properties:
+        note:
+          $ref: "#/components/schemas/Note"
+        description:
+          type: string
+          description: Description
+          examples:
+            - Beställning av tjänst Test4
+          minLength: 1
+        caseType:
+          type: string
+          description: Case type
+          examples:
+            - Service Request
+          minLength: 1
+        caseCategory:
+          type: string
+          description: Case category
+          examples:
+            - IT Användarhantering
+          minLength: 1
+        customerContact:
+          type: string
+          description: Customer contact
+          examples:
+            - test02test
+          minLength: 1
+        externalArticleNumber:
+          type: string
+          description: External article number
+          examples:
+            - "4343434"
+          minLength: 1
+        managementCompany:
+          type: string
+          description: ManagementCompany
+          examples:
+            - BoU
+          minLength: 1
+        priority:
+          type: string
+          description: Priority
+          examples:
+            - IT4
+          minLength: 1
+        personal:
+          type: boolean
+          description: Personal
+          examples:
+            - "true"
+        responsibleGroup:
+          type: string
+          description: Responsible group
+          examples:
+            - First Line IT
+          minLength: 1
+        externalServiceId:
+          type: string
+          description: External service id
+          examples:
+            - "123"
+          minLength: 1
+        office:
+          type: boolean
+          description: Office
+          examples:
+            - "true"
+        freeText:
+          type: string
+          description: Free text
+          examples:
+            - leverans fredagar
+          minLength: 1
+        joinContact:
+          type: string
+          description: Join contact
+          examples:
+            - test01test
+          minLength: 1
+        responsibilityNumber:
+          type: string
+          description: Responsibility number
+          examples:
+            - "15220100"
+          minLength: 1
+        subaccount:
+          type: string
+          description: Subaccount
+          examples:
+            - "974310"
+          minLength: 1
+        businessNumber:
+          type: string
+          description: Business number
+          examples:
+            - "920350"
+          minLength: 1
+        activityNumber:
+          type: string
+          description: Activity number
+          examples:
+            - "5662"
+          minLength: 1
+        projectNumber:
+          type: string
+          description: Project number
+          examples:
+            - "17071"
+          minLength: 1
+        objectNumber:
+          type: string
+          description: Object number
+          examples:
+            - "6310000"
+          minLength: 1
+        counterPart:
+          type: string
+          description: Counterpart
+          examples:
+            - "115"
+          minLength: 1
+        ciDescription:
+          type: string
+          description: CI description
+          examples:
+            - Tydlig och bra CI beskrivning
+          minLength: 1
+        contactPerson:
+          type: string
+          description: Contact person
+          examples:
+            - Test Testsson
+          minLength: 1
+        phoneNumber:
+          type: string
+          description: Phone number
+          examples:
+            - 070-11111111
+          minLength: 1
+        email:
+          type: string
+          description: Email
+          examples:
+            - test.testsson@sundsvall.se
+          minLength: 1
+        imeiNumber:
+          type: string
+          description: IMEI number
+          examples:
+            - "123456789012345"
+        modelName:
+          type: string
+          description: Model name
+          examples:
+            - iPhone 14 Pro
+        address:
+          $ref: "#/components/schemas/Address"
       required:
         - activityNumber
         - businessNumber
@@ -786,153 +944,21 @@ components:
         - responsibilityNumber
         - responsibleGroup
         - subaccount
-      type: object
-      properties:
-        note:
-          $ref: "#/components/schemas/Note"
-        description:
-          minLength: 1
-          type: string
-          description: Description
-          example: Beställning av tjänst Test4
-        caseType:
-          minLength: 1
-          type: string
-          description: Case type
-          example: Service Request
-        caseCategory:
-          minLength: 1
-          type: string
-          description: Case category
-          example: IT Användarhantering
-        customerContact:
-          minLength: 1
-          type: string
-          description: Customer contact
-          example: test02test
-        externalArticleNumber:
-          minLength: 1
-          type: string
-          description: External article number
-          example: "4343434"
-        managementCompany:
-          minLength: 1
-          type: string
-          description: ManagementCompany
-          example: BoU
-        priority:
-          minLength: 1
-          type: string
-          description: Priority
-          example: IT4
-        personal:
-          type: boolean
-          description: Personal
-          example: true
-        responsibleGroup:
-          minLength: 1
-          type: string
-          description: Responsible group
-          example: First Line IT
-        externalServiceId:
-          minLength: 1
-          type: string
-          description: External service id
-          example: "123"
-        office:
-          type: boolean
-          description: Office
-          example: true
-        freeText:
-          minLength: 1
-          type: string
-          description: Free text
-          example: leverans fredagar
-        joinContact:
-          minLength: 1
-          type: string
-          description: Join contact
-          example: test01test
-        responsibilityNumber:
-          minLength: 1
-          type: string
-          description: Responsibility number
-          example: "15220100"
-        subaccount:
-          minLength: 1
-          type: string
-          description: Subaccount
-          example: "974310"
-        businessNumber:
-          minLength: 1
-          type: string
-          description: Business number
-          example: "920350"
-        activityNumber:
-          minLength: 1
-          type: string
-          description: Activity number
-          example: "5662"
-        projectNumber:
-          minLength: 1
-          type: string
-          description: Project number
-          example: "17071"
-        objectNumber:
-          minLength: 1
-          type: string
-          description: Object number
-          example: "6310000"
-        counterPart:
-          minLength: 1
-          type: string
-          description: Counterpart
-          example: "115"
-        ciDescription:
-          minLength: 1
-          type: string
-          description: CI description
-          example: Tydlig och bra CI beskrivning
-        contactPerson:
-          minLength: 1
-          type: string
-          description: Contact person
-          example: Test Testsson
-        phoneNumber:
-          minLength: 1
-          type: string
-          description: Phone number
-          example: 070-11111111
-        email:
-          minLength: 1
-          type: string
-          description: Email
-          example: test.testsson@sundsvall.se
-        imeiNumber:
-          type: string
-          description: IMEI number
-          example: "123456789012345"
-        modelName:
-          type: string
-          description: Model name
-          example: iPhone 14 Pro
-        address:
-          $ref: "#/components/schemas/Address"
-      description: CreateCaseRequest model
     Note:
-      required:
-        - text
-        - type
       type: object
+      description: Note model
       properties:
         type:
           $ref: "#/components/schemas/NoteType"
         text:
-          minLength: 1
           type: string
           description: Note text
-          example: This is a note
-      description: Note model
+          examples:
+            - This is a note
+          minLength: 1
+      required:
+        - text
+        - type
     NoteType:
       type: string
       description: NoteType model
@@ -942,279 +968,337 @@ components:
         - WORKNOTE
         - SUPPLIERNOTE
     CreateAssetRequest:
-      required:
-        - modelName
-        - serialNumber
       type: object
+      description: CreateAssetRequest model
       properties:
         manufacturer:
           type: string
           description: Manufacturer
-          example: x_dell
+          examples:
+            - x_dell
         modelName:
-          minLength: 1
           type: string
           description: Model name
-          example: Latitude 9000
+          examples:
+            - Latitude 9000
+          minLength: 1
         modelDescription:
           type: string
           description: Description of asset
-          example: Latitude 9000
+          examples:
+            - Latitude 9000
         serialNumber:
-          minLength: 1
           type: string
           description: Serial number
-          example: CD23456
+          examples:
+            - CD23456
+          minLength: 1
         macAddress:
           type: string
           description: MAC address for the unit
-          example: 00:00:0a:bb:28:fc
+          examples:
+            - 00:00:0a:bb:28:fc
         warrantyEndDate:
           type: string
-          description: Warranty end date
           format: date
-          example: 2022-01-01
+          description: Warranty end date
+          examples:
+            - 2022-01-01
         supplierStatus:
           type: string
           description: Supplier status
-          example: "0"
+          examples:
+            - "0"
         hardwareStatus:
           type: string
           description: Hardware status
-          example: "0"
+          examples:
+            - "0"
         deliveryDate:
           type: string
-          description: Delivery date
           format: date
-          example: 2022-01-01
+          description: Delivery date
+          examples:
+            - 2022-01-01
         leaseStatus:
           type: string
           description: Lease status
-          example: status1
-      description: CreateAssetRequest model
+          examples:
+            - status1
+      required:
+        - modelName
+        - serialNumber
     CreateAssetResponse:
       type: object
+      description: CreateAssetResponse model
       properties:
         id:
           type: string
           description: Id of asset in Pob
-          example: "111222"
-      description: CreateAssetResponse model
+          examples:
+            - "111222"
     UpdateCaseRequest:
       type: object
+      description: UpdateCaseRequest model
       properties:
         note:
           $ref: "#/components/schemas/Note"
         externalCaseId:
           type: string
           description: External case-ID
-          example: INC232323
+          examples:
+            - INC232323
         caseStatus:
           type: string
           description: Case status
-          example: In Process
+          examples:
+            - In Process
         caseCategory:
           type: string
           description: Case category
-          example: IT Användarhantering
+          examples:
+            - IT Användarhantering
         closureCode:
           type: string
           description: Closure code
-          example: IT Byte/uppgradering av hårdvara
+          examples:
+            - IT Byte/uppgradering av hårdvara
         hardwareName:
           type: string
           description: Hardware name
         responsibleGroup:
           type: string
           description: Responsible group
-          example: First Line IT
+          examples:
+            - First Line IT
         serialNumber:
           type: string
           description: Serial number
-          example: FRGDZ1J
+          examples:
+            - FRGDZ1J
         imeiNumber:
           type: string
           description: IMEI number
-          example: "123456789012345"
+          examples:
+            - "123456789012345"
         modelName:
           type: string
           description: Model name
-          example: iPhone 14 Pro
-      description: UpdateCaseRequest model
+          examples:
+            - iPhone 14 Pro
     UpdateAssetRequest:
       type: object
+      description: UpdateAssetRequest model
       properties:
         note:
           $ref: "#/components/schemas/Note"
         hardwareName:
           type: string
           description: Hardware name
-          example: Latitude 9000
+          examples:
+            - Latitude 9000
         macAddress:
           type: string
           description: MAC address for the unit
-          example: 00:00:0a:bb:28:fc
+          examples:
+            - 00:00:0a:bb:28:fc
         supplierStatus:
           type: string
           description: Supplier status
-          example: "0"
+          examples:
+            - "0"
         hardwareStatus:
           type: string
           description: Hardware status
-          example: "0"
+          examples:
+            - "0"
         warrantyEndDate:
           type: string
-          description: Warranty end date
           format: date
-          example: 2022-01-01
+          description: Warranty end date
+          examples:
+            - 2022-01-01
         deliveryDate:
           type: string
-          description: Delivery date
           format: date
-          example: 2022-01-01
+          description: Delivery date
+          examples:
+            - 2022-01-01
         leaseStatus:
           type: string
           description: Lease status
-          example: status1
-      description: UpdateAssetRequest model
+          examples:
+            - status1
     Case:
       type: object
+      description: Case model
       properties:
         caseId:
           type: string
           description: Case id
-          example: "81471222"
+          examples:
+            - "81471222"
         note:
           $ref: "#/components/schemas/Note"
         description:
           type: string
           description: Description
-          example: Beställning av tjänst Test4
+          examples:
+            - Beställning av tjänst Test4
         caseType:
           type: string
           description: Case type
-          example: Service Request
+          examples:
+            - Service Request
         caseCategory:
           type: string
           description: Case category
-          example: IT Användarhantering
+          examples:
+            - IT Användarhantering
         customerContact:
           type: string
           description: Customer contact
-          example: test02test
+          examples:
+            - test02test
         externalArticleNumber:
           type: string
           description: External article number
         managementCompany:
           type: string
           description: ManagementCompany
-          example: BoU
+          examples:
+            - BoU
         priority:
           type: string
           description: Priority
-          example: IT4
+          examples:
+            - IT4
         personal:
           type: boolean
           description: Personal
-          example: true
+          examples:
+            - "true"
         responsibleGroup:
           type: string
           description: Responsible group
-          example: First Line IT
+          examples:
+            - First Line IT
         externalServiceId:
           type: string
           description: External service id
-          example: "123"
+          examples:
+            - "123"
         office:
           type: boolean
           description: Office
-          example: true
+          examples:
+            - "true"
         freeText:
           type: string
           description: Free text
-          example: leverans fredagar
+          examples:
+            - leverans fredagar
         joinContact:
           type: string
           description: Join contact
-          example: test01test
+          examples:
+            - test01test
         responsibilityNumber:
           type: string
           description: Responsibility number
-          example: "15220100"
+          examples:
+            - "15220100"
         subaccount:
           type: string
           description: Subaccount
-          example: "974310"
+          examples:
+            - "974310"
         businessNumber:
           type: string
           description: Business number
-          example: "920350"
+          examples:
+            - "920350"
         activityNumber:
           type: string
           description: Activity number
-          example: "5662"
+          examples:
+            - "5662"
         projectNumber:
           type: string
           description: Project number
-          example: "17071"
+          examples:
+            - "17071"
         objectNumber:
           type: string
           description: Object number
-          example: "6310000"
+          examples:
+            - "6310000"
         counterPart:
           type: string
           description: Counterpart
-          example: "115"
+          examples:
+            - "115"
         ciDescription:
           type: string
           description: CI description
-          example: Tydlig och bra CI beskrivning
+          examples:
+            - Tydlig och bra CI beskrivning
         contactPerson:
           type: string
           description: Contact person
-          example: Test Testsson
+          examples:
+            - Test Testsson
         phoneNumber:
           type: string
           description: Phone number
-          example: 070-11111111
+          examples:
+            - 070-11111111
         email:
           type: string
           description: Email
-          example: test.testsson@sundsvall.se
+          examples:
+            - test.testsson@sundsvall.se
         imeiNumber:
           type: string
           description: IMEI number
-          example: "123456789012345"
+          examples:
+            - "123456789012345"
         modelName:
           type: string
           description: Model name
-          example: iPhone 14 Pro
+          examples:
+            - iPhone 14 Pro
         address:
           $ref: "#/components/schemas/Address"
-      description: Case model
     Asset:
       type: object
+      description: Asset model
       properties:
         id:
           type: string
           description: Id of asset
-          example: "123456"
+          examples:
+            - "123456"
         serialNumber:
           type: string
           description: Serial-number
-          example: 4VVRN2
+          examples:
+            - 4VVRN2
         hardwareName:
           type: string
           description: Hardware-name
-          example: WB12345NY
+          examples:
+            - WB12345NY
         hardwareDescription:
           type: string
           description: Description of hardware
-          example: Computer
+          examples:
+            - Computer
         macAddress:
           type: string
           description: MAC address for the unit
-          example: 00:00:0a:bb:28:fc
+          examples:
+            - 00:00:0a:bb:28:fc
         supplierStatus:
           type: string
           description: Supplier status
@@ -1224,32 +1308,38 @@ components:
         manufacturer:
           type: string
           description: Manufacturer
-          example: x_dell
+          examples:
+            - x_dell
         modelName:
           type: string
           description: Model name
-          example: Latitude 9000
+          examples:
+            - Latitude 9000
         modelDescription:
           type: string
           description: Description of model
-          example: Latitude 9000
+          examples:
+            - Latitude 9000
         warrantyEndDate:
           type: string
-          description: Warranty end date
           format: date
-          example: 2022-01-01
+          description: Warranty end date
+          examples:
+            - 2022-01-01
         deliveryDate:
           type: string
-          description: Delivery date
           format: date
-          example: 2022-01-01
+          description: Delivery date
+          examples:
+            - 2022-01-01
         municipalityId:
           type: string
           description: Municipality id
-          example: "2281"
+          examples:
+            - "2281"
         leaseStatus:
           type: string
           description: Lease status
-          example: status1
-      description: Asset model
-  securitySchemes: {}
+          examples:
+            - status1
+  securitySchemes: { }

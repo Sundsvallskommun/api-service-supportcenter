@@ -12,15 +12,15 @@ import java.util.Objects;
 public class Address {
 
 	@NotBlank
-	@Schema(example = "Street 1", description = "Street address", requiredMode = REQUIRED)
+	@Schema(examples = "Street 1", description = "Street address", requiredMode = REQUIRED)
 	private String street;
 
 	@NotBlank
-	@Schema(example = "851 86", description = "Postal code", requiredMode = REQUIRED)
+	@Schema(examples = "851 86", description = "Postal code", requiredMode = REQUIRED)
 	private String postalCode;
 
 	@NotBlank
-	@Schema(example = "Sundsvall", description = "City", requiredMode = REQUIRED)
+	@Schema(examples = "Sundsvall", description = "City", requiredMode = REQUIRED)
 	private String city;
 
 	public static Address create() {

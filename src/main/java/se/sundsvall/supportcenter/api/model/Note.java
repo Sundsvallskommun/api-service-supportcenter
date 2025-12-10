@@ -15,7 +15,7 @@ public class Note {
 	@NotNull(message = "must be provided")
 	private NoteType type;
 
-	@Schema(description = "Note text", example = "This is a note", requiredMode = REQUIRED)
+	@Schema(description = "Note text", examples = "This is a note", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	private String text;
 

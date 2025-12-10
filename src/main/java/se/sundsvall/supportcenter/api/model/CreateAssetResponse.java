@@ -6,7 +6,7 @@ import java.util.Objects;
 @Schema(description = "CreateAssetResponse model")
 public class CreateAssetResponse {
 
-	@Schema(example = "111222", description = "Id of asset in Pob")
+	@Schema(examples = "111222", description = "Id of asset in Pob")
 	private String id;
 
 	public static CreateAssetResponse create() {

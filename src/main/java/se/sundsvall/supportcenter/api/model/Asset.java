@@ -9,19 +9,19 @@ import java.util.Objects;
 @Schema(description = "Asset model")
 public class Asset {
 
-	@Schema(example = "123456", description = "Id of asset")
+	@Schema(examples = "123456", description = "Id of asset")
 	private String id;
 
-	@Schema(example = "4VVRN2", description = "Serial-number")
+	@Schema(examples = "4VVRN2", description = "Serial-number")
 	private String serialNumber;
 
-	@Schema(example = "WB12345NY", description = "Hardware-name")
+	@Schema(examples = "WB12345NY", description = "Hardware-name")
 	private String hardwareName;
 
-	@Schema(example = "Computer", description = "Description of hardware")
+	@Schema(examples = "Computer", description = "Description of hardware")
 	private String hardwareDescription;
 
-	@Schema(example = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
+	@Schema(examples = "00:00:0a:bb:28:fc", description = "MAC address for the unit")
 	private String macAddress;
 
 	@Schema(description = "Supplier status")
@@ -30,25 +30,25 @@ public class Asset {
 	@Schema(description = "Hardware status")
 	private String hardwareStatus;
 
-	@Schema(example = "x_dell", description = "Manufacturer")
+	@Schema(examples = "x_dell", description = "Manufacturer")
 	private String manufacturer;
 
-	@Schema(example = "Latitude 9000", description = "Model name")
+	@Schema(examples = "Latitude 9000", description = "Model name")
 	private String modelName;
 
-	@Schema(example = "Latitude 9000", description = "Description of model")
+	@Schema(examples = "Latitude 9000", description = "Description of model")
 	private String modelDescription;
 
-	@Schema(example = "2022-01-01", description = "Warranty end date")
+	@Schema(examples = "2022-01-01", description = "Warranty end date")
 	private LocalDate warrantyEndDate;
 
-	@Schema(example = "2022-01-01", description = "Delivery date")
+	@Schema(examples = "2022-01-01", description = "Delivery date")
 	private LocalDate deliveryDate;
 
-	@Schema(example = "2281", description = "Municipality id")
+	@Schema(examples = "2281", description = "Municipality id")
 	private String municipalityId;
 
-	@Schema(example = "status1", description = "Lease status")
+	@Schema(examples = "status1", description = "Lease status")
 	private String leaseStatus;
 
 	public static Asset create() {
