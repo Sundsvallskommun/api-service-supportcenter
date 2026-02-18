@@ -1,9 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static java.util.Objects.nonNull;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUSPENSION;
-
 import generated.client.pob.PobPayload;
 import java.util.Objects;
 import org.slf4j.Logger;
@@ -13,6 +9,10 @@ import org.zalando.problem.Status;
 import org.zalando.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
+
+import static java.util.Objects.nonNull;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUSPENSION;
 
 /**
  * Performs action to remove suspension for case

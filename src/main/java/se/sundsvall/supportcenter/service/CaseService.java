@@ -1,16 +1,5 @@
 package se.sundsvall.supportcenter.service;
 
-import static java.lang.String.format;
-import static java.util.Collections.emptyList;
-import static org.zalando.problem.Status.BAD_REQUEST;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
-import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toCase;
-import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toPobPayload;
-import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCaseCategoryList;
-import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toClosureCodeList;
-import static se.sundsvall.supportcenter.service.mapper.UpdateCaseMapper.toPobPayloads;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
-
 import generated.client.pob.PobPayload;
 import generated.client.pob.PobPayloadWithTriggerResults;
 import java.util.List;
@@ -23,6 +12,17 @@ import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
+
+import static java.lang.String.format;
+import static java.util.Collections.emptyList;
+import static org.zalando.problem.Status.BAD_REQUEST;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
+import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toCase;
+import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toPobPayload;
+import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCaseCategoryList;
+import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toClosureCodeList;
+import static se.sundsvall.supportcenter.service.mapper.UpdateCaseMapper.toPobPayloads;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
 
 @Service
 public class CaseService {

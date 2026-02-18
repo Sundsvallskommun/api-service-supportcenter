@@ -1,5 +1,7 @@
 package se.sundsvall.supportcenter.api.model.enums;
 
+import org.junit.jupiter.api.Test;
+
 import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,8 +9,6 @@ import static se.sundsvall.supportcenter.api.model.enums.NoteType.PROBLEM;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
-
-import org.junit.jupiter.api.Test;
 
 class NoteTypeTest {
 

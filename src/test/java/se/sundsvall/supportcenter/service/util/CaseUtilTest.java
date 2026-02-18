@@ -1,9 +1,5 @@
 package se.sundsvall.supportcenter.service.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static se.sundsvall.dept44.test.annotation.resource.Load.ResourceType.JSON;
-
 import com.jayway.jsonpath.PathNotFoundException;
 import generated.client.pob.PobPayload;
 import java.util.stream.Stream;
@@ -14,6 +10,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import se.sundsvall.dept44.test.annotation.resource.Load;
 import se.sundsvall.dept44.test.extension.ResourceLoaderExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.sundsvall.dept44.test.annotation.resource.Load.ResourceType.JSON;
 
 @ExtendWith(ResourceLoaderExtension.class)
 class CaseUtilTest {

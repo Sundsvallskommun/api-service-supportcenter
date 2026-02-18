@@ -1,11 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
 import java.util.Map;
@@ -15,6 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
 /**
  * Performs customizations on the PobPayload regarding solution memo

@@ -1,20 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_CLOSED;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
 import java.util.HashMap;
@@ -31,6 +16,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_CLOSED;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
 @ExtendWith(MockitoExtension.class)
 class SolutionNoteProcessorTest {

@@ -1,12 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO2;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
-
 import generated.client.pob.PobPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +8,13 @@ import org.springframework.util.StringUtils;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.ConfigurationService;
+
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO2;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 /**
  * Performs customizations on the PobPayload regarding serial number

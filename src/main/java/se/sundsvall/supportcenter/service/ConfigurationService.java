@@ -1,16 +1,16 @@
 package se.sundsvall.supportcenter.service;
 
-import static java.lang.String.format;
-import static org.zalando.problem.Status.BAD_REQUEST;
-import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCaseCategoryList;
-import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toClosureCodeList;
-import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toConfigurationItemList;
-
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zalando.problem.Problem;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
+
+import static java.lang.String.format;
+import static org.zalando.problem.Status.BAD_REQUEST;
+import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toCaseCategoryList;
+import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toClosureCodeList;
+import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toConfigurationItemList;
 
 @Service
 public class ConfigurationService {

@@ -1,21 +1,5 @@
 package se.sundsvall.supportcenter.service.cube;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_NEEDED;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_NEEDED_DESCRIPTION;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_CASE_ID;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
-
 import generated.client.pob.PobPayload;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +20,22 @@ import se.sundsvall.supportcenter.service.CaseService;
 import se.sundsvall.supportcenter.service.ConfigurationService;
 import se.sundsvall.supportcenter.service.processor.CaseStatusProcessor;
 import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_NEEDED;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_NEEDED_DESCRIPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_EXTERNAL_CASE_ID;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ID;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 
 /**
  * Class for testing that cube support flow logic produces valid POB payload when setting status of case to 'AssignBack'

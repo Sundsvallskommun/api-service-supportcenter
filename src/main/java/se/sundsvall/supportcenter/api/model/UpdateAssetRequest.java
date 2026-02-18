@@ -1,12 +1,12 @@
 package se.sundsvall.supportcenter.api.model;
 
-import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.Objects;
 import se.sundsvall.supportcenter.api.validation.ValidMacAddress;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 
 @Schema(description = "UpdateAssetRequest model")
 public class UpdateAssetRequest {

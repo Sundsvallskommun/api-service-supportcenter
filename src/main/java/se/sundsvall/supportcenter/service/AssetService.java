@@ -1,5 +1,16 @@
 package se.sundsvall.supportcenter.service;
 
+import generated.client.pob.PobPayload;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
+import org.zalando.problem.Problem;
+import org.zalando.problem.Status;
+import se.sundsvall.supportcenter.api.model.Asset;
+import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
+import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
+import se.sundsvall.supportcenter.integration.pob.POBIntegration;
+
 import static java.util.Collections.emptyList;
 import static org.springframework.util.StringUtils.hasText;
 import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toPobPayload;
@@ -13,17 +24,6 @@ import static se.sundsvall.supportcenter.service.mapper.GetAssetMapper.toMapOfAt
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_CONFIGURATION_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
-
-import generated.client.pob.PobPayload;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import se.sundsvall.supportcenter.api.model.Asset;
-import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
-import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
-import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 @Service
 public class AssetService {

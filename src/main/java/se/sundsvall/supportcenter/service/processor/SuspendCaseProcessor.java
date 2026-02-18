@@ -1,9 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static java.lang.Boolean.TRUE;
-import static java.util.Objects.nonNull;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
-
 import generated.client.pob.PobPayload;
 import generated.client.pob.SuspensionInfo;
 import generated.client.pob.SuspensionInfo.TimeLimitsActionEnum;
@@ -14,6 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
+
+import static java.lang.Boolean.TRUE;
+import static java.util.Objects.nonNull;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
 
 /**
  * Performs action to suspend case
