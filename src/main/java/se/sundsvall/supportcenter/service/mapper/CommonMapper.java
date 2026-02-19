@@ -1,13 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import static java.lang.String.format;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
-import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
-import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobMemo.StyleEnum;
 import generated.client.pob.PobPayload;
@@ -16,6 +8,14 @@ import java.util.Set;
 import java.util.stream.Stream;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
+
+import static java.lang.String.format;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
+import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 public final class CommonMapper {
 

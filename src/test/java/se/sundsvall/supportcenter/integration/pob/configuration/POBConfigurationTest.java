@@ -1,11 +1,5 @@
 package se.sundsvall.supportcenter.integration.pob.configuration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration.CLIENT_ID;
-
 import feign.codec.ErrorDecoder;
 import feign.jackson.JacksonEncoder;
 import java.util.List;
@@ -22,6 +16,12 @@ import org.springframework.test.context.ActiveProfiles;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.dept44.configuration.feign.decoder.JsonPathErrorDecoder;
 import se.sundsvall.supportcenter.Application;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration.CLIENT_ID;
 
 @SpringBootTest(classes = {
 	Application.class, POBConfiguration.class, JacksonEncoder.class

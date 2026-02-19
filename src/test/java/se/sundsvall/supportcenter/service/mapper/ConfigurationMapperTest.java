@@ -1,7 +1,5 @@
 package se.sundsvall.supportcenter.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobMemo.StyleEnum;
 import generated.client.pob.PobPayload;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ConfigurationMapperTest {
 

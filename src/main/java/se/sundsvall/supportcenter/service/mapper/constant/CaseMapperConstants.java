@@ -1,5 +1,12 @@
 package se.sundsvall.supportcenter.service.mapper.constant;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
+
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
@@ -16,13 +23,6 @@ import static se.sundsvall.supportcenter.service.SupportCenterStatus.PROCESSED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESERVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.SCHEDULE_CHANGED;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
 
 public final class CaseMapperConstants {
 

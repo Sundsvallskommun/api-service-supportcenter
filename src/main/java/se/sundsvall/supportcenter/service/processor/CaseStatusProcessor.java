@@ -1,15 +1,15 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static java.util.Objects.nonNull;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
-
 import generated.client.pob.PobPayload;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
+
+import static java.util.Objects.nonNull;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 
 /**
  * Performs action to alter (change/remove) caseStatus in POB payload before sending it

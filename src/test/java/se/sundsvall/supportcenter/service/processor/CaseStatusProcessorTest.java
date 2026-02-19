@@ -1,13 +1,5 @@
 package se.sundsvall.supportcenter.service.processor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
-
 import generated.client.pob.PobPayload;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +15,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 
 @ExtendWith(MockitoExtension.class)
 class CaseStatusProcessorTest {

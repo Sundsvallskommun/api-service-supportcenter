@@ -1,14 +1,14 @@
 package se.sundsvall.supportcenter.service.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import generated.client.pob.PobPayload;
+
 import static com.google.gson.FieldNamingPolicy.UPPER_CAMEL_CASE;
 import static com.jayway.jsonpath.Configuration.defaultConfiguration;
 import static com.jayway.jsonpath.JsonPath.parse;
 import static com.jayway.jsonpath.Option.SUPPRESS_EXCEPTIONS;
 import static java.util.Objects.nonNull;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import generated.client.pob.PobPayload;
 
 public final class CaseUtil {
 

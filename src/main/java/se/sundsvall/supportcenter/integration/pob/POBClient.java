@@ -1,9 +1,5 @@
 package se.sundsvall.supportcenter.integration.pob;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration.CLIENT_ID;
-
 import generated.client.pob.PobPayload;
 import generated.client.pob.PobPayloadWithTriggerResults;
 import generated.client.pob.SuspensionInfo;
@@ -18,6 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static se.sundsvall.supportcenter.integration.pob.configuration.POBConfiguration.CLIENT_ID;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.pob.url}", configuration = POBConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)
