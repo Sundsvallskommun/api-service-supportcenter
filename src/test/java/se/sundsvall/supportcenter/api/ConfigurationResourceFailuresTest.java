@@ -3,6 +3,7 @@ package se.sundsvall.supportcenter.api;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -14,6 +15,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 @ActiveProfiles("junit")
 class ConfigurationResourceFailuresTest {
 
@@ -33,7 +35,7 @@ class ConfigurationResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(configurationServiceMock);
 	}
@@ -48,7 +50,7 @@ class ConfigurationResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(configurationServiceMock);
 	}

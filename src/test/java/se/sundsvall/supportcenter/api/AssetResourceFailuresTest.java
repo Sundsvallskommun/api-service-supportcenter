@@ -1,9 +1,11 @@
 package se.sundsvall.supportcenter.api;
 
 import java.time.LocalDate;
+import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -13,6 +15,7 @@ import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 import se.sundsvall.supportcenter.service.AssetService;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
@@ -21,6 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 @ActiveProfiles("junit")
 class AssetResourceFailuresTest {
 
@@ -43,13 +47,17 @@ class AssetResourceFailuresTest {
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
-			.expectBody()
-			.jsonPath("$.title").isEqualTo("Constraint Violation")
-			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.violations[0].field").isEqualTo("modelName")
-			.jsonPath("$.violations[0].message").isEqualTo("must be provided")
-			.jsonPath("$.violations[1].field").isEqualTo("serialNumber")
-			.jsonPath("$.violations[1].message").isEqualTo("must be provided");
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.when(Option.IGNORING_ARRAY_ORDER)
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"modelName","message":"must be provided"},
+							{"field":"serialNumber","message":"must be provided"}
+						]""")));
 		verifyNoInteractions(assetServiceMock);
 	}
 
@@ -71,15 +79,18 @@ class AssetResourceFailuresTest {
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
-			.expectBody()
-			.jsonPath("$.title").isEqualTo("Constraint Violation")
-			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.violations[0].field").isEqualTo("macAddress")
-			.jsonPath("$.violations[0].message").isEqualTo("must contain a valid mac address")
-			.jsonPath("$.violations[1].field").isEqualTo("modelName")
-			.jsonPath("$.violations[1].message").isEqualTo("must be provided")
-			.jsonPath("$.violations[2].field").isEqualTo("serialNumber")
-			.jsonPath("$.violations[2].message").isEqualTo("must be provided");
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.when(Option.IGNORING_ARRAY_ORDER)
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"macAddress","message":"must contain a valid mac address"},
+							{"field":"modelName","message":"must be provided"},
+							{"field":"serialNumber","message":"must be provided"}
+						]""")));
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -117,7 +128,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-			.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
+			.jsonPath("$.detail").isEqualTo("Content-Type 'null' is not supported.");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -134,8 +145,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: org.springframework.http.ResponseEntity<se.sundsvall.supportcenter.api.model.CreateAssetResponse> se.sundsvall.supportcenter.api.AssetResource.createAsset(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateAssetRequest)");
+			.jsonPath("$.detail").isEqualTo("Failed to read request");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -152,7 +162,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo("Bad Request")
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -172,8 +182,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.AssetResource.updateAsset(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateAssetRequest)");
+			.jsonPath("$.detail").isEqualTo("Failed to read request");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -192,7 +201,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -211,7 +220,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-			.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
+			.jsonPath("$.detail").isEqualTo("Content-Type 'null' is not supported.");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -321,7 +330,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(assetServiceMock);
 	}
@@ -337,7 +346,7 @@ class AssetResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request parameter 'serialNumber' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required parameter 'serialNumber' is not present.");
 
 		verifyNoInteractions(assetServiceMock);
 	}

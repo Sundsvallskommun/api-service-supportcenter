@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
+import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.supportcenter.api.model.Case;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
@@ -15,7 +15,7 @@ import se.sundsvall.supportcenter.service.processor.ProcessorInterface;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
-import static org.zalando.problem.Status.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
 import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toCase;
 import static se.sundsvall.supportcenter.service.mapper.CaseMapper.toPobPayload;

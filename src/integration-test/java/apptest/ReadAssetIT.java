@@ -74,6 +74,7 @@ class ReadAssetIT extends AbstractAppTest {
 			.withServicePath(PATH + "?serialNumber=YYY")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withHeader("Accept", "application/json")
 			.withExpectedResponse(RESPONSE_FILE)
 			.withExpectedResponseStatus(INTERNAL_SERVER_ERROR)
 			.sendRequestAndVerifyResponse();

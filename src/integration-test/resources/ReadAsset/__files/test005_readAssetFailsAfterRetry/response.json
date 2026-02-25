@@ -1,5 +1,6 @@
 {
-	"detail": "${json-unit.regex}((Read timed out|timeout) executing GET http:\\/\\/localhost:(.*)\\/pob\\/configurationitems\\?Filter=SerialNumber=YYY)",
-	"title": "Internal Server Error",
-	"status": 500
+	"error": "Internal Server Error",
+	"path": "/2281/assets",
+	"status": 500,
+	"timestamp": "${json-unit.any-string}"
 }

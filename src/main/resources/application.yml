@@ -13,7 +13,7 @@ resilience4j:
   circuitbreaker:
     instances:
       pob:
-        ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+        ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
 mdc:
   municipalityId:
     enabled: true
