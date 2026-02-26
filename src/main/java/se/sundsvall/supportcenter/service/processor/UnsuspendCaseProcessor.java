@@ -5,12 +5,12 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 import static java.util.Objects.nonNull;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUSPENSION;
 
@@ -43,7 +43,7 @@ public class UnsuspendCaseProcessor implements ProcessorInterface {
 			pobPayload.getData().put(KEY_SUSPENSION, null); // Set suspension status to null on POB payload
 		} catch (final ThrowableProblem e) {
 			// If POB returns other status than 404, re throw the exception
-			if (e.getStatus() != Status.NOT_FOUND) {
+			if (e.getStatus() != NOT_FOUND) {
 				throw e;
 			}
 			LOG.debug("Case '{}' is not suspended, no further action is needed", caseId);

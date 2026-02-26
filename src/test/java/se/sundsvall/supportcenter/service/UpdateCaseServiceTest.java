@@ -14,9 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
+import se.sundsvall.dept44.problem.Problem;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
@@ -35,6 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.CUSTOM_STATUS_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_CATEGORY;
@@ -443,7 +443,7 @@ class UpdateCaseServiceTest {
 			.withResponsibleGroup(responsibleGroup);
 
 		// Mock
-		doThrow(Problem.valueOf(Status.NOT_FOUND, "Could not find caseCategory")).when(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
+		doThrow(Problem.valueOf(NOT_FOUND, "Could not find caseCategory")).when(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 
 		// Call
 		assertThrows(ThrowableProblem.class, () -> caseService.updateCase(pobKey, caseId, request));
@@ -478,7 +478,7 @@ class UpdateCaseServiceTest {
 			.withResponsibleGroup(responsibleGroup);
 
 		// Mock
-		doThrow(Problem.valueOf(Status.NOT_FOUND, "Could not find closureCode")).when(configurationServiceMock).validateClosureCode(pobKey, closureCode);
+		doThrow(Problem.valueOf(NOT_FOUND, "Could not find closureCode")).when(configurationServiceMock).validateClosureCode(pobKey, closureCode);
 
 		// Call
 		assertThrows(ThrowableProblem.class, () -> caseService.updateCase(pobKey, caseId, request));

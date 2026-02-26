@@ -8,9 +8,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
+import se.sundsvall.dept44.problem.Problem;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.Address;
 import se.sundsvall.supportcenter.api.model.CreateCaseRequest;
 import se.sundsvall.supportcenter.api.model.Note;
@@ -24,6 +23,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTIVITY_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_BUSINESS_NUMBER;
@@ -205,7 +205,7 @@ class CreateCaseServiceTest {
 			.withAddress(Address.create().withCity("city").withPostalCode("postalCode").withStreet("street"));
 
 		// Mock
-		doThrow(Problem.valueOf(Status.NOT_FOUND, "Could not find caseCategory")).when(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
+		doThrow(Problem.valueOf(NOT_FOUND, "Could not find caseCategory")).when(configurationServiceMock).validateCaseCategory(pobKey, caseCategory);
 
 		// Call
 		assertThrows(ThrowableProblem.class, () -> caseService.createCase(pobKey, request));

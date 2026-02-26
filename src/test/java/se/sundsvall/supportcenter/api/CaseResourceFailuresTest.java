@@ -1,8 +1,10 @@
 package se.sundsvall.supportcenter.api;
 
+import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -13,6 +15,7 @@ import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.service.CaseService;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
@@ -21,6 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.PROBLEM;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 @ActiveProfiles("junit")
 class CaseResourceFailuresTest {
 
@@ -45,8 +49,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.createCase(java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.CreateCaseRequest)");
+			.jsonPath("$.detail").isEqualTo("Failed to read request");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -62,7 +65,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -78,7 +81,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-			.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
+			.jsonPath("$.detail").isEqualTo("Content-Type 'null' is not supported.");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -150,56 +153,39 @@ class CaseResourceFailuresTest {
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
-			.expectBody()
-			.jsonPath("$.title").isEqualTo("Constraint Violation")
-			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.violations[0].field").isEqualTo("activityNumber")
-			.jsonPath("$.violations[0].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[1].field").isEqualTo("businessNumber")
-			.jsonPath("$.violations[1].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[2].field").isEqualTo("caseCategory")
-			.jsonPath("$.violations[2].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[3].field").isEqualTo("caseType")
-			.jsonPath("$.violations[3].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[4].field").isEqualTo("ciDescription")
-			.jsonPath("$.violations[4].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[5].field").isEqualTo("contactPerson")
-			.jsonPath("$.violations[5].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[6].field").isEqualTo("counterPart")
-			.jsonPath("$.violations[6].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[7].field").isEqualTo("customerContact")
-			.jsonPath("$.violations[7].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[8].field").isEqualTo("description")
-			.jsonPath("$.violations[8].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[9].field").isEqualTo("email")
-			.jsonPath("$.violations[9].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[10].field").isEqualTo("externalArticleNumber")
-			.jsonPath("$.violations[10].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[11].field").isEqualTo("externalServiceId")
-			.jsonPath("$.violations[11].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[12].field").isEqualTo("freeText")
-			.jsonPath("$.violations[12].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[13].field").isEqualTo("joinContact")
-			.jsonPath("$.violations[13].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[14].field").isEqualTo("managementCompany")
-			.jsonPath("$.violations[14].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[15].field").isEqualTo("objectNumber")
-			.jsonPath("$.violations[15].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[16].field").isEqualTo("office")
-			.jsonPath("$.violations[16].message").isEqualTo("must not be null")
-			.jsonPath("$.violations[17].field").isEqualTo("personal")
-			.jsonPath("$.violations[17].message").isEqualTo("must not be null")
-			.jsonPath("$.violations[18].field").isEqualTo("phoneNumber")
-			.jsonPath("$.violations[18].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[19].field").isEqualTo("priority")
-			.jsonPath("$.violations[19].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[20].field").isEqualTo("projectNumber")
-			.jsonPath("$.violations[20].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[21].field").isEqualTo("responsibilityNumber")
-			.jsonPath("$.violations[21].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[22].field").isEqualTo("responsibleGroup")
-			.jsonPath("$.violations[22].message").isEqualTo("must not be blank")
-			.jsonPath("$.violations[23].field").isEqualTo("subaccount");
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.when(Option.IGNORING_ARRAY_ORDER)
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"activityNumber","message":"must not be blank"},
+							{"field":"businessNumber","message":"must not be blank"},
+							{"field":"caseCategory","message":"must not be blank"},
+							{"field":"caseType","message":"must not be blank"},
+							{"field":"ciDescription","message":"must not be blank"},
+							{"field":"contactPerson","message":"must not be blank"},
+							{"field":"counterPart","message":"must not be blank"},
+							{"field":"customerContact","message":"must not be blank"},
+							{"field":"description","message":"must not be blank"},
+							{"field":"email","message":"must not be blank"},
+							{"field":"externalArticleNumber","message":"must not be blank"},
+							{"field":"externalServiceId","message":"must not be blank"},
+							{"field":"freeText","message":"must not be blank"},
+							{"field":"joinContact","message":"must not be blank"},
+							{"field":"managementCompany","message":"must not be blank"},
+							{"field":"objectNumber","message":"must not be blank"},
+							{"field":"office","message":"must not be null"},
+							{"field":"personal","message":"must not be null"},
+							{"field":"phoneNumber","message":"must not be blank"},
+							{"field":"priority","message":"must not be blank"},
+							{"field":"projectNumber","message":"must not be blank"},
+							{"field":"responsibilityNumber","message":"must not be blank"},
+							{"field":"responsibleGroup","message":"must not be blank"},
+							{"field":"subaccount","message":"must not be blank"}
+						]""")));
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -216,8 +202,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo(
-				"Required request body is missing: org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.supportcenter.api.CaseResource.updateCase(java.lang.String,java.lang.String,java.lang.String,se.sundsvall.supportcenter.api.model.UpdateCaseRequest)");
+			.jsonPath("$.detail").isEqualTo("Failed to read request");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -233,7 +218,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -249,7 +234,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(UNSUPPORTED_MEDIA_TYPE.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(UNSUPPORTED_MEDIA_TYPE.value())
-			.jsonPath("$.detail").isEqualTo("Content-Type is not supported");
+			.jsonPath("$.detail").isEqualTo("Content-Type 'null' is not supported.");
 
 		verifyNoInteractions(caseServiceMock);
 	}
@@ -321,7 +306,7 @@ class CaseResourceFailuresTest {
 			.expectBody()
 			.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
 			.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-			.jsonPath("$.detail").isEqualTo("Required request header 'pobKey' for method parameter type String is not present");
+			.jsonPath("$.detail").isEqualTo("Required header 'pobKey' is not present.");
 
 		verifyNoInteractions(caseServiceMock);
 	}

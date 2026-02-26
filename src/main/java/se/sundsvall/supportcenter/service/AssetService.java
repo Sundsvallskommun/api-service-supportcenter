@@ -4,14 +4,14 @@ import generated.client.pob.PobPayload;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
+import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.supportcenter.api.model.Asset;
 import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
 import static java.util.Collections.emptyList;
+import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.util.StringUtils.hasText;
 import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toPobPayload;
 import static se.sundsvall.supportcenter.service.mapper.CreateAssetMapper.toItemId;
@@ -46,7 +46,7 @@ public class AssetService {
 		if (itemIds.isEmpty()) {
 			id = createItem(pobKey, createAssetRequest);
 		} else {
-			id = itemIds.stream().findFirst().orElseThrow(() -> Problem.valueOf(Status.BAD_GATEWAY, CI_ID_ERROR_TEMPLATE));
+			id = itemIds.stream().findFirst().orElseThrow(() -> Problem.valueOf(BAD_GATEWAY, CI_ID_ERROR_TEMPLATE));
 		}
 		return createConfigurationItem(pobKey, id, createAssetRequest);
 	}

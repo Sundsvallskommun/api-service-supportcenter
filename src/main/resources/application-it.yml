@@ -2,7 +2,7 @@ integration:
   pob:
     connectTimeout: 1
     readTimeout: 2
-    url: http://localhost:${wiremock.server.port}/pob
+    url: http://localhost:${wiremock.server.port:}/pob
 logging:
   level:
     root: INFO

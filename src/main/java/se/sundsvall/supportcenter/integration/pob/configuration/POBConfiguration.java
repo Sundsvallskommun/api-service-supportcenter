@@ -22,21 +22,20 @@ public class POBConfiguration {
 	public static final String CLIENT_ID = "pob";
 
 	@Bean
-	FeignBuilderCustomizer feignBuilderCustomizer(POBProperties pobProperties) {
+	FeignBuilderCustomizer feignBuilderCustomizer(final POBProperties pobProperties) {
 		return FeignMultiCustomizer.create()
+			.withEncoder(encoder())
 			.withErrorDecoder(errorDecoder())
 			.withRequestTimeoutsInSeconds(pobProperties.connectTimeout(), pobProperties.readTimeout())
 			.composeCustomizersToOne();
 	}
 
-	@Bean
-	Encoder encoder() {
-		return new JacksonEncoder(new ObjectMapper()
-			.setDefaultPropertyInclusion(ALWAYS)); // Feign must be able to send null values.
+	private Encoder encoder() {
+		// Feign must be able to send null values.
+		return new JacksonEncoder(new ObjectMapper().setDefaultPropertyInclusion(ALWAYS));
 	}
 
-	@Bean
-	ErrorDecoder errorDecoder() {
+	private ErrorDecoder errorDecoder() {
 		// JsonPath below is constructed to only extract values from the attributes if they exist.
 		// UserMessage and Message should never exist at the same time (according to API-spec).
 		// 404:s should be thrown as 404:s and not 502:s

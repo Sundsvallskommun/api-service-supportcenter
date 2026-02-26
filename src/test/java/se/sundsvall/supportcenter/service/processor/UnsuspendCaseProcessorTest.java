@@ -9,10 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.stereotype.Component;
-import org.zalando.problem.Status;
-import org.zalando.problem.ThrowableProblem;
-import se.sundsvall.dept44.exception.ClientProblem;
-import se.sundsvall.dept44.exception.ServerProblem;
+import se.sundsvall.dept44.problem.Problem;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.service.SupportCenterStatus;
@@ -24,6 +22,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SUSPENSION;
 
@@ -87,7 +87,7 @@ class UnsuspendCaseProcessorTest {
 	@Test
 	void preProcessWhenCaseIsNotSuspended() {
 		// Mocks
-		when(pobIntegrationMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(new ClientProblem(Status.NOT_FOUND, "Not Found: Testexception"));
+		when(pobIntegrationMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(Problem.valueOf(NOT_FOUND, "Not Found: Testexception"));
 
 		// Call
 		processor.preProcess(POB_KEY, CASE_ID, REQUEST, pobPayloadMock);
@@ -101,7 +101,7 @@ class UnsuspendCaseProcessorTest {
 
 	@Test
 	void preProcessWhenNon404ExceptionIsThrown() {
-		final var exception = new ServerProblem(Status.INTERNAL_SERVER_ERROR, "Internal Server Error: Testexception");
+		final var exception = Problem.valueOf(INTERNAL_SERVER_ERROR, "Internal Server Error: Testexception");
 
 		// Mocks
 		when(pobIntegrationMock.getSuspension(POB_KEY, CASE_ID)).thenThrow(exception);
