@@ -39,6 +39,12 @@ public class UpdateAssetRequest {
 	@Schema(examples = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)
 	private String leaseStatus;
 
+	@Schema(examples = "2022-01-01", description = "Lease start date", requiredMode = NOT_REQUIRED)
+	private LocalDate leaseStart;
+
+	@Schema(examples = "2022-01-01", description = "Lease end date", requiredMode = NOT_REQUIRED)
+	private LocalDate leaseEnd;
+
 	public static UpdateAssetRequest create() {
 		return new UpdateAssetRequest();
 	}
@@ -160,6 +166,32 @@ public class UpdateAssetRequest {
 		return this;
 	}
 
+	public LocalDate getLeaseStart() {
+		return leaseStart;
+	}
+
+	public void setLeaseStart(LocalDate leaseStart) {
+		this.leaseStart = leaseStart;
+	}
+
+	public UpdateAssetRequest withLeaseStart(LocalDate leaseStart) {
+		this.leaseStart = leaseStart;
+		return this;
+	}
+
+	public LocalDate getLeaseEnd() {
+		return leaseEnd;
+	}
+
+	public void setLeaseEnd(LocalDate leaseEnd) {
+		this.leaseEnd = leaseEnd;
+	}
+
+	public UpdateAssetRequest withLeaseEnd(LocalDate leaseEnd) {
+		this.leaseEnd = leaseEnd;
+		return this;
+	}
+
 	@Override
 	public String toString() {
 		return "UpdateAssetRequest{" +
@@ -172,6 +204,8 @@ public class UpdateAssetRequest {
 			", deliveryDate=" + deliveryDate +
 			", municipalityId='" + municipalityId + '\'' +
 			", leaseStatus='" + leaseStatus + '\'' +
+			", leaseStart=" + leaseStart +
+			", leaseEnd=" + leaseEnd +
 			'}';
 	}
 
@@ -182,11 +216,11 @@ public class UpdateAssetRequest {
 		UpdateAssetRequest that = (UpdateAssetRequest) o;
 		return Objects.equals(note, that.note) && Objects.equals(hardwareName, that.hardwareName) && Objects.equals(macAddress, that.macAddress) && Objects.equals(supplierStatus, that.supplierStatus)
 			&& Objects.equals(hardwareStatus, that.hardwareStatus) && Objects.equals(warrantyEndDate, that.warrantyEndDate) && Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId,
-				that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus);
+				that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus) && Objects.equals(leaseStart, that.leaseStart) && Objects.equals(leaseEnd, that.leaseEnd);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(note, hardwareName, macAddress, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId, leaseStatus);
+		return Objects.hash(note, hardwareName, macAddress, supplierStatus, hardwareStatus, warrantyEndDate, deliveryDate, municipalityId, leaseStatus, leaseStart, leaseEnd);
 	}
 }

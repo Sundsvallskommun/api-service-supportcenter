@@ -104,6 +104,8 @@ class ConfigurationMapperTest {
 		final var note = Note.create().withType(NoteType.SUPPLIERNOTE).withText("text");
 		final var deliveryDate = LocalDate.now().plusDays(1);
 		final var warrantyEndDate = LocalDate.now().plusDays(700);
+		final var leaseStart = LocalDate.now().plusDays(2);
+		final var leaseEnd = LocalDate.now().plusDays(800);
 
 		// Parameter values
 		final var updateAssetRequest = UpdateAssetRequest.create()
@@ -113,7 +115,9 @@ class ConfigurationMapperTest {
 			.withSupplierStatus("supplierStatus")
 			.withDeliveryDate(deliveryDate)
 			.withWarrantyEndDate(warrantyEndDate)
-			.withLeaseStatus("status1");
+			.withLeaseStatus("status1")
+			.withLeaseStart(leaseStart)
+			.withLeaseEnd(leaseEnd);
 
 		final var assetId = "assetId";
 
@@ -129,6 +133,8 @@ class ConfigurationMapperTest {
 		assertThat(result.getData()).containsEntry("DeliveryDate", deliveryDate.format(DATE_FORMATTER));
 		assertThat(result.getData()).containsEntry("EndWarrantyDate", warrantyEndDate.format(DATE_FORMATTER));
 		assertThat(result.getData()).containsEntry("Virtual.LeaseStatus", "status1");
+		assertThat(result.getData()).containsEntry("Virtual.TjanstStart", leaseStart.format(DATE_FORMATTER));
+		assertThat(result.getData()).containsEntry("Virtual.TjanstSlut", leaseEnd.format(DATE_FORMATTER));
 		assertThat(result.getMemo()).extractingByKey("CILeverantorensAnteckningar").extracting(
 			PobMemo::getExtension,
 			PobMemo::getHandleSeparators,

@@ -122,7 +122,9 @@
 					"LastChangeDate": "",
 					"MonitorStatus": "0",
 					"Virtual.DataloadSyncInfo": "",
-					"Virtual.LeaseStatus": "ACTIVE"
+					"Virtual.LeaseStatus": "ACTIVE",
+					"Virtual.TjanstStart": "2022-01-01 00:00:00",
+					"Virtual.TjanstSlut": "2025-01-01 00:00:00"
 				},
 				"Memo": {}
 			}

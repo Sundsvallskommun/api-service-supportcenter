@@ -46,6 +46,8 @@ class CreateAssetRequestTest {
 		final var deliveryDate = LocalDate.now().plusDays(5L);
 		final var municipalityId = "municipalityId";
 		final var leaseStatus = "leaseStatus";
+		final var leaseStart = LocalDate.now().plusDays(5L);
+		final var leaseEnd = LocalDate.now().plusDays(400L);
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -58,7 +60,9 @@ class CreateAssetRequestTest {
 			.withHardwareStatus(hardwareStatus)
 			.withDeliveryDate(deliveryDate)
 			.withMunicipalityId(municipalityId)
-			.withLeaseStatus(leaseStatus);
+			.withLeaseStatus(leaseStatus)
+			.withLeaseStart(leaseStart)
+			.withLeaseEnd(leaseEnd);
 
 		assertThat(createAssetRequest).hasNoNullFieldsOrProperties();
 		assertThat(createAssetRequest.getManufacturer()).isEqualTo(manufacturer);
@@ -72,6 +76,8 @@ class CreateAssetRequestTest {
 		assertThat(createAssetRequest.getDeliveryDate()).isEqualTo(deliveryDate);
 		assertThat(createAssetRequest.getMunicipalityId()).isEqualTo(municipalityId);
 		assertThat(createAssetRequest.getLeaseStatus()).isEqualTo(leaseStatus);
+		assertThat(createAssetRequest.getLeaseStart()).isEqualTo(leaseStart);
+		assertThat(createAssetRequest.getLeaseEnd()).isEqualTo(leaseEnd);
 	}
 
 	@Test

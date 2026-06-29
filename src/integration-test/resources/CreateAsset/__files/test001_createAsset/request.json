@@ -7,5 +7,7 @@
 	"warrantyEndDate": "2022-01-01",
 	"deliveryDate": "2022-01-01",
 	"manufacturer": "x_dell",
-	"leaseStatus": "ACTIVE"
+	"leaseStatus": "ACTIVE",
+	"leaseStart": "2022-01-01",
+	"leaseEnd": "2025-01-01"
 }

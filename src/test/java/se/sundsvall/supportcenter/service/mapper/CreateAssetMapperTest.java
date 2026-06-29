@@ -17,6 +17,8 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_ITEM_ID_OPTION;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_END;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_START;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MANUFACTURER;
@@ -68,6 +70,8 @@ class CreateAssetMapperTest {
 		final var hardwareStatus = "hardwareStatus";
 		final var municipalityId = "2281";
 		final var leaseStatus = "leaseStatus";
+		final var leaseStart = LocalDate.now().plusDays(5);
+		final var leaseEnd = LocalDate.now().plusDays(400);
 
 		final var createAssetRequest = CreateAssetRequest.create()
 			.withManufacturer(manufacturer)
@@ -79,7 +83,9 @@ class CreateAssetMapperTest {
 			.withDeliveryDate(LocalDate.now().plusDays(2))
 			.withWarrantyEndDate(LocalDate.now().plusDays(360))
 			.withMunicipalityId(municipalityId)
-			.withLeaseStatus(leaseStatus);
+			.withLeaseStatus(leaseStatus)
+			.withLeaseStart(leaseStart)
+			.withLeaseEnd(leaseEnd);
 
 		// Call
 		final var result = CreateAssetMapper.toPobPayloadForCreatingConfigurationItem(itemId, createAssetRequest);
@@ -95,6 +101,8 @@ class CreateAssetMapperTest {
 		assertThat(result.getData()).containsEntry(KEY_END_WARRANTY_DATE, createAssetRequest.getWarrantyEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		assertThat(result.getData()).containsEntry(KEY_MUNICIPALITY, "Sundsvall");
 		assertThat(result.getData()).containsEntry(KEY_LEASE_STATUS, leaseStatus);
+		assertThat(result.getData()).containsEntry(KEY_LEASE_START, leaseStart.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		assertThat(result.getData()).containsEntry(KEY_LEASE_END, leaseEnd.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 	}
 
 	@Test

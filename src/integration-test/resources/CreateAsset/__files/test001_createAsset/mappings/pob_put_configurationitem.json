@@ -19,7 +19,9 @@
 						"Virtual.CIKommun": "Sundsvall",
 						"DeliveryDate": "2022-01-01",
 						"EndWarrantyDate": "2022-01-01",
-						"Virtual.LeaseStatus": "ACTIVE"
+						"Virtual.LeaseStatus": "ACTIVE",
+						"Virtual.TjanstStart": "2022-01-01",
+						"Virtual.TjanstSlut": "2025-01-01"
 					},
 					"Memo": {}
 				}

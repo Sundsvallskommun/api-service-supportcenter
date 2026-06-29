@@ -5,7 +5,7 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "2.2"
+  version: "2.3"
 servers:
 - url: http://localhost:56226
   description: Generated server url
@@ -897,6 +897,18 @@ components:
           description: Lease status
           examples:
           - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
       required:
       - modelName
       - serialNumber
@@ -1001,6 +1013,18 @@ components:
           description: Lease status
           examples:
           - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
     Case:
       type: object
       description: Case model
@@ -1214,4 +1238,16 @@ components:
           description: Lease status
           examples:
           - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
   securitySchemes: {}

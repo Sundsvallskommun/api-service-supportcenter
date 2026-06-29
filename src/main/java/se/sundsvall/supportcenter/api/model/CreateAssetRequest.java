@@ -48,6 +48,12 @@ public class CreateAssetRequest {
 	@Schema(examples = "status1", description = "Lease status", requiredMode = NOT_REQUIRED)
 	private String leaseStatus;
 
+	@Schema(examples = "2022-01-01", description = "Lease start date", requiredMode = NOT_REQUIRED)
+	private LocalDate leaseStart;
+
+	@Schema(examples = "2022-01-01", description = "Lease end date", requiredMode = NOT_REQUIRED)
+	private LocalDate leaseEnd;
+
 	public static CreateAssetRequest create() {
 		return new CreateAssetRequest();
 	}
@@ -195,6 +201,32 @@ public class CreateAssetRequest {
 		return this;
 	}
 
+	public LocalDate getLeaseStart() {
+		return leaseStart;
+	}
+
+	public void setLeaseStart(LocalDate leaseStart) {
+		this.leaseStart = leaseStart;
+	}
+
+	public CreateAssetRequest withLeaseStart(LocalDate leaseStart) {
+		this.leaseStart = leaseStart;
+		return this;
+	}
+
+	public LocalDate getLeaseEnd() {
+		return leaseEnd;
+	}
+
+	public void setLeaseEnd(LocalDate leaseEnd) {
+		this.leaseEnd = leaseEnd;
+	}
+
+	public CreateAssetRequest withLeaseEnd(LocalDate leaseEnd) {
+		this.leaseEnd = leaseEnd;
+		return this;
+	}
+
 	@Override
 	public String toString() {
 		return "CreateAssetRequest{" +
@@ -209,6 +241,8 @@ public class CreateAssetRequest {
 			", deliveryDate=" + deliveryDate +
 			", municipalityId='" + municipalityId + '\'' +
 			", leaseStatus='" + leaseStatus + '\'' +
+			", leaseStart=" + leaseStart +
+			", leaseEnd=" + leaseEnd +
 			'}';
 	}
 
@@ -219,11 +253,12 @@ public class CreateAssetRequest {
 		CreateAssetRequest that = (CreateAssetRequest) o;
 		return Objects.equals(manufacturer, that.manufacturer) && Objects.equals(modelName, that.modelName) && Objects.equals(modelDescription, that.modelDescription) && Objects.equals(serialNumber, that.serialNumber)
 			&& Objects.equals(macAddress, that.macAddress) && Objects.equals(warrantyEndDate, that.warrantyEndDate) && Objects.equals(supplierStatus, that.supplierStatus) && Objects.equals(hardwareStatus,
-				that.hardwareStatus) && Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus);
+				that.hardwareStatus) && Objects.equals(deliveryDate, that.deliveryDate) && Objects.equals(municipalityId, that.municipalityId) && Objects.equals(leaseStatus, that.leaseStatus) && Objects.equals(leaseStart,
+					that.leaseStart) && Objects.equals(leaseEnd, that.leaseEnd);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate, municipalityId, leaseStatus);
+		return Objects.hash(manufacturer, modelName, modelDescription, serialNumber, macAddress, warrantyEndDate, supplierStatus, hardwareStatus, deliveryDate, municipalityId, leaseStatus, leaseStart, leaseEnd);
 	}
 }
