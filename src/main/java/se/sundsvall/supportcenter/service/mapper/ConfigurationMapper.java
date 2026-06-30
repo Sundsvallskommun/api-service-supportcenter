@@ -19,6 +19,8 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_END_WARRANTY_DATE;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_HARDWARE_STATUS;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_END;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_START;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_LEASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MAC_ADDRESS;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
@@ -84,6 +86,8 @@ public final class ConfigurationMapper {
 		ofNullable(updateAssetRequest.getWarrantyEndDate()).ifPresent(value -> dataMap.put(KEY_END_WARRANTY_DATE, value.format(DATE_FORMATTER)));
 		ofNullable(updateAssetRequest.getMunicipalityId()).ifPresent(value -> dataMap.put(KEY_MUNICIPALITY, MUNICIPALITY_MAP.get(value)));
 		ofNullable(updateAssetRequest.getLeaseStatus()).ifPresent(value -> dataMap.put(KEY_LEASE_STATUS, value));
+		ofNullable(updateAssetRequest.getLeaseStart()).ifPresent(value -> dataMap.put(KEY_LEASE_START, value.format(DATE_FORMATTER)));
+		ofNullable(updateAssetRequest.getLeaseEnd()).ifPresent(value -> dataMap.put(KEY_LEASE_END, value.format(DATE_FORMATTER)));
 		return dataMap;
 	}
 }

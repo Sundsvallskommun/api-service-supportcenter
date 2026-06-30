@@ -104,6 +104,8 @@ class GetAssetMapperTest {
 		final var municipality1 = "Sundsvall";
 		final var municipalityId1 = "2281";
 		final var leaseStatus1 = "leaseStatus-1";
+		final var leaseStart1 = "2023-02-01 00:00:00";
+		final var leaseEnd1 = "2025-02-01 00:00:00";
 		final var configurationItemId2 = "222";
 		final var hardwareName2 = "hardwareName-2";
 		final var hardwareDescription2 = "hardwareDescription-2";
@@ -116,6 +118,8 @@ class GetAssetMapperTest {
 		final var municipality2 = "Ånge";
 		final var municipalityId2 = "2260";
 		final var leaseStatus2 = "leaseStatus-2";
+		final var leaseStart2 = "2024-02-01 00:00:00";
+		final var leaseEnd2 = "2026-02-01 00:00:00";
 
 		final var manufacturer = "manufacturer";
 
@@ -138,6 +142,8 @@ class GetAssetMapperTest {
 		dataMap1.put("EndWarrantyDate", warrantyEndDate1);
 		dataMap1.put("Virtual.CIKommun", municipality1);
 		dataMap1.put("Virtual.LeaseStatus", leaseStatus1);
+		dataMap1.put("Virtual.TjanstStart", leaseStart1);
+		dataMap1.put("Virtual.TjanstSlut", leaseEnd1);
 
 		var dataMap2 = new HashMap<String, Object>();
 		dataMap2.put("Id", configurationItemId2);
@@ -151,6 +157,8 @@ class GetAssetMapperTest {
 		dataMap2.put("EndWarrantyDate", warrantyEndDate2);
 		dataMap2.put("Virtual.CIKommun", municipality2);
 		dataMap2.put("Virtual.LeaseStatus", leaseStatus2);
+		dataMap2.put("Virtual.TjanstStart", leaseStart2);
+		dataMap2.put("Virtual.TjanstSlut", leaseEnd2);
 
 		final var configurationItems = List.of(
 			new PobPayload()
@@ -186,7 +194,9 @@ class GetAssetMapperTest {
 				Asset::getModelDescription,
 				Asset::getModelName,
 				Asset::getMunicipalityId,
-				Asset::getLeaseStatus)
+				Asset::getLeaseStatus,
+				Asset::getLeaseStart,
+				Asset::getLeaseEnd)
 			.containsExactly(
 				tuple(
 					configurationItemId1,
@@ -202,7 +212,9 @@ class GetAssetMapperTest {
 					modelDescription,
 					modelName,
 					municipalityId1,
-					leaseStatus1),
+					leaseStatus1,
+					LocalDate.parse(leaseStart1, DATE_TIME_FORMATTER),
+					LocalDate.parse(leaseEnd1, DATE_TIME_FORMATTER)),
 				tuple(
 					configurationItemId2,
 					hardwareDescription2,
@@ -217,7 +229,9 @@ class GetAssetMapperTest {
 					modelDescription,
 					modelName,
 					municipalityId2,
-					leaseStatus2));
+					leaseStatus2,
+					LocalDate.parse(leaseStart2, DATE_TIME_FORMATTER),
+					LocalDate.parse(leaseEnd2, DATE_TIME_FORMATTER)));
 	}
 
 	@Test
@@ -235,6 +249,8 @@ class GetAssetMapperTest {
 		final var municipality = "Sundsvall";
 		final var municipalityId = "2281";
 		final var leaseStatus = "leaseStatus";
+		final var leaseStart = "2023-02-01 00:00:00";
+		final var leaseEnd = "2025-02-01 00:00:00";
 
 		final var dataMap = new HashMap<String, Object>();
 		dataMap.put("Id", configurationItemId);
@@ -248,6 +264,8 @@ class GetAssetMapperTest {
 		dataMap.put("EndWarrantyDate", warrantyEndDate);
 		dataMap.put("Virtual.CIKommun", municipality);
 		dataMap.put("Virtual.LeaseStatus", leaseStatus);
+		dataMap.put("Virtual.TjanstStart", leaseStart);
+		dataMap.put("Virtual.TjanstSlut", leaseEnd);
 
 		final var configurationItems = List.of(
 			new PobPayload()
@@ -275,7 +293,9 @@ class GetAssetMapperTest {
 				Asset::getManufacturer,
 				Asset::getModelName,
 				Asset::getMunicipalityId,
-				Asset::getLeaseStatus)
+				Asset::getLeaseStatus,
+				Asset::getLeaseStart,
+				Asset::getLeaseEnd)
 			.containsExactly(tuple(
 				configurationItemId,
 				hardwareDescription,
@@ -289,6 +309,8 @@ class GetAssetMapperTest {
 				null,
 				null,
 				municipalityId,
-				leaseStatus));
+				leaseStatus,
+				LocalDate.parse(leaseStart, DATE_TIME_FORMATTER),
+				LocalDate.parse(leaseEnd, DATE_TIME_FORMATTER)));
 	}
 }

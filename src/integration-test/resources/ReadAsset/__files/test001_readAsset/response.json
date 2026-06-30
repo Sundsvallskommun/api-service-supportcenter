@@ -13,6 +13,8 @@
 		"supplierStatus": "2",
 		"id": "15857",
 		"deliveryDate": "2022-01-01",
-		"leaseStatus": "ACTIVE"
+		"leaseStatus": "ACTIVE",
+		"leaseStart": "2022-01-01",
+		"leaseEnd": "2025-01-01"
 	}
 ]

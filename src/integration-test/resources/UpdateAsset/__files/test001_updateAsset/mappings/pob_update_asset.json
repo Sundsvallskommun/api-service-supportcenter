@@ -20,7 +20,9 @@
 						"Id": "867403",
 						"DeliveryDate": "2022-02-20",
 						"EndWarrantyDate": "2024-02-20",
-						"Virtual.LeaseStatus": "ACTIVE"
+						"Virtual.LeaseStatus": "ACTIVE",
+						"Virtual.TjanstStart": "2022-02-20",
+						"Virtual.TjanstSlut": "2025-02-20"
 					},
 					"Memo": {
 						"CILeverantorensAnteckningar": {
