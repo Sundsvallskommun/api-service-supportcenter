@@ -3,8 +3,10 @@ package se.sundsvall.supportcenter.api.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import java.util.Objects;
+import se.sundsvall.supportcenter.api.validation.ValidHardwareIdentifiers;
 
 @Schema(description = "UpdateCaseRequest model")
+@ValidHardwareIdentifiers
 public class UpdateCaseRequest {
 
 	@Valid
