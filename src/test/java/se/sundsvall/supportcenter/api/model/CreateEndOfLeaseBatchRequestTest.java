@@ -35,15 +35,18 @@ class CreateEndOfLeaseBatchRequestTest {
 
 	@Test
 	void hasValidBuilderMethods() {
+		final var externalBatchId = randomUUID().toString();
 		final var computers = List.of(EndOfLeaseComputer.create()
 			.withSerialNumber("serialNumber")
 			.withAssetTag("assetTag")
 			.withEndOfLeaseDate(LocalDate.now().plusDays(90L)));
 
 		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(externalBatchId)
 			.withComputers(computers);
 
 		assertThat(createEndOfLeaseBatchRequest).hasNoNullFieldsOrProperties();
+		assertThat(createEndOfLeaseBatchRequest.getExternalBatchId()).isEqualTo(externalBatchId);
 		assertThat(createEndOfLeaseBatchRequest.getComputers()).isEqualTo(computers);
 	}
 

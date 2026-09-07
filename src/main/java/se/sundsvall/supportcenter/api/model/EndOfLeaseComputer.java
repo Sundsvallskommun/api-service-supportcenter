@@ -3,6 +3,7 @@ package se.sundsvall.supportcenter.api.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,10 +14,12 @@ public class EndOfLeaseComputer {
 
 	@Schema(examples = "J123ABC", description = "Serial number", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
+	@Size(min = 1, max = 64)
 	private String serialNumber;
 
 	@Schema(examples = "WB16603", description = "Asset tag", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
+	@Size(min = 1, max = 64)
 	private String assetTag;
 
 	@Schema(examples = "2026-11-30", description = "Date when the lease ends. Stored for traceability, does not control when the message is sent", requiredMode = REQUIRED)
