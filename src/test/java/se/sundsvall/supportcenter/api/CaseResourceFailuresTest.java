@@ -297,6 +297,31 @@ class CaseResourceFailuresTest {
 	}
 
 	@Test
+	void updateCaseWithBothHardwareNameAndImeiNumber() {
+
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
+			.contentType(APPLICATION_JSON)
+			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.bodyValue(UpdateCaseRequest.create().withHardwareName("WB12345NY").withImeiNumber("702548572062338"))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.when(Option.IGNORING_ARRAY_ORDER)
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"hardwareName","message":"hardwareName and imeiNumber must not be provided at the same time"},
+							{"field":"imeiNumber","message":"hardwareName and imeiNumber must not be provided at the same time"}
+						]""")));
+
+		verifyNoInteractions(caseServiceMock);
+	}
+
+	@Test
 	void getCaseMissingPobKeyHeader() {
 
 		webTestClient.get().uri("/2281/cases/{caseId}", "12345")
