@@ -41,7 +41,7 @@ class EndOfLeaseBatchResourceTest {
 			.withComputers(List.of(
 				EndOfLeaseComputer.create()
 					.withSerialNumber("J123ABC")
-					.withAssetTag("WB16603")
+					.withAssetTag("AB12345")
 					.withEndOfLeaseDate(LocalDate.of(2026, 11, 30)),
 				EndOfLeaseComputer.create()
 					.withSerialNumber("K456DEF")

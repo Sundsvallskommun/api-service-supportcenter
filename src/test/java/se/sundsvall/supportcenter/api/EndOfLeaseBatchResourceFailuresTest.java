@@ -180,7 +180,7 @@ class EndOfLeaseBatchResourceFailuresTest {
 	private static EndOfLeaseComputer validComputer() {
 		return EndOfLeaseComputer.create()
 			.withSerialNumber("J123ABC")
-			.withAssetTag("WB16603")
+			.withAssetTag("AB12345")
 			.withEndOfLeaseDate(LocalDate.of(2026, 11, 30));
 	}
 }

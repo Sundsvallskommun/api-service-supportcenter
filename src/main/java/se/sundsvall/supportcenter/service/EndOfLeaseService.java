@@ -9,6 +9,7 @@ import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseBatchRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 
+import static se.sundsvall.dept44.util.LogUtils.sanitizeForLogging;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
 
 @Service
@@ -55,14 +56,22 @@ public class EndOfLeaseService {
 	private void logResend(final String batchId, final String externalBatchId, final int resentComputers) {
 		final var storedComputers = endOfLeaseBatchRepository.countComputers(batchId);
 
+		final var sanitizedBatchId = sanitizeForLogging(externalBatchId);
+
 		if (storedComputers == resentComputers) {
-			LOG.info("Batch with external id {} is already registered as {} with {} computers, nothing was stored", externalBatchId, batchId, storedComputers);
+			LOG.info("Batch with external id {} is already registered as {} with {} computers, nothing was stored", sanitizedBatchId, batchId, storedComputers);
 		} else {
 			LOG.warn("Batch with external id {} is already registered as {} with {} computers, but arrived again with {}. The computers that arrived now were not stored",
-				externalBatchId, batchId, storedComputers, resentComputers);
+				sanitizedBatchId, batchId, storedComputers, resentComputers);
 		}
 	}
 
+	/**
+	 * Deliberately not transactional, and must not be called from something that is. The recovery below depends on the
+	 * failed save having been its own committed transaction: inside a caller's transaction the lookup would read the
+	 * snapshot taken before the competing insert committed and find nothing, and the transaction would already be marked
+	 * rollback-only by the failed flush.
+	 */
 	private String store(final String municipalityId, final CreateEndOfLeaseBatchRequest createEndOfLeaseBatchRequest) {
 		try {
 			return endOfLeaseBatchRepository.save(toEndOfLeaseBatchEntity(municipalityId, createEndOfLeaseBatchRequest)).getId();
@@ -74,15 +83,15 @@ public class EndOfLeaseService {
 	}
 
 	private String recoverFromDuplicate(final String municipalityId, final String externalBatchId, final DataIntegrityViolationException cause) {
+		final Optional<String> batchId;
 		try {
-			return findBatchId(municipalityId, externalBatchId).orElseThrow(() -> cause);
+			batchId = findBatchId(municipalityId, externalBatchId);
 		} catch (final RuntimeException e) {
 			// Whatever went wrong while looking the batch up says nothing about which constraint was violated, and that
 			// is the part an operator needs, so the two are reported together rather than one replacing the other.
-			if (e != cause) {
-				e.addSuppressed(cause);
-			}
+			e.addSuppressed(cause);
 			throw e;
 		}
+		return batchId.orElseThrow(() -> cause);
 	}
 }

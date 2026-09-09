@@ -34,6 +34,9 @@ spring:
   flyway:
     enabled: false
   jpa:
+    # A request is answered from a DTO, so holding the session open for the whole of it only pins a connection. It would
+    # also let the duplicate recovery in EndOfLeaseService query through the same session that just failed to flush.
+    open-in-view: false
     properties:
       jakarta:
         persistence:

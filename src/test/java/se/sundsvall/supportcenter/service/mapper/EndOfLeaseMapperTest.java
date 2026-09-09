@@ -25,7 +25,7 @@ class EndOfLeaseMapperTest {
 			.withComputers(List.of(
 				EndOfLeaseComputer.create()
 					.withSerialNumber("J123ABC")
-					.withAssetTag("WB16603")
+					.withAssetTag("AB12345")
 					.withEndOfLeaseDate(END_OF_LEASE_DATE),
 				EndOfLeaseComputer.create()
 					.withSerialNumber("K456DEF")
@@ -39,7 +39,7 @@ class EndOfLeaseMapperTest {
 		assertThat(endOfLeaseBatchEntity.getComputers())
 			.extracting(EndOfLeaseComputerEntity::getSerialNumber, EndOfLeaseComputerEntity::getAssetTag, EndOfLeaseComputerEntity::getEndOfLeaseDate)
 			.containsExactly(
-				tuple("J123ABC", "WB16603", END_OF_LEASE_DATE),
+				tuple("J123ABC", "AB12345", END_OF_LEASE_DATE),
 				tuple("K456DEF", "PUB16604", END_OF_LEASE_DATE));
 	}
 
@@ -49,14 +49,14 @@ class EndOfLeaseMapperTest {
 			.withExternalBatchId(EXTERNAL_BATCH_ID)
 			.withComputers(List.of(EndOfLeaseComputer.create()
 				.withSerialNumber("J123ABC")
-				.withAssetTag("WB16603")
+				.withAssetTag("AB12345")
 				.withEndOfLeaseDate(END_OF_LEASE_DATE)));
 
 		final var endOfLeaseBatchEntity = toEndOfLeaseBatchEntity(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
 
 		assertThat(endOfLeaseBatchEntity.getComputers()).hasSize(1).allSatisfy(computer -> {
 			assertThat(computer.getSerialNumber()).isEqualTo("J123ABC");
-			assertThat(computer.getAssetTag()).isEqualTo("WB16603");
+			assertThat(computer.getAssetTag()).isEqualTo("AB12345");
 			assertThat(computer.getEndOfLeaseDate()).isEqualTo(END_OF_LEASE_DATE);
 			assertThat(computer.getStatus()).isEqualTo(PENDING);
 			assertThat(computer.getBatch()).isSameAs(endOfLeaseBatchEntity);

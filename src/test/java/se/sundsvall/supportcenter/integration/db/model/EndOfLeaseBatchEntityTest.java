@@ -75,4 +75,14 @@ class EndOfLeaseBatchEntityTest {
 
 		assertThat(endOfLeaseBatchEntity.getCreated()).isCloseTo(now(), within(2, SECONDS));
 	}
+
+	@Test
+	void prePersistKeepsCreatedThatIsAlreadySet() {
+		final var created = now().minusDays(1);
+		final var endOfLeaseBatchEntity = EndOfLeaseBatchEntity.create().withCreated(created);
+
+		endOfLeaseBatchEntity.prePersist();
+
+		assertThat(endOfLeaseBatchEntity.getCreated()).isEqualTo(created);
+	}
 }

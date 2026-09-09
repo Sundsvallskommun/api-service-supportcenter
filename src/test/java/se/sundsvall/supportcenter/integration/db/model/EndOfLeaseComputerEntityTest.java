@@ -25,7 +25,7 @@ class EndOfLeaseComputerEntityTest {
 
 	@BeforeAll
 	static void setup() {
-		registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt(1000)), LocalDate.class);
+		registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt()), LocalDate.class);
 		registerValueGenerator(() -> now().plusSeconds(new Random().nextInt()), OffsetDateTime.class);
 		registerValueGenerator(() -> EndOfLeaseBatchEntity.create().withId(randomUUID().toString()), EndOfLeaseBatchEntity.class);
 	}
@@ -45,7 +45,7 @@ class EndOfLeaseComputerEntityTest {
 		final var id = "id";
 		final var batch = EndOfLeaseBatchEntity.create().withId("batchId");
 		final var serialNumber = "J123ABC";
-		final var assetTag = "WB16603";
+		final var assetTag = "AB12345";
 		final var endOfLeaseDate = LocalDate.now().plusDays(90L);
 		final var assetMunicipalityId = "2260";
 		final var attempts = 2;
@@ -106,6 +106,16 @@ class EndOfLeaseComputerEntityTest {
 		endOfLeaseComputerEntity.prePersist();
 
 		assertThat(endOfLeaseComputerEntity.getAttempts()).isEqualTo(3);
+	}
+
+	@Test
+	void prePersistKeepsCreatedThatIsAlreadySet() {
+		final var created = now().minusDays(1);
+		final var endOfLeaseComputerEntity = EndOfLeaseComputerEntity.create().withCreated(created);
+
+		endOfLeaseComputerEntity.prePersist();
+
+		assertThat(endOfLeaseComputerEntity.getCreated()).isEqualTo(created);
 	}
 
 	@Test

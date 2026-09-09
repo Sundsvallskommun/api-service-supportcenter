@@ -88,7 +88,7 @@ public class EndOfLeaseComputerEntity {
 
 	@PrePersist
 	void prePersist() {
-		created = now(systemDefault());
+		created = ofNullable(created).orElse(now(systemDefault()));
 		attempts = ofNullable(attempts).orElse(0);
 	}
 

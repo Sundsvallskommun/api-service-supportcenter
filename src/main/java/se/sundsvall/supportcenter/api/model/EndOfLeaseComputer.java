@@ -17,7 +17,7 @@ public class EndOfLeaseComputer {
 	@Size(min = 1, max = 64)
 	private String serialNumber;
 
-	@Schema(examples = "WB16603", description = "Asset tag", requiredMode = REQUIRED)
+	@Schema(examples = "AB12345", description = "Asset tag", requiredMode = REQUIRED)
 	@NotBlank(message = "must be provided")
 	@Size(min = 1, max = 64)
 	private String assetTag;

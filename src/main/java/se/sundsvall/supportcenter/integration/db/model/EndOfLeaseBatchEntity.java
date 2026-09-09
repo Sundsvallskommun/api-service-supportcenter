@@ -17,6 +17,7 @@ import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.GenerationType.UUID;
 import static java.time.OffsetDateTime.now;
 import static java.time.ZoneId.systemDefault;
+import static java.util.Optional.ofNullable;
 import static org.hibernate.annotations.TimeZoneStorageType.NORMALIZE;
 
 @Entity
@@ -60,7 +61,7 @@ public class EndOfLeaseBatchEntity {
 
 	@PrePersist
 	void prePersist() {
-		created = now(systemDefault());
+		created = ofNullable(created).orElse(now(systemDefault()));
 	}
 
 	public String getId() {

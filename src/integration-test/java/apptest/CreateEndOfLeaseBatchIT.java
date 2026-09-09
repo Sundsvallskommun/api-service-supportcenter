@@ -64,7 +64,7 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 		assertThat(computers)
 			.extracting(row -> row.get("serial_number"), row -> row.get("asset_tag"), row -> ((Date) row.get("end_of_lease_date")).toLocalDate(), row -> row.get("status"), row -> row.get("attempts"))
 			.containsExactly(
-				tuple("J123ABC", "WB16603", LocalDate.of(2026, 11, 30), "PENDING", 0),
+				tuple("J123ABC", "AB12345", LocalDate.of(2026, 11, 30), "PENDING", 0),
 				tuple("K456DEF", "PUB16604", LocalDate.of(2026, 12, 31), "PENDING", 0));
 
 		assertThat(computers).allSatisfy(row -> {
@@ -95,6 +95,7 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 
 		final var circuitBreaker = circuitBreakerRegistry.circuitBreaker("endOfLeaseBatchRepository");
 		final var failedCallsBefore = circuitBreaker.getMetrics().getNumberOfFailedCalls();
+		final var successfulCallsBefore = circuitBreaker.getMetrics().getNumberOfSuccessfulCalls();
 
 		endOfLeaseBatchRepository.save(batch("2281", "e8a1c4d7-5b3e-4f9a-8c2d-6e1f3a5b7c9d"));
 
@@ -103,6 +104,9 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 				.isThrownBy(() -> endOfLeaseBatchRepository.save(batch("2281", "e8a1c4d7-5b3e-4f9a-8c2d-6e1f3a5b7c9d")));
 		}
 
+		// Asserting that the successful calls were counted too, since a breaker that never advises the repository has all
+		// its metrics sitting at zero and would satisfy the failure assertion without proving anything.
+		assertThat(circuitBreaker.getMetrics().getNumberOfSuccessfulCalls()).isGreaterThan(successfulCallsBefore);
 		assertThat(circuitBreaker.getMetrics().getNumberOfFailedCalls()).isEqualTo(failedCallsBefore);
 		assertThat(circuitBreaker.getState()).isEqualTo(CLOSED);
 
@@ -143,7 +147,7 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 			.map(serialNumber -> EndOfLeaseComputerEntity.create()
 				.withBatch(endOfLeaseBatchEntity)
 				.withSerialNumber(serialNumber)
-				.withAssetTag("WB16603")
+				.withAssetTag("AB12345")
 				.withEndOfLeaseDate(LocalDate.of(2026, 11, 30))
 				.withStatus(PENDING))
 			.collect(toCollection(ArrayList::new)));

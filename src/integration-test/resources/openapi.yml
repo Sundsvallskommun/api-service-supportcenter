@@ -5,7 +5,7 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "2.5"
+  version: "2.4"
 servers:
   - url: http://localhost:59823
     description: Generated server url
@@ -627,7 +627,7 @@ components:
           type: string
           description: Asset tag
           examples:
-            - WB16603
+            - AB12345
           maxLength: 64
           minLength: 1
         endOfLeaseDate:
