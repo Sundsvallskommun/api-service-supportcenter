@@ -596,6 +596,13 @@ components:
       type: object
       description: CreateEndOfLeaseBatchRequest model
       properties:
+        externalBatchId:
+          type: string
+          description: "Id of the batch, set by the sender. A batch sent again under\
+            \ an id that is already registered is accepted without being queued a\
+            \ second time"
+          examples:
+            - d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90
         computers:
           type: array
           items:
@@ -604,6 +611,7 @@ components:
           minItems: 1
       required:
         - computers
+        - externalBatchId
     EndOfLeaseComputer:
       type: object
       description: EndOfLeaseComputer model
@@ -613,12 +621,14 @@ components:
           description: Serial number
           examples:
             - J123ABC
+          maxLength: 64
           minLength: 1
         assetTag:
           type: string
           description: Asset tag
           examples:
-            - WB16603
+            - AB12345
+          maxLength: 64
           minLength: 1
         endOfLeaseDate:
           type: string

@@ -37,6 +37,10 @@
 		</dependency>
 		<dependency>
 			<groupId>se.sundsvall.dept44</groupId>
+			<artifactId>dept44-starter-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>se.sundsvall.dept44</groupId>
 			<artifactId>dept44-common-validators</artifactId>
 		</dependency>
 		<dependency>
@@ -48,6 +52,11 @@
 		<dependency>
 			<groupId>se.sundsvall.dept44</groupId>
 			<artifactId>dept44-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>se.sundsvall.dept44</groupId>
+			<artifactId>dept44-starter-jpa-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

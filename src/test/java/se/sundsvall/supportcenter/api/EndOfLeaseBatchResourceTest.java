@@ -25,6 +25,7 @@ class EndOfLeaseBatchResourceTest {
 
 	private static final String MUNICIPALITY_ID = "2281";
 	private static final String BATCH_ID = "8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c";
+	private static final String EXTERNAL_BATCH_ID = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90";
 
 	@MockitoBean
 	private EndOfLeaseService endOfLeaseServiceMock;
@@ -36,10 +37,11 @@ class EndOfLeaseBatchResourceTest {
 	void createEndOfLeaseBatch() {
 
 		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
 			.withComputers(List.of(
 				EndOfLeaseComputer.create()
 					.withSerialNumber("J123ABC")
-					.withAssetTag("WB16603")
+					.withAssetTag("AB12345")
 					.withEndOfLeaseDate(LocalDate.of(2026, 11, 30)),
 				EndOfLeaseComputer.create()
 					.withSerialNumber("K456DEF")

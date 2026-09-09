@@ -14,6 +14,11 @@ resilience4j:
     instances:
       pob:
         ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
+      endOfLeaseBatchRepository:
+        # A batch that is sent again loses on the unique index, which is an expected outcome rather than the database
+        # being unwell. Counted as a failure it opens the breaker after a handful of resends and takes every sender down
+        # with it.
+        ignoreExceptions: org.springframework.dao.DataIntegrityViolationException
 mdc:
   municipalityId:
     enabled: true
@@ -24,3 +29,17 @@ spring:
     cache-names: case-categories, closure-codes
     caffeine:
       spec: maximumSize=50, expireAfterWrite=86400s
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+  flyway:
+    enabled: false
+  jpa:
+    # A request is answered from a DTO, so holding the session open for the whole of it only pins a connection. It would
+    # also let the duplicate recovery in EndOfLeaseService query through the same session that just failed to flush.
+    open-in-view: false
+    properties:
+      jakarta:
+        persistence:
+          schema-generation:
+            database:
+              action: none
