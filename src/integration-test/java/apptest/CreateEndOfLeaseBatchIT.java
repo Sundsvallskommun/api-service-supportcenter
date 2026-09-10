@@ -65,7 +65,7 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 			.extracting(row -> row.get("serial_number"), row -> row.get("asset_tag"), row -> ((Date) row.get("end_of_lease_date")).toLocalDate(), row -> row.get("status"), row -> row.get("attempts"))
 			.containsExactly(
 				tuple("J123ABC", "AB12345", LocalDate.of(2026, 11, 30), "PENDING", 0),
-				tuple("K456DEF", "PUB16604", LocalDate.of(2026, 12, 31), "PENDING", 0));
+				tuple("K456DEF", "PUB16604", LocalDate.of(2026, 12, 31), "EXCLUDED", 0));
 
 		assertThat(computers).allSatisfy(row -> {
 			assertThat(row.get("asset_municipality_id")).isNull();
