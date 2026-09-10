@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import se.sundsvall.supportcenter.api.model.Asset;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -312,5 +314,36 @@ class GetAssetMapperTest {
 				leaseStatus,
 				LocalDate.parse(leaseStart, DATE_TIME_FORMATTER),
 				LocalDate.parse(leaseEnd, DATE_TIME_FORMATTER)));
+	}
+
+	@ParameterizedTest
+	@CsvSource(value = {
+		"Sundsvall, 2281",
+		"sundsvall, 2281",
+		"2281, 2281",
+		"Ånge, 2260",
+		"2260, 2260",
+		"Timrå, NULL",
+		"NULL, NULL"
+	}, nullValues = "NULL")
+	void getAssetListMapsMunicipalityFromBothCodeAndName(String municipality, String expectedMunicipalityId) {
+
+		// Parameter values
+		final var dataMap = new HashMap<String, Object>();
+		dataMap.put("Id", "111");
+		dataMap.put("Virtual.CIKommun", municipality);
+
+		final var configurationItems = List.of(
+			new PobPayload()
+				.type("ConfigurationItem")
+				.data(dataMap));
+
+		// Call
+		final var result = GetAssetMapper.toAssetList(configurationItems, new HashMap<>());
+
+		// Verification
+		assertThat(result)
+			.extracting(Asset::getMunicipalityId)
+			.containsExactly(expectedMunicipalityId);
 	}
 }
