@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.sundsvall.supportcenter.api.model.Asset;
 
 import static java.util.Collections.emptyList;
@@ -35,6 +37,8 @@ import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMa
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.TYPE_ITEM;
 
 public final class GetAssetMapper {
+
+	private static final Logger LOG = LoggerFactory.getLogger(GetAssetMapper.class);
 
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -114,11 +118,19 @@ public final class GetAssetMapper {
 	}
 
 	private static String toMunicipalityId(String municipality) {
-		return MUNICIPALITY_MAP.entrySet().stream()
-			.filter(entry -> entry.getValue().equalsIgnoreCase(municipality))
-			.findFirst()
-			.map(Map.Entry::getKey)
-			.orElse(null);
+		final var municipalityId = ofNullable(municipality)
+			.filter(MUNICIPALITY_MAP::containsKey)
+			.or(() -> MUNICIPALITY_MAP.entrySet().stream()
+				.filter(entry -> entry.getValue().equalsIgnoreCase(municipality))
+				.findFirst()
+				.map(Map.Entry::getKey));
+
+		if (municipalityId.isEmpty() && StringUtils.isNotEmpty(municipality)) {
+			final var sanitizedMunicipality = municipality.replaceAll("\\p{Cntrl}", " ");
+			LOG.warn("Municipality '{}' from POB matches no known municipality id or name, municipalityId is left out of the asset", sanitizedMunicipality);
+		}
+
+		return municipalityId.orElse(null);
 	}
 
 }
