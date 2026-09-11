@@ -92,6 +92,12 @@ public class EndOfLeaseService {
 			e.addSuppressed(cause);
 			throw e;
 		}
+
+		// The driver logs the violation as a bare duplicate entry warning, which reads like the database being unwell
+		// rather than a sender being answered correctly. This is the line that says which of the two it was.
+		batchId.ifPresent(id -> LOG.info("Batch with external id {} arrived again while the first one was still being stored, and lost on the unique index. It is registered as {}, nothing was stored",
+			sanitizeForLogging(externalBatchId), id));
+
 		return batchId.orElseThrow(() -> cause);
 	}
 }
