@@ -3,9 +3,12 @@ package se.sundsvall.supportcenter.service.mapper;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputer;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -63,5 +66,37 @@ class EndOfLeaseMapperTest {
 			assertThat(computer.getAssetMunicipalityId()).isNull();
 			assertThat(computer.getSentAt()).isNull();
 		});
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+		"EB12345, EXCLUDED",
+		"LB12345, EXCLUDED",
+		"PB12345, EXCLUDED",
+		"PS12345, EXCLUDED",
+		"MPB12345, EXCLUDED",
+		"MPS12345, EXCLUDED",
+		"SP12345, EXCLUDED",
+		"CB12345, EXCLUDED",
+		"PUB16604, EXCLUDED",
+		"pub16604, EXCLUDED",
+		"AB12345, PENDING",
+		"WB16603, PENDING",
+		"SPARE1, PENDING",
+		"12345, PENDING"
+	})
+	void toEndOfLeaseBatchEntityHoldsBackComputerTypesThatAreNotSent(final String assetTag, final EndOfLeaseStatus expectedStatus) {
+		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withComputers(List.of(EndOfLeaseComputer.create()
+				.withSerialNumber("J123ABC")
+				.withAssetTag(assetTag)
+				.withEndOfLeaseDate(END_OF_LEASE_DATE)));
+
+		final var endOfLeaseBatchEntity = toEndOfLeaseBatchEntity(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
+
+		assertThat(endOfLeaseBatchEntity.getComputers())
+			.extracting(EndOfLeaseComputerEntity::getStatus)
+			.containsExactly(expectedStatus);
 	}
 }

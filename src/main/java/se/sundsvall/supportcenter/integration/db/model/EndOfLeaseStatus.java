@@ -19,5 +19,12 @@ public enum EndOfLeaseStatus {
 	 * The attempts are used up and the computer needs to be looked at by a human. Terminal until someone puts it back to
 	 * PENDING.
 	 */
-	FAILED
+	FAILED,
+
+	/**
+	 * A computer name that should not get a message, recognized by the letters its asset tag starts with. Stored rather
+	 * than dropped, so that the batch still holds every computer the sender listed and a batch that arrives again is
+	 * still recognized as the one already stored. Never picked up, and terminal.
+	 */
+	EXCLUDED
 }
