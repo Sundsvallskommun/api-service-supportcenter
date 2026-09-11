@@ -14,3 +14,7 @@ spring:
     url: jdbc:tc:mariadb:10.6.22:///
   flyway:
     enabled: true
+scheduler:
+  end-of-lease:
+    # Off under test. The tests that exercise the job call it themselves.
+    cron: '-'

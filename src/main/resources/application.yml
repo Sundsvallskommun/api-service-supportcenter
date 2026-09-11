@@ -22,6 +22,17 @@ resilience4j:
 mdc:
   municipalityId:
     enabled: true
+scheduler:
+  end-of-lease:
+    name: end-of-lease
+    # A batch arrives once a day and SysMan is in no hurry to hear about it, so this is a slow drain rather than a
+    # dispatch. Every quarter is already far tighter than the delay anyone downstream would notice.
+    cron: '0 */15 * * * *'
+    # Has to stay longer than a run can take. Shorter, and the lock is handed to the next instance while this one is
+    # still working, and a computer is reported to SysMan once per instance. Both numbers are set for a job that only
+    # counts rows, and have to be measured again once POB and SysMan are called for every computer.
+    shedlock-lock-at-most-for: PT10M
+    maximum-execution-time: PT5M
 spring:
   application:
     name: api-supportcenter

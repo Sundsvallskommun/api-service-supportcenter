@@ -21,3 +21,7 @@ spring:
           schema-generation:
             database:
               action: validate
+scheduler:
+  end-of-lease:
+    # Off under test. The tests that exercise the job call it themselves.
+    cron: '-'
