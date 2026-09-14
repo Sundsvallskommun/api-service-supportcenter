@@ -3,6 +3,18 @@ integration:
     connectTimeout: 1
     readTimeout: 2
     url: http://localhost:${wiremock.server.port:}/pob
+  sysman:
+    connectTimeout: 1
+    readTimeout: 2
+    sundsvall:
+      url: http://localhost:${wiremock.server.port:}/sysman-sundsvall
+      username: sundsvallUsername
+      password: sundsvallPassword
+    ange:
+      url: http://localhost:${wiremock.server.port:}/sysman-ange
+      domain: ANGE
+      username: angeUsername
+      password: angePassword
 logging:
   level:
     root: INFO

@@ -2,6 +2,17 @@ integration:
   pob:
     connectTimeout: 10
     readTimeout: 60
+  sysman:
+    connectTimeout: 10
+    readTimeout: 30
+    # The municipality of a computer is read from POB and decides which installation it belongs to. Kept here so that
+    # moving a municipality between installations is a property and not a release. Url, username and password are
+    # environment specific and are not checked in.
+    sundsvall:
+      municipalityId: 2281
+      domain: PERSONAL
+    ange:
+      municipalityId: 2260
 logging:
   level:
     root: INFO
@@ -13,6 +24,14 @@ resilience4j:
   circuitbreaker:
     instances:
       pob:
+        ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
+      # Both installations ignore everything the error decoder throws, which is every answer from SysMan that is not a
+      # success. A computer SysMan no longer knows about is a fact about that computer and is recorded on its row, not
+      # a sign that the installation is unwell. What the breakers are left to catch is what they should catch, a host
+      # that does not answer at all. One breaker each, so that Ånge cannot take our own installation down with it.
+      sysman-sundsvall:
+        ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
+      sysman-ange:
         ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
       endOfLeaseBatchRepository:
         # A batch that is sent again loses on the unique index, which is an expected outcome rather than the database

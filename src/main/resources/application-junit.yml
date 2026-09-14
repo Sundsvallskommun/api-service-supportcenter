@@ -3,6 +3,16 @@ integration:
     connectTimeout: 10
     readTimeout: 20
     url: http://pob.url
+  sysman:
+    sundsvall:
+      url: http://sysman.sundsvall.url
+      username: sundsvallUsername
+      password: sundsvallPassword
+    ange:
+      url: http://sysman.ange.url
+      domain: ANGE
+      username: angeUsername
+      password: angePassword
 logging:
   level:
     root: INFO

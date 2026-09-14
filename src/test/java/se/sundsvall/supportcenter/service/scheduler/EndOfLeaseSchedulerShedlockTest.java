@@ -33,6 +33,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  */
 @SpringBootTest(properties = {
 	"scheduler.end-of-lease.cron=* * * * * *", // Every second, so that a tick lands while the first run is still going
+	// More than one thread on purpose. The default pool holds one, and the run below never returns, so without this
+	// no second tick is ever attempted and the test would pass with the lock taken away entirely.
+	"spring.task.scheduling.pool.size=2",
 	"server.shutdown=immediate",
 	"spring.lifecycle.timeout-per-shutdown-phase=0s"
 })
