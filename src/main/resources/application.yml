@@ -58,15 +58,47 @@ mdc:
     enabled: true
 scheduler:
   end-of-lease:
-    name: end-of-lease
-    # A batch arrives once a day and SysMan is in no hurry to hear about it, so this is a slow drain rather than a
-    # dispatch. Every quarter is already far tighter than the delay anyone downstream would notice.
-    cron: '0 */15 * * * *'
-    # Has to stay longer than a run can take. Shorter, and the lock is handed to the next instance while this one is
-    # still working, and a computer is reported to SysMan once per instance. Both numbers are set for a job that only
-    # counts rows, and have to be measured again once POB and SysMan are called for every computer.
-    shedlock-lock-at-most-for: PT10M
-    maximum-execution-time: PT5M
+    # Sending a computer its message is two runs. The municipality on its POB configuration item decides which SysMan
+    # installation it belongs to, so nothing can be sent before the lookup has written that municipality on the row.
+    # Kept apart because the two fail differently: a lookup failure is one computer, a dispatch failure is everyone in
+    # the call.
+    #
+    # How many attempts each run gets. The column is shared, but a successful lookup puts it back to nothing spent, so
+    # the budget is per run rather than per computer.
+    #
+    # Spent on what a computer itself is the cause of: a row POB or SysMan will not accept, a serial number POB knows
+    # nothing about, a computer name SysMan does not recognize. An unreachable or unwell POB or SysMan is not counted
+    # against anyone, since it says nothing about any single computer. A queue therefore stands still through an outage
+    # rather than draining into FAILED, which is deliberate and worth an alarm on the age of the oldest waiting row.
+    maximum-attempts: 5
+    lookup:
+      name: end-of-lease-lookup
+      # A batch arrives once a day and nobody is waiting on the message by the minute, so this is a slow drain rather
+      # than a dispatch. On the hour, with the dispatch run half an hour behind, so that what this run resolves is
+      # waiting for it rather than being written while it reads.
+      cron: '0 0 * * * *'
+      # One POB call per computer, so a run takes as long as the page is wide. A hundred an hour drains a batch of a
+      # thousand in half a day, which is well inside the day the next batch arrives in, and leaves a run far short of
+      # its execution time.
+      page-size: 100
+      # Has to stay longer than a run can take. Shorter, and the lock is handed to the next instance while this one is
+      # still working, and a computer is looked up once per instance.
+      shedlock-lock-at-most-for: PT10M
+      maximum-execution-time: PT5M
+    dispatch:
+      name: end-of-lease-dispatch
+      # Half an hour after the lookup, not alongside it. Run at the same minute the two jobs hold separate locks and
+      # start together, and this one reads the queue before the other has written to it, which costs every computer a
+      # whole extra cycle.
+      cron: '0 30 * * * *'
+      # The computers taken in one run, not the size of a SysMan call. A run groups what it took by municipality and
+      # sends one call per group.
+      page-size: 100
+      # The SysMan message an end of lease computer is to receive. A placeholder until someone says which message that
+      # is, and a property rather than a constant so that naming it is a deploy and not a release.
+      message-id: 1
+      shedlock-lock-at-most-for: PT10M
+      maximum-execution-time: PT5M
 spring:
   application:
     name: api-supportcenter

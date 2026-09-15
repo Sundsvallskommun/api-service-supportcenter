@@ -10,19 +10,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
-class EndOfLeaseSchedulerTest {
+class EndOfLeaseLookupSchedulerTest {
 
 	@Mock
-	private EndOfLeaseSchedulerWorker endOfLeaseSchedulerWorkerMock;
+	private EndOfLeaseLookupWorker endOfLeaseLookupWorkerMock;
 
 	@InjectMocks
-	private EndOfLeaseScheduler endOfLeaseScheduler;
+	private EndOfLeaseLookupScheduler endOfLeaseLookupScheduler;
 
 	@Test
-	void reportPendingComputers() {
-		endOfLeaseScheduler.reportPendingComputers();
+	void lookUpComputers() {
+		endOfLeaseLookupScheduler.lookUpComputers();
 
-		verify(endOfLeaseSchedulerWorkerMock).processPendingComputers();
-		verifyNoMoreInteractions(endOfLeaseSchedulerWorkerMock);
+		verify(endOfLeaseLookupWorkerMock).processComputersAwaitingLookup();
+		verifyNoMoreInteractions(endOfLeaseLookupWorkerMock);
 	}
 }

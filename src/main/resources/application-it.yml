@@ -3,6 +3,7 @@ integration:
     connectTimeout: 1
     readTimeout: 2
     url: http://localhost:${wiremock.server.port:}/pob
+    key: pobKey
   sysman:
     connectTimeout: 1
     readTimeout: 2
@@ -35,5 +36,8 @@ spring:
               action: validate
 scheduler:
   end-of-lease:
-    # Off under test. The tests that exercise the job call it themselves.
-    cron: '-'
+    # Off under test. The tests that exercise the jobs call them themselves.
+    lookup:
+      cron: '-'
+    dispatch:
+      cron: '-'

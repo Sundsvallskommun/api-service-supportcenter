@@ -1,0 +1,14 @@
+{
+	"request": {
+		"method": "POST",
+		"urlPath": "/sysman-sundsvall/api/v2/message/target"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [],
+		"status": 200
+	},
+	"name": "sysman-sundsvall-send-messages-to-no-targets"
+}

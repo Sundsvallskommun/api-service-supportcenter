@@ -6,6 +6,9 @@ import generated.client.pob.PobPayload;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
@@ -14,10 +17,13 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.SUPPLIERNOTE;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.MUNICIPALITY_MAP;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.extractValueFromJsonPath;
 import static se.sundsvall.supportcenter.service.util.CaseUtil.jsonPathExists;
 
 public final class CommonMapper {
+
+	private static final Logger LOG = LoggerFactory.getLogger(CommonMapper.class);
 
 	private static final String DEFAULT_NOTE_EXTENSION = ".html";
 	private static final boolean DEFAULT_NOTE_HANDLE_SEPARATORS = true;
@@ -86,6 +92,31 @@ public final class CommonMapper {
 			return new Note().withType(noteType).withText(getValue(pobPayload, format(NOTE_TEXT_JSON_PATH, noteType.toValue())));
 		}
 		return null;
+	}
+
+	/**
+	 * Reads the municipality field of a POB configuration item as a municipality id.
+	 *
+	 * POB holds the field in either of two spellings, the id itself or the name it belongs to, so both are accepted.
+	 * Anything else is nothing we can route on and is answered with null rather than with a guess.
+	 *
+	 * @param  municipality the value of Virtual.CIKommun, an id such as 2281 or a name such as Sundsvall
+	 * @return              the municipality id, or null when the value matches neither
+	 */
+	public static String toMunicipalityId(String municipality) {
+		final var municipalityId = ofNullable(municipality)
+			.filter(MUNICIPALITY_MAP::containsKey)
+			.or(() -> MUNICIPALITY_MAP.entrySet().stream()
+				.filter(entry -> entry.getValue().equalsIgnoreCase(municipality))
+				.findFirst()
+				.map(Map.Entry::getKey));
+
+		if (municipalityId.isEmpty() && StringUtils.isNotEmpty(municipality)) {
+			final var sanitizedMunicipality = municipality.replaceAll("\\p{Cntrl}", " ");
+			LOG.warn("Municipality '{}' from POB matches no known municipality id or name", sanitizedMunicipality);
+		}
+
+		return municipalityId.orElse(null);
 	}
 
 	private static String getValue(PobPayload pobPayload, String jsonPath) {

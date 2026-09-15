@@ -3,6 +3,7 @@ integration:
     connectTimeout: 10
     readTimeout: 20
     url: http://pob.url
+    key: pobKey
   sysman:
     sundsvall:
       url: http://sysman.sundsvall.url
@@ -26,5 +27,8 @@ spring:
     enabled: true
 scheduler:
   end-of-lease:
-    # Off under test. The tests that exercise the job call it themselves.
-    cron: '-'
+    # Off under test. The tests that exercise the jobs call them themselves.
+    lookup:
+      cron: '-'
+    dispatch:
+      cron: '-'

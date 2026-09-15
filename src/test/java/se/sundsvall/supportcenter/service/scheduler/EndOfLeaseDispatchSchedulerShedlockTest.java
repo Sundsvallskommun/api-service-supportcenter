@@ -26,13 +26,13 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * Proves that the ShedLock row keeps a second run out while the first one is still going, which is what stops a
- * computer from being reported to SysMan once per instance.
+ * computer from being sent its message via SysMan once per instance.
  *
  * Deliberately does not name the configuration class the way the other tests here do. Naming it skips the search for
  * nested configuration classes, and the mock below is declared in one.
  */
 @SpringBootTest(properties = {
-	"scheduler.end-of-lease.cron=* * * * * *", // Every second, so that a tick lands while the first run is still going
+	"scheduler.end-of-lease.dispatch.cron=* * * * * *", // Every second, so that a tick lands while the first run is still going
 	// More than one thread on purpose. The default pool holds one, and the run below never returns, so without this
 	// no second tick is ever attempted and the test would pass with the lock taken away entirely.
 	"spring.task.scheduling.pool.size=2",
@@ -40,9 +40,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 	"spring.lifecycle.timeout-per-shutdown-phase=0s"
 })
 @ActiveProfiles("junit")
-class EndOfLeaseSchedulerShedlockTest {
+class EndOfLeaseDispatchSchedulerShedlockTest {
 
-	private static final String LOCK_NAME = "end-of-lease";
+	private static final String LOCK_NAME = "end-of-lease-dispatch";
 
 	private static LocalDateTime mockCalledTime;
 
@@ -51,8 +51,8 @@ class EndOfLeaseSchedulerShedlockTest {
 
 		@Bean
 		@Primary
-		public EndOfLeaseSchedulerWorker createMock() {
-			final var mockBean = Mockito.mock(EndOfLeaseSchedulerWorker.class);
+		public EndOfLeaseDispatchWorker createMock() {
+			final var mockBean = Mockito.mock(EndOfLeaseDispatchWorker.class);
 
 			// Never returns, so the first run is still holding the lock when the following ticks come around. Stubbed
 			// here rather than in a setup method, because the first tick lands before one would have run.
@@ -60,14 +60,14 @@ class EndOfLeaseSchedulerShedlockTest {
 				mockCalledTime = LocalDateTime.now();
 				await().forever().until(() -> false);
 				return null;
-			}).when(mockBean).processPendingComputers();
+			}).when(mockBean).processComputersReadyToSend();
 
 			return mockBean;
 		}
 	}
 
 	@Autowired
-	private EndOfLeaseSchedulerWorker endOfLeaseSchedulerWorkerMock;
+	private EndOfLeaseDispatchWorker endOfLeaseDispatchWorkerMock;
 
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -81,8 +81,8 @@ class EndOfLeaseSchedulerShedlockTest {
 			.untilAsserted(() -> assertThat(getLockedAt()).isCloseTo(LocalDateTime.now(systemUTC()), within(10, ChronoUnit.SECONDS)));
 
 		// The ticks that came while the first run held the lock found nothing to do, which is the whole point of it.
-		verify(endOfLeaseSchedulerWorkerMock).processPendingComputers();
-		verifyNoMoreInteractions(endOfLeaseSchedulerWorkerMock);
+		verify(endOfLeaseDispatchWorkerMock).processComputersReadyToSend();
+		verifyNoMoreInteractions(endOfLeaseDispatchWorkerMock);
 	}
 
 	private LocalDateTime getLockedAt() {

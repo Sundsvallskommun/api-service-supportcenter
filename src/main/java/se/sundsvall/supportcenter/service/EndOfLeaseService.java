@@ -28,7 +28,7 @@ public class EndOfLeaseService {
 	 *
 	 * A batch sent again under an id the sender has already used is answered with the id of the batch stored the first
 	 * time, and nothing is queued a second time. That is what lets a sender who timed out without seeing our answer retry
-	 * without every computer in the batch being reported to SysMan twice.
+	 * without every computer in the batch being sent its message twice.
 	 *
 	 * @param  municipalityId               the municipality of the sender
 	 * @param  createEndOfLeaseBatchRequest the batch to store

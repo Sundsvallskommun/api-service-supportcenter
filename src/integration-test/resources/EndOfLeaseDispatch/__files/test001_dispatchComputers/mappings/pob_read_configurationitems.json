@@ -1,0 +1,36 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=J123ABC"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"Id": "867403",
+					"SerialNumber": "J123ABC",
+					"OptionalNumber": "AB12345",
+					"Virtual.CIKommun": "Sundsvall"
+				},
+				"Memo": {}
+			}
+		],
+		"status": 200
+	},
+	"name": "pob-read-configurationitems"
+}
