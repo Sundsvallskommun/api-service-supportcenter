@@ -99,6 +99,22 @@ message 1 happens to be in each installation.
 Both runs report on `/actuator/health`. The `endOfLeaseQueue` component answers RESTRICTED when the queue stops moving,
 or when a computer has run out of attempts and needs a person to look at it.
 
+A computer that has run out of attempts is left alone by both runs, and stays counted on the health endpoint until
+somebody deals with it. This is how you put it back in the queue, with its attempts reset:
+
+```bash
+# every computer the municipality has been given up on
+curl -X POST http://localhost:8080/api/2281/endOfLeaseComputers/retry \
+  -H 'Content-Type: application/json' -d '{}'
+
+# or just the ones you name
+curl -X POST http://localhost:8080/api/2281/endOfLeaseComputers/retry \
+  -H 'Content-Type: application/json' -d '{"serialNumbers": ["J123ABC"]}'
+```
+
+The municipality in the path is the one that registered the batch, not the one the lookup read from POB. A computer
+that never got as far as a lookup goes back to the lookup run, and one that did goes straight to the dispatch run.
+
 ## Configuration
 
 Configuration is crucial for the application to run successfully. Ensure all necessary settings are configured in

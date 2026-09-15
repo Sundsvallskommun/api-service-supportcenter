@@ -1,15 +1,22 @@
 package se.sundsvall.supportcenter.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
+import se.sundsvall.supportcenter.api.model.RetryEndOfLeaseComputersRequest;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseBatchRepository;
+import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
+import static java.util.Objects.isNull;
 import static se.sundsvall.dept44.util.LogUtils.sanitizeForLogging;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
 
 @Service
@@ -18,9 +25,52 @@ public class EndOfLeaseService {
 	private static final Logger LOG = LoggerFactory.getLogger(EndOfLeaseService.class);
 
 	private final EndOfLeaseBatchRepository endOfLeaseBatchRepository;
+	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 
-	public EndOfLeaseService(final EndOfLeaseBatchRepository endOfLeaseBatchRepository) {
+	public EndOfLeaseService(
+		final EndOfLeaseBatchRepository endOfLeaseBatchRepository,
+		final EndOfLeaseComputerRepository endOfLeaseComputerRepository) {
+
 		this.endOfLeaseBatchRepository = endOfLeaseBatchRepository;
+		this.endOfLeaseComputerRepository = endOfLeaseComputerRepository;
+	}
+
+	/**
+	 * Puts computers that were given up on back in the queue.
+	 *
+	 * FAILED is where a computer ends up once its attempts are gone, and nothing in the two runs can take it further.
+	 * Without this the only way back is an UPDATE written by hand, and the queue health indicator counts every such row
+	 * for as long as it is there, so one computer POB has never heard of leaves the service RESTRICTED for good.
+	 *
+	 * The attempts are reset along with the state, or a computer would be given up on again by the first run that
+	 * reached it. The POB municipality is deliberately left as it is: a computer that never got past the lookup has
+	 * none and goes back to the lookup run, and one that did keeps it and goes straight to the dispatch run.
+	 *
+	 * @param  municipalityId                  the municipality of the sender that registered the batch
+	 * @param  retryEndOfLeaseComputersRequest the computers to take, or nothing to take all of them
+	 * @return                                 the number of computers that were put back in the queue
+	 */
+	public int retryComputersGivenUpOn(final String municipalityId, final RetryEndOfLeaseComputersRequest retryEndOfLeaseComputersRequest) {
+		final var computers = findComputersGivenUpOn(municipalityId, retryEndOfLeaseComputersRequest.getSerialNumbers());
+
+		computers.forEach(computer -> {
+			computer.setStatus(PENDING);
+			computer.setAttempts(0);
+			computer.setErrorMessage(null);
+		});
+
+		endOfLeaseComputerRepository.saveAll(computers);
+
+		LOG.info("Put {} computer(s) of municipality {} back in the queue", computers.size(), sanitizeForLogging(municipalityId));
+
+		return computers.size();
+	}
+
+	private List<EndOfLeaseComputerEntity> findComputersGivenUpOn(final String municipalityId, final List<String> serialNumbers) {
+		if (isNull(serialNumbers) || serialNumbers.isEmpty()) {
+			return endOfLeaseComputerRepository.findByStatusAndBatchMunicipalityId(FAILED, municipalityId);
+		}
+		return endOfLeaseComputerRepository.findByStatusAndBatchMunicipalityIdAndSerialNumberIn(FAILED, municipalityId, serialNumbers);
 	}
 
 	/**

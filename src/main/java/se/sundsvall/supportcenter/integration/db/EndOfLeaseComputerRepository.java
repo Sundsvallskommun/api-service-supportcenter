@@ -1,6 +1,7 @@
 package se.sundsvall.supportcenter.integration.db;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,28 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * @return        the oldest computer in the state, or empty when none is waiting
 	 */
 	Optional<EndOfLeaseComputerEntity> findFirstByStatusOrderByCreated(EndOfLeaseStatus status);
+
+	/**
+	 * The computers of a municipality that are in a state, whether or not they have been looked up yet.
+	 *
+	 * Scoped by the municipality of the batch rather than by the one read from POB, since a computer that never got as
+	 * far as a lookup has no POB municipality at all, and those are exactly the ones somebody asks to retry.
+	 *
+	 * @param  status         the state to look in
+	 * @param  municipalityId the municipality of the sender that registered the batch
+	 * @return                the computers in the state
+	 */
+	List<EndOfLeaseComputerEntity> findByStatusAndBatchMunicipalityId(EndOfLeaseStatus status, String municipalityId);
+
+	/**
+	 * The same, narrowed to the computers a caller named.
+	 *
+	 * @param  status         the state to look in
+	 * @param  municipalityId the municipality of the sender that registered the batch
+	 * @param  serialNumbers  the serial numbers to take
+	 * @return                the computers in the state that carry one of the serial numbers
+	 */
+	List<EndOfLeaseComputerEntity> findByStatusAndBatchMunicipalityIdAndSerialNumberIn(EndOfLeaseStatus status, String municipalityId, Collection<String> serialNumbers);
 
 	/**
 	 * How many computers are in a state.

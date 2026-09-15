@@ -5,7 +5,7 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
-  version: "2.4"
+  version: "2.5"
 servers:
   - url: http://localhost:59823
     description: Generated server url
@@ -19,6 +19,48 @@ tags:
   - name: Asset
     description: Asset operations
 paths:
+  /{municipalityId}/endOfLeaseComputers/retry:
+    post:
+      tags:
+        - End of lease
+      summary: Put computers that were given up on back in the queue
+      description: A computer whose attempts are gone is left in a state the scheduled runs cannot take it out of. This is what puts it back, with its attempts reset. Answers with how many were taken, which is zero when there was nothing to take
+      operationId: retryEndOfLeaseComputers
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality Id of the sender that registered the batch
+          required: true
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetryEndOfLeaseComputersRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetryEndOfLeaseComputersResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Problem'
+                  - $ref: '#/components/schemas/ConstraintViolationProblem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /{municipalityId}/endOfLeaseBatches:
     post:
       tags:
@@ -592,6 +634,30 @@ paths:
       x-wso2-mutual-ssl: Optional
 components:
   schemas:
+    RetryEndOfLeaseComputersRequest:
+      type: object
+      description: RetryEndOfLeaseComputersRequest model
+      properties:
+        serialNumbers:
+          type: array
+          description: The computers to put back in the queue. Left out, every computer the municipality has been given up on is taken
+          items:
+            type: string
+            description: Serial number of a computer to put back in the queue
+            examples:
+              - J123ABC
+          maxItems: 1000
+          minItems: 0
+    RetryEndOfLeaseComputersResponse:
+      type: object
+      description: RetryEndOfLeaseComputersResponse model
+      properties:
+        reset:
+          type: integer
+          format: int32
+          description: Number of computers that were put back in the queue
+          examples:
+            - 3
     CreateEndOfLeaseBatchRequest:
       type: object
       description: CreateEndOfLeaseBatchRequest model
