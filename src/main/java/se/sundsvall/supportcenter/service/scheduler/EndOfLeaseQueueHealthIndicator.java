@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
 /**
@@ -35,6 +36,7 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 	private static final String DETAIL_REASON = "Reason";
 	private static final String DETAIL_WAITING_SINCE = "Waiting since";
 	private static final String DETAIL_SERIAL_NUMBER = "Oldest waiting serial number";
+	private static final String DETAIL_GIVEN_UP = "Given up on";
 
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final Duration maximumQueueAge;
@@ -50,9 +52,14 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 	@Override
 	public Health health() {
 		try {
+			// Counted here rather than left to the run that gave up. That one says so on the scheduler's own indicator,
+			// but the aspect resets it on the next run that goes well, so an hour later nothing remembers. A computer
+			// nobody can report is only off this list once a person has dealt with it.
+			final var givenUp = endOfLeaseComputerRepository.countByStatus(FAILED);
+
 			return endOfLeaseComputerRepository.findFirstByStatusOrderByCreated(PENDING)
-				.map(this::toHealth)
-				.orElseGet(() -> Health.up().withDetail(DETAIL_REASON, "No computer is waiting").build());
+				.map(oldest -> toHealth(oldest, givenUp))
+				.orElseGet(() -> toHealth(givenUp));
 		} catch (final Exception e) {
 			// Answering DOWN would take the instance out of rotation over a queue we could not read, and the datasource
 			// has an indicator of its own for the case where the database is the problem.
@@ -62,16 +69,43 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 		}
 	}
 
-	private Health toHealth(final EndOfLeaseComputerEntity oldest) {
+	private Health toHealth(final EndOfLeaseComputerEntity oldest, final long givenUp) {
 		final var age = Duration.between(oldest.getCreated(), OffsetDateTime.now(ZoneId.systemDefault()));
 
 		final var builder = age.compareTo(maximumQueueAge) > 0
 			? Health.status(RESTRICTED).withDetail(DETAIL_REASON, "The oldest computer has been waiting %s, which is longer than %s".formatted(age, maximumQueueAge))
-			: Health.up();
+			: restrictedIfGivenUp(givenUp);
 
 		return builder
 			.withDetail(DETAIL_SERIAL_NUMBER, oldest.getSerialNumber())
 			.withDetail(DETAIL_WAITING_SINCE, oldest.getCreated())
+			.withDetail(DETAIL_GIVEN_UP, givenUp)
 			.build();
+	}
+
+	private Health toHealth(final long givenUp) {
+		// An empty queue is not the whole story. Nothing is waiting, but a computer that was given up on is still
+		// somebody's to deal with, and saying the queue is empty would talk over it.
+		if (givenUp > 0) {
+			return restrictedIfGivenUp(givenUp)
+				.withDetail(DETAIL_GIVEN_UP, givenUp)
+				.build();
+		}
+
+		return Health.up()
+			.withDetail(DETAIL_REASON, "No computer is waiting")
+			.withDetail(DETAIL_GIVEN_UP, givenUp)
+			.build();
+	}
+
+	/**
+	 * A computer that has been given up on needs a person, and says so for as long as it is in that state.
+	 */
+	private static Health.Builder restrictedIfGivenUp(final long givenUp) {
+		if (givenUp > 0) {
+			return Health.status(RESTRICTED)
+				.withDetail(DETAIL_REASON, "%d computer(s) have been given up on and need a person to look at them".formatted(givenUp));
+		}
+		return Health.up();
 	}
 }

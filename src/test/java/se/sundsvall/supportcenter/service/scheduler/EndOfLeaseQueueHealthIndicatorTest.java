@@ -13,6 +13,7 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,6 +70,34 @@ class EndOfLeaseQueueHealthIndicatorTest {
 	 * DOWN would carry through to the aggregated health and take the instance out of rotation over a queue we could not
 	 * read. The datasource has an indicator of its own for a database that is actually the problem.
 	 */
+	/**
+	 * The run that gives up says so on the scheduler's own indicator, but the aspect resets that on the next run that
+	 * goes well. Counted from the rows instead, a computer nobody can report stays reported until a person has dealt
+	 * with it.
+	 */
+	@Test
+	void aComputerThatWasGivenUpOnKeepsBeingReported() {
+		when(endOfLeaseComputerRepositoryMock.countByStatus(FAILED)).thenReturn(2L);
+		when(endOfLeaseComputerRepositoryMock.findFirstByStatusOrderByCreated(PENDING)).thenReturn(Optional.empty());
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getStatus().getCode()).isEqualTo("RESTRICTED");
+		assertThat(health.getDetails().get("Reason").toString()).contains("2 computer(s) have been given up on");
+		assertThat(health.getDetails()).containsEntry("Given up on", 2L);
+	}
+
+	@Test
+	void aQueueThatIsMovingWithNobodyGivenUpOnIsUp() {
+		when(endOfLeaseComputerRepositoryMock.countByStatus(FAILED)).thenReturn(0L);
+		whenOldestWaitedFor(2);
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getStatus().getCode()).isEqualTo("UP");
+		assertThat(health.getDetails()).containsEntry("Given up on", 0L);
+	}
+
 	@Test
 	void aQueueThatCannotBeReadIsRestrictedRatherThanDown() {
 		when(endOfLeaseComputerRepositoryMock.findFirstByStatusOrderByCreated(PENDING)).thenThrow(new IllegalStateException("The database is unwell"));

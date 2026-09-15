@@ -43,4 +43,16 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * @return        the oldest computer in the state, or empty when none is waiting
 	 */
 	Optional<EndOfLeaseComputerEntity> findFirstByStatusOrderByCreated(EndOfLeaseStatus status);
+
+	/**
+	 * How many computers are in a state.
+	 *
+	 * Read by the health indicator to count the ones that have been given up on. The scheduler indicator says so on the
+	 * run that gives up, but the aspect resets it on the next run that goes well, so without a count read from the rows
+	 * themselves a computer nobody can report is forgotten an hour later.
+	 *
+	 * @param  status the state to count
+	 * @return        the number of computers in the state
+	 */
+	long countByStatus(EndOfLeaseStatus status);
 }

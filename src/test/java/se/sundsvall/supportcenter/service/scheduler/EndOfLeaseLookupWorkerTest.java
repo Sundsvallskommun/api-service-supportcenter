@@ -255,6 +255,22 @@ class EndOfLeaseLookupWorkerTest {
 		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
+	/**
+	 * Only this job needs a POB key of its own, so a missing one must not stop the service from starting. It is caught
+	 * here instead, where it is one unhealthy job rather than an API that will not come up.
+	 */
+	@Test
+	void aMissingPobKeyStopsTheRunAndSaysSo() {
+		endOfLeaseLookupWorker = new EndOfLeaseLookupWorker(
+			endOfLeaseComputerRepositoryMock, pobIntegrationMock, new POBProperties(1, 2, " "),
+			dept44HealthUtilityMock, PAGE_SIZE, MAXIMUM_ATTEMPTS, JOB_NAME);
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("integration.pob.key"));
+		verifyNoInteractions(endOfLeaseComputerRepositoryMock, pobIntegrationMock);
+	}
+
 	@Test
 	void anEmptyPageCallsNobody() {
 		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))

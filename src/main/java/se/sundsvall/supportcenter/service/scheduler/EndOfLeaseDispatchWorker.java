@@ -3,6 +3,9 @@ package se.sundsvall.supportcenter.service.scheduler;
 import feign.RetryableException;
 import generated.client.sysman.TargetReference;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.net.UnknownHostException;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +30,7 @@ import static java.util.stream.Collectors.toSet;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveMessagesToTargetsCommand;
 
 /**
@@ -91,12 +95,25 @@ public class EndOfLeaseDispatchWorker {
 		try {
 			targetReferences = sysManIntegration.sendMessagesToTargets(
 				municipalityId, toSaveMessagesToTargetsCommand(computers, messageId));
-		} catch (final ServerProblem | RetryableException | CallNotPermittedException e) {
-			// The installation is unwell or out of reach. Nobody in the group was reached, but that is a fact about the
-			// installation and not about any of them, so it is not counted against anyone. Listed by name rather than
-			// caught as everything else, so that a defect of our own falls through to the branch that does count and
-			// cannot keep its group in every page for good.
+		} catch (final ServerProblem | CallNotPermittedException e) {
+			// The installation is unwell or refusing traffic. Nobody in the group was reached, but that is a fact about
+			// the installation and not about any of them, so it is not counted against anyone. Listed by name rather
+			// than caught as everything else, so that a defect of our own falls through to the branch that does count
+			// and cannot keep its group in every page for good.
 			recordDependencyFailure(municipalityId, computers, e.getMessage());
+			return;
+		} catch (final RetryableException e) {
+			// Feign wraps both a connection that was never made and an answer that never came in the same exception,
+			// and the difference decides everything here. Never connected means nothing was delivered and nobody should
+			// pay for it. An answer that never came is not evidence of anything: the installation may well have taken
+			// the call and sent the messages before it went quiet. Counted, because uncounted it is sent again every
+			// hour for good, and the batch is deduplicated precisely so that nobody is told twice.
+			if (neverReached(e)) {
+				recordDependencyFailure(municipalityId, computers, e.getMessage());
+			} else {
+				LOG.warn("The SysMan installation of municipality {} did not answer for {} computer(s), which is no proof the message was not sent: {}", municipalityId, computers.size(), e.getMessage());
+				computers.forEach(computer -> recordFailedAttempt(computer, e.getMessage()));
+			}
 			return;
 		} catch (final Exception e) {
 			// The installation turned our call down, or we built a call it could not read. One computer name it will
@@ -126,7 +143,7 @@ public class EndOfLeaseDispatchWorker {
 		dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, "The SysMan installation of municipality %s could not be reached: %s".formatted(municipalityId, errorMessage));
 
 		computers.forEach(computer -> {
-			computer.setErrorMessage(errorMessage);
+			computer.setErrorMessage(toErrorMessage(errorMessage));
 			endOfLeaseComputerRepository.save(computer);
 		});
 	}
@@ -150,6 +167,18 @@ public class EndOfLeaseDispatchWorker {
 		});
 	}
 
+	/**
+	 * Whether the call never got as far as the installation. A refused or unresolvable host says so; a call that was
+	 * made and then timed out says nothing at all about what the other end did with it.
+	 */
+	private static boolean neverReached(final RetryableException e) {
+		final var cause = e.getCause();
+
+		return cause instanceof ConnectException
+			|| cause instanceof UnknownHostException
+			|| cause instanceof NoRouteToHostException;
+	}
+
 	private static Set<String> ofTargetNames(final List<TargetReference> targetReferences) {
 		return ofNullable(targetReferences).orElse(emptyList()).stream()
 			.map(TargetReference::getName)
@@ -166,7 +195,7 @@ public class EndOfLeaseDispatchWorker {
 		final var attempts = computer.getAttempts() + 1;
 
 		computer.setAttempts(attempts);
-		computer.setErrorMessage(errorMessage);
+		computer.setErrorMessage(toErrorMessage(errorMessage));
 
 		if (attempts >= maximumAttempts) {
 			computer.setStatus(FAILED);

@@ -1,8 +1,13 @@
 package se.sundsvall.supportcenter.service.scheduler;
 
+import feign.Request;
+import feign.RetryableException;
 import generated.client.sysman.SaveMessagesToTargetsCommand;
 import generated.client.sysman.TargetReference;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +24,7 @@ import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.sysman.SysManIntegration;
 
+import static feign.Request.HttpMethod.POST;
 import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -290,6 +296,38 @@ class EndOfLeaseDispatchWorkerTest {
 		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
+	/**
+	 * A call that was made and then went quiet says nothing about what the installation did with it. It may well have
+	 * queued every message before it stopped answering, so this cannot be free: uncounted, the same group is sent the
+	 * same message every hour for good.
+	 */
+	@Test
+	void anAnswerThatNeverCameCountsBecauseTheMessageMayHaveGoneOut() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new SocketTimeoutException("Read timed out")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isOne();
+	}
+
+	/**
+	 * A connection that was never made is the other half of the same exception, and there nothing can have been sent,
+	 * so nobody pays for it.
+	 */
+	@Test
+	void aConnectionThatWasNeverMadeCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new ConnectException("Connection refused")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isZero();
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
 	@Test
 	void anEmptyPageCallsNobody() {
 		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNotNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))
@@ -313,6 +351,11 @@ class EndOfLeaseDispatchWorkerTest {
 			.withAssetMunicipalityId(assetMunicipalityId)
 			.withStatus(PENDING)
 			.withAttempts(attempts);
+	}
+
+	private static RetryableException retryableException(final Throwable cause) {
+		return new RetryableException(-1, cause.getMessage(), POST, cause, (Long) null,
+			Request.create(POST, "http://sysman.url", Map.of(), null, null, null));
 	}
 
 	private static TargetReference targetReference(final String name) {

@@ -13,6 +13,7 @@ integration:
       domain: PERSONAL
     ange:
       municipalityId: 2260
+      domain: ANGEDOMAIN
 logging:
   level:
     root: INFO
@@ -39,9 +40,13 @@ resilience4j:
       # minimumNumberOfCalls is lowered from the inherited five because the dispatch run makes one call per
       # municipality, so a breaker here sees one call an hour rather than the hundred the lookup run makes. Left at
       # five it would take five hours to so much as evaluate, and an installation that is down would sit unreported for
-      # most of a working day. At three, with the inherited fifty percent threshold, two failures among the last three
-      # runs open it, which is about three hours. Lower it to two and a single failure followed by a success is enough,
-      # which is more noise than this is worth.
+      # most of a working day. At three it opens after two failures among the first three calls; the inherited sliding
+      # window of ten then spans ten hours rather than three runs, so it is slow to close again.
+      #
+      # What this buys is the health endpoint, not back-off. waitDurationInOpenState is ten seconds and the next call
+      # is an hour away, so an open breaker is always eligible for half-open by the time anything arrives and never
+      # actually turns a call away. It does report CIRCUIT_OPEN in the meantime, which dept44's aggregator surfaces as
+      # RESTRICTED, and that is the point.
       sysman-sundsvall:
         ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
         minimumNumberOfCalls: 3
@@ -79,34 +84,54 @@ scheduler:
     lookup:
       name: end-of-lease-lookup
       # A batch arrives once a day and nobody is waiting on the message by the minute, so this is a slow drain rather
-      # than a dispatch. On the hour, with the dispatch run half an hour behind, so that what this run resolves is
-      # waiting for it rather than being written while it reads.
-      cron: '0 0 * * * *'
+      # than a dispatch. On the hour when it is turned on, with the dispatch run half an hour behind, so that what this
+      # run resolves is waiting for it rather than being written while it reads.
+      #
+      # Off in the checked-in configuration. An environment turns the pair on with '0 0 * * * *' here and
+      # '0 30 * * * *' below, once the message id further down names a real message.
+      cron: '-'
       # One POB call per computer, so a run takes as long as the page is wide. A hundred an hour drains a batch of a
       # thousand in half a day, which is well inside the day the next batch arrives in, and leaves a run far short of
       # its execution time.
       page-size: 100
       # Has to stay longer than a run can take. Shorter, and the lock is handed to the next instance while this one is
       # still working, and a computer is looked up once per instance.
-      shedlock-lock-at-most-for: PT10M
+      #
+      # A hundred computers is a hundred POB calls, and integration.pob.readTimeout is sixty seconds, so a POB that
+      # answers slowly rather than failing can carry one run past an hour and a half without anything having gone
+      # wrong. maximum-execution-time only writes a warning when that happens, it does not stop the run, so the lock is
+      # the only thing holding the second instance off and it has to outlast the worst case rather than the usual one.
+      shedlock-lock-at-most-for: PT2H
       maximum-execution-time: PT5M
     dispatch:
       name: end-of-lease-dispatch
       # Half an hour after the lookup, not alongside it. Run at the same minute the two jobs hold separate locks and
       # start together, and this one reads the queue before the other has written to it, which costs every computer a
-      # whole extra cycle.
-      cron: '0 30 * * * *'
+      # whole extra cycle. Off here for the same reason as the lookup.
+      cron: '-'
       # The computers taken in one run, not the size of a SysMan call. A run groups what it took by municipality and
       # sends one call per group.
       page-size: 100
-      # The SysMan message an end of lease computer is to receive. A placeholder until someone says which message that
-      # is, and a property rather than a constant so that naming it is a deploy and not a release.
+      # The SysMan message an end of lease computer is to receive. Still a placeholder: nobody has said which message
+      # that is. Harmless only for as long as the crons above stay off, which is why they are off. Turn them on in the
+      # same change that names the real message, or the first run pushes whatever message 1 happens to be in each
+      # installation to real computers and marks the rows SENT so the right message can never reach them from here.
       message-id: 1
-      shedlock-lock-at-most-for: PT10M
+      # A page is two calls, one per installation, against a thirty second read timeout, so this run cannot come near
+      # the hour and a half the lookup can. Kept well above it anyway: too long a lock delays a run, too short a one
+      # tells a computer twice.
+      shedlock-lock-at-most-for: PT30M
       maximum-execution-time: PT5M
 spring:
   application:
     name: api-supportcenter
+  task:
+    scheduling:
+      # One thread per job. Spring's default pool holds a single thread for every scheduled method there is, so a
+      # lookup run still going at half past would hold the dispatch trigger back rather than run beside it, and the
+      # ShedLock row would never even be consulted.
+      pool:
+        size: 2
   cache:
     cache-names: case-categories, closure-codes
     caffeine:

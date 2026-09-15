@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveMessagesToTargetsCommand;
 
 class EndOfLeaseMapperTest {
@@ -169,5 +170,26 @@ class EndOfLeaseMapperTest {
 		assertThat(command.getMessagesToSend()).containsExactly(7L);
 		assertThat(command.getTargetType()).isEqualTo(COMPUTER);
 		assertThat(command.getTargetAll()).isFalse();
+	}
+
+	/**
+	 * A server that answers with its own stack trace produces a reason several times wider than the column. Stored as
+	 * it comes, the insert is rejected from inside the catch block that was recording the failure, which takes the run
+	 * down and leaves the row to do it again on the next one.
+	 */
+	@Test
+	void toErrorMessageCutsAReasonToWhatTheColumnHolds() {
+		final var tooLong = "x".repeat(3000);
+
+		assertThat(toErrorMessage(tooLong)).hasSize(2048);
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@CsvSource({
+		"POB is unwell"
+	})
+	void toErrorMessageLeavesAReasonThatFitsAlone(final String errorMessage) {
+		assertThat(toErrorMessage(errorMessage)).isEqualTo(errorMessage);
 	}
 }

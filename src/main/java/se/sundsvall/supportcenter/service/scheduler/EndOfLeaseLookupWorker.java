@@ -15,9 +15,11 @@ import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 
 /**
  * The work the lookup run does. Separate from the scheduler so that the scheduler stays the part that says when, and
@@ -30,6 +32,8 @@ import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAsset
 public class EndOfLeaseLookupWorker {
 
 	private static final Logger LOG = LoggerFactory.getLogger(EndOfLeaseLookupWorker.class);
+
+	private static final String NO_KEY = "integration.pob.key is not configured, so the job has no POB identity to look computers up with";
 
 	private static final String UNKNOWN_TO_POB = "POB answered the serial number with no configuration item holding a municipality we can route on";
 
@@ -60,6 +64,14 @@ public class EndOfLeaseLookupWorker {
 	}
 
 	public void processComputersAwaitingLookup() {
+		// The key is the job's own, and only this job needs one, so a missing key is not allowed to stop the service
+		// from starting. Caught here instead, where it is one unhealthy job rather than an API that will not come up.
+		if (isBlank(pobProperties.key())) {
+			LOG.error(NO_KEY);
+			dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, NO_KEY);
+			return;
+		}
+
 		final var computers = endOfLeaseComputerRepository
 			.findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(pageSize));
 
@@ -118,7 +130,7 @@ public class EndOfLeaseLookupWorker {
 		// is invisible until the queue has aged enough for the queue indicator to notice.
 		dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, "POB could not be reached: " + errorMessage);
 
-		computer.setErrorMessage(errorMessage);
+		computer.setErrorMessage(toErrorMessage(errorMessage));
 		endOfLeaseComputerRepository.save(computer);
 	}
 
@@ -126,7 +138,7 @@ public class EndOfLeaseLookupWorker {
 		final var attempts = computer.getAttempts() + 1;
 
 		computer.setAttempts(attempts);
-		computer.setErrorMessage(errorMessage);
+		computer.setErrorMessage(toErrorMessage(errorMessage));
 
 		if (attempts >= maximumAttempts) {
 			computer.setStatus(FAILED);

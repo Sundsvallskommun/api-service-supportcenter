@@ -22,6 +22,11 @@ import static se.sundsvall.supportcenter.service.mapper.constant.EndOfLeaseMappe
 
 public final class EndOfLeaseMapper {
 
+	/**
+	 * The width of end_of_lease_computer.error_message.
+	 */
+	private static final int ERROR_MESSAGE_LENGTH = 2048;
+
 	private EndOfLeaseMapper() {}
 
 	public static EndOfLeaseBatchEntity toEndOfLeaseBatchEntity(final String municipalityId, final CreateEndOfLeaseBatchRequest createEndOfLeaseBatchRequest) {
@@ -69,6 +74,24 @@ public final class EndOfLeaseMapper {
 			.messagesToSend(List.of(messageId))
 			.targetType(COMPUTER)
 			.targetAll(false);
+	}
+
+	/**
+	 * A failure reason cut to what its column holds.
+	 *
+	 * POB and SysMan both answer a failure with whatever their own stack had to say, and a server that hands back a
+	 * stack trace produces a message several times wider than the column. Stored as it comes, the insert is rejected
+	 * from inside the very catch block that was recording the failure, which takes the whole run down and leaves the
+	 * row to do it again on the next one.
+	 *
+	 * @param  errorMessage the reason, of any length
+	 * @return              the reason, no wider than the column
+	 */
+	public static String toErrorMessage(final String errorMessage) {
+		if (errorMessage == null || errorMessage.length() <= ERROR_MESSAGE_LENGTH) {
+			return errorMessage;
+		}
+		return errorMessage.substring(0, ERROR_MESSAGE_LENGTH);
 	}
 
 	private static EndOfLeaseComputerEntity toEndOfLeaseComputerEntity(final EndOfLeaseBatchEntity endOfLeaseBatchEntity, final EndOfLeaseComputer endOfLeaseComputer) {
