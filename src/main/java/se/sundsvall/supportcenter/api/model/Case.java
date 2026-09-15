@@ -503,19 +503,17 @@ public class Case {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Case [note=").append(note).append(", caseId=").append(caseId).append(", description=").append(description)
-			.append(", caseType=").append(caseType).append(", caseCategory=").append(caseCategory).append(", customerContact=").append(customerContact)
-			.append(", externalArticleNumber=").append(externalArticleNumber).append(", managementCompany=").append(managementCompany)
-			.append(", priority=").append(priority).append(", personal=").append(personal).append(", responsibleGroup=").append(responsibleGroup)
-			.append(", externalServiceId=").append(externalServiceId).append(", office=").append(office)
-			.append(", freeText=").append(freeText).append(", joinContact=").append(joinContact)
-			.append(", responsibilityNumber=").append(responsibilityNumber).append(", subaccount=").append(subaccount)
-			.append(", businessNumber=").append(businessNumber).append(", projectNumber=").append(projectNumber)
-			.append(", activityNumber=").append(activityNumber).append(", objectNumber=").append(objectNumber)
-			.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
-			.append(", contactPerson=").append(contactPerson)
-			.append(", phoneNumber=").append(phoneNumber).append(", email=").append(email).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append(", address=").append(address).append("]");
-		return builder.toString();
+		return "Case [note=" + note + ", caseId=" + caseId + ", description=" + description +
+			", caseType=" + caseType + ", caseCategory=" + caseCategory + ", customerContact=" + customerContact +
+			", externalArticleNumber=" + externalArticleNumber + ", managementCompany=" + managementCompany +
+			", priority=" + priority + ", personal=" + personal + ", responsibleGroup=" + responsibleGroup +
+			", externalServiceId=" + externalServiceId + ", office=" + office +
+			", freeText=" + freeText + ", joinContact=" + joinContact +
+			", responsibilityNumber=" + responsibilityNumber + ", subaccount=" + subaccount +
+			", businessNumber=" + businessNumber + ", projectNumber=" + projectNumber +
+			", activityNumber=" + activityNumber + ", objectNumber=" + objectNumber +
+			", ciDescription=" + ciDescription + ", counterPart=" + counterPart +
+			", contactPerson=" + contactPerson +
+			", phoneNumber=" + phoneNumber + ", email=" + email + ", imeiNumber=" + imeiNumber + ", modelName=" + modelName + ", address=" + address + "]";
 	}
 }

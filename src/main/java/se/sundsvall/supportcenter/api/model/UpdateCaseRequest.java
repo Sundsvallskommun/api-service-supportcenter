@@ -194,10 +194,8 @@ public class UpdateCaseRequest {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("UpdateCaseRequest [note=").append(note).append(", externalCaseId=").append(externalCaseId).append(", caseStatus=").append(caseStatus).append(
-			", caseCategory=").append(caseCategory).append(", closureCode=").append(closureCode).append(", hardwareName=").append(hardwareName).append(
-				", responsibleGroup=").append(responsibleGroup).append(", serialNumber=").append(serialNumber).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append("]");
-		return builder.toString();
+		return "UpdateCaseRequest [note=" + note + ", externalCaseId=" + externalCaseId + ", caseStatus=" + caseStatus +
+			", caseCategory=" + caseCategory + ", closureCode=" + closureCode + ", hardwareName=" + hardwareName +
+			", responsibleGroup=" + responsibleGroup + ", serialNumber=" + serialNumber + ", imeiNumber=" + imeiNumber + ", modelName=" + modelName + "]";
 	}
 }

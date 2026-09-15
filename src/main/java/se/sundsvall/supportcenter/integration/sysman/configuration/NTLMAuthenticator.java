@@ -88,7 +88,7 @@ class NTLMAuthenticator implements Authenticator {
 			// Flags read off the type 2 rather than the no argument defaults, which are OR'd into whatever the server
 			// negotiated and can only add bits. Against a server that asked for OEM the no argument version forces
 			// unicode back on, and jcifs then writes the username as UTF-16LE for a server that cannot read it.
-			return ofNullable(Base64.encode(new Type3Message(type2Message, password, domain, username, null, Type3Message.getDefaultFlags(type2Message)).toByteArray()));
+			return Optional.of(Base64.encode(new Type3Message(type2Message, password, domain, username, null, Type3Message.getDefaultFlags(type2Message)).toByteArray()));
 		} catch (final Exception e) {
 			// Broad on purpose. A malformed message is an IOException, but a well formed type 2 that carries no
 			// challenge bytes throws a NullPointerException out of the digest instead, since jcifs computes an NTLMv2

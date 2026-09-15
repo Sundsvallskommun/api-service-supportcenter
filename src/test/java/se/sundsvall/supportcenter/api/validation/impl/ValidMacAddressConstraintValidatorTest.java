@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ValidMacAddressConstraintValidatorTest {
 
-	private ValidMacAddressConstraintValidator validator = new ValidMacAddressConstraintValidator();
+	private final ValidMacAddressConstraintValidator validator = new ValidMacAddressConstraintValidator();
 
 	@ParameterizedTest
 	@ValueSource(strings = {

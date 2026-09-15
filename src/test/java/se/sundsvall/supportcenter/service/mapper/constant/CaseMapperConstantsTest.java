@@ -203,11 +203,9 @@ class CaseMapperConstantsTest {
 	}
 
 	private static Map<String, Object> from(Map<String, Object> map, List<String> nullValues) {
-		Map<String, Object> hashMap = new HashMap<>();
 
-		hashMap.putAll(map);
+		Map<String, Object> hashMap = new HashMap<>(map);
 		ofNullable(nullValues).orElse(Collections.emptyList())
-			.stream()
 			.forEach(key -> hashMap.put(key, null));
 
 		return hashMap;
