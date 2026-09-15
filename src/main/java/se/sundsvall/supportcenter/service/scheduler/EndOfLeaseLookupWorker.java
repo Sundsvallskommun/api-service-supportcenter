@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import se.sundsvall.dept44.exception.ClientProblem;
 import se.sundsvall.dept44.exception.ServerProblem;
 import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
@@ -17,6 +18,8 @@ import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
 
@@ -114,6 +117,16 @@ public class EndOfLeaseLookupWorker {
 			// outage does not spend the budget of every computer waiting behind it. Listed by name rather than caught
 			// as everything else, so that anything we did not foresee falls through to the branch below.
 			endOfLeaseFailureRecorder.recordDependencyFailure(List.of(computer), jobName, "POB could not be reached: " + e.getMessage());
+		} catch (final ClientProblem e) {
+			// The key this job authenticates with is its own, and POB turning it down says nothing about the computer
+			// the call happened to be about. Counted, it would empty the budget of every computer in the queue over a
+			// key somebody rotated, and the first anyone would hear of it is a queue that had already drained into
+			// FAILED. Every other 4xx is about this row and falls through to the branch below.
+			if (e.getStatus() == UNAUTHORIZED || e.getStatus() == FORBIDDEN) {
+				endOfLeaseFailureRecorder.recordDependencyFailure(List.of(computer), jobName, "POB turned the job's key down: " + e.getMessage());
+			} else {
+				endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage());
+			}
 		} catch (final Exception e) {
 			// POB turned our request down, or this row's own data broke us on the way through. Either way it counts:
 			// a row nothing can make sense of would otherwise keep its place in every page for good, and a hundred of

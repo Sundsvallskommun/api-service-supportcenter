@@ -32,6 +32,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
@@ -215,6 +217,37 @@ class EndOfLeaseLookupWorkerTest {
 		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
 		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
 		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(2);
+	}
+
+	/**
+	 * The key this job carries is its own, and POB turning it down is no fact about the computer the call happened to
+	 * be about. Counted, a rotated key would drain the whole queue into FAILED before anyone noticed.
+	 */
+	@Test
+	void aRejectedPobKeyCostsNoAttempt() {
+		whenPageContains(computer(PENDING, 2));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, SERIAL_NUMBER)).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(2);
+	}
+
+	/**
+	 * The same for a key POB knows but will not let this far, and it never leaves a computer FAILED.
+	 */
+	@Test
+	void aForbiddenPobKeyNeverLeavesTheComputerFailed() {
+		whenPageContains(computer(PENDING, MAXIMUM_ATTEMPTS - 1));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, SERIAL_NUMBER)).thenThrow(new ClientProblem(FORBIDDEN, "Forbidden"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
 	}
 
 	@Test

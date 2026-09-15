@@ -5,17 +5,20 @@ import generated.client.sysman.TargetReference;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import javax.net.ssl.SSLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import se.sundsvall.dept44.exception.ClientProblem;
 import se.sundsvall.dept44.exception.ServerProblem;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
@@ -26,6 +29,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveMessagesToTargetsCommand;
@@ -44,6 +49,8 @@ public class EndOfLeaseDispatchWorker {
 	private static final Logger LOG = LoggerFactory.getLogger(EndOfLeaseDispatchWorker.class);
 
 	private static final String NOT_RECOGNIZED = "SysMan did not recognize the computer name and answered without it";
+
+	private static final String CONNECT_TIMED_OUT = "connect timed out";
 
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final SysManIntegration sysManIntegration;
@@ -106,7 +113,19 @@ public class EndOfLeaseDispatchWorker {
 				endOfLeaseFailureRecorder.recordDependencyFailure(computers, jobName, unreachable(municipalityId, e));
 			} else {
 				LOG.warn("The SysMan installation of municipality {} did not answer for {} computer(s), which is no proof the message was not sent: {}", municipalityId, computers.size(), e.getMessage());
-				computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage()));
+				chargeEveryone(computers, e);
+			}
+			return;
+		} catch (final ClientProblem e) {
+			// A rejected account is the one 4xx that says nothing about the computers. A rotated password or a locked
+			// account answers every call the same way, and counted per computer it empties the budget of a whole
+			// municipality in five runs over something none of them is the cause of. Every other 4xx is either the call
+			// we built or a row in it, and falls through to the count below.
+			if (rejectedOurAccount(e)) {
+				endOfLeaseFailureRecorder.recordDependencyFailure(computers, jobName, rejectedIdentity(municipalityId, e));
+			} else {
+				LOG.warn("The SysMan installation of municipality {} turned down the call for all {} computer(s) in it: {}", municipalityId, computers.size(), e.getMessage());
+				chargeEveryone(computers, e);
 			}
 			return;
 		} catch (final Exception e) {
@@ -115,7 +134,7 @@ public class EndOfLeaseDispatchWorker {
 			// that broke it. A municipality with no installation configured lands here too, which is right: nobody but
 			// a human can put that one straight.
 			LOG.warn("The SysMan installation of municipality {} turned down the call for all {} computer(s) in it: {}", municipalityId, computers.size(), e.getMessage());
-			computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage()));
+			chargeEveryone(computers, e);
 			return;
 		}
 
@@ -144,10 +163,10 @@ public class EndOfLeaseDispatchWorker {
 		});
 	}
 
-	/**
-	 * Whether the call never got as far as the installation. A refused or unresolvable host says so; a call that was
-	 * made and then timed out says nothing at all about what the other end did with it.
-	 */
+	private void chargeEveryone(final List<EndOfLeaseComputerEntity> computers, final Exception e) {
+		computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage()));
+	}
+
 	private static String subject(final EndOfLeaseComputerEntity computer) {
 		return "computer name " + computer.getAssetTag();
 	}
@@ -156,12 +175,42 @@ public class EndOfLeaseDispatchWorker {
 		return "The SysMan installation of municipality %s could not be reached: %s".formatted(municipalityId, e.getMessage());
 	}
 
+	private static String rejectedIdentity(final String municipalityId, final ClientProblem e) {
+		return "The SysMan installation of municipality %s turned our account down, which is nothing any of these computers is the cause of: %s".formatted(municipalityId, e.getMessage());
+	}
+
+	/**
+	 * Whether the installation refused the account rather than the call. Both answers are 4xx and only the status tells
+	 * them apart.
+	 */
+	private static boolean rejectedOurAccount(final ClientProblem e) {
+		return e.getStatus() == UNAUTHORIZED || e.getStatus() == FORBIDDEN;
+	}
+
+	/**
+	 * Whether the call never got as far as the installation. A refused or unresolvable host says so, and so does a
+	 * handshake that failed and a connection that was never established inside its timeout. A call that was made and
+	 * then timed out waiting for the answer says nothing at all about what the other end did with it.
+	 *
+	 * Measured against okhttp 4.12.0: a blackholed address gives SocketTimeoutException("Connect timed out") once the
+	 * connect timeout is up, while a host that answers and then goes quiet gives SocketTimeoutException("Read timed
+	 * out"). The type is the same for both and the message is the only thing that separates them. Both strings come
+	 * from the JDK's own socket implementation rather than from okhttp, so they do not move with the http client. A
+	 * message we do not recognize counts the attempt, which is what this method did for every timeout before.
+	 */
 	private static boolean neverReached(final RetryableException e) {
 		final var cause = e.getCause();
 
 		return cause instanceof ConnectException
 			|| cause instanceof UnknownHostException
-			|| cause instanceof NoRouteToHostException;
+			|| cause instanceof NoRouteToHostException
+			|| cause instanceof SSLException
+			|| connectTimedOut(cause);
+	}
+
+	private static boolean connectTimedOut(final Throwable cause) {
+		return cause instanceof SocketTimeoutException
+			&& String.valueOf(cause.getMessage()).toLowerCase(Locale.ROOT).startsWith(CONNECT_TIMED_OUT);
 	}
 
 	private static Set<String> ofTargetNames(final List<TargetReference> targetReferences) {

@@ -8,6 +8,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
+import javax.net.ssl.SSLHandshakeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
@@ -331,6 +334,89 @@ class EndOfLeaseDispatchWorkerTest {
 		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
 		assertThat(computerCaptor.getValue().getAttempts()).isZero();
 		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * A connect timeout is the same exception type as a read timeout and only the message tells them apart. This one
+	 * never reached the installation, so it has to be free like any other connection that was never made.
+	 */
+	@Test
+	void aConnectTimeoutCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new SocketTimeoutException("Connect timed out")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isZero();
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * An expired or untrusted certificate stops the handshake, so the call never carried anything. It is a fact about
+	 * the installation and lasts until somebody renews the certificate, which is long enough to run every computer in
+	 * the municipality out of attempts if it counted.
+	 */
+	@Test
+	void aFailedHandshakeCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any()))
+			.thenThrow(retryableException(new SSLHandshakeException("PKIX path building failed")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * A rotated password or a locked account answers every call the same way. Counted per computer it would empty the
+	 * budget of the whole municipality in five runs over something none of them is the cause of.
+	 */
+	@Test
+	void aRejectedAccountCostsNobodyAnAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 2));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactly(
+				tuple(PENDING, 0),
+				tuple(PENDING, 2));
+	}
+
+	/**
+	 * The same for a forbidden account, and it never leaves a computer FAILED however many runs it lasts.
+	 */
+	@Test
+	void aForbiddenAccountNeverLeavesTheComputerFailed() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(FORBIDDEN, "Forbidden"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
+	}
+
+	/**
+	 * A rejected account is an outage of its own and belongs on the health endpoint, or the only sign of it is a queue
+	 * that quietly stops moving.
+	 */
+	@Test
+	void aRejectedAccountIsReportedOnTheHealthEndpoint() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("turned our account down"));
+		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
 	@Test
