@@ -41,3 +41,7 @@ scheduler:
       cron: '-'
     dispatch:
       cron: '-'
+      # Pinned here because the EndOfLeaseDispatch stubs match on it. It happens to be the same value as the
+      # placeholder in application.yml, and without this line replacing that placeholder with a real message id
+      # fails three apptests for a reason that has nothing to do with the change.
+      message-id: 1

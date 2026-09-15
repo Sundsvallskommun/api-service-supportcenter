@@ -16,6 +16,10 @@ import se.sundsvall.supportcenter.integration.sysman.configuration.SysManPropert
  */
 final class SysManFeignFactory {
 
+	static final String TITLE_PATH = "$.message";
+
+	static final String DETAIL_PATH = "$..details.concat()";
+
 	private SysManFeignFactory() {}
 
 	/**
@@ -45,7 +49,16 @@ final class SysManFeignFactory {
 		return FeignMultiCustomizer.create()
 			// SysMan answers a failure with an ApiErrorMessage, whose message says what went wrong and whose details
 			// carry whatever more the server had to say.
-			.withErrorDecoder(new JsonPathErrorDecoder(clientId, new JsonPathSetup("$.message", "$.details")))
+			//
+			// The details path is a deep scan with concat() rather than the plain "$.details" it reads like, and both
+			// halves of that are deliberate. read(path, String.class) hands back null for an array, so the plain path
+			// drops the details on every error that has any. A definite path also throws PathNotFoundException when
+			// the field is absent, and AbstractErrorDecoder answers any throw from here by giving up on the whole body
+			// and reporting "Unknown error", which loses the message as well. A deep scan is indefinite and answers an
+			// absent field with nothing instead of throwing. Measured against every shape SysMan can send: an array, an
+			// empty array, an absent field, an explicit null, a plain string, and an html error page from something in
+			// front of it.
+			.withErrorDecoder(new JsonPathErrorDecoder(clientId, new JsonPathSetup(TITLE_PATH, DETAIL_PATH)))
 			.withRequestTimeoutsInSeconds(sysManProperties.connectTimeout(), sysManProperties.readTimeout())
 			.composeCustomizersToOne();
 	}
