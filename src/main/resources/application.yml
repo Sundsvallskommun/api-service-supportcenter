@@ -71,6 +71,11 @@ scheduler:
     # against anyone, since it says nothing about any single computer. A queue therefore stands still through an outage
     # rather than draining into FAILED, which is deliberate and worth an alarm on the age of the oldest waiting row.
     maximum-attempts: 5
+    # How long the oldest waiting computer may have been waiting before the health endpoint says so. A batch of a
+    # thousand takes about half a day at a hundred an hour, so a full day of waiting means the queue is not moving at
+    # all rather than moving slowly. Reported as RESTRICTED rather than DOWN, since it is something to look at and not
+    # a reason to take the instance out of rotation.
+    maximum-queue-age: PT24H
     lookup:
       name: end-of-lease-lookup
       # A batch arrives once a day and nobody is waiting on the message by the minute, so this is a slow drain rather
