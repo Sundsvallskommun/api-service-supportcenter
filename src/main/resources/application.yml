@@ -23,16 +23,31 @@ openapi:
 resilience4j:
   circuitbreaker:
     instances:
+      # Shared by every endpoint this service exposes, and left as it was. Narrowing it so that a POB answering 5xx
+      # opens the breaker would be right in itself, but it would decide availability for callers of /cases, /assets and
+      # /configuration, which is not a change the end of lease job gets to make on their behalf.
       pob:
         ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
-      # Both installations ignore everything the error decoder throws, which is every answer from SysMan that is not a
-      # success. A computer SysMan no longer knows about is a fact about that computer and is recorded on its row, not
-      # a sign that the installation is unwell. What the breakers are left to catch is what they should catch, a host
-      # that does not answer at all. One breaker each, so that Ånge cannot take our own installation down with it.
+      # The end of lease job's own POB breaker, on a client of its own so that the two cannot open each other. dept44's
+      # error decoder answers a 4xx with a ClientProblem and a 5xx with a ServerProblem, so ignoring only the former
+      # leaves a POB that answers 500 to everything counted as unwell, which is what it is. The job can back off from
+      # that without anyone else noticing.
+      pob-end-of-lease:
+        ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+      # One breaker each, so that Ånge cannot take our own installation down with it.
+      #
+      # minimumNumberOfCalls is lowered from the inherited five because the dispatch run makes one call per
+      # municipality, so a breaker here sees one call an hour rather than the hundred the lookup run makes. Left at
+      # five it would take five hours to so much as evaluate, and an installation that is down would sit unreported for
+      # most of a working day. At three, with the inherited fifty percent threshold, two failures among the last three
+      # runs open it, which is about three hours. Lower it to two and a single failure followed by a success is enough,
+      # which is more noise than this is worth.
       sysman-sundsvall:
-        ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
+        ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+        minimumNumberOfCalls: 3
       sysman-ange:
-        ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
+        ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+        minimumNumberOfCalls: 3
       endOfLeaseBatchRepository:
         # A batch that is sent again loses on the unique index, which is an expected outcome rather than the database
         # being unwell. Counted as a failure it opens the breaker after a handful of resends and takes every sender down
