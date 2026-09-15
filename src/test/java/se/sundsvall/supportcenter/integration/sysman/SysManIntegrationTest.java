@@ -86,4 +86,20 @@ class SysManIntegrationTest {
 
 		verifyNoInteractions(sysManSundsvallClientMock, sysManAngeClientMock);
 	}
+
+	/**
+	 * Map.of answers the same mistake with a bare duplicate key and no hint as to which property to look at, which is
+	 * out of step with every other gap in this configuration.
+	 */
+	@Test
+	void twoInstallationsOnTheSameMunicipalityNameTheProperties() {
+		final var sysManProperties = new SysManProperties(1, 2,
+			new Instance(SUNDSVALL_MUNICIPALITY_ID, "http://sundsvall.url", "PERSONAL", "sundsvallUsername", "sundsvallPassword"),
+			new Instance(SUNDSVALL_MUNICIPALITY_ID, "http://ange.url", "ANGEDOMAIN", "angeUsername", "angePassword"));
+
+		assertThatExceptionOfType(IllegalStateException.class)
+			.isThrownBy(() -> new SysManIntegration(sysManProperties, sysManSundsvallClientMock, sysManAngeClientMock))
+			.withMessageContaining("integration.sysman.sundsvall.municipalityId")
+			.withMessageContaining("integration.sysman.ange.municipalityId");
+	}
 }

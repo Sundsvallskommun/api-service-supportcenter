@@ -36,8 +36,9 @@ public record SysManProperties(
 	 * One SysMan installation.
 	 *
 	 * @param municipalityId the municipality whose computers belong to this installation. Read from the POB
-	 *                       configuration item rather than from the caller, and kept here so that the routing table is
-	 *                       configuration rather than a constant in the code.
+	 *                       configuration item rather than from the caller, and kept here so that which of the two
+	 *                       installations it goes to is configuration. A municipality outside MUNICIPALITY_MAP is a
+	 *                       different question and still needs a release.
 	 * @param url            the base url of the installation
 	 * @param domain         the NTLM domain, which is its own field in the handshake and never a prefix on the username
 	 * @param username       the account to authenticate as, without a domain prefix

@@ -5,9 +5,9 @@ integration:
   sysman:
     connectTimeout: 10
     readTimeout: 30
-    # The municipality of a computer is read from POB and decides which installation it belongs to. Kept here so that
-    # moving a municipality between installations is a property and not a release. Url, username and password are
-    # environment specific and are not checked in.
+    # Which installation a municipality belongs to is settled here, so moving one across is a property and not a
+    # release. A third municipality is not: CommonMapper.toMunicipalityId reads the POB field against MUNICIPALITY_MAP,
+    # which knows 2281 and 2260 only. Url, username and password are not checked in.
     sundsvall:
       municipalityId: 2281
       domain: PERSONAL
@@ -24,29 +24,18 @@ openapi:
 resilience4j:
   circuitbreaker:
     instances:
-      # Shared by every endpoint this service exposes, and left as it was. Narrowing it so that a POB answering 5xx
-      # opens the breaker would be right in itself, but it would decide availability for callers of /cases, /assets and
-      # /configuration, which is not a change the end of lease job gets to make on their behalf.
+      # Shared by every endpoint this service exposes, so it is left as it was. Narrowing it would decide availability
+      # for /cases, /assets and /configuration, which is not the end of lease job's call to make.
       pob:
         ignoreExceptions: se.sundsvall.dept44.problem.ThrowableProblem
-      # The end of lease job's own POB breaker, on a client of its own so that the two cannot open each other. dept44's
-      # error decoder answers a 4xx with a ClientProblem and a 5xx with a ServerProblem, so ignoring only the former
-      # leaves a POB that answers 500 to everything counted as unwell, which is what it is. The job can back off from
-      # that without anyone else noticing.
+      # The job's own breaker, on a client of its own so the two cannot open each other. Ignoring ClientProblem alone
+      # leaves a POB that answers 5xx counted as unwell, which is what it is.
       pob-end-of-lease:
         ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
-      # One breaker each, so that Ånge cannot take our own installation down with it.
-      #
-      # minimumNumberOfCalls is lowered from the inherited five because the dispatch run makes one call per
-      # municipality, so a breaker here sees one call an hour rather than the hundred the lookup run makes. Left at
-      # five it would take five hours to so much as evaluate, and an installation that is down would sit unreported for
-      # most of a working day. At three it opens after two failures among the first three calls; the inherited sliding
-      # window of ten then spans ten hours rather than three runs, so it is slow to close again.
-      #
-      # What this buys is the health endpoint, not back-off. waitDurationInOpenState is ten seconds and the next call
-      # is an hour away, so an open breaker is always eligible for half-open by the time anything arrives and never
-      # actually turns a call away. It does report CIRCUIT_OPEN in the meantime, which dept44's aggregator surfaces as
-      # RESTRICTED, and that is the point.
+      # One breaker each, so that Ånge cannot take our own installation down with it. minimumNumberOfCalls is lowered
+      # from the inherited five because the dispatch run makes one call per municipality, an hour apart, and at five it
+      # would take most of a working day to evaluate at all. What this buys is CIRCUIT_OPEN on the health endpoint
+      # rather than back-off: the next call is an hour away, by which time an open breaker is eligible for half-open.
       sysman-sundsvall:
         ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
         minimumNumberOfCalls: 3
@@ -54,72 +43,56 @@ resilience4j:
         ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
         minimumNumberOfCalls: 3
       endOfLeaseBatchRepository:
-        # A batch that is sent again loses on the unique index, which is an expected outcome rather than the database
-        # being unwell. Counted as a failure it opens the breaker after a handful of resends and takes every sender down
-        # with it.
+        # A resent batch losing on the unique index is an expected outcome, not the database being unwell. Counted as
+        # a failure it opens the breaker after a handful of resends and takes every sender down with it.
         ignoreExceptions: org.springframework.dao.DataIntegrityViolationException
 mdc:
   municipalityId:
     enabled: true
 scheduler:
   end-of-lease:
-    # Sending a computer its message is two runs. The municipality on its POB configuration item decides which SysMan
-    # installation it belongs to, so nothing can be sent before the lookup has written that municipality on the row.
-    # Kept apart because the two fail differently: a lookup failure is one computer, a dispatch failure is everyone in
-    # the call.
+    # Sending a computer its message is two runs: nothing can be sent before the lookup has written the municipality
+    # that decides the installation. Kept apart because a lookup failure is one computer and a dispatch failure is
+    # everyone in the call.
     #
-    # How many attempts each run gets. The column is shared, but a successful lookup puts it back to nothing spent, so
-    # the budget is per run rather than per computer.
-    #
-    # Spent on what a computer itself is the cause of: a row POB or SysMan will not accept, a serial number POB knows
-    # nothing about, a computer name SysMan does not recognize. An unreachable or unwell POB or SysMan is not counted
-    # against anyone, since it says nothing about any single computer. A queue therefore stands still through an outage
-    # rather than draining into FAILED, which is deliberate and worth an alarm on the age of the oldest waiting row.
+    # Attempts are spent on what a computer is itself the cause of. An unreachable POB or SysMan costs nobody one, so a
+    # queue stands still through an outage rather than draining into FAILED. The column is shared, but a successful
+    # lookup resets it, so the budget is per run.
     maximum-attempts: 5
-    # How long the oldest waiting computer may have been waiting before the health endpoint says so. A batch of a
-    # thousand takes about half a day at a hundred an hour, so a full day of waiting means the queue is not moving at
-    # all rather than moving slowly. Reported as RESTRICTED rather than DOWN, since it is something to look at and not
-    # a reason to take the instance out of rotation.
+    # How long the oldest waiting computer may wait before the health endpoint says so. A batch of a thousand drains
+    # in about four hours, so a full day means the queue is not moving at all. RESTRICTED rather than DOWN: something
+    # to look at, not a reason to leave the rotation.
     maximum-queue-age: PT24H
     lookup:
       name: end-of-lease-lookup
-      # A batch arrives once a day and nobody is waiting on the message by the minute, so this is a slow drain rather
-      # than a dispatch. On the hour when it is turned on, with the dispatch run half an hour behind, so that what this
-      # run resolves is waiting for it rather than being written while it reads.
-      #
-      # Off in the checked-in configuration. An environment turns the pair on with '0 0 * * * *' here and
-      # '0 30 * * * *' below, once the message id further down names a real message.
+      # Off in the checked-in configuration. Turn the pair on with '0 0 * * * *' here and '0 30 * * * *' below, once
+      # the message id further down names a real message. Half an hour apart so the dispatch run reads what this one
+      # has already written rather than racing it.
       cron: '-'
-      # One POB call per computer, so a run takes as long as the page is wide. A hundred an hour drains a batch of a
-      # thousand in half a day, which is well inside the day the next batch arrives in, and leaves a run far short of
-      # its execution time.
-      page-size: 100
-      # Has to stay longer than a run can take. Shorter, and the lock is handed to the next instance while this one is
-      # still working, and a computer is looked up once per instance.
-      #
-      # A hundred computers is a hundred POB calls, and integration.pob.readTimeout is sixty seconds, so a POB that
-      # answers slowly rather than failing can carry one run past an hour and a half without anything having gone
-      # wrong. maximum-execution-time only writes a warning when that happens, it does not stop the run, so the lock is
-      # the only thing holding the second instance off and it has to outlast the worst case rather than the usual one.
-      shedlock-lock-at-most-for: PT2H
-      maximum-execution-time: PT5M
+      # One POB call per computer, measured at just under a hundred milliseconds, so a page of this size is half a
+      # minute and a batch of a thousand drains in four runs.
+      page-size: 250
+      # Has to outlast a run, or the lock passes to the next instance mid-run and a computer is looked up twice. An
+      # hour covers POB at fourteen seconds a call, a hundred and forty times the measured pace. Deliberately not the
+      # arithmetic worst case of four hours: the same lock is what holds the queue still after an instance dies, and
+      # that is the far likelier bill.
+      shedlock-lock-at-most-for: PT1H
+      # Twenty times the measured pace. Worth knowing about, not worth panicking over.
+      maximum-execution-time: PT10M
     dispatch:
       name: end-of-lease-dispatch
-      # Half an hour after the lookup, not alongside it. Run at the same minute the two jobs hold separate locks and
-      # start together, and this one reads the queue before the other has written to it, which costs every computer a
-      # whole extra cycle. Off here for the same reason as the lookup.
+      # Off for the same reason as the lookup, and half an hour behind it when turned on.
       cron: '-'
-      # The computers taken in one run, not the size of a SysMan call. A run groups what it took by municipality and
-      # sends one call per group.
-      page-size: 100
-      # The SysMan message an end of lease computer is to receive. Still a placeholder: nobody has said which message
-      # that is. Harmless only for as long as the crons above stay off, which is why they are off. Turn them on in the
-      # same change that names the real message, or the first run pushes whatever message 1 happens to be in each
-      # installation to real computers and marks the rows SENT so the right message can never reach them from here.
+      # Computers per run, not calls: a run sends one call per municipality, so the widest call is a page that all
+      # belongs to one. SysMan caps a batch call at four thousand targets and nothing here splits a group, so this must
+      # stay below that. Level with the lookup page, or this run falls behind it.
+      page-size: 250
+      # Still a placeholder: nobody has said which message this is. Safe only while the crons above stay off. Name the
+      # real message in the same change that turns them on, or the first run sends whatever message 1 happens to be and
+      # marks the rows SENT.
       message-id: 1
-      # A page is two calls, one per installation, against a thirty second read timeout, so this run cannot come near
-      # the hour and a half the lookup can. Kept well above it anyway: too long a lock delays a run, too short a one
-      # tells a computer twice.
+      # Two calls against a thirty second read timeout, so nowhere near what the lookup can take. Kept well above it
+      # anyway: too short a lock tells a computer twice.
       shedlock-lock-at-most-for: PT30M
       maximum-execution-time: PT5M
 spring:
@@ -127,9 +100,8 @@ spring:
     name: api-supportcenter
   task:
     scheduling:
-      # One thread per job. Spring's default pool holds a single thread for every scheduled method there is, so a
-      # lookup run still going at half past would hold the dispatch trigger back rather than run beside it, and the
-      # ShedLock row would never even be consulted.
+      # One thread per job. Spring's default pool holds a single thread for every scheduled method, so a lookup run
+      # still going at half past would hold the dispatch trigger back instead of running beside it.
       pool:
         size: 2
   cache:

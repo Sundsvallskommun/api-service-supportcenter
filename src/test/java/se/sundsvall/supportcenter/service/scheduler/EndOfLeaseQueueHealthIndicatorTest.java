@@ -67,9 +67,21 @@ class EndOfLeaseQueueHealthIndicatorTest {
 	}
 
 	/**
-	 * DOWN would carry through to the aggregated health and take the instance out of rotation over a queue we could not
-	 * read. The datasource has an indicator of its own for a database that is actually the problem.
+	 * Duration prints itself as PT74H48M33.899099S, which nobody reads at a glance. The threshold beside it stays as
+	 * written, since that is the value standing in application.yml.
 	 */
+	@Test
+	void theWaitingTimeIsReadable() {
+		whenOldestWaitedFor(74);
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getDetails().get("Reason").toString())
+			.contains("has been waiting 3d 2h")
+			.contains("longer than PT24H")
+			.doesNotContain("PT74H");
+	}
+
 	/**
 	 * The run that gives up says so on the scheduler's own indicator, but the aspect resets that on the next run that
 	 * goes well. Counted from the rows instead, a computer nobody can report stays reported until a person has dealt

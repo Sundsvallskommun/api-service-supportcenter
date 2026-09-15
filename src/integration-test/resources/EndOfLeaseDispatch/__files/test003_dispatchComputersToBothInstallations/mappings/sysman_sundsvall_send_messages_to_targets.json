@@ -1,0 +1,35 @@
+{
+	"request": {
+		"method": "POST",
+		"urlPath": "/sysman-sundsvall/api/v2/message/target",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"targets": [
+						"AB12345"
+					],
+					"messagesToSend": [
+						1
+					],
+					"targetType": "Computer",
+					"targetAll": false
+				},
+				"ignoreExtraElements": true
+			}
+		]
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"id": 41207,
+				"name": "AB12345",
+				"type": "Computer"
+			}
+		],
+		"status": 200
+	},
+	"name": "sysman-sundsvall-send-messages-to-targets"
+}

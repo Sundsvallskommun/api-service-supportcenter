@@ -10,6 +10,7 @@ efficient handling of case updates, status changes, and synchronization with POB
 - **Java 25 or higher**
 - **Maven**
 - **Git**
+- **MariaDB**
 - **[Dependent Microservices](#dependencies)**
 
 ### Installation
@@ -45,6 +46,11 @@ This microservice depends on the following services:
   - **Purpose:** POB is the case management system where IT support handles cases.
   - **Website:** [https://www.serviceaide.com/products/pob](https://www.serviceaide.com/products/pob)
   - **Setup Instructions:** Refer to its documentation for installation and configuration steps.
+- **SysMan**
+  - **Purpose:** SysMan sends messages to the computers themselves. The end of lease job asks it to message every
+    computer whose lease is ending.
+  - **Setup Instructions:** Two installations are in use, one run by Sundsvall and one by Ånge. Each needs its own url
+    and NTLM account.
 
 Ensure that these services are running and properly configured before starting this microservice.
 
@@ -66,6 +72,33 @@ Refer to the [API Documentation](#api-documentation) for detailed information on
 curl -X GET http://localhost:8080/api/2281/assets
 ```
 
+## Scheduled Jobs
+
+Computers that have reached end of lease are reported in two runs. Both are off in the checked-in configuration.
+
+The lookup run (`end-of-lease-lookup`) reads each waiting computer's municipality from POB and writes it on the row.
+That municipality decides which SysMan installation the computer belongs to, so nothing goes out before this has run.
+
+The dispatch run (`end-of-lease-dispatch`) asks that installation to send the message, one call per municipality.
+
+Turn both on by setting their cron expressions. The dispatch run also needs a real message id:
+
+```yaml
+scheduler:
+  end-of-lease:
+    lookup:
+      cron: '0 0 * * * *'
+    dispatch:
+      cron: '0 30 * * * *'
+      message-id: 42
+```
+
+`message-id: 1` is checked in as a placeholder. Turn the crons on without replacing it and the first run sends whatever
+message 1 happens to be in each installation.
+
+Both runs report on `/actuator/health`. The `endOfLeaseQueue` component answers RESTRICTED when the queue stops moving,
+or when a computer has run out of attempts and needs a person to look at it.
+
 ## Configuration
 
 Configuration is crucial for the application to run successfully. Ensure all necessary settings are configured in
@@ -85,7 +118,36 @@ Configuration is crucial for the application to run successfully. Ensure all nec
   integration:
     pob:
       url: http://dependency_service_url
+      key: your_pob_key
+  ```
 
+  `key` is the service's own POB identity and only the end of lease job uses it. Every API request carries the caller's
+  key instead, so leaving it out stops that job and nothing else.
+
+- **SysMan Installations:**
+
+  ```yaml
+  integration:
+    sysman:
+      sundsvall:
+        url: http://sysman_sundsvall_url
+        username: account
+        password: secret
+      ange:
+        url: http://sysman_ange_url
+        username: account
+        password: secret
+  ```
+- **Database:**
+
+  ```yaml
+  spring:
+    datasource:
+      url: jdbc:mariadb://localhost:3306/supportcenter
+      username: username
+      password: password
+    flyway:
+      enabled: true
   ```
 
 ### Additional Notes

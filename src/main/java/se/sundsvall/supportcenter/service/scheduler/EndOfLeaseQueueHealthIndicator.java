@@ -73,7 +73,7 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 		final var age = Duration.between(oldest.getCreated(), OffsetDateTime.now(ZoneId.systemDefault()));
 
 		final var builder = age.compareTo(maximumQueueAge) > 0
-			? Health.status(RESTRICTED).withDetail(DETAIL_REASON, "The oldest computer has been waiting %s, which is longer than %s".formatted(age, maximumQueueAge))
+			? Health.status(RESTRICTED).withDetail(DETAIL_REASON, "The oldest computer has been waiting %s, which is longer than %s".formatted(readable(age), maximumQueueAge))
 			: restrictedIfGivenUp(givenUp);
 
 		return builder
@@ -81,6 +81,23 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 			.withDetail(DETAIL_WAITING_SINCE, oldest.getCreated())
 			.withDetail(DETAIL_GIVEN_UP, givenUp)
 			.build();
+	}
+
+	/**
+	 * A waiting time in the two units that matter, for a line a person reads at a glance. Duration prints itself as
+	 * PT74H48M33.899099S, which is a machine's answer to a question nobody asked.
+	 *
+	 * The threshold beside it is left as it is written, since that is the value standing in application.yml and the
+	 * reader may well be on their way there to change it.
+	 */
+	private static String readable(final Duration age) {
+		if (age.toDaysPart() > 0) {
+			return "%dd %dh".formatted(age.toDaysPart(), age.toHoursPart());
+		}
+		if (age.toHoursPart() > 0) {
+			return "%dh %dm".formatted(age.toHoursPart(), age.toMinutesPart());
+		}
+		return "%dm".formatted(age.toMinutesPart());
 	}
 
 	private Health toHealth(final long givenUp) {

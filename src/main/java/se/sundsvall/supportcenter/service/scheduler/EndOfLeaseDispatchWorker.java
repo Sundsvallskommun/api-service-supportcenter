@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import se.sundsvall.dept44.exception.ServerProblem;
-import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.sysman.SysManIntegration;
@@ -27,10 +26,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
-import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
-import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveMessagesToTargetsCommand;
 
 /**
@@ -50,26 +47,23 @@ public class EndOfLeaseDispatchWorker {
 
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final SysManIntegration sysManIntegration;
-	private final Dept44HealthUtility dept44HealthUtility;
+	private final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder;
 	private final int pageSize;
-	private final int maximumAttempts;
 	private final long messageId;
 	private final String jobName;
 
 	public EndOfLeaseDispatchWorker(
 		final EndOfLeaseComputerRepository endOfLeaseComputerRepository,
 		final SysManIntegration sysManIntegration,
-		final Dept44HealthUtility dept44HealthUtility,
+		final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder,
 		@Value("${scheduler.end-of-lease.dispatch.page-size}") final int pageSize,
-		@Value("${scheduler.end-of-lease.maximum-attempts}") final int maximumAttempts,
 		@Value("${scheduler.end-of-lease.dispatch.message-id}") final long messageId,
 		@Value("${scheduler.end-of-lease.dispatch.name}") final String jobName) {
 
 		this.endOfLeaseComputerRepository = endOfLeaseComputerRepository;
 		this.sysManIntegration = sysManIntegration;
-		this.dept44HealthUtility = dept44HealthUtility;
+		this.endOfLeaseFailureRecorder = endOfLeaseFailureRecorder;
 		this.pageSize = pageSize;
-		this.maximumAttempts = maximumAttempts;
 		this.messageId = messageId;
 		this.jobName = jobName;
 	}
@@ -100,7 +94,7 @@ public class EndOfLeaseDispatchWorker {
 			// the installation and not about any of them, so it is not counted against anyone. Listed by name rather
 			// than caught as everything else, so that a defect of our own falls through to the branch that does count
 			// and cannot keep its group in every page for good.
-			recordDependencyFailure(municipalityId, computers, e.getMessage());
+			endOfLeaseFailureRecorder.recordDependencyFailure(computers, jobName, unreachable(municipalityId, e));
 			return;
 		} catch (final RetryableException e) {
 			// Feign wraps both a connection that was never made and an answer that never came in the same exception,
@@ -109,10 +103,10 @@ public class EndOfLeaseDispatchWorker {
 			// the call and sent the messages before it went quiet. Counted, because uncounted it is sent again every
 			// hour for good, and the batch is deduplicated precisely so that nobody is told twice.
 			if (neverReached(e)) {
-				recordDependencyFailure(municipalityId, computers, e.getMessage());
+				endOfLeaseFailureRecorder.recordDependencyFailure(computers, jobName, unreachable(municipalityId, e));
 			} else {
 				LOG.warn("The SysMan installation of municipality {} did not answer for {} computer(s), which is no proof the message was not sent: {}", municipalityId, computers.size(), e.getMessage());
-				computers.forEach(computer -> recordFailedAttempt(computer, e.getMessage()));
+				computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage()));
 			}
 			return;
 		} catch (final Exception e) {
@@ -121,7 +115,7 @@ public class EndOfLeaseDispatchWorker {
 			// that broke it. A municipality with no installation configured lands here too, which is right: nobody but
 			// a human can put that one straight.
 			LOG.warn("The SysMan installation of municipality {} turned down the call for all {} computer(s) in it: {}", municipalityId, computers.size(), e.getMessage());
-			computers.forEach(computer -> recordFailedAttempt(computer, e.getMessage()));
+			computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage()));
 			return;
 		}
 
@@ -129,23 +123,6 @@ public class EndOfLeaseDispatchWorker {
 		// down is not a failed send and must not be recorded as one. Left to travel up instead, where the scheduler
 		// aspect reports it, rather than be mistaken for an installation that never answered.
 		reconcile(computers, targetReferences);
-	}
-
-	/**
-	 * A failure that belongs to the installation rather than to the computers. The reason is written on every row so
-	 * that a queue standing still can be read off it, but the attempts and the statuses are left as they were.
-	 */
-	private void recordDependencyFailure(final String municipalityId, final List<EndOfLeaseComputerEntity> computers, final String errorMessage) {
-		LOG.warn("The SysMan installation of municipality {} could not be reached for {} computer(s), leaving their attempts untouched: {}", municipalityId, computers.size(), errorMessage);
-
-		// The run carries on to the next municipality and swallows this, so the scheduler aspect never sees it. Said
-		// here instead, or an outage is invisible until the queue has aged enough for the queue indicator to notice.
-		dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, "The SysMan installation of municipality %s could not be reached: %s".formatted(municipalityId, errorMessage));
-
-		computers.forEach(computer -> {
-			computer.setErrorMessage(toErrorMessage(errorMessage));
-			endOfLeaseComputerRepository.save(computer);
-		});
 	}
 
 	/**
@@ -162,7 +139,7 @@ public class EndOfLeaseDispatchWorker {
 				computer.setErrorMessage(null);
 				endOfLeaseComputerRepository.save(computer);
 			} else {
-				recordFailedAttempt(computer, NOT_RECOGNIZED);
+				endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), NOT_RECOGNIZED);
 			}
 		});
 	}
@@ -171,6 +148,14 @@ public class EndOfLeaseDispatchWorker {
 	 * Whether the call never got as far as the installation. A refused or unresolvable host says so; a call that was
 	 * made and then timed out says nothing at all about what the other end did with it.
 	 */
+	private static String subject(final EndOfLeaseComputerEntity computer) {
+		return "computer name " + computer.getAssetTag();
+	}
+
+	private static String unreachable(final String municipalityId, final Exception e) {
+		return "The SysMan installation of municipality %s could not be reached: %s".formatted(municipalityId, e.getMessage());
+	}
+
 	private static boolean neverReached(final RetryableException e) {
 		final var cause = e.getCause();
 
@@ -191,21 +176,4 @@ public class EndOfLeaseDispatchWorker {
 		return value.toUpperCase(Locale.ROOT);
 	}
 
-	private void recordFailedAttempt(final EndOfLeaseComputerEntity computer, final String errorMessage) {
-		final var attempts = computer.getAttempts() + 1;
-
-		computer.setAttempts(attempts);
-		computer.setErrorMessage(toErrorMessage(errorMessage));
-
-		if (attempts >= maximumAttempts) {
-			computer.setStatus(FAILED);
-			LOG.warn("Giving up the send of computer name {} after {} attempts: {}", computer.getAssetTag(), attempts, errorMessage);
-
-			// Giving up on a computer is the definition of FAILED: nobody but a person can take it further. The run
-			// itself swallows this, so without saying so here the only place it shows is the log.
-			dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, "Gave up the send of computer name %s after %d attempts".formatted(computer.getAssetTag(), attempts));
-		}
-
-		endOfLeaseComputerRepository.save(computer);
-	}
 }

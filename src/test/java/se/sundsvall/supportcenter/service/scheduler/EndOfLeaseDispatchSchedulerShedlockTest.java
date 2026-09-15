@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -21,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -52,7 +52,7 @@ class EndOfLeaseDispatchSchedulerShedlockTest {
 		@Bean
 		@Primary
 		public EndOfLeaseDispatchWorker createMock() {
-			final var mockBean = Mockito.mock(EndOfLeaseDispatchWorker.class);
+			final var mockBean = mock(EndOfLeaseDispatchWorker.class);
 
 			// Never returns, so the first run is still holding the lock when the following ticks come around. Stubbed
 			// here rather than in a setup method, because the first tick lands before one would have run.

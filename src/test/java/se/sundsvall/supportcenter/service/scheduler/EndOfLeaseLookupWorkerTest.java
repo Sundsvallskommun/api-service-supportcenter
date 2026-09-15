@@ -60,13 +60,16 @@ class EndOfLeaseLookupWorkerTest {
 
 	@BeforeEach
 	void setUp() {
+		// A real recorder over the same mocks. The policy it carries is proven once in EndOfLeaseFailureRecorderTest,
+		// and keeping it real here lets these tests go on saying what a run leaves behind rather than which collaborator
+		// it called.
 		endOfLeaseLookupWorker = new EndOfLeaseLookupWorker(
 			endOfLeaseComputerRepositoryMock,
 			pobIntegrationMock,
 			new POBProperties(1, 2, POB_KEY),
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
 			dept44HealthUtilityMock,
 			PAGE_SIZE,
-			MAXIMUM_ATTEMPTS,
 			JOB_NAME);
 	}
 
@@ -251,7 +254,7 @@ class EndOfLeaseLookupWorkerTest {
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
-		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("Gave up the lookup"));
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("Gave up on serial number"));
 		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
@@ -263,7 +266,8 @@ class EndOfLeaseLookupWorkerTest {
 	void aMissingPobKeyStopsTheRunAndSaysSo() {
 		endOfLeaseLookupWorker = new EndOfLeaseLookupWorker(
 			endOfLeaseComputerRepositoryMock, pobIntegrationMock, new POBProperties(1, 2, " "),
-			dept44HealthUtilityMock, PAGE_SIZE, MAXIMUM_ATTEMPTS, JOB_NAME);
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
+			dept44HealthUtilityMock, PAGE_SIZE, JOB_NAME);
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 

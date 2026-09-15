@@ -15,13 +15,17 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
  * Sends to the SysMan installation a computer belongs to.
  *
  * Which installation that is follows from the municipality on the POB configuration item, not from the municipality
- * the batch was sent to. The two are read from configuration rather than written here, so that moving a municipality
- * between installations is a property and not a release.
+ * the batch was sent to. The two are read from configuration rather than written here, so moving a municipality from
+ * one of these installations to the other is a property and not a release.
+ *
+ * Taking on a municipality neither of them covers is not. The POB field is read against MUNICIPALITY_MAP, which knows
+ * 2281 and 2260 and nothing else, so anything else never reaches this class to be routed.
  */
 @Component
 public class SysManIntegration {
 
 	private static final String NO_INSTANCE = "No SysMan installation is configured for municipality %s";
+	private static final String SAME_MUNICIPALITY = "integration.sysman.sundsvall.municipalityId and integration.sysman.ange.municipalityId are both %s, so there is no telling which installation a computer belongs to";
 
 	private final Map<String, SysManClient> clientsByMunicipalityId;
 
@@ -30,9 +34,29 @@ public class SysManIntegration {
 		final SysManSundsvallClient sysManSundsvallClient,
 		final SysManAngeClient sysManAngeClient) {
 
-		this.clientsByMunicipalityId = Map.of(
-			sysManProperties.sundsvall().municipalityId(), sysManSundsvallClient,
-			sysManProperties.ange().municipalityId(), sysManAngeClient);
+		this.clientsByMunicipalityId = routingTable(sysManProperties, sysManSundsvallClient, sysManAngeClient);
+	}
+
+	/**
+	 * The municipality of a computer to the installation it belongs to.
+	 *
+	 * The two municipalities are checked against each other rather than left to Map.of, which answers the same mistake
+	 * with a bare duplicate key and no hint as to which property to look at. Every other gap in this configuration is
+	 * reported by name, and this one should be too.
+	 */
+	private static Map<String, SysManClient> routingTable(
+		final SysManProperties sysManProperties,
+		final SysManSundsvallClient sysManSundsvallClient,
+		final SysManAngeClient sysManAngeClient) {
+
+		final var sundsvallMunicipalityId = sysManProperties.sundsvall().municipalityId();
+		final var angeMunicipalityId = sysManProperties.ange().municipalityId();
+
+		if (sundsvallMunicipalityId.equals(angeMunicipalityId)) {
+			throw new IllegalStateException(SAME_MUNICIPALITY.formatted(sundsvallMunicipalityId));
+		}
+
+		return Map.of(sundsvallMunicipalityId, sysManSundsvallClient, angeMunicipalityId, sysManAngeClient);
 	}
 
 	/**

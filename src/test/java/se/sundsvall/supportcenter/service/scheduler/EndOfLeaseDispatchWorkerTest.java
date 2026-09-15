@@ -75,8 +75,13 @@ class EndOfLeaseDispatchWorkerTest {
 
 	@BeforeEach
 	void setUp() {
+		// A real recorder over the same mocks. The policy it carries is proven once in EndOfLeaseFailureRecorderTest,
+		// and keeping it real here lets these tests go on saying what a run leaves behind rather than which collaborator
+		// it called.
 		endOfLeaseDispatchWorker = new EndOfLeaseDispatchWorker(
-			endOfLeaseComputerRepositoryMock, sysManIntegrationMock, dept44HealthUtilityMock, PAGE_SIZE, MAXIMUM_ATTEMPTS, MESSAGE_ID, JOB_NAME);
+			endOfLeaseComputerRepositoryMock, sysManIntegrationMock,
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
+			PAGE_SIZE, MESSAGE_ID, JOB_NAME);
 	}
 
 	@Test
@@ -292,7 +297,7 @@ class EndOfLeaseDispatchWorkerTest {
 
 		endOfLeaseDispatchWorker.processComputersReadyToSend();
 
-		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("Gave up the send of computer name CD67890"));
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("Gave up on computer name CD67890"));
 		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 

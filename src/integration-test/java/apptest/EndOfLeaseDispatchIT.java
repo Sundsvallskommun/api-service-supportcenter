@@ -83,6 +83,25 @@ class EndOfLeaseDispatchIT extends AbstractAppTest {
 			"select sent_at from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class)).isNull();
 	}
 
+	/**
+	 * The one test that proves the routing rather than assuming it. Each installation is stubbed to accept only its own
+	 * computer name, so a mistake that sent both to the same host, or wired both clients to the same url, leaves one of
+	 * them unsent and fails here. Nothing else exercises the Ange half against a real round trip.
+	 */
+	@Test
+	void test003_dispatchComputersToBothInstallations() throws Exception {
+		final var batchId = sendBatch();
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		assertThat(computers(batchId))
+			.extracting("serial_number", "status", "asset_municipality_id")
+			.containsExactly(
+				tuple("J123ABC", "SENT", "2281"),
+				tuple("L789GHI", "SENT", "2260"));
+	}
+
 	private String sendBatch() throws Exception {
 		return setupCall()
 			.withServicePath(PATH)
