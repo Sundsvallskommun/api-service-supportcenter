@@ -1,0 +1,35 @@
+{
+	"request": {
+		"method": "POST",
+		"urlPath": "/sysman-ange/api/v2/message/target",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"targets": [
+						"CD67890"
+					],
+					"messagesToSend": [
+						1
+					],
+					"targetType": "Computer",
+					"targetAll": false
+				},
+				"ignoreExtraElements": true
+			}
+		]
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"id": 8842,
+				"name": "CD67890",
+				"type": "Computer"
+			}
+		],
+		"status": 200
+	},
+	"name": "sysman-ange-send-messages-to-targets"
+}

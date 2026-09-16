@@ -1,0 +1,498 @@
+package se.sundsvall.supportcenter.service.scheduler;
+
+import feign.Request;
+import feign.RetryableException;
+import generated.client.sysman.SaveMessagesToTargetsCommand;
+import generated.client.sysman.TargetReference;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import javax.net.ssl.SSLHandshakeException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import se.sundsvall.dept44.exception.ClientProblem;
+import se.sundsvall.dept44.exception.ServerProblem;
+import se.sundsvall.dept44.problem.Problem;
+import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
+import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
+import se.sundsvall.supportcenter.integration.sysman.SysManIntegration;
+
+import static feign.Request.HttpMethod.POST;
+import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.BAD_GATEWAY;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
+
+@ExtendWith(MockitoExtension.class)
+class EndOfLeaseDispatchWorkerTest {
+
+	private static final String SUNDSVALL = "2281";
+	private static final String ANGE = "2260";
+	private static final int PAGE_SIZE = 100;
+	private static final int MAXIMUM_ATTEMPTS = 5;
+	private static final long MESSAGE_ID = 1;
+	private static final Duration BACKOFF = Duration.ofHours(6);
+	private static final String JOB_NAME = "end-of-lease-dispatch";
+
+	@Mock
+	private EndOfLeaseComputerRepository endOfLeaseComputerRepositoryMock;
+
+	@Mock
+	private SysManIntegration sysManIntegrationMock;
+
+	@Mock
+	private Dept44HealthUtility dept44HealthUtilityMock;
+
+	@Captor
+	private ArgumentCaptor<EndOfLeaseComputerEntity> computerCaptor;
+
+	@Captor
+	private ArgumentCaptor<SaveMessagesToTargetsCommand> commandCaptor;
+
+	private EndOfLeaseDispatchWorker endOfLeaseDispatchWorker;
+
+	@BeforeEach
+	void setUp() {
+		// A real recorder over the same mocks. The policy it carries is proven once in EndOfLeaseFailureRecorderTest,
+		// and keeping it real here lets these tests go on saying what a run leaves behind rather than which collaborator
+		// it called.
+		endOfLeaseDispatchWorker = new EndOfLeaseDispatchWorker(
+			endOfLeaseComputerRepositoryMock, sysManIntegrationMock,
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
+			dept44HealthUtilityMock, PAGE_SIZE, MESSAGE_ID, JOB_NAME);
+	}
+
+	/**
+	 * The checked-in configuration names no message, since which one it is differs per installation. SENT is terminal,
+	 * so a run that sent the wrong one could not be taken back, and the queue is left alone instead.
+	 */
+	@Test
+	void refusesToRunWithoutAMessageId() {
+		final var worker = new EndOfLeaseDispatchWorker(
+			endOfLeaseComputerRepositoryMock, sysManIntegrationMock,
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
+			dept44HealthUtilityMock, PAGE_SIZE, 0, JOB_NAME);
+
+		worker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("message-id is not configured"));
+		verifyNoInteractions(sysManIntegrationMock, endOfLeaseComputerRepositoryMock);
+		verifyNoMoreInteractions(dept44HealthUtilityMock);
+	}
+
+	@Test
+	void aComputerSysManAnsweredWithIsSent() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(List.of(targetReference("AB12345")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(SENT);
+		assertThat(computerCaptor.getValue().getSentAt()).isNotNull();
+		assertThat(computerCaptor.getValue().getAttempts()).isZero();
+		assertThat(computerCaptor.getValue().getErrorMessage()).isNull();
+	}
+
+	/**
+	 * The asset tag is the computer name in SysMan, and the message is the one the property names.
+	 */
+	@Test
+	void theCallNamesEveryComputerInTheGroup() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(emptyList());
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(sysManIntegrationMock).sendMessagesToTargets(eq(SUNDSVALL), commandCaptor.capture());
+		assertThat(commandCaptor.getValue().getTargets()).containsExactly("AB12345", "CD67890");
+		assertThat(commandCaptor.getValue().getMessagesToSend()).containsExactly(MESSAGE_ID);
+		assertThat(commandCaptor.getValue().getTargetType()).isEqualTo(COMPUTER);
+		assertThat(commandCaptor.getValue().getTargetAll()).isFalse();
+	}
+
+	/**
+	 * One call per installation. A computer belongs to the SysMan its municipality is run by, and an installation knows
+	 * nothing of the other one's computers.
+	 */
+	@Test
+	void everyMunicipalityIsItsOwnCall() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", ANGE, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(List.of(targetReference("AB12345")));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(ANGE), any())).thenReturn(List.of(targetReference("CD67890")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(sysManIntegrationMock).sendMessagesToTargets(eq(SUNDSVALL), any());
+		verify(sysManIntegrationMock).sendMessagesToTargets(eq(ANGE), any());
+		verifyNoMoreInteractions(sysManIntegrationMock);
+	}
+
+	/**
+	 * A target SysMan does not know about is left out of the answer rather than reported, so a short answer is how a
+	 * computer that was not reached shows up. It keeps its turn instead of being counted as sent.
+	 */
+	@Test
+	void aComputerLeftOutOfTheAnswerIsRetried() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(List.of(targetReference("AB12345")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getAssetTag, EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactly(
+				tuple("AB12345", SENT, 0),
+				tuple("CD67890", PENDING, 1));
+	}
+
+	@Test
+	void anAnswerThatNamesTheComputerInAnotherCaseStillCounts() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(List.of(targetReference("ab12345")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(SENT);
+	}
+
+	@Test
+	void anAnswerWithoutTargetsRetriesEveryone() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(null);
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isOne();
+	}
+
+	/**
+	 * One computer name the installation will not accept is enough to lose the whole group, so a turned down call has to
+	 * count. Without that, the group never gets past the row that broke it.
+	 */
+	@Test
+	void aCallTheInstallationTurnsDownCountsForTheWholeGroup() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 2));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(BAD_REQUEST, "Invalid target name"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactly(
+				tuple(PENDING, 1),
+				tuple(PENDING, 3));
+	}
+
+	/**
+	 * An unwell or unreachable installation is no fact about any of the computers in the group, so spending their budget
+	 * on it would give up on a queue that has nothing wrong with it. The reason is still written on every row, so a
+	 * queue standing still can be read off it.
+	 */
+	@Test
+	void anUnreachableInstallationDoesNotCostAnAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 2));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ServerProblem(BAD_GATEWAY, "SysMan is unwell"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactly(
+				tuple(PENDING, 0),
+				tuple(PENDING, 2));
+	}
+
+	/**
+	 * An outage never leaves a computer FAILED, however long it lasts.
+	 */
+	@Test
+	void anUnreachableInstallationNeverLeavesTheComputerFailed() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ServerProblem(BAD_GATEWAY, "SysMan is unwell"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
+	}
+
+	@Test
+	void theLastAttemptLeavesTheComputerFailed() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(emptyList());
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(FAILED);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS);
+	}
+
+	/**
+	 * A municipality with no installation configured is not an outage. Nothing but a human can put it straight, so it
+	 * has to run the attempts down and reach FAILED rather than sit in the queue forever.
+	 */
+	@Test
+	void aMunicipalityWithNoInstallationCountsAsAnAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any()))
+			.thenThrow(Problem.valueOf(INTERNAL_SERVER_ERROR, "No SysMan installation is configured for municipality 2281"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isOne();
+	}
+
+	/**
+	 * The message is delivered by the time the outcome is written down, so a failure while writing it is not a failed
+	 * send. Swallowed here it would stamp an error on rows already marked SENT and leave the rest to be sent a second
+	 * time, which is the one thing the batch is deduplicated to avoid.
+	 */
+	@Test
+	void aFailureWhileRecordingTheOutcomeIsNotMistakenForAFailedSend() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(List.of(targetReference("AB12345")));
+		when(endOfLeaseComputerRepositoryMock.save(any())).thenThrow(new IllegalStateException("The database is unwell"));
+
+		assertThatExceptionOfType(IllegalStateException.class)
+			.isThrownBy(() -> endOfLeaseDispatchWorker.processComputersReadyToSend());
+	}
+
+	/**
+	 * The run swallows an outage so that the computers keep their attempts, which leaves the scheduler aspect with
+	 * nothing to report. Saying so here is what puts it on the health endpoint on the run that hits it, rather than a
+	 * day later when the queue has aged enough for the queue indicator to notice.
+	 */
+	@Test
+	void anUnreachableInstallationIsReportedOnTheHealthEndpoint() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ServerProblem(BAD_GATEWAY, "SysMan is unwell"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("could not be reached"));
+	}
+
+	/**
+	 * Giving up on a computer means nobody but a person can take it further, which is worth the same visibility as an
+	 * outage. An ordinary attempt that still has budget left is not, or the indicator would never be green.
+	 */
+	@Test
+	void givingUpOnAComputerIsReportedButAnOrdinaryAttemptIsNot() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenReturn(emptyList());
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("Gave up on computer name CD67890"));
+		verifyNoMoreInteractions(dept44HealthUtilityMock);
+	}
+
+	/**
+	 * A call that was made and then went quiet says nothing about what the installation did with it. It may well have
+	 * queued every message before it stopped answering, so this cannot be free: uncounted, the same group is sent the
+	 * same message every hour for good.
+	 */
+	@Test
+	void anAnswerThatNeverCameCountsBecauseTheMessageMayHaveGoneOut() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new SocketTimeoutException("Read timed out")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isOne();
+	}
+
+	/**
+	 * A connection that was never made is the other half of the same exception, and there nothing can have been sent,
+	 * so nobody pays for it.
+	 */
+	@Test
+	void aConnectionThatWasNeverMadeCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new ConnectException("Connection refused")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isZero();
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * A connect timeout is the same exception type as a read timeout and only the message tells them apart. This one
+	 * never reached the installation, so it has to be free like any other connection that was never made.
+	 */
+	@Test
+	void aConnectTimeoutCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(retryableException(new SocketTimeoutException("Connect timed out")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isZero();
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * An expired or untrusted certificate stops the handshake, so the call never carried anything. It is a fact about
+	 * the installation and lasts until somebody renews the certificate, which is long enough to run every computer in
+	 * the municipality out of attempts if it counted.
+	 */
+	@Test
+	void aFailedHandshakeCostsNoAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any()))
+			.thenThrow(retryableException(new SSLHandshakeException("PKIX path building failed")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+	}
+
+	/**
+	 * A rotated password or a locked account answers every call the same way. Counted per computer it would empty the
+	 * budget of the whole municipality in five runs over something none of them is the cause of.
+	 */
+	@Test
+	void aRejectedAccountCostsNobodyAnAttempt() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", SUNDSVALL, 2));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactly(
+				tuple(PENDING, 0),
+				tuple(PENDING, 2));
+	}
+
+	/**
+	 * The same for a forbidden account, and it never leaves a computer FAILED however many runs it lasts.
+	 */
+	@Test
+	void aForbiddenAccountNeverLeavesTheComputerFailed() {
+		whenPageContains(computer("AB12345", SUNDSVALL, MAXIMUM_ATTEMPTS - 1));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(FORBIDDEN, "Forbidden"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getStatus()).isEqualTo(PENDING);
+		assertThat(computerCaptor.getValue().getAttempts()).isEqualTo(MAXIMUM_ATTEMPTS - 1);
+	}
+
+	/**
+	 * A rejected account is an outage of its own and belongs on the health endpoint, or the only sign of it is a queue
+	 * that quietly stops moving.
+	 */
+	@Test
+	void aRejectedAccountIsReportedOnTheHealthEndpoint() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any())).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("turned our account down"));
+		verifyNoMoreInteractions(dept44HealthUtilityMock);
+	}
+
+	/**
+	 * Map.forEach over the groupingBy HashMap runs the groups in an arbitrary order, so a change that let an exception
+	 * escape send would starve whichever group happened to come second, and which one that is would vary between runs.
+	 */
+	@Test
+	void aGroupThatFailsDoesNotStopTheOther() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", ANGE, 0));
+
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any()))
+			.thenThrow(Problem.valueOf(INTERNAL_SERVER_ERROR, "No SysMan installation is configured for municipality 2281"));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(ANGE), any()))
+			.thenReturn(List.of(targetReference("CD67890")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getAssetTag, EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactlyInAnyOrder(
+				tuple("AB12345", PENDING, 1),
+				tuple("CD67890", SENT, 0));
+	}
+
+	@Test
+	void anEmptyPageCallsNobody() {
+		when(endOfLeaseComputerRepositoryMock.findReadyToSend(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
+			.thenReturn(emptyList());
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, never()).save(any());
+		verifyNoInteractions(sysManIntegrationMock);
+	}
+
+	private void whenPageContains(final EndOfLeaseComputerEntity... computers) {
+		when(endOfLeaseComputerRepositoryMock.findReadyToSend(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
+			.thenReturn(List.of(computers));
+	}
+
+	private static EndOfLeaseComputerEntity computer(final String assetTag, final String assetMunicipalityId, final int attempts) {
+		return EndOfLeaseComputerEntity.create()
+			.withSerialNumber("SN" + assetTag)
+			.withAssetTag(assetTag)
+			.withAssetMunicipalityId(assetMunicipalityId)
+			.withStatus(PENDING)
+			.withAttempts(attempts);
+	}
+
+	private static RetryableException retryableException(final Throwable cause) {
+		return new RetryableException(-1, cause.getMessage(), POST, cause, (Long) null,
+			Request.create(POST, "http://sysman.url", Map.of(), null, null, null));
+	}
+
+	private static TargetReference targetReference(final String name) {
+		return new TargetReference().name(name);
+	}
+}

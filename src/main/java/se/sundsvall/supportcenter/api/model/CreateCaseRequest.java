@@ -516,20 +516,18 @@ public class CreateCaseRequest {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CreateCaseRequest [note=").append(note).append(", description=").append(description)
-			.append(", caseType=").append(caseType).append(", caseCategory=").append(caseCategory).append(", customerContact=").append(customerContact)
-			.append(", externalArticleNumber=").append(externalArticleNumber).append(", priority=").append(priority)
-			.append(", managementCompany=").append(managementCompany)
-			.append(", personal=").append(personal).append(", responsibleGroup=").append(responsibleGroup)
-			.append(", externalServiceId=").append(externalServiceId).append(", office=").append(office)
-			.append(", freeText=").append(freeText).append(", joinContact=").append(joinContact)
-			.append(", responsibilityNumber=").append(responsibilityNumber).append(", subaccount=").append(subaccount)
-			.append(", businessNumber=").append(businessNumber).append(", activityNumber=").append(activityNumber)
-			.append(", projectNumber=").append(projectNumber).append(", objectNumber=").append(objectNumber).append(", counterPart=").append(counterPart)
-			.append(", ciDescription=").append(ciDescription).append(", counterPart=").append(counterPart)
-			.append(", contactPerson=").append(contactPerson).append(", phoneNumber=").append(phoneNumber)
-			.append(", email=").append(email).append(", imeiNumber=").append(imeiNumber).append(", modelName=").append(modelName).append(", address=").append(address).append("]");
-		return builder.toString();
+		return "CreateCaseRequest [note=" + note + ", description=" + description +
+			", caseType=" + caseType + ", caseCategory=" + caseCategory + ", customerContact=" + customerContact +
+			", externalArticleNumber=" + externalArticleNumber + ", priority=" + priority +
+			", managementCompany=" + managementCompany +
+			", personal=" + personal + ", responsibleGroup=" + responsibleGroup +
+			", externalServiceId=" + externalServiceId + ", office=" + office +
+			", freeText=" + freeText + ", joinContact=" + joinContact +
+			", responsibilityNumber=" + responsibilityNumber + ", subaccount=" + subaccount +
+			", businessNumber=" + businessNumber + ", activityNumber=" + activityNumber +
+			", projectNumber=" + projectNumber + ", objectNumber=" + objectNumber +
+			", ciDescription=" + ciDescription + ", counterPart=" + counterPart +
+			", contactPerson=" + contactPerson + ", phoneNumber=" + phoneNumber +
+			", email=" + email + ", imeiNumber=" + imeiNumber + ", modelName=" + modelName + ", address=" + address + "]";
 	}
 }

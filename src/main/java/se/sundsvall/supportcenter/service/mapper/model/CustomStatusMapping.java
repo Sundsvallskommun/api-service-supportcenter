@@ -65,8 +65,6 @@ public class CustomStatusMapping {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CustomStatusMapping [attributes=").append(attributes).append(", statusNoteType=").append(statusNoteType).append("]");
-		return builder.toString();
+		return "CustomStatusMapping [attributes=" + attributes + ", statusNoteType=" + statusNoteType + "]";
 	}
 }

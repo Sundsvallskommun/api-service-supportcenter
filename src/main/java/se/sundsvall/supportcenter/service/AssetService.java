@@ -2,7 +2,6 @@ package se.sundsvall.supportcenter.service;
 
 import generated.client.pob.PobPayload;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.supportcenter.api.model.Asset;
@@ -10,7 +9,6 @@ import se.sundsvall.supportcenter.api.model.CreateAssetRequest;
 import se.sundsvall.supportcenter.api.model.UpdateAssetRequest;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 
-import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.util.StringUtils.hasText;
 import static se.sundsvall.supportcenter.service.mapper.ConfigurationMapper.toPobPayload;
@@ -41,7 +39,7 @@ public class AssetService {
 	public String createAsset(final String pobKey, final CreateAssetRequest createAssetRequest) {
 
 		var id = "";
-		final var itemIds = Optional.ofNullable(getItemsByModelName(pobKey, createAssetRequest.getModelName())).orElse(emptyList());
+		final var itemIds = getItemsByModelName(pobKey, createAssetRequest.getModelName());
 
 		if (itemIds.isEmpty()) {
 			id = createItem(pobKey, createAssetRequest);

@@ -10,6 +10,7 @@ efficient handling of case updates, status changes, and synchronization with POB
 - **Java 25 or higher**
 - **Maven**
 - **Git**
+- **MariaDB**
 - **[Dependent Microservices](#dependencies)**
 
 ### Installation
@@ -45,6 +46,11 @@ This microservice depends on the following services:
   - **Purpose:** POB is the case management system where IT support handles cases.
   - **Website:** [https://www.serviceaide.com/products/pob](https://www.serviceaide.com/products/pob)
   - **Setup Instructions:** Refer to its documentation for installation and configuration steps.
+- **SysMan**
+  - **Purpose:** SysMan sends messages to the computers themselves. The end of lease job asks it to message every
+    computer whose lease is ending.
+  - **Setup Instructions:** Two installations are in use, one run by Sundsvall and one by Ånge. Each needs its own url
+    and NTLM account.
 
 Ensure that these services are running and properly configured before starting this microservice.
 
@@ -66,6 +72,50 @@ Refer to the [API Documentation](#api-documentation) for detailed information on
 curl -X GET http://localhost:8080/api/2281/assets
 ```
 
+## Scheduled Jobs
+
+Computers that have reached end of lease are reported in two runs. Both are off in the checked-in configuration.
+
+The lookup run (`end-of-lease-lookup`) reads each waiting computer's municipality from POB and writes it on the row.
+That municipality decides which SysMan installation the computer belongs to, so nothing goes out before this has run.
+
+The dispatch run (`end-of-lease-dispatch`) asks that installation to send the message, one call per municipality.
+
+Turn both on by setting their cron expressions. The dispatch run also needs a real message id:
+
+```yaml
+scheduler:
+  end-of-lease:
+    lookup:
+      cron: '0 0 * * * *'
+    dispatch:
+      cron: '0 30 * * * *'
+      message-id: 42
+```
+
+`message-id` is checked in as `0`, which is not a message. The dispatch run refuses to start without a real one and
+reports itself unhealthy on `/actuator/health`, so turning the crons on without naming the message sends nothing rather
+than sending the wrong thing. `SENT` is terminal, so a computer that got the wrong message cannot be taken back.
+
+Both runs report on `/actuator/health`. The `endOfLeaseQueue` component answers RESTRICTED when the queue stops moving,
+or when a computer has run out of attempts and needs a person to look at it.
+
+A computer that has run out of attempts is left alone by both runs, and stays counted on the health endpoint until
+somebody deals with it. This is how you put it back in the queue, with its attempts reset:
+
+```bash
+# every computer the municipality has been given up on
+curl -X POST http://localhost:8080/api/2281/endOfLeaseComputers/retry \
+  -H 'Content-Type: application/json' -d '{}'
+
+# or just the ones you name
+curl -X POST http://localhost:8080/api/2281/endOfLeaseComputers/retry \
+  -H 'Content-Type: application/json' -d '{"serialNumbers": ["J123ABC"]}'
+```
+
+The municipality in the path is the one that registered the batch, not the one the lookup read from POB. A computer
+that never got as far as a lookup goes back to the lookup run, and one that did goes straight to the dispatch run.
+
 ## Configuration
 
 Configuration is crucial for the application to run successfully. Ensure all necessary settings are configured in
@@ -85,7 +135,42 @@ Configuration is crucial for the application to run successfully. Ensure all nec
   integration:
     pob:
       url: http://dependency_service_url
+      key: your_pob_key
+  ```
 
+  `key` is the service's own POB identity and only the end of lease job uses it. Every API request carries the caller's
+  key instead, so leaving it out stops that job and nothing else.
+
+- **SysMan Installations:**
+
+  ```yaml
+  integration:
+    sysman:
+      sundsvall:
+        url: http://sysman_sundsvall_url
+        username: account
+        password: secret
+      ange:
+        url: http://sysman_ange_url
+        username: account
+        password: secret
+  ```
+
+  All six are required before the service starts, including in environments that never turn the end of lease job on.
+  Both Feign clients take their host from `url`, so the client bean cannot be built without it, and the properties are
+  validated so that a gap names itself instead of surfacing as an unresolved placeholder inside a URI parser. Add them
+  to every environment in the same change that deploys this version.
+
+- **Database:**
+
+  ```yaml
+  spring:
+    datasource:
+      url: jdbc:mariadb://localhost:3306/supportcenter
+      username: username
+      password: password
+    flyway:
+      enabled: true
   ```
 
 ### Additional Notes

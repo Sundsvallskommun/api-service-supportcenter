@@ -1,7 +1,7 @@
 package se.sundsvall.supportcenter.integration.db.model;
 
 /**
- * The state a computer is in on its way to SysMan.
+ * The state a computer is in on its way to being sent its message via SysMan.
  */
 public enum EndOfLeaseStatus {
 
@@ -11,7 +11,7 @@ public enum EndOfLeaseStatus {
 	PENDING,
 
 	/**
-	 * Sent to SysMan. Terminal.
+	 * The message has been sent to the computer via SysMan. Terminal.
 	 */
 	SENT,
 

@@ -32,6 +32,9 @@ class POBIntegrationTest {
 	@Mock
 	private POBClient clientMock;
 
+	@Mock
+	private EndOfLeasePOBClient endOfLeaseClientMock;
+
 	@InjectMocks
 	private POBIntegration integration;
 
@@ -125,6 +128,22 @@ class POBIntegrationTest {
 
 		assertThat(result).containsExactly(payloadMock);
 		verify(clientMock).getConfigurationItemsBySerialNumber(POB_KEY, serialNbr);
+	}
+
+	/**
+	 * The end of lease job goes over a client of its own so that its circuit breaker cannot decide availability for the
+	 * endpoints this service exposes. Asserting that the shared client is left alone is what says the two stay apart.
+	 */
+	@Test
+	void getConfigurationItemsBySerialNumberForEndOfLease() {
+		final var serialNbr = RandomStringUtils.secure().nextAlphabetic(10);
+		when(endOfLeaseClientMock.getConfigurationItemsBySerialNumber(POB_KEY, serialNbr)).thenReturn(List.of(payloadMock));
+
+		final var result = integration.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, serialNbr);
+
+		assertThat(result).containsExactly(payloadMock);
+		verify(endOfLeaseClientMock).getConfigurationItemsBySerialNumber(POB_KEY, serialNbr);
+		verifyNoInteractions(clientMock);
 	}
 
 	@Test

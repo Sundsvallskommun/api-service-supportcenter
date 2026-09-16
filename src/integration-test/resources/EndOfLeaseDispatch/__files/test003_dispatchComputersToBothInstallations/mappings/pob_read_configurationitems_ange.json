@@ -1,0 +1,34 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=L789GHI"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"SerialNumber": "L789GHI",
+					"Virtual.CIKommun": "Ånge"
+				},
+				"Memo": {}
+			}
+		],
+		"status": 200
+	},
+	"name": "pob-read-configurationitems-ange"
+}

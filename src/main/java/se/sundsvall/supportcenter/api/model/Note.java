@@ -68,8 +68,6 @@ public class Note {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Note [type=").append(type).append(", text=").append(text).append("]");
-		return builder.toString();
+		return "Note [type=" + type + ", text=" + text + "]";
 	}
 }

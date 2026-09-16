@@ -85,7 +85,6 @@ public class Address {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		return builder.append("Address [street=").append(street).append(", postalCode=").append(postalCode).append(", city=").append(city).append("]").toString();
+		return "Address [street=" + street + ", postalCode=" + postalCode + ", city=" + city + "]";
 	}
 }

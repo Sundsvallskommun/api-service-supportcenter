@@ -50,6 +50,8 @@ class EndOfLeaseComputerEntityTest {
 		final var assetMunicipalityId = "2260";
 		final var attempts = 2;
 		final var errorMessage = "errorMessage";
+		final var retryAfter = now().plusHours(6);
+		final var version = 3L;
 		final var sentAt = now();
 		final var created = now();
 		final var modified = now();
@@ -64,6 +66,8 @@ class EndOfLeaseComputerEntityTest {
 			.withAssetMunicipalityId(assetMunicipalityId)
 			.withAttempts(attempts)
 			.withErrorMessage(errorMessage)
+			.withRetryAfter(retryAfter)
+			.withVersion(version)
 			.withSentAt(sentAt)
 			.withCreated(created)
 			.withModified(modified);
@@ -78,6 +82,8 @@ class EndOfLeaseComputerEntityTest {
 		assertThat(endOfLeaseComputerEntity.getAssetMunicipalityId()).isEqualTo(assetMunicipalityId);
 		assertThat(endOfLeaseComputerEntity.getAttempts()).isEqualTo(attempts);
 		assertThat(endOfLeaseComputerEntity.getErrorMessage()).isEqualTo(errorMessage);
+		assertThat(endOfLeaseComputerEntity.getRetryAfter()).isEqualTo(retryAfter);
+		assertThat(endOfLeaseComputerEntity.getVersion()).isEqualTo(version);
 		assertThat(endOfLeaseComputerEntity.getSentAt()).isEqualTo(sentAt);
 		assertThat(endOfLeaseComputerEntity.getCreated()).isEqualTo(created);
 		assertThat(endOfLeaseComputerEntity.getModified()).isEqualTo(modified);

@@ -13,7 +13,7 @@ public class ValidMacAddressConstraintValidator implements ConstraintValidator<V
 	private static final String NON_HEXADECIMAL_VALUES = "[^a-fA-F0-9]";
 	private static final String HEXADECIMAL_PAIRS = "^([0-9a-fA-F]{2}){6}$";
 
-	private Pattern pattern = compile(HEXADECIMAL_PAIRS);
+	private final Pattern pattern = compile(HEXADECIMAL_PAIRS);
 
 	@Override
 	public boolean isValid(final String macAddress, final ConstraintValidatorContext context) {

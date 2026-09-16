@@ -1,0 +1,130 @@
+# The SysMan specification as published is 1.6 MB, 61 541 lines, 508 paths and 590 schemas. This service calls one of
+# them, POST /api/v2/message/target, and uses three of the schemas. The rest is trimmed away rather than checked in,
+# the same way pob.yaml beside this file carries its definitions and an empty paths block.
+#
+# The servers block is deliberately gone. It named a production host, and hosts belong in configuration rather than in
+# a public repository; integration.sysman.<installation>.url is where they live.
+#
+# None of the three schemas references anything further, so nothing else has to come with them. A schema that grows a
+# $ref later fails the build on a missing class, which is the right way to find out.
+openapi: 3.0.1
+info:
+  title: SysMan Web API Documentation
+  description: Integrate with all functionality available in SysMan through the Web API
+  version: v2
+paths: {}
+components:
+  schemas:
+    SaveMessagesToTargetsCommand:
+      type: object
+      properties:
+        targets:
+          type: array
+          items:
+            type: string
+          description: Gets or sets the names of the targets to associate the messages with.
+          nullable: true
+        messagesToSend:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Gets or sets a List over the messages that should be saved (sent).
+          nullable: true
+        messagesToRemove:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Gets or sets a list over the messages that should be removed (unsent).
+          nullable: true
+        targetType:
+          enum:
+          - Computer
+          - User
+          - MobileDevice
+          - CloudUser
+          type: string
+          description: 'Gets or sets target Type. Possible values: { Computer, User, MobileDevice, CloudUser }.'
+        sendDate:
+          type: string
+          description: 'Gets or sets if the send out to the client should be scheduled for a later time. NOTE: this only works
+            with the stand alone Driftinfo module and it only works when sending messages.'
+          format: date-time
+          nullable: true
+        targetAll:
+          type: boolean
+          description: Gets or sets a value indicating whether if the action should target all of the specified type.
+      additionalProperties: false
+      description: Saves or removes messages to a set of targets.
+    TargetReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Gets or sets the id of the target.
+          format: int64
+        securityIdentifier:
+          type: string
+          description: Gets or sets the security identifier.
+          nullable: true
+        name:
+          type: string
+          description: Gets or sets the name of the target.
+          nullable: true
+        type:
+          enum:
+          - Computer
+          - User
+          - MobileDevice
+          - CloudUser
+          type: string
+          description: 'Gets or sets the type of the target. Possible values: { Computer, User, MobileDevice, CloudUser }.'
+        sccmReferenceId:
+          type: integer
+          description: Gets or sets the reference id in ConfigMgr.
+          format: int32
+          nullable: true
+        azureActiveDirectoryReferenceId:
+          type: string
+          description: Gets or sets the reference id in Active Directory.
+          format: uuid
+          nullable: true
+        objectGuid:
+          type: string
+          description: Gets or sets the ObjectGuid for the target in (onPremise) Active Directory.
+          format: uuid
+          nullable: true
+        azureActiveDirectoryDeviceReferenceId:
+          type: string
+          description: Gets or sets the device id in Azure Active Directory. This is the same as the DeviceId in Azure Graph
+            API or in the Azure Portal.
+          format: uuid
+          nullable: true
+        intuneReferenceId:
+          type: string
+          description: Gets or sets the id in Intune for a device. This is the same as id in Intune portal.
+          format: uuid
+          nullable: true
+      additionalProperties: false
+      description: A reference to a target (client, user) in SysMan.
+    ApiErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Gets or sets the error message.
+          nullable: true
+        details:
+          type: array
+          items:
+            type: string
+          description: Gets the details about the message (if any is available).
+          nullable: true
+        code:
+          type: string
+          description: Gets or sets the error message code.
+          nullable: true
+      additionalProperties: false
+      description: An error message from the api. Indicates something went wrong. Use the information provided in this class
+        together with the returned HttpStatus code to troubleshoot the issue.

@@ -3,6 +3,18 @@ integration:
     connectTimeout: 1
     readTimeout: 2
     url: http://localhost:${wiremock.server.port:}/pob
+    key: pobKey
+  sysman:
+    connectTimeout: 1
+    readTimeout: 2
+    sundsvall:
+      url: http://localhost:${wiremock.server.port:}/sysman-sundsvall
+      username: sundsvallUsername
+      password: sundsvallPassword
+    ange:
+      url: http://localhost:${wiremock.server.port:}/sysman-ange
+      username: angeUsername
+      password: angePassword
 logging:
   level:
     root: INFO
@@ -21,3 +33,14 @@ spring:
           schema-generation:
             database:
               action: validate
+scheduler:
+  end-of-lease:
+    # Off under test. The tests that exercise the jobs call them themselves.
+    lookup:
+      cron: '-'
+    dispatch:
+      cron: '-'
+      # Pinned here because the EndOfLeaseDispatch stubs match on it. It happens to be the same value as the
+      # placeholder in application.yml, and without this line replacing that placeholder with a real message id
+      # fails three apptests for a reason that has nothing to do with the change.
+      message-id: 1

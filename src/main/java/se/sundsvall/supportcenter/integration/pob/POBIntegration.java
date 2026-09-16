@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 public class POBIntegration {
 
 	private final POBClient pobClient;
+	private final EndOfLeasePOBClient endOfLeasePOBClient;
 
-	public POBIntegration(POBClient pobClient) {
+	public POBIntegration(POBClient pobClient, EndOfLeasePOBClient endOfLeasePOBClient) {
 		this.pobClient = pobClient;
+		this.endOfLeasePOBClient = endOfLeasePOBClient;
 	}
 
 	/**
@@ -79,6 +81,19 @@ public class POBIntegration {
 	 */
 	public List<PobPayload> getConfigurationItemsBySerialNumber(String pobKey, String serialNumber) {
 		return pobClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
+	}
+
+	/**
+	 * The same lookup as {@link #getConfigurationItemsBySerialNumber}, over the client the end of lease job has to
+	 * itself. Separate so that the job's circuit breaker is its own and cannot decide availability for the endpoints
+	 * this service exposes.
+	 *
+	 * @param  pobKey       the key to use for authorization
+	 * @param  serialNumber the serial number to filter the results on
+	 * @return              a list of configuration-items
+	 */
+	public List<PobPayload> getConfigurationItemsBySerialNumberForEndOfLease(String pobKey, String serialNumber) {
+		return endOfLeasePOBClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
 	}
 
 	/**

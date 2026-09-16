@@ -43,8 +43,6 @@ public class CreateAssetResponse {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("CreateAssetResponse [id=").append(id).append("]");
-		return builder.toString();
+		return "CreateAssetResponse [id=" + id + "]";
 	}
 }

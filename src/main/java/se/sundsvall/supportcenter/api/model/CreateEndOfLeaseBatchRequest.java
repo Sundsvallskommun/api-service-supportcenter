@@ -14,7 +14,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 public class CreateEndOfLeaseBatchRequest {
 
 	@Schema(examples = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90", description = "Id of the batch, set by the sender. A batch sent again under an id that is already registered is accepted without being queued a second time", requiredMode = REQUIRED)
-	@ValidUuid(nullable = false)
+	@ValidUuid
 	private String externalBatchId;
 
 	@ArraySchema(schema = @Schema(description = "Computers that have reached end of lease", requiredMode = REQUIRED, implementation = EndOfLeaseComputer.class))
