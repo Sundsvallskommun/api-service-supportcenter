@@ -21,6 +21,15 @@ public class POBConfiguration {
 
 	public static final String CLIENT_ID = "pob";
 
+	/**
+	 * Shared with {@link EndOfLeasePOBConfiguration}, which decodes the same POB errors and differs only in which
+	 * statuses it lets through. JsonPath below is constructed to only extract values from the attributes if they exist.
+	 * UserMessage and Message should never exist at the same time (according to API-spec).
+	 */
+	static final JsonPathSetup JSON_PATH_SETUP = new JsonPathSetup(
+		"concat($[?(@.UserMessage != null)].UserMessage, $[?(@.Message != null)].Message)",
+		"concat($[?(@.InternalMessage != null)].InternalMessage)");
+
 	@Bean
 	FeignBuilderCustomizer feignBuilderCustomizer(final POBProperties pobProperties) {
 		return FeignMultiCustomizer.create()
@@ -36,9 +45,10 @@ public class POBConfiguration {
 	}
 
 	private ErrorDecoder errorDecoder() {
-		// JsonPath below is constructed to only extract values from the attributes if they exist.
-		// UserMessage and Message should never exist at the same time (according to API-spec).
 		// 404:s should be thrown as 404:s and not 502:s
-		return new JsonPathErrorDecoder(CLIENT_ID, List.of(NOT_FOUND.value()), new JsonPathSetup("concat($[?(@.UserMessage != null)].UserMessage, $[?(@.Message != null)].Message)", "concat($[?(@.InternalMessage != null)].InternalMessage)"));
+		// Left at that on purpose. This decoder serves every endpoint this service exposes, so letting a POB 401
+		// through here would change what a caller of /cases or /assets is answered with. The end of lease job needs
+		// that distinction and has its own decoder for it.
+		return new JsonPathErrorDecoder(CLIENT_ID, List.of(NOT_FOUND.value()), JSON_PATH_SETUP);
 	}
 }

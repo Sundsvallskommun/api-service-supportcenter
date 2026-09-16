@@ -78,9 +78,9 @@ public class EndOfLeaseComputerEntity {
 	private String errorMessage;
 
 	/**
-	 * When the computer may be picked up again, or null for right away. Set when the other end could not be reached,
-	 * which costs the computer no attempt and would otherwise let it keep its place at the front of every page for
-	 * good. Cleared as soon as a run gets through.
+	 * When the computer may be picked up again, or null for right away. Set by the dispatch run when SysMan could not
+	 * be reached, so a group that costs no attempt cannot keep its place at the front of every page. Cleared as soon as
+	 * a run gets through.
 	 */
 	@Column(name = "retry_after")
 	@TimeZoneStorage(NORMALIZE)

@@ -129,6 +129,31 @@ class EndOfLeaseQueueHealthIndicatorTest {
 		assertThat(health.getDetails()).containsEntry("Given up on", 0L);
 	}
 
+	/**
+	 * Saying a queue has stopped moving without saying what stopped it leaves the answer a database query away, in a
+	 * place nobody looks first. The run that last failed on this computer wrote the reason on its row.
+	 */
+	@Test
+	void theReasonTheOldestComputerIsStuckIsOnTheEndpoint() {
+		whenOldestWaitedFor(25, "POB turned the job's key down: 401 Unauthorized");
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getDetails()).containsEntry("Last failure", "POB turned the job's key down: 401 Unauthorized");
+	}
+
+	/**
+	 * A computer that has never failed has nothing to say, and an empty line would only read as a missing value.
+	 */
+	@Test
+	void aComputerThatHasNotFailedCarriesNoLastFailure() {
+		whenOldestWaitedFor(2);
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getDetails()).doesNotContainKey("Last failure");
+	}
+
 	@Test
 	void aQueueThatCannotBeReadIsRestrictedRatherThanDown() {
 		when(endOfLeaseComputerRepositoryMock.findFirstByStatusOrderByCreated(PENDING)).thenThrow(new IllegalStateException("The database is unwell"));
@@ -140,11 +165,16 @@ class EndOfLeaseQueueHealthIndicatorTest {
 	}
 
 	private void whenOldestWaitedFor(final int hours) {
+		whenOldestWaitedFor(hours, null);
+	}
+
+	private void whenOldestWaitedFor(final int hours, final String errorMessage) {
 		when(endOfLeaseComputerRepositoryMock.findFirstByStatusOrderByCreated(PENDING)).thenReturn(Optional.of(
 			EndOfLeaseComputerEntity.create()
 				.withSerialNumber("J123ABC")
 				.withAssetTag("AB12345")
 				.withStatus(PENDING)
+				.withErrorMessage(errorMessage)
 				.withCreated(OffsetDateTime.now().minusHours(hours))));
 	}
 }

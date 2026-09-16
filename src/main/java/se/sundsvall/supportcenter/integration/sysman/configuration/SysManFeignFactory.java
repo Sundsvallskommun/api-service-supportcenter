@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.integration.sysman.configuration;
 
 import feign.Client;
 import feign.okhttp.OkHttpClient;
+import java.util.List;
 import javax.net.ssl.X509TrustManager;
 import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
@@ -9,6 +10,9 @@ import se.sundsvall.dept44.configuration.feign.decoder.JsonPathErrorDecoder;
 import se.sundsvall.dept44.configuration.feign.decoder.JsonPathErrorDecoder.JsonPathSetup;
 import se.sundsvall.dept44.security.Truststore;
 import se.sundsvall.supportcenter.integration.sysman.configuration.SysManProperties.Instance;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * The Feign pieces the two SysMan installations have in common. They differ in their host and their account and in
@@ -47,19 +51,26 @@ final class SysManFeignFactory {
 	 */
 	static FeignBuilderCustomizer feignBuilderCustomizer(final String clientId, final SysManProperties sysManProperties) {
 		return FeignMultiCustomizer.create()
-			// SysMan answers a failure with an ApiErrorMessage, whose message says what went wrong and whose details
-			// carry whatever more the server had to say.
-			//
-			// The details path is a deep scan with concat() rather than the plain "$.details" it reads like, and both
-			// halves of that are deliberate. read(path, String.class) hands back null for an array, so the plain path
-			// drops the details on every error that has any. A definite path also throws PathNotFoundException when
-			// the field is absent, and AbstractErrorDecoder answers any throw from here by giving up on the whole body
-			// and reporting "Unknown error", which loses the message as well. A deep scan is indefinite and answers an
-			// absent field with nothing instead of throwing. Measured against every shape SysMan can send: an array, an
-			// empty array, an absent field, an explicit null, a plain string, and an html error page from something in
-			// front of it.
-			.withErrorDecoder(new JsonPathErrorDecoder(clientId, new JsonPathSetup(TITLE_PATH, DETAIL_PATH)))
+			.withErrorDecoder(errorDecoder(clientId))
 			.withRequestTimeoutsInSeconds(sysManProperties.connectTimeout(), sysManProperties.readTimeout())
 			.composeCustomizersToOne();
+	}
+
+	/**
+	 * The decoder both installations report their failures through.
+	 *
+	 * 401 and 403 are bypassed because the dispatch run tells an installation that refused our account from one that
+	 * refused the call by the status alone, and without them every 4xx arrives as BAD_GATEWAY. Kept to those two, since
+	 * every other 4xx is about the call we built or a row in it and is meant to count.
+	 *
+	 * The details path is a deep scan with concat() rather than the plain "$.details" it reads like. read(path,
+	 * String.class) hands back null for an array, and a definite path throws when the field is absent, which costs the
+	 * message as well. Both shapes are asserted in SysManErrorDecodingTest.
+	 *
+	 * @param  clientId the name the failure is reported under
+	 * @return          the decoder
+	 */
+	static JsonPathErrorDecoder errorDecoder(final String clientId) {
+		return new JsonPathErrorDecoder(clientId, List.of(UNAUTHORIZED.value(), FORBIDDEN.value()), new JsonPathSetup(TITLE_PATH, DETAIL_PATH));
 	}
 }

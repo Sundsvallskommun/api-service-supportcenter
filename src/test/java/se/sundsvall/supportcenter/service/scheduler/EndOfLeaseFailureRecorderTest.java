@@ -112,6 +112,35 @@ class EndOfLeaseFailureRecorderTest {
 	}
 
 	/**
+	 * The lookup run answers a dependency failure by stopping, so nothing behind this computer was tried and nothing
+	 * was starved. The reason still has to reach the row and the health endpoint, since those are all a person has.
+	 */
+	@Test
+	void aNotedDependencyFailureCostsNoAttemptEither() {
+		endOfLeaseFailureRecorder.noteDependencyFailure(computer(3), JOB_NAME, SUBJECT, "POB turned the job's key down: 401");
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue())
+			.extracting(EndOfLeaseComputerEntity::getAttempts, EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getErrorMessage)
+			.containsExactly(3, PENDING, "POB turned the job's key down: 401");
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(JOB_NAME, "POB turned the job's key down: 401");
+	}
+
+	/**
+	 * The difference from {@link EndOfLeaseFailureRecorder#recordDependencyFailure}, and the whole reason both exist.
+	 * A held back computer is one the next run skips, and a run that stopped needs the opposite: to start again on the
+	 * very computer it stopped on, so that one failing call an hour is all an outage costs.
+	 */
+	@Test
+	void aNotedDependencyFailureDoesNotHoldTheComputerBack() {
+		endOfLeaseFailureRecorder.noteDependencyFailure(computer(0), JOB_NAME, SUBJECT, "POB could not be reached");
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getRetryAfter()).isNull();
+	}
+
+	/**
 	 * A spent attempt takes the computer to FAILED after a handful of tries, so it leaves the queue on its own and
 	 * needs no hold. Holding it as well would only delay a computer whose own data is the problem.
 	 */

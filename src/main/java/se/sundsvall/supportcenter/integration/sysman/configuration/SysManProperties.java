@@ -16,13 +16,10 @@ import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
  * installation once a day, at whatever hour the batch happens to be picked up.
  *
  * The opposite policy to {@link se.sundsvall.supportcenter.integration.pob.configuration.POBProperties#key()}, which is
- * left unvalidated so that a service whose API has never needed one still starts without it. The difference is where
- * the value is read. The POB key is a header on a client that is already built, while url is a {@code @FeignClient}
- * attribute, so the client bean cannot be built without it at all. Absent, the placeholder reaches URI parsing
- * unresolved and the context dies on an "Illegal character in authority" that quotes the placeholder back. Blank, the
- * client falls through to load balancing and dies on a missing LoadBalancerClientFactory. Both installations are load
- * bearing for startup either way, so validating them decides only whether the failure names the property. See the
- * deployment note in README.md.
+ * left unvalidated so that a service whose API has never needed one still starts without it. The difference is that
+ * url is a {@code @FeignClient} attribute, so the client bean cannot be built without it at all: absent it dies on an
+ * unresolved placeholder, blank it dies on a missing LoadBalancerClientFactory. Validating it decides only whether the
+ * failure names the property. See the deployment note in README.md.
  *
  * @param connectTimeout the connect timeout in seconds, shared by both installations
  * @param readTimeout    the read timeout in seconds, shared by both installations

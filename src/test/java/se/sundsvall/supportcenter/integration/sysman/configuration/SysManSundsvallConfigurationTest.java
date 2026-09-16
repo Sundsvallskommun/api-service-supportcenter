@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.integration.sysman.configuration;
 
 import feign.okhttp.OkHttpClient;
 import java.security.KeyStore;
+import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ import static javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.sysman.configuration.SysManSundsvallConfiguration.CLIENT_ID;
 
 @ExtendWith(MockitoExtension.class)
@@ -60,8 +63,11 @@ class SysManSundsvallConfigurationTest {
 			verify(feignMultiCustomizerSpy).withRequestTimeoutsInSeconds(connectTimeout, readTimeout);
 			verify(feignMultiCustomizerSpy).composeCustomizersToOne();
 
+			// The bypass list is what keeps a rejected account distinguishable from a rejected call. Left off, every
+			// 4xx arrives as BAD_GATEWAY and the branch that spares a municipality its attempts never runs.
 			assertThat(errorDecoderCaptor.getValue())
 				.isInstanceOf(JsonPathErrorDecoder.class)
+				.hasFieldOrPropertyWithValue("bypassResponseCodes", List.of(UNAUTHORIZED.value(), FORBIDDEN.value()))
 				.hasFieldOrPropertyWithValue("integrationName", CLIENT_ID);
 			assertThat(customizer).isSameAs(feignBuilderCustomizerMock);
 		}

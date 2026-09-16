@@ -87,8 +87,12 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 	/**
 	 * The half of the attempt budget that is otherwise proven with mocks alone. A POB that answers 5xx is the other end
-	 * being unwell, which is no fact about this computer, so the attempt is not spent. The row is held back instead, and
-	 * carries the reason so that a queue standing still can be read off it.
+	 * being unwell, which is no fact about this computer, so the attempt is not spent.
+	 *
+	 * Nor is the row held back. The run answers a POB that has stopped answering by stopping itself, so nothing behind
+	 * this computer was tried and there is nothing left to protect it from. Left free, it is the first one tried on the
+	 * next run, and one failing call an hour is the whole price of an outage. It carries the reason either way, so that
+	 * a queue standing still can be read off it.
 	 */
 	@Test
 	void test003_pobIsUnwell() throws Exception {
@@ -108,8 +112,8 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select retry_after from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class))
-				.as("held back, or it keeps its place at the front of every page while POB is down")
-				.isNotNull();
+				.as("left free, or the next run skips the very computer it stopped on and the outage costs six hours instead of one")
+				.isNull();
 	}
 
 	private String sendBatch() throws Exception {

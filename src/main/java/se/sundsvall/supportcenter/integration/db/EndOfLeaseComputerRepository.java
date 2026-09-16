@@ -69,7 +69,8 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * two runs apart. Taken a page at a time rather than all at once, since every computer here is one POB call and a
 	 * run has to finish inside its lock.
 	 *
-	 * Held back rows are left out for the same reason as in {@link #findReadyToSend}.
+	 * The hold is filtered on for symmetry with {@link #findReadyToSend}, though nothing sets one on a row awaiting
+	 * lookup any more. That run answers a dependency failure by stopping, not by holding the page back.
 	 *
 	 * @param  status   the state to look in
 	 * @param  now      the moment to measure the hold against

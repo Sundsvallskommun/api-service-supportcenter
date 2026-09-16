@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
+import static java.util.Optional.ofNullable;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
@@ -38,6 +39,7 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 	private static final String DETAIL_WAITING_SINCE = "Waiting since";
 	private static final String DETAIL_SERIAL_NUMBER = "Oldest waiting serial number";
 	private static final String DETAIL_GIVEN_UP = "Given up on";
+	private static final String DETAIL_LAST_FAILURE = "Last failure";
 
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final Duration maximumQueueAge;
@@ -88,11 +90,17 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 			? Health.up()
 			: Health.status(RESTRICTED).withDetail(DETAIL_REASON, String.join(". ", reasons));
 
-		return builder
+		builder
 			.withDetail(DETAIL_SERIAL_NUMBER, oldest.getSerialNumber())
 			.withDetail(DETAIL_WAITING_SINCE, oldest.getCreated())
-			.withDetail(DETAIL_GIVEN_UP, givenUp)
-			.build();
+			.withDetail(DETAIL_GIVEN_UP, givenUp);
+
+		// Why it is still waiting, in the words of whichever run last failed on it. Without this the endpoint says a
+		// queue has stopped moving but not what stopped it, and the answer is a database query away in a place nobody
+		// looks first. Left out when the row carries no failure, since an empty line only reads as a missing value.
+		ofNullable(oldest.getErrorMessage()).ifPresent(errorMessage -> builder.withDetail(DETAIL_LAST_FAILURE, errorMessage));
+
+		return builder.build();
 	}
 
 	/**

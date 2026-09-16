@@ -59,10 +59,13 @@ scheduler:
     # queue stands still through an outage rather than draining into FAILED. The column is shared, but a successful
     # lookup resets it, so the budget is per run.
     maximum-attempts: 5
-    # How long a computer is held back after the other end could not be reached. Costing no attempt is what keeps an
-    # outage from draining the queue into FAILED, and this is what keeps the same rows from filling the front of every
-    # page while it lasts. Must stay longer than the interval between runs, or the held back rows are back on the first
-    # page an hour later and nothing behind them is read.
+    # How long a computer is held back after the other end could not be reached. Read by the dispatch run only. That
+    # one carries on to the next municipality, since one installation being down says nothing about the other, so the
+    # group it just tried has to be held back or it fills the front of every page. Must stay longer than the interval
+    # between runs, or the held back rows are back on the first page an hour later and nothing behind them is read.
+    #
+    # The lookup run has no use for it. POB is the same POB for every computer in the page, so that run answers a
+    # dependency failure by stopping and leaving the rest of the page untouched. Stopping is its backoff.
     dependency-failure-backoff: PT6H
     # How long the oldest waiting computer may wait before the health endpoint says so. A batch of a thousand drains
     # in about four hours, so a full day means the queue is not moving at all. RESTRICTED rather than DOWN: something

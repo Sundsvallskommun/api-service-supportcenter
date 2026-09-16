@@ -22,6 +22,7 @@ import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
@@ -241,6 +242,74 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	/**
+	 * The run stops on a POB that is not answering, so there is nothing behind this computer left to protect from it
+	 * and no reason to hold it back. Left free, it is the first one tried on the next run, which makes one failing call
+	 * an hour the whole price of an outage instead of a page held back for six.
+	 */
+	@Test
+	void aRejectedPobKeyDoesNotHoldTheComputerBack() {
+		whenPageContains(computer(PENDING, 2));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, SERIAL_NUMBER)).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getRetryAfter()).isNull();
+	}
+
+	/**
+	 * POB is the same POB for every computer in the page, so once it has turned three calls down in a row there is
+	 * nothing to learn from the remaining two hundred and forty seven. Everything not reached has to be left exactly as
+	 * it was found, or stopping buys nothing.
+	 */
+	@Test
+	void theRunStopsAfterThreeFailuresInARow() {
+		whenPageContains(computers(5));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any())).thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(pobIntegrationMock, times(3)).getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any());
+		verify(endOfLeaseComputerRepositoryMock, times(3)).save(any());
+	}
+
+	/**
+	 * A POB that answers some calls and not others is a different thing from one that is down. Counted as a total
+	 * rather than as a run of failures, a flapping POB would stop the queue on the third bad call of the day.
+	 */
+	@Test
+	void aComputerThatGoesThroughResetsTheCount() {
+		whenPageContains(computers(6));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any()))
+			.thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"))
+			.thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"))
+			.thenReturn(configurationItem("2281"))
+			.thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"))
+			.thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"))
+			.thenThrow(new ClientProblem(UNAUTHORIZED, "Unauthorized"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		// The third call resets the count, so the run reaches the sixth computer rather than stopping at the third.
+		verify(pobIntegrationMock, times(6)).getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any());
+	}
+
+	/**
+	 * A computer POB has nothing to say about is that computer's problem, and the next one has nothing to do with it.
+	 * Only POB itself failing stops the run.
+	 */
+	@Test
+	void aFailureOfTheComputerItselfNeverStopsTheRun() {
+		whenPageContains(computers(5));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any())).thenReturn(emptyList());
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(pobIntegrationMock, times(5)).getConfigurationItemsBySerialNumberForEndOfLease(eq(POB_KEY), any());
+		verify(endOfLeaseComputerRepositoryMock, times(5)).save(any());
+	}
+
+	/**
 	 * The same for a key POB knows but will not let this far, and it never leaves a computer FAILED.
 	 */
 	@Test
@@ -345,11 +414,21 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	private static EndOfLeaseComputerEntity computer(final EndOfLeaseStatus status, final int attempts) {
+		return computer(SERIAL_NUMBER, status, attempts);
+	}
+
+	private static EndOfLeaseComputerEntity computer(final String serialNumber, final EndOfLeaseStatus status, final int attempts) {
 		return EndOfLeaseComputerEntity.create()
-			.withSerialNumber(SERIAL_NUMBER)
+			.withSerialNumber(serialNumber)
 			.withAssetTag("AB12345")
 			.withStatus(status)
 			.withAttempts(attempts);
+	}
+
+	private static EndOfLeaseComputerEntity[] computers(final int count) {
+		return range(0, count)
+			.mapToObj(index -> computer("J%03dABC".formatted(index), PENDING, 0))
+			.toArray(EndOfLeaseComputerEntity[]::new);
 	}
 
 	private static List<PobPayload> configurationItem(final String municipality) {

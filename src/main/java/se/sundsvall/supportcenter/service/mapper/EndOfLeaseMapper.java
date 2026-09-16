@@ -121,10 +121,8 @@ public final class EndOfLeaseMapper {
 	}
 
 	/**
-	 * The letters an asset tag starts with, which is the computer name. Empty for a tag that starts with anything else,
-	 * and such a tag is sent like any other rather than being held back on a guess.
-	 * "[^\p{Alpha}]" matches a sign that is not a character. ".*" matches everything after.
-	 * e.g. PUB12345, the matching will start with 1 and go over 12345, left is "PUB", which will be returned .
+	 * The letters an asset tag starts with, which is the computer name, so PUB12345 gives PUB. Empty for a tag that
+	 * starts with anything else, and such a tag is sent like any other rather than held back on a guess.
 	 */
 	private static String toAssetTagPrefix(final String assetTag) {
 		return assetTag.replaceAll("[^\\p{Alpha}].*", "").toUpperCase(Locale.ROOT);
