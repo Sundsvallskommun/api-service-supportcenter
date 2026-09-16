@@ -16,6 +16,10 @@
 		<!-- Service properties -->
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<jcifs.version>1.3.17</jcifs.version>
+		<!-- Neither this nor the okhttp that feign-okhttp pulls in is managed by dept44-service-parent or by
+				spring-boot-dependencies, so the two are kept level by hand. They resolve to the same version today. This is
+				still the okhttp 4 MockWebServer, with the setResponseCode and shutdown API; the okhttp 5 successor is a
+				different artifact called mockwebserver3. -->
 		<mockwebserver.version>4.12.0</mockwebserver.version>
 	</properties>
 	<dependencies>
@@ -136,15 +140,9 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/integrations/sysman.json</inputSpec>
-							<!-- The SysMan specification covers 508 endpoints and 590 schemas, and we call one of them. Without
-									this the build writes five megabytes of models we never touch. The three named here are the
-									request body, the success body and the error body of POST /api/v2/message/target, and they
-									reference nothing further. A schema added to any of them later fails the build on a missing
-									class, which is the right way to find out. -->
-							<globalProperties>
-								<models>SaveMessagesToTargetsCommand,TargetReference,ApiErrorMessage</models>
-							</globalProperties>
+							<!-- Trimmed to the one call this service makes and the three schemas it uses, so the whole file is
+									generated rather than filtered down with globalProperties. See the header in sysman.yaml. -->
+							<inputSpec>${project.basedir}/src/main/resources/integrations/sysman.yaml</inputSpec>
 							<generateSupportingFiles>false</generateSupportingFiles>
 							<output>${generated-sources-path}</output>
 							<generatorName>jaxrs-spec</generatorName>
