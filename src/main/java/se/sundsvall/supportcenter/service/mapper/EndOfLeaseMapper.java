@@ -23,9 +23,11 @@ import static se.sundsvall.supportcenter.service.mapper.constant.EndOfLeaseMappe
 public final class EndOfLeaseMapper {
 
 	/**
-	 * The width of end_of_lease_computer.error_message.
+	 * The width of end_of_lease_computer.error_message, read off the column rather than written again here. The
+	 * migration, the entity and this cut all have to agree, and a literal in three places agrees only until one of them
+	 * is widened.
 	 */
-	private static final int ERROR_MESSAGE_LENGTH = 2048;
+	private static final int ERROR_MESSAGE_LENGTH = EndOfLeaseComputerEntity.ERROR_MESSAGE_LENGTH;
 
 	private EndOfLeaseMapper() {}
 
@@ -50,7 +52,11 @@ public final class EndOfLeaseMapper {
 		return ofNullable(configurationItems).orElse(emptyList()).stream()
 			.findFirst()
 			.map(PobPayload::getData)
-			.map(data -> (String) data.get(KEY_MUNICIPALITY))
+			.map(data -> data.get(KEY_MUNICIPALITY))
+			// POB holds Data as name to object, and the municipality comes back as a string in every payload we have
+			// seen. A cast would turn the one that does not into a ClassCastException, which spends the computer's
+			// attempt on a value that was perfectly routable written out.
+			.map(String::valueOf)
 			.map(CommonMapper::toMunicipalityId)
 			.orElse(null);
 	}
@@ -70,6 +76,10 @@ public final class EndOfLeaseMapper {
 		return new SaveMessagesToTargetsCommand()
 			.targets(computers.stream()
 				.map(EndOfLeaseComputerEntity::getAssetTag)
+				// The same computer can legitimately sit in more than one batch, and naming it twice in one call asks
+				// the installation to do the same work twice. Both rows still end up SENT, which is right: the row
+				// records that this computer was told, and it was.
+				.distinct()
 				.toList())
 			.messagesToSend(List.of(messageId))
 			.targetType(COMPUTER)

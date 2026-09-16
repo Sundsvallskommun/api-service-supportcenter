@@ -99,6 +99,25 @@ class EndOfLeaseQueueHealthIndicatorTest {
 		assertThat(health.getDetails()).containsEntry("Given up on", 2L);
 	}
 
+	/**
+	 * Both hold often enough: an outage that stops the queue is also what runs computers out of attempts. Reported one
+	 * at a time the age won and the computers somebody has to deal with survived only as a detail, which is the more
+	 * actionable of the two.
+	 */
+	@Test
+	void anAgeingQueueWithComputersGivenUpOnReportsBoth() {
+		when(endOfLeaseComputerRepositoryMock.countByStatus(FAILED)).thenReturn(3L);
+		whenOldestWaitedFor(25);
+
+		final var health = endOfLeaseQueueHealthIndicator.health();
+
+		assertThat(health.getStatus().getCode()).isEqualTo("RESTRICTED");
+		assertThat(health.getDetails().get("Reason").toString())
+			.contains("has been waiting")
+			.contains("3 computer(s) have been given up on");
+		assertThat(health.getDetails()).containsEntry("Given up on", 3L);
+	}
+
 	@Test
 	void aQueueThatIsMovingWithNobodyGivenUpOnIsUp() {
 		when(endOfLeaseComputerRepositoryMock.countByStatus(FAILED)).thenReturn(0L);

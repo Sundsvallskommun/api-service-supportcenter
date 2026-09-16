@@ -160,8 +160,10 @@ public class EndOfLeaseDispatchWorker {
 	}
 
 	/**
-	 * A target the installation does not know about is left out of the answer rather than reported as an error, so what
-	 * came back is the only thing that says who was reached.
+	 * Writes down who was reached. A name that came back is SENT; one that did not is a computer the installation does
+	 * not know about, and that costs an attempt like any other failure of the computer's own.
+	 *
+	 * The protocol reason this is done name by name rather than for the group as a whole is on the class.
 	 */
 	private void reconcile(final List<EndOfLeaseComputerEntity> computers, final List<TargetReference> targetReferences) {
 		final var reachedNames = ofTargetNames(targetReferences);

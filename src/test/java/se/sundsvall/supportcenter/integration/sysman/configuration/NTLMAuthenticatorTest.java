@@ -83,6 +83,43 @@ class NTLMAuthenticatorTest {
 	}
 
 	/**
+	 * RFC 9110 lets a server put the schemes on one line instead of one header each, and IIS is free to do either. Read
+	 * as a whole value neither "Negotiate" nor "NTLM" matches, the handshake never starts, and the call fails as a naked
+	 * 401 with nothing in the log saying why.
+	 */
+	@Test
+	void picksTheNtlmChallengeWhenTheSchemesShareOneHeader() throws Exception {
+		mockWebServer.enqueue(new MockResponse()
+			.setResponseCode(401)
+			.addHeader(WWW_AUTHENTICATE, "Negotiate, NTLM"));
+		mockWebServer.enqueue(new MockResponse().setResponseCode(200));
+
+		try (final var response = call()) {
+			assertThat(response.code()).isEqualTo(200);
+		}
+
+		assertThat(mockWebServer.getRequestCount()).isEqualTo(2);
+		mockWebServer.takeRequest();
+		assertThat(mockWebServer.takeRequest().getHeader(AUTHORIZATION)).startsWith(SCHEME_PREFIX);
+	}
+
+	/**
+	 * A 401 that offers no NTLM at all is left as the 401 it is, for the error decoder to report.
+	 */
+	@Test
+	void leavesA401ThatOffersNoNtlmAlone() throws Exception {
+		mockWebServer.enqueue(new MockResponse()
+			.setResponseCode(401)
+			.addHeader(WWW_AUTHENTICATE, "Negotiate, Basic realm=\"sysman\""));
+
+		try (final var response = call()) {
+			assertThat(response.code()).isEqualTo(401);
+		}
+
+		assertThat(mockWebServer.getRequestCount()).isEqualTo(1);
+	}
+
+	/**
 	 * OkHttp records a prior response for every follow-up, a redirect included. Counting those as handshake attempts
 	 * spends the budget before the challenge arrives and the call fails looking like bad credentials.
 	 */

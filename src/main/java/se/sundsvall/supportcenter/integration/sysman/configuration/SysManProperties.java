@@ -64,5 +64,16 @@ public record SysManProperties(
 		@NotBlank String username,
 
 		@NotBlank String password) {
+
+		/**
+		 * Overridden because a record prints every component it has, and this one carries an NTLM password. Nothing in
+		 * the service logs an Instance today, but a stray LOG.debug or a binding failure that prints the bound value is
+		 * one line away. Actuator needs no help here, configprops.show-values defaults to NEVER.
+		 */
+		@Override
+		public String toString() {
+			return "Instance[municipalityId=%s, url=%s, domain=%s, username=%s, password=%s]"
+				.formatted(municipalityId, url, domain, username, password == null ? null : "*****");
+		}
 	}
 }

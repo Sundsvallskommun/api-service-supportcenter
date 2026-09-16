@@ -1,5 +1,6 @@
 package se.sundsvall.supportcenter.integration.sysman.configuration;
 
+import java.util.Arrays;
 import java.util.Optional;
 import jcifs.ntlmssp.Type1Message;
 import jcifs.ntlmssp.Type2Message;
@@ -65,13 +66,27 @@ class NTLMAuthenticator implements Authenticator {
 	}
 
 	/**
-	 * The NTLM challenge among whatever else the server offers. A server that advertises Negotiate as well answers with
-	 * more than one header, and picking the first one blindly hands the wrong scheme to the parser below.
+	 * The NTLM challenge among whatever else the server offers. A server that advertises Negotiate as well may answer
+	 * with one header per scheme or with the schemes on a single comma separated line, which RFC 9110 allows, and
+	 * picking the first value blindly hands the wrong scheme to the parser below.
+	 *
+	 * Splitting on the comma is safe for the value we want: a type 2 challenge is base64, whose alphabet has no comma.
 	 */
 	private Optional<String> challenge(final Response response) {
-		return response.headers().values(WWW_AUTHENTICATE).stream()
+		final var values = response.headers().values(WWW_AUTHENTICATE);
+
+		final var challenge = values.stream()
+			.flatMap(value -> Arrays.stream(value.split(",")))
+			.map(String::trim)
 			.filter(value -> SCHEME.equalsIgnoreCase(value) || value.regionMatches(true, 0, SCHEME_PREFIX, 0, SCHEME_PREFIX.length()))
 			.findFirst();
+
+		if (challenge.isEmpty()) {
+			// Otherwise the call fails as a naked 401 with no line saying the handshake never started.
+			LOG.debug("The 401 from {} offered no NTLM challenge, only {}", response.request().url().host(), values);
+		}
+
+		return challenge;
 	}
 
 	/**

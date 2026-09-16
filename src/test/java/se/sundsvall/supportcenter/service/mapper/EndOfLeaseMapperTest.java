@@ -4,6 +4,7 @@ import generated.client.pob.PobPayload;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -131,6 +132,32 @@ class EndOfLeaseMapperTest {
 	})
 	void toAssetMunicipalityIdAnswersNullForAMunicipalityWeCannotRouteOn(final String municipality) {
 		assertThat(toAssetMunicipalityId(configurationItem(municipality))).isNull();
+	}
+
+	/**
+	 * The same computer can legitimately sit in more than one batch, and a page can hold both rows. Naming it twice in
+	 * one call asks the installation to do the same work twice.
+	 */
+	@Test
+	void toSaveMessagesToTargetsCommandNamesEachComputerOnce() {
+		final var command = toSaveMessagesToTargetsCommand(List.of(
+			EndOfLeaseComputerEntity.create().withAssetTag("AB12345").withSerialNumber("J123ABC"),
+			EndOfLeaseComputerEntity.create().withAssetTag("AB12345").withSerialNumber("J123ABC"),
+			EndOfLeaseComputerEntity.create().withAssetTag("CD67890").withSerialNumber("K456DEF")), 42L);
+
+		assertThat(command.getTargets()).containsExactly("AB12345", "CD67890");
+	}
+
+	/**
+	 * POB holds Data as name to object, so nothing in the contract says the municipality arrives as a string. Read with
+	 * a cast it would be a ClassCastException, and the run would spend the computer's attempt on a value that routes
+	 * perfectly well written out.
+	 */
+	@Test
+	void toAssetMunicipalityIdReadsAMunicipalityThatCameBackAsANumber() {
+		final var configurationItem = new PobPayload().type("ConfigurationItem").data(new HashMap<>(Map.of("Virtual.CIKommun", 2281)));
+
+		assertThat(toAssetMunicipalityId(List.of(configurationItem))).isEqualTo("2281");
 	}
 
 	@ParameterizedTest

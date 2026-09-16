@@ -113,7 +113,10 @@ public final class CommonMapper {
 
 		if (municipalityId.isEmpty() && StringUtils.isNotEmpty(municipality)) {
 			final var sanitizedMunicipality = municipality.replaceAll("\\p{Cntrl}", " ");
-			LOG.warn("Municipality '{}' from POB matches no known municipality id or name", sanitizedMunicipality);
+			// The consequence is named again after the move out of GetAssetMapper, but in terms both callers share: the
+			// asset leaves municipalityId out, and the end of lease row has nothing to route on. Volume is bounded by
+			// the attempt budget, since the row that produced it is given up on once its attempts are gone.
+			LOG.warn("Municipality '{}' from POB matches no known municipality id or name, so nothing is routed on it", sanitizedMunicipality);
 		}
 
 		return municipalityId.orElse(null);

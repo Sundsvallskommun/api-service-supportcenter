@@ -68,7 +68,13 @@ public class EndOfLeaseComputerEntity {
 	@Column(name = "attempts", nullable = false)
 	private Integer attempts;
 
-	@Column(name = "error_message", length = 2048)
+	/**
+	 * The width of the error_message column, so that the cut in EndOfLeaseMapper.toErrorMessage and the varchar in the
+	 * migration have one place to agree with rather than three literals that agree only by luck.
+	 */
+	public static final int ERROR_MESSAGE_LENGTH = 2048;
+
+	@Column(name = "error_message", length = ERROR_MESSAGE_LENGTH)
 	private String errorMessage;
 
 	/**

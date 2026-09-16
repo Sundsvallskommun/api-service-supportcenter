@@ -3,6 +3,7 @@ package se.sundsvall.supportcenter.service.scheduler;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.health.contributor.Health;
 import org.springframework.boot.health.contributor.HealthIndicator;
@@ -72,9 +73,20 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 	private Health toHealth(final EndOfLeaseComputerEntity oldest, final long givenUp) {
 		final var age = Duration.between(oldest.getCreated(), OffsetDateTime.now(ZoneId.systemDefault()));
 
-		final var builder = age.compareTo(maximumQueueAge) > 0
-			? Health.status(RESTRICTED).withDetail(DETAIL_REASON, "The oldest computer has been waiting %s, which is longer than %s".formatted(readable(age), maximumQueueAge))
-			: restrictedIfGivenUp(givenUp);
+		// Both reasons reach Reason when both hold. Reported one at a time the age won, and the computers somebody has
+		// to deal with survived only as a detail, which is the more actionable of the two.
+		final var reasons = new ArrayList<String>();
+
+		if (age.compareTo(maximumQueueAge) > 0) {
+			reasons.add("The oldest computer has been waiting %s, which is longer than %s".formatted(readable(age), maximumQueueAge));
+		}
+		if (givenUp > 0) {
+			reasons.add(givenUpReason(givenUp));
+		}
+
+		final var builder = reasons.isEmpty()
+			? Health.up()
+			: Health.status(RESTRICTED).withDetail(DETAIL_REASON, String.join(". ", reasons));
 
 		return builder
 			.withDetail(DETAIL_SERIAL_NUMBER, oldest.getSerialNumber())
@@ -120,9 +132,12 @@ public class EndOfLeaseQueueHealthIndicator implements HealthIndicator {
 	 */
 	private static Health.Builder restrictedIfGivenUp(final long givenUp) {
 		if (givenUp > 0) {
-			return Health.status(RESTRICTED)
-				.withDetail(DETAIL_REASON, "%d computer(s) have been given up on and need a person to look at them".formatted(givenUp));
+			return Health.status(RESTRICTED).withDetail(DETAIL_REASON, givenUpReason(givenUp));
 		}
 		return Health.up();
+	}
+
+	private static String givenUpReason(final long givenUp) {
+		return "%d computer(s) have been given up on and need a person to look at them".formatted(givenUp);
 	}
 }

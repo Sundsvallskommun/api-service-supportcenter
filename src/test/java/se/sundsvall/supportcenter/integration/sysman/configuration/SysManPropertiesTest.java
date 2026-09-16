@@ -15,6 +15,19 @@ class SysManPropertiesTest {
 	@Autowired
 	private SysManProperties sysManProperties;
 
+	/**
+	 * A record prints every component it has, and this one carries an NTLM password. Nothing logs an Instance today, but
+	 * a stray LOG.debug or a binding failure that prints the bound value is one line away.
+	 */
+	@Test
+	void theInstanceKeepsThePasswordOutOfItsToString() {
+		assertThat(sysManProperties.sundsvall().toString())
+			.contains("sundsvallUsername")
+			.contains("PERSONAL")
+			.doesNotContain("sundsvallPassword")
+			.contains("password=*****");
+	}
+
 	@Test
 	void testProperties() {
 		assertThat(sysManProperties.connectTimeout()).isEqualTo(10);
