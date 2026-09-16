@@ -1,5 +1,6 @@
 package se.sundsvall.supportcenter.service.scheduler;
 
+import java.time.Duration;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
+import static java.time.OffsetDateTime.now;
+import static java.time.ZoneId.systemDefault;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 
@@ -28,15 +31,18 @@ class EndOfLeaseFailureRecorder {
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final Dept44HealthUtility dept44HealthUtility;
 	private final int maximumAttempts;
+	private final Duration dependencyFailureBackoff;
 
 	EndOfLeaseFailureRecorder(
 		final EndOfLeaseComputerRepository endOfLeaseComputerRepository,
 		final Dept44HealthUtility dept44HealthUtility,
-		@Value("${scheduler.end-of-lease.maximum-attempts}") final int maximumAttempts) {
+		@Value("${scheduler.end-of-lease.maximum-attempts}") final int maximumAttempts,
+		@Value("${scheduler.end-of-lease.dependency-failure-backoff}") final Duration dependencyFailureBackoff) {
 
 		this.endOfLeaseComputerRepository = endOfLeaseComputerRepository;
 		this.dept44HealthUtility = dept44HealthUtility;
 		this.maximumAttempts = maximumAttempts;
+		this.dependencyFailureBackoff = dependencyFailureBackoff;
 	}
 
 	/**
@@ -77,11 +83,17 @@ class EndOfLeaseFailureRecorder {
 	void recordDependencyFailure(final List<EndOfLeaseComputerEntity> computers, final String jobName, final String reason) {
 		// The run carries on and swallows this, so the scheduler aspect never sees it. Said here instead, or an outage
 		// is invisible until the queue has aged enough for the queue indicator to notice.
-		LOG.warn("{}. The attempts of {} computer(s) are left untouched.", reason, computers.size());
+		LOG.warn("{}. The attempts of {} computer(s) are left untouched, and they are held back for {}.", reason, computers.size(), dependencyFailureBackoff);
 		dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, reason);
+
+		// Held back rather than left free to be picked up again on the very next pass. Costing no attempt is what keeps
+		// an outage from draining the queue into FAILED, but it is also what lets such a row keep its place at the front
+		// of every page for good, and a page worth of them stops everyone behind them.
+		final var retryAfter = now(systemDefault()).plus(dependencyFailureBackoff);
 
 		computers.forEach(computer -> {
 			computer.setErrorMessage(toErrorMessage(reason));
+			computer.setRetryAfter(retryAfter);
 			endOfLeaseComputerRepository.save(computer);
 		});
 	}

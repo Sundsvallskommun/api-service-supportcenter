@@ -1,11 +1,14 @@
 package se.sundsvall.supportcenter.integration.db;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 
@@ -13,13 +16,51 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseComputerEntity, String> {
 
 	/**
+	 * Redeclared rather than inherited so that the circuit breaker on this interface covers it, the same way
+	 * {@link EndOfLeaseBatchRepository#save} is. Measured against this configuration: a call to a method declared here
+	 * is recorded by the breaker, and a call to one inherited from JpaRepository is not recorded at all. Left
+	 * inherited, every write the two runs make would sit outside the breaker while every read sat inside it.
+	 *
+	 * No instance configuration accompanies this one. The sibling needs {@code ignoreExceptions} because a resent batch
+	 * losing on the unique index is an expected outcome; nothing a computer row does is expected to fail, so the
+	 * inherited defaults are what this breaker should have.
+	 *
+	 * @param  <S>    the type of the computer to store
+	 * @param  entity the computer to store
+	 * @return        the stored computer
+	 */
+	@Override
+	<S extends EndOfLeaseComputerEntity> S save(S entity);
+
+	/**
+	 * Redeclared for the same reason as {@link #save}. Used by the retry endpoint, which puts a whole municipality's
+	 * computers back in the queue in one call.
+	 *
+	 * @param  <S>      the type of the computers to store
+	 * @param  entities the computers to store
+	 * @return          the stored computers
+	 */
+	@Override
+	<S extends EndOfLeaseComputerEntity> List<S> saveAll(Iterable<S> entities);
+
+	/**
 	 * The computers the lookup run has made ready to send, oldest first.
 	 *
+	 * Rows held back after a dependency failure are left out until their window is up. Such a failure costs a computer
+	 * no attempt and nothing else moves it, so without this it keeps its place at the front of every page and a page
+	 * worth of them stops everything behind them for good.
+	 *
 	 * @param  status   the state to look in
+	 * @param  now      the moment to measure the hold against
 	 * @param  pageable how many to take
-	 * @return          the computers whose municipality is known
+	 * @return          the computers whose municipality is known and whose turn it is
 	 */
-	List<EndOfLeaseComputerEntity> findByStatusAndAssetMunicipalityIdIsNotNullOrderByCreated(EndOfLeaseStatus status, Pageable pageable);
+	@Query("select computer from EndOfLeaseComputerEntity computer "
+		+ "where computer.status = :status "
+		+ "and computer.assetMunicipalityId is not null "
+		+ "and (computer.retryAfter is null or computer.retryAfter <= :now) "
+		+ "order by computer.created")
+	List<EndOfLeaseComputerEntity> findReadyToSend(@Param("status") EndOfLeaseStatus status, @Param("now") OffsetDateTime now, Pageable pageable);
 
 	/**
 	 * The computers the lookup run has left to do, oldest first.
@@ -28,11 +69,19 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * two runs apart. Taken a page at a time rather than all at once, since every computer here is one POB call and a
 	 * run has to finish inside its lock.
 	 *
+	 * Held back rows are left out for the same reason as in {@link #findReadyToSend}.
+	 *
 	 * @param  status   the state to look in
+	 * @param  now      the moment to measure the hold against
 	 * @param  pageable how many to take
-	 * @return          the computers waiting to be looked up
+	 * @return          the computers waiting to be looked up whose turn it is
 	 */
-	List<EndOfLeaseComputerEntity> findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(EndOfLeaseStatus status, Pageable pageable);
+	@Query("select computer from EndOfLeaseComputerEntity computer "
+		+ "where computer.status = :status "
+		+ "and computer.assetMunicipalityId is null "
+		+ "and (computer.retryAfter is null or computer.retryAfter <= :now) "
+		+ "order by computer.created")
+	List<EndOfLeaseComputerEntity> findAwaitingLookup(@Param("status") EndOfLeaseStatus status, @Param("now") OffsetDateTime now, Pageable pageable);
 
 	/**
 	 * The computer that has been waiting longest, whichever of the two runs it is waiting for.

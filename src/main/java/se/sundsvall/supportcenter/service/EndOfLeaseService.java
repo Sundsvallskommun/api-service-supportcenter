@@ -57,6 +57,8 @@ public class EndOfLeaseService {
 			computer.setStatus(PENDING);
 			computer.setAttempts(0);
 			computer.setErrorMessage(null);
+			// Any hold from the outage that gave up on it is over as far as the person asking is concerned.
+			computer.setRetryAfter(null);
 		});
 
 		endOfLeaseComputerRepository.saveAll(computers);

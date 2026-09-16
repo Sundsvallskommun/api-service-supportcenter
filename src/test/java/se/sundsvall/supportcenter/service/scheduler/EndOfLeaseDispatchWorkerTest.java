@@ -6,6 +6,7 @@ import generated.client.sysman.SaveMessagesToTargetsCommand;
 import generated.client.sysman.TargetReference;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import javax.net.ssl.SSLHandshakeException;
@@ -57,6 +58,7 @@ class EndOfLeaseDispatchWorkerTest {
 	private static final int PAGE_SIZE = 100;
 	private static final int MAXIMUM_ATTEMPTS = 5;
 	private static final long MESSAGE_ID = 1;
+	private static final Duration BACKOFF = Duration.ofHours(6);
 	private static final String JOB_NAME = "end-of-lease-dispatch";
 
 	@Mock
@@ -83,8 +85,26 @@ class EndOfLeaseDispatchWorkerTest {
 		// it called.
 		endOfLeaseDispatchWorker = new EndOfLeaseDispatchWorker(
 			endOfLeaseComputerRepositoryMock, sysManIntegrationMock,
-			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
-			PAGE_SIZE, MESSAGE_ID, JOB_NAME);
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
+			dept44HealthUtilityMock, PAGE_SIZE, MESSAGE_ID, JOB_NAME);
+	}
+
+	/**
+	 * The checked-in configuration names no message, since which one it is differs per installation. SENT is terminal,
+	 * so a run that sent the wrong one could not be taken back, and the queue is left alone instead.
+	 */
+	@Test
+	void refusesToRunWithoutAMessageId() {
+		final var worker = new EndOfLeaseDispatchWorker(
+			endOfLeaseComputerRepositoryMock, sysManIntegrationMock,
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
+			dept44HealthUtilityMock, PAGE_SIZE, 0, JOB_NAME);
+
+		worker.processComputersReadyToSend();
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(eq(JOB_NAME), contains("message-id is not configured"));
+		verifyNoInteractions(sysManIntegrationMock, endOfLeaseComputerRepositoryMock);
+		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
 	@Test
@@ -421,7 +441,7 @@ class EndOfLeaseDispatchWorkerTest {
 
 	@Test
 	void anEmptyPageCallsNobody() {
-		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNotNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))
+		when(endOfLeaseComputerRepositoryMock.findReadyToSend(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
 			.thenReturn(emptyList());
 
 		endOfLeaseDispatchWorker.processComputersReadyToSend();
@@ -431,7 +451,7 @@ class EndOfLeaseDispatchWorkerTest {
 	}
 
 	private void whenPageContains(final EndOfLeaseComputerEntity... computers) {
-		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNotNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))
+		when(endOfLeaseComputerRepositoryMock.findReadyToSend(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
 			.thenReturn(List.of(computers));
 	}
 

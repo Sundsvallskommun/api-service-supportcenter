@@ -1,6 +1,7 @@
 package se.sundsvall.supportcenter.service.scheduler;
 
 import generated.client.pob.PobPayload;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,7 @@ class EndOfLeaseLookupWorkerTest {
 	private static final String SERIAL_NUMBER = "J123ABC";
 	private static final int PAGE_SIZE = 100;
 	private static final int MAXIMUM_ATTEMPTS = 5;
+	private static final Duration BACKOFF = Duration.ofHours(6);
 	private static final String JOB_NAME = "end-of-lease-lookup";
 
 	@Mock
@@ -69,7 +71,7 @@ class EndOfLeaseLookupWorkerTest {
 			endOfLeaseComputerRepositoryMock,
 			pobIntegrationMock,
 			new POBProperties(1, 2, POB_KEY),
-			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
 			dept44HealthUtilityMock,
 			PAGE_SIZE,
 			JOB_NAME);
@@ -299,7 +301,7 @@ class EndOfLeaseLookupWorkerTest {
 	void aMissingPobKeyStopsTheRunAndSaysSo() {
 		endOfLeaseLookupWorker = new EndOfLeaseLookupWorker(
 			endOfLeaseComputerRepositoryMock, pobIntegrationMock, new POBProperties(1, 2, " "),
-			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS),
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
 			dept44HealthUtilityMock, PAGE_SIZE, JOB_NAME);
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
@@ -310,12 +312,12 @@ class EndOfLeaseLookupWorkerTest {
 
 	@Test
 	void anEmptyPageCallsNobody() {
-		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))
+		when(endOfLeaseComputerRepositoryMock.findAwaitingLookup(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
 			.thenReturn(emptyList());
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
-		verify(endOfLeaseComputerRepositoryMock).findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE));
+		verify(endOfLeaseComputerRepositoryMock).findAwaitingLookup(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE)));
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoInteractions(pobIntegrationMock);
 	}
@@ -335,7 +337,7 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	private void whenPageContains(final EndOfLeaseComputerEntity... computers) {
-		when(endOfLeaseComputerRepositoryMock.findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(PAGE_SIZE)))
+		when(endOfLeaseComputerRepositoryMock.findAwaitingLookup(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
 			.thenReturn(List.of(computers));
 	}
 

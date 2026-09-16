@@ -59,6 +59,11 @@ scheduler:
     # queue stands still through an outage rather than draining into FAILED. The column is shared, but a successful
     # lookup resets it, so the budget is per run.
     maximum-attempts: 5
+    # How long a computer is held back after the other end could not be reached. Costing no attempt is what keeps an
+    # outage from draining the queue into FAILED, and this is what keeps the same rows from filling the front of every
+    # page while it lasts. Must stay longer than the interval between runs, or the held back rows are back on the first
+    # page an hour later and nothing behind them is read.
+    dependency-failure-backoff: PT6H
     # How long the oldest waiting computer may wait before the health endpoint says so. A batch of a thousand drains
     # in about four hours, so a full day means the queue is not moving at all. RESTRICTED rather than DOWN: something
     # to look at, not a reason to leave the rotation.
@@ -87,10 +92,11 @@ scheduler:
       # belongs to one. SysMan caps a batch call at four thousand targets and nothing here splits a group, so this must
       # stay below that. Level with the lookup page, or this run falls behind it.
       page-size: 250
-      # Still a placeholder: nobody has said which message this is. Safe only while the crons above stay off. Name the
-      # real message in the same change that turns them on, or the first run sends whatever message 1 happens to be and
-      # marks the rows SENT.
-      message-id: 1
+      # Left unset on purpose. Nobody has said which message this is, it differs per installation, and SENT is
+      # terminal, so a run that sent the wrong one could not be taken back. The run refuses to start without it and
+      # says so on its health indicator, the same way the lookup run refuses without a POB key. Name the real message
+      # in the change that turns the crons on.
+      message-id: 0
       # Two calls against a thirty second read timeout, so nowhere near what the lookup can take. Kept well above it
       # anyway: too short a lock tells a computer twice.
       shedlock-lock-at-most-for: PT30M

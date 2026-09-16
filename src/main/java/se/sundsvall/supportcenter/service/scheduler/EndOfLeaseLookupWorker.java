@@ -16,6 +16,8 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 
+import static java.time.OffsetDateTime.now;
+import static java.time.ZoneId.systemDefault;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -75,7 +77,7 @@ public class EndOfLeaseLookupWorker {
 		}
 
 		final var computers = endOfLeaseComputerRepository
-			.findByStatusAndAssetMunicipalityIdIsNullOrderByCreated(PENDING, PageRequest.ofSize(pageSize));
+			.findAwaitingLookup(PENDING, now(systemDefault()), PageRequest.ofSize(pageSize));
 
 		final var numberOfComputers = computers.size();
 
@@ -109,8 +111,10 @@ public class EndOfLeaseLookupWorker {
 			// computer that used most of its attempts getting looked up would otherwise be given up on after a single
 			// bad call to SysMan.
 			computer.setAttempts(0);
-			// Don't store a potentially old failure for a successful lookup.
+			// Don't store a potentially old failure for a successful lookup, and let the dispatch run have it at once
+			// rather than leave a hold from an outage that is plainly over.
 			computer.setErrorMessage(null);
+			computer.setRetryAfter(null);
 			endOfLeaseComputerRepository.save(computer);
 		} catch (final ServerProblem | RetryableException | CallNotPermittedException e) {
 			// POB is unwell or out of reach, which is no fact about this computer. Kept off the attempts so that an

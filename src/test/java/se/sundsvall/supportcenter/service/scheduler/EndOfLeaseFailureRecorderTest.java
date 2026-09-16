@@ -1,5 +1,7 @@
 package se.sundsvall.supportcenter.service.scheduler;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,7 @@ import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.P
 class EndOfLeaseFailureRecorderTest {
 
 	private static final int MAXIMUM_ATTEMPTS = 5;
+	private static final Duration BACKOFF = Duration.ofHours(6);
 	private static final String JOB_NAME = "end-of-lease-lookup";
 	private static final String SUBJECT = "serial number J123ABC";
 
@@ -46,7 +49,7 @@ class EndOfLeaseFailureRecorderTest {
 
 	@BeforeEach
 	void setUp() {
-		endOfLeaseFailureRecorder = new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS);
+		endOfLeaseFailureRecorder = new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF);
 	}
 
 	@Test
@@ -90,6 +93,34 @@ class EndOfLeaseFailureRecorderTest {
 				tuple(0, PENDING, "POB could not be reached: no route to host"));
 
 		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(JOB_NAME, "POB could not be reached: no route to host");
+	}
+
+	/**
+	 * Costing no attempt is what keeps an outage from draining the queue into FAILED, and it is also what would let the
+	 * same rows fill the front of every page for good. The hold is the other half of that bargain.
+	 */
+	@Test
+	void aDependencyFailureHoldsTheComputerBackForTheBackoffWindow() {
+		final var before = OffsetDateTime.now();
+
+		endOfLeaseFailureRecorder.recordDependencyFailure(List.of(computer(0)), JOB_NAME, "SysMan could not be reached");
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getRetryAfter())
+			.isNotNull()
+			.isBetween(before.plus(BACKOFF), OffsetDateTime.now().plus(BACKOFF));
+	}
+
+	/**
+	 * A spent attempt takes the computer to FAILED after a handful of tries, so it leaves the queue on its own and
+	 * needs no hold. Holding it as well would only delay a computer whose own data is the problem.
+	 */
+	@Test
+	void aSpentAttemptDoesNotHoldTheComputerBack() {
+		endOfLeaseFailureRecorder.recordFailedAttempt(computer(0), JOB_NAME, SUBJECT, "SysMan did not recognize the computer name");
+
+		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
+		assertThat(computerCaptor.getValue().getRetryAfter()).isNull();
 	}
 
 	/**

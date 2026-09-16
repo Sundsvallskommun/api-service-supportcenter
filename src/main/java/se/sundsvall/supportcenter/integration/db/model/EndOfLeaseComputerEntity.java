@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -70,6 +71,15 @@ public class EndOfLeaseComputerEntity {
 	@Column(name = "error_message", length = 2048)
 	private String errorMessage;
 
+	/**
+	 * When the computer may be picked up again, or null for right away. Set when the other end could not be reached,
+	 * which costs the computer no attempt and would otherwise let it keep its place at the front of every page for
+	 * good. Cleared as soon as a run gets through.
+	 */
+	@Column(name = "retry_after")
+	@TimeZoneStorage(NORMALIZE)
+	private OffsetDateTime retryAfter;
+
 	@Column(name = "sent_at")
 	@TimeZoneStorage(NORMALIZE)
 	private OffsetDateTime sentAt;
@@ -81,6 +91,14 @@ public class EndOfLeaseComputerEntity {
 	@Column(name = "modified")
 	@TimeZoneStorage(NORMALIZE)
 	private OffsetDateTime modified;
+
+	/**
+	 * Rows are read detached and written back with a merge of the whole entity. Two instances that both believe they
+	 * hold the ShedLock lock would otherwise overwrite each other without a sound; with this the second one fails.
+	 */
+	@Version
+	@Column(name = "version", nullable = false)
+	private Long version;
 
 	public static EndOfLeaseComputerEntity create() {
 		return new EndOfLeaseComputerEntity();
@@ -214,6 +232,32 @@ public class EndOfLeaseComputerEntity {
 		return this;
 	}
 
+	public OffsetDateTime getRetryAfter() {
+		return retryAfter;
+	}
+
+	public void setRetryAfter(OffsetDateTime retryAfter) {
+		this.retryAfter = retryAfter;
+	}
+
+	public EndOfLeaseComputerEntity withRetryAfter(OffsetDateTime retryAfter) {
+		this.retryAfter = retryAfter;
+		return this;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public EndOfLeaseComputerEntity withVersion(Long version) {
+		this.version = version;
+		return this;
+	}
+
 	public OffsetDateTime getSentAt() {
 		return sentAt;
 	}
@@ -262,13 +306,13 @@ public class EndOfLeaseComputerEntity {
 		if (!(o instanceof final EndOfLeaseComputerEntity that))
 			return false;
 		return Objects.equals(id, that.id) && Objects.equals(serialNumber, that.serialNumber) && Objects.equals(assetTag, that.assetTag) && Objects.equals(endOfLeaseDate, that.endOfLeaseDate) && status == that.status && Objects.equals(
-			assetMunicipalityId, that.assetMunicipalityId) && Objects.equals(attempts, that.attempts) && Objects.equals(errorMessage, that.errorMessage) && Objects.equals(sentAt, that.sentAt) && Objects.equals(created, that.created)
-			&& Objects.equals(modified, that.modified);
+			assetMunicipalityId, that.assetMunicipalityId) && Objects.equals(attempts, that.attempts) && Objects.equals(errorMessage, that.errorMessage) && Objects.equals(retryAfter, that.retryAfter) && Objects.equals(sentAt, that.sentAt)
+			&& Objects.equals(created, that.created) && Objects.equals(modified, that.modified) && Objects.equals(version, that.version);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, serialNumber, assetTag, endOfLeaseDate, status, assetMunicipalityId, attempts, errorMessage, sentAt, created, modified);
+		return Objects.hash(id, serialNumber, assetTag, endOfLeaseDate, status, assetMunicipalityId, attempts, errorMessage, retryAfter, sentAt, created, modified, version);
 	}
 
 	@Override
@@ -282,9 +326,11 @@ public class EndOfLeaseComputerEntity {
 			", assetMunicipalityId='" + assetMunicipalityId + '\'' +
 			", attempts=" + attempts +
 			", errorMessage='" + errorMessage + '\'' +
+			", retryAfter=" + retryAfter +
 			", sentAt=" + sentAt +
 			", created=" + created +
 			", modified=" + modified +
+			", version=" + version +
 			'}';
 	}
 }

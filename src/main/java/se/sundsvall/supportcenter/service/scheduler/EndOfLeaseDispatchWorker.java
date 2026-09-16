@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import se.sundsvall.dept44.exception.ClientProblem;
 import se.sundsvall.dept44.exception.ServerProblem;
+import se.sundsvall.dept44.scheduling.health.Dept44HealthUtility;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.sysman.SysManIntegration;
@@ -52,9 +53,12 @@ public class EndOfLeaseDispatchWorker {
 
 	private static final String CONNECT_TIMED_OUT = "connect timed out";
 
+	private static final String NO_MESSAGE_ID = "scheduler.end-of-lease.dispatch.message-id is not configured, so the job has no message to ask SysMan to send";
+
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final SysManIntegration sysManIntegration;
 	private final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder;
+	private final Dept44HealthUtility dept44HealthUtility;
 	private final int pageSize;
 	private final long messageId;
 	private final String jobName;
@@ -63,21 +67,32 @@ public class EndOfLeaseDispatchWorker {
 		final EndOfLeaseComputerRepository endOfLeaseComputerRepository,
 		final SysManIntegration sysManIntegration,
 		final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder,
+		final Dept44HealthUtility dept44HealthUtility,
 		@Value("${scheduler.end-of-lease.dispatch.page-size}") final int pageSize,
-		@Value("${scheduler.end-of-lease.dispatch.message-id}") final long messageId,
+		@Value("${scheduler.end-of-lease.dispatch.message-id:0}") final long messageId,
 		@Value("${scheduler.end-of-lease.dispatch.name}") final String jobName) {
 
 		this.endOfLeaseComputerRepository = endOfLeaseComputerRepository;
 		this.sysManIntegration = sysManIntegration;
 		this.endOfLeaseFailureRecorder = endOfLeaseFailureRecorder;
+		this.dept44HealthUtility = dept44HealthUtility;
 		this.pageSize = pageSize;
 		this.messageId = messageId;
 		this.jobName = jobName;
 	}
 
 	public void processComputersReadyToSend() {
+		// Which message this is has to be named per environment, and SENT is terminal, so a run that sent the wrong one
+		// could not be taken back. Caught here rather than validated at startup, where it would stop an API that has never
+		// needed a message id from coming up at all. The lookup run refuses without its POB key the same way.
+		if (messageId <= 0) {
+			LOG.error(NO_MESSAGE_ID);
+			dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, NO_MESSAGE_ID);
+			return;
+		}
+
 		final var computers = endOfLeaseComputerRepository
-			.findByStatusAndAssetMunicipalityIdIsNotNullOrderByCreated(PENDING, PageRequest.ofSize(pageSize));
+			.findReadyToSend(PENDING, now(ZoneId.systemDefault()), PageRequest.ofSize(pageSize));
 
 		if (!computers.isEmpty()) {
 			LOG.info("Sending the message via SysMan to {} computer(s).", computers.size());
@@ -156,6 +171,7 @@ public class EndOfLeaseDispatchWorker {
 				computer.setStatus(SENT);
 				computer.setSentAt(now(ZoneId.systemDefault()));
 				computer.setErrorMessage(null);
+				computer.setRetryAfter(null);
 				endOfLeaseComputerRepository.save(computer);
 			} else {
 				endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), NOT_RECOGNIZED);
