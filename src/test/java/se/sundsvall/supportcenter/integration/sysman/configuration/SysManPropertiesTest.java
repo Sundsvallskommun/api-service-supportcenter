@@ -31,7 +31,7 @@ class SysManPropertiesTest {
 		assertThat(sysManProperties.ange()).satisfies(instance -> {
 			assertThat(instance.municipalityId()).isEqualTo("2260");
 			assertThat(instance.url()).isEqualTo("http://sysman.ange.url");
-			assertThat(instance.domain()).isEqualTo("ANGE");
+			assertThat(instance.domain()).isEqualTo("ANGEDOMAIN");
 			assertThat(instance.username()).isEqualTo("angeUsername");
 			assertThat(instance.password()).isEqualTo("angePassword");
 		});

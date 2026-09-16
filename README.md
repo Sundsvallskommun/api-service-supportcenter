@@ -93,8 +93,9 @@ scheduler:
       message-id: 42
 ```
 
-`message-id: 1` is checked in as a placeholder. Turn the crons on without replacing it and the first run sends whatever
-message 1 happens to be in each installation.
+`message-id` is checked in as `0`, which is not a message. The dispatch run refuses to start without a real one and
+reports itself unhealthy on `/actuator/health`, so turning the crons on without naming the message sends nothing rather
+than sending the wrong thing. `SENT` is terminal, so a computer that got the wrong message cannot be taken back.
 
 Both runs report on `/actuator/health`. The `endOfLeaseQueue` component answers RESTRICTED when the queue stops moving,
 or when a computer has run out of attempts and needs a person to look at it.
@@ -154,6 +155,12 @@ Configuration is crucial for the application to run successfully. Ensure all nec
         username: account
         password: secret
   ```
+
+  All six are required before the service starts, including in environments that never turn the end of lease job on.
+  Both Feign clients take their host from `url`, so the client bean cannot be built without it, and the properties are
+  validated so that a gap names itself instead of surfacing as an unresolved placeholder inside a URI parser. Add them
+  to every environment in the same change that deploys this version.
+
 - **Database:**
 
   ```yaml

@@ -6,4 +6,4 @@ create table shedlock (
     locked_at  timestamp(3) not null default current_timestamp(3),
     locked_by  varchar(255) not null,
     primary key (name)
-) engine = InnoDB;
+) engine = InnoDB default charset = utf8mb4 collate = utf8mb4_unicode_ci;

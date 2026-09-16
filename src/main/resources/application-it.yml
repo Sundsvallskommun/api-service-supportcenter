@@ -13,7 +13,6 @@ integration:
       password: sundsvallPassword
     ange:
       url: http://localhost:${wiremock.server.port:}/sysman-ange
-      domain: ANGE
       username: angeUsername
       password: angePassword
 logging:
