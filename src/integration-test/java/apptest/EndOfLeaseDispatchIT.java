@@ -52,6 +52,10 @@ class EndOfLeaseDispatchIT extends AbstractAppTest {
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 		endOfLeaseDispatchWorker.processComputersReadyToSend();
 
+		// Every stub was called and nothing arrived that no stub matched. Without this a run that sent the wrong body
+		// would only show up indirectly, as a row that never reached SENT.
+		verifyStubs();
+
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
 			.containsExactly(
@@ -72,6 +76,10 @@ class EndOfLeaseDispatchIT extends AbstractAppTest {
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		// Every stub was called and nothing arrived that no stub matched. Without this a run that sent the wrong body
+		// would only show up indirectly, as a row that never reached SENT.
+		verifyStubs();
 
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
@@ -95,11 +103,43 @@ class EndOfLeaseDispatchIT extends AbstractAppTest {
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 		endOfLeaseDispatchWorker.processComputersReadyToSend();
 
+		// Every stub was called and nothing arrived that no stub matched. Without this a run that sent the wrong body
+		// would only show up indirectly, as a row that never reached SENT.
+		verifyStubs();
+
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id")
 			.containsExactly(
 				tuple("J123ABC", "SENT", "2281"),
 				tuple("L789GHI", "SENT", "2260"));
+	}
+
+	/**
+	 * The other half of the attempt budget, end to end. An installation that answers 5xx is unwell, which is no fact
+	 * about the computers in the call, so nobody pays an attempt for it. The group is held back instead and carries
+	 * what SysMan said, which is the only thing a person has to go on when the queue stops moving.
+	 */
+	@Test
+	void test004_sysManIsUnwell() throws Exception {
+		final var batchId = sendBatch();
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verifyStubs();
+
+		assertThat(computers(batchId))
+			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
+			.containsExactly(tuple("J123ABC", "PENDING", "2281", 0));
+
+		assertThat(jdbcTemplate.queryForObject(
+			"select error_message from end_of_lease_computer where serial_number = 'J123ABC'", String.class))
+				.as("the reason SysMan gave survives the error decoder and reaches the row")
+				.contains("The message service is not responding")
+				.contains("the queue host refused the connection");
+
+		assertThat(jdbcTemplate.queryForObject(
+			"select retry_after from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class)).isNotNull();
 	}
 
 	private String sendBatch() throws Exception {

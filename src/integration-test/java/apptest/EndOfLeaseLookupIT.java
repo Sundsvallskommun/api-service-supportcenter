@@ -1,5 +1,6 @@
 package apptest;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,10 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
+		// Every stub was called and nothing arrived that no stub matched. Without this a run that asked POB the wrong
+		// question would only show up indirectly, as a row that never got its municipality.
+		verifyStubs();
+
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
 			.containsExactly(
@@ -66,6 +71,10 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
+		// Every stub was called and nothing arrived that no stub matched. Without this a run that asked POB the wrong
+		// question would only show up indirectly, as a row that never got its municipality.
+		verifyStubs();
+
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
 			.containsExactly(
@@ -74,6 +83,33 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select error_message from end_of_lease_computer where serial_number = 'J123ABC'", String.class)).isNotBlank();
+	}
+
+	/**
+	 * The half of the attempt budget that is otherwise proven with mocks alone. A POB that answers 5xx is the other end
+	 * being unwell, which is no fact about this computer, so the attempt is not spent. The row is held back instead, and
+	 * carries the reason so that a queue standing still can be read off it.
+	 */
+	@Test
+	void test003_pobIsUnwell() throws Exception {
+		final var batchId = sendBatch();
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verifyStubs();
+
+		assertThat(computers(batchId))
+			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
+			.containsExactly(tuple("J123ABC", "PENDING", null, 0));
+
+		assertThat(jdbcTemplate.queryForObject(
+			"select error_message from end_of_lease_computer where serial_number = 'J123ABC'", String.class))
+				.contains("POB could not be reached");
+
+		assertThat(jdbcTemplate.queryForObject(
+			"select retry_after from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class))
+				.as("held back, or it keeps its place at the front of every page while POB is down")
+				.isNotNull();
 	}
 
 	private String sendBatch() throws Exception {

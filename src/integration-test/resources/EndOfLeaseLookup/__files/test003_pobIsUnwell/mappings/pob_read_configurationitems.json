@@ -1,0 +1,28 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=J123ABC"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": {
+			"InternalMessage": "The database is not accepting connections",
+			"UserMessage": "An error occured",
+			"Code": 3
+		},
+		"status": 500
+	},
+	"name": "pob-read-configurationitems-unwell"
+}

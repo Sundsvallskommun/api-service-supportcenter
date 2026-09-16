@@ -22,8 +22,14 @@
 		"headers": {
 			"Content-Type": "application/json"
 		},
-		"jsonBody": [],
-		"status": 200
+		"jsonBody": {
+			"message": "The message service is not responding",
+			"details": [
+				"the queue host refused the connection"
+			],
+			"code": "MessageServiceUnavailable"
+		},
+		"status": 500
 	},
-	"name": "sysman-sundsvall-send-messages-to-no-targets"
+	"name": "sysman-sundsvall-is-unwell"
 }

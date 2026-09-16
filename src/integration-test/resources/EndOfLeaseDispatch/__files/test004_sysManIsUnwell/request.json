@@ -1,0 +1,10 @@
+{
+	"externalBatchId": "f2a91c47-6b83-4e05-9d1a-8c3b7e60f524",
+	"computers": [
+		{
+			"serialNumber": "J123ABC",
+			"assetTag": "AB12345",
+			"endOfLeaseDate": "2026-11-30"
+		}
+	]
+}
