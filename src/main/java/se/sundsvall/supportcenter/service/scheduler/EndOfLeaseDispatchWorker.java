@@ -206,15 +206,12 @@ public class EndOfLeaseDispatchWorker {
 	}
 
 	/**
-	 * Whether the call never got as far as the installation. A refused or unresolvable host says so, and so does a
-	 * handshake that failed and a connection that was never established inside its timeout. A call that was made and
-	 * then timed out waiting for the answer says nothing at all about what the other end did with it.
+	 * Whether the call never reached the installation. A refused or unresolvable host says so, and so does any TLS
+	 * failure and a connection that was never established inside its timeout.
 	 *
-	 * Measured against okhttp 4.12.0: a blackholed address gives SocketTimeoutException("Connect timed out") once the
-	 * connect timeout is up, while a host that answers and then goes quiet gives SocketTimeoutException("Read timed
-	 * out"). The type is the same for both and the message is the only thing that separates them. Both strings come
-	 * from the JDK's own socket implementation rather than from okhttp, so they do not move with the http client. A
-	 * message we do not recognize counts the attempt, which is what this method did for every timeout before.
+	 * The two timeouts are the same type and only the message separates them, "Connect timed out" against "Read timed
+	 * out", both written by the JDK's socket implementation rather than by okhttp. A read timeout says nothing about
+	 * what the other end did with the call, so it counts, and so does a message we do not recognize.
 	 */
 	private static boolean neverReached(final RetryableException e) {
 		final var cause = e.getCause();

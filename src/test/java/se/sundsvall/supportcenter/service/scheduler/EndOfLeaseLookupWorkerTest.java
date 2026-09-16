@@ -212,7 +212,10 @@ class EndOfLeaseLookupWorkerTest {
 	@Test
 	void aDefectOnTheRowItselfCountsAsAnAttempt() {
 		whenPageContains(computer(PENDING, 1));
-		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, SERIAL_NUMBER)).thenThrow(new ClassCastException("Integer cannot be cast to String"));
+		// Anything the two named branches above did not foresee. Deliberately not a ClassCastException off the
+		// municipality any more: EndOfLeaseMapper converts that value instead of casting it, so the exception this test
+		// used to throw can no longer happen, and a test that stubs an impossible failure proves nothing.
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, SERIAL_NUMBER)).thenThrow(new IllegalStateException("the payload broke us on the way through"));
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 

@@ -439,6 +439,29 @@ class EndOfLeaseDispatchWorkerTest {
 		verifyNoMoreInteractions(dept44HealthUtilityMock);
 	}
 
+	/**
+	 * Map.forEach over the groupingBy HashMap runs the groups in an arbitrary order, so a change that let an exception
+	 * escape send would starve whichever group happened to come second, and which one that is would vary between runs.
+	 */
+	@Test
+	void aGroupThatFailsDoesNotStopTheOther() {
+		whenPageContains(computer("AB12345", SUNDSVALL, 0), computer("CD67890", ANGE, 0));
+
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(SUNDSVALL), any()))
+			.thenThrow(Problem.valueOf(INTERNAL_SERVER_ERROR, "No SysMan installation is configured for municipality 2281"));
+		when(sysManIntegrationMock.sendMessagesToTargets(eq(ANGE), any()))
+			.thenReturn(List.of(targetReference("CD67890")));
+
+		endOfLeaseDispatchWorker.processComputersReadyToSend();
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getAssetTag, EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.containsExactlyInAnyOrder(
+				tuple("AB12345", PENDING, 1),
+				tuple("CD67890", SENT, 0));
+	}
+
 	@Test
 	void anEmptyPageCallsNobody() {
 		when(endOfLeaseComputerRepositoryMock.findReadyToSend(eq(PENDING), any(), eq(PageRequest.ofSize(PAGE_SIZE))))
