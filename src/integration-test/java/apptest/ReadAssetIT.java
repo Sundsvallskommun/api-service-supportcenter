@@ -23,7 +23,7 @@ class ReadAssetIT extends AbstractAppTest {
 	void test001_readAsset() {
 
 		setupCall()
-			.withServicePath(PATH + "?serialNumber=FRGDZ1J")
+			.withServicePath(PATH + "?serialNumber=ABC12345")
 			.withHttpMethod(GET)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withExpectedResponse(RESPONSE_FILE)

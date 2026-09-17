@@ -8,7 +8,7 @@
 		"method": "GET",
 		"queryParameters": {
 			"Filter": {
-				"equalTo": "SerialNumber=FRGDZ1J"
+				"equalTo": "SerialNumber=ABC12345"
 			}
 		},
 		"urlPath": "/pob/configurationitems"
@@ -20,111 +20,232 @@
 		"jsonBody": [
 			{
 				"Type": "ConfigurationItem",
+				"$id": "232754",
 				"Links": [],
 				"Data": {
-					"Virtual.IsPersonal": "False",
-					"AssetNo": "",
-					"DeliveryDate": "2022-01-01 00:00:00",
-					"InstallationDate": "",
-					"Virtual.CIParentsConcat": "",
-					"Virtual.InstallerasAv": "",
-					"ShortDescription": "",
-					"Item": {
-						"Type": "Item",
-						"Links": [
-							{
-								"Relation": "self",
-								"Href": "pobg6/api/v110/items/10018"
-							}
-						],
-						"Data": {
-							"ItemStatus": "2",
-							"Description": "Dell Latitude D510                  ",
-							"Id": "10018"
-						},
-						"Memo": {}
-					},
-					"Virtual.SerialNumber2": "",
-					"Virtual.Ovrigt": "",
-					"CiStatus": "2",
-					"IsOkForWebUse": "False",
+					"ConfigurationItemPK": "106621731",
+					"Id": "232754",
+					"Description": "Utgången",
+					"DeleteDate": "",
+					"OptionalNumber": "WB06315",
+					"TypeNumber": " ",
 					"TypeDescription": "",
-					"Virtual.Avvikelse": "",
-					"ConfigurationItemPK": "622109",
-					"Virtual.VIRT_REMINDER_PERIOD": "",
-					"LastCaseDate": "2022-03-23 15:01:55",
-					"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
-					"Virtual.ManualOverrideNoSlaTrygghetslarm": "",
-					"Virtual.MgmtSource_Detail": "",
-					"SwStatus": "0",
-					"Virtual.CIStatusChangeDate": "2022-04-05 09:49:15",
+					"SerialNumber": "ABC12345",
+					"InstallationDate": "",
+					"CiStatus": "3",
+					"LastCaseDate": "2022-12-12 10:07:51",
+					"LastCaseId": "940026",
+					"CalibrationDate": "",
+					"OperationStatus": "1",
+					"MonitorStatus": "0",
+					"LastChangeDate": "",
+					"IsBamActive": "",
+					"IsItService": "",
+					"UptimeImpactPercentage": "",
+					"IsUptimeReport": "",
+					"IsOkForWebUse": "",
+					"AssetNo": "",
+					"ExpirationDate": "",
+					"PCName": "",
+					"DefaultProtocol": "31",
+					"LicType": "",
+					"SwStatus": "",
+					"PurchasePrice": "8270,00000",
 					"Brand": "",
-					"SerialNumber": "FRGDZ1J",
-					"Virtual.VIRT_REMINDER_DATE": "",
-					"Virtual.ActionIdOfRemovedSla": "",
-					"Virtual.ManuelltIntaktsKontoCCMSla": "False",
-					"Virtual.FysiskPlats_Adr_Postnr": "",
-					"UptimeImpactPercentage": "0",
-					"Id": "15857",
+					"DeliveryDate": "2018-06-30 00:00:00",
+					"EndWarrantyDate": "2021-04-28 00:00:00",
 					"AlertPercent": "",
-					"Virtual.FysiskPlats_Adr_Postort": "",
 					"AlertColor": "",
+					"ShortDescription": "",
+					"WebTooltip": "",
+					"ADEId": "",
+					"LastScanDate": "",
+					"LastScanStatus": "",
+					"DiscoveryStatus": "",
+					"ScanComment": "",
+					"OSName": "",
+					"OSVersion": "",
+					"OSBuild": "",
+					"ServicePack": "",
+					"PhysicalMemory": "",
+					"VirtualMemory": "",
+					"CPUType": "",
+					"CPUCount": "",
+					"CPUSpeed": "",
+					"RegisteredTo": "",
+					"BIOS": "",
+					"DNSName": "",
+					"DomainName": "",
+					"IpAddress": "",
+					"MacAddress": "",
+					"NIC": "",
+					"DHCP": "",
+					"Uptime": "",
+					"ADEContact": "",
+					"ADELocation": "",
+					"ManagedStatus": "",
 					"CIType": {
 						"Type": "ConfigurationItemType",
+						"$id": "Lätt Bärbar",
 						"Links": [
 							{
 								"Relation": "self",
-								"Href": "pobg6/api/v110/configurationitemtypes/Bärbar"
+								"Href": "pobg6/api/v110/configurationitemtypes/Lätt Bärbar"
 							}
 						],
 						"Data": {
-							"Description": "Bärbar datorarbetsplats",
-							"Id": "Bärbar"
+							"Id": "Lätt Bärbar",
+							"Description": "Lätt Bärbar datorarbetsplats"
 						},
 						"Memo": {}
 					},
-					"Virtual.EQU_ADSL_PRICE": "",
-					"IsUptimeReport": "False",
-					"Description": "Some description",
-					"WebTooltip": "",
-					"Virtual.IsContactLocalAdmin": "False",
-					"PCName": "",
-					"Virtual.FysiskPlats_Adr_Gatuadress": "",
-					"PurchasePrice": "",
-					"TypeNumber": "",
-					"IsBamActive": "False",
-					"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
-					"CalibrationDate": "",
+					"CostCentre": {
+						"Type": "CostCentre",
+						"$id": "15400100 934400 920340                    120",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/errors/1"
+							}
+						],
+						"Data": {
+							"Id": "15400100 934400 920340                    120"
+						},
+						"Memo": {}
+					},
+					"Item": {
+						"Type": "Item",
+						"$id": "100733",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/items/100733"
+							}
+						],
+						"Data": {
+							"Id": "100733",
+							"Description": "Latitude 7280",
+							"ItemStatus": "1",
+							"Virtual.AnsvarigtDriftteamCalcDisplayId": ""
+						},
+						"Memo": {}
+					},
+					"Organization": {
+						"Type": "Organization",
+						"$id": "7506",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/7506"
+							}
+						],
+						"Data": {
+							"Id": "7506",
+							"Description": "Lalles Biodling",
+							"Address2": "",
+							"Virtual.DefaultContractId": "12092"
+						},
+						"Memo": {}
+					},
+					"Supplier": {
+						"Type": "Organization",
+						"$id": "X_Dell",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/X_Dell"
+							}
+						],
+						"Data": {
+							"Id": "X_Dell",
+							"Description": "Hårdvaruleverantör, datorer och servrar",
+							"Address2": "",
+							"Virtual.DefaultContractId": ""
+						},
+						"Memo": {}
+					},
 					"Virtual.VIRT_REMINDER_RESP": "",
-					"Virtual.ActionId": "",
-					"Virtual.HasContactRDRights": "",
+					"Virtual.VIRT_REMINDER_DATE": "",
+					"Virtual.VIRT_REMINDER_PERIOD": "",
+					"Virtual.CIHarSLA": "False",
+					"Virtual.TjanstStart": "",
+					"Virtual.TjanstSlut": "",
+					"Virtual.EQU_ADSL_PRICE": "",
+					"Virtual.EQU_NETWORK1": "fe80::1,192.0.2.152,fe80::2,fe80::3,198.51.100.177",
 					"Virtual.EQU_NETWORK2": "",
-					"Virtual.PersonligGemensam": "",
-					"Virtual.EQU_NETWORK1": "172.16.55.82",
-					"Virtual.MDM_MobileDeviceMgmt": "",
-					"Virtual.LeverantorensStatus": "2",
-					"LastCaseId": "867441",
-					"OperationStatus": "1",
-					"Virtual.PathToDocumentation": "",
-					"Virtual.MgmtSource": "",
-					"IsItService": "False",
-					"LicType": "",
-					"Virtual.EQU_INKOPSPRIS": "",
-					"Virtual.CIKommun": "Sundsvall",
-					"Virtual.ActionTriggerTime": "",
-					"OptionalNumber": "test1234",
-					"EndWarrantyDate": "2022-01-01 00:00:00",
-					"DefaultProtocol": "",
-					"DeleteDate": "",
-					"Virtual.BluetoothAddress": "00:00:0a:bb:28:fc",
-					"ExpirationDate": "",
+					"Virtual.CIParentsConcat": "",
+					"Virtual.Avvikelse": "",
 					"Virtual.Domain": "",
-					"LastChangeDate": "",
-					"MonitorStatus": "0",
+					"Virtual.Phys_Organization": {
+						"Type": "Organization",
+						"$id": "7506",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/organizations/7506"
+							}
+						],
+						"Data": {
+							"Id": "7506",
+							"Description": "Lalles Biodling",
+							"Address2": "",
+							"Virtual.DefaultContractId": "12092"
+						},
+						"Memo": {}
+					},
+					"Virtual.HasContactRDRights": "",
+					"Virtual.IsContactLocalAdmin": "False",
+					"Virtual.MgmtSource": "",
+					"Virtual.Phys_Customer": {
+						"Type": "Customer",
+						"$id": "nam12nam",
+						"Links": [
+							{
+								"Relation": "self",
+								"Href": "pobg6/api/v110/customers/nam12nam"
+							}
+						],
+						"Data": {
+							"FirstName": "Namn",
+							"Id": "nam12nam",
+							"LastName": "Namnsson",
+							"Mobile": "0701234567",
+							"Phone": "0701234567"
+						},
+						"Memo": {}
+					},
+					"Virtual.ActionId": "CustomerUpdatedInformCI;2022-11-02 04:57:57 ",
+					"Virtual.ActionTriggerTime": "",
+					"Virtual.BluetoothAddress": "001A2B3C4D5E",
+					"Virtual.PathToDocumentation": "",
+					"Virtual.SerialNumber2": "",
+					"Virtual.CIStatusChangeDate": "2023-04-06 12:10:11",
+					"Virtual.EQU_SERIAL_NO_OLD_VIRT": "",
+					"Virtual.ActionType": "",
+					"Virtual.LeaseStatus": "Avslutad",
+					"Virtual.EkonomisktObjektnummer": "",
+					"Virtual.LeverantorensStatus": "Retired",
+					"Virtual.WebLookupPCandMore": "LookupDator01",
+					"Virtual.Samhallsviktigt": "",
+					"Virtual.Verksamhetskritiskt": "",
+					"Virtual.ContractExpirationDate": "2022-06-30 00:00:00",
+					"Virtual.CIKommun": "2281",
+					"Virtual.InstallerasAv": "",
+					"Virtual.PersonligGemensam": "",
+					"Virtual.FysiskPlats_Adr_Gatuadress": "",
+					"Virtual.FysiskPlats_Adr_Postnr": "",
+					"Virtual.FysiskPlats_Adr_Postort": "",
+					"Virtual.OwnedBy": "0",
+					"Virtual.ManuelltIntaktsKontoCCMSla": "False",
+					"Virtual.IsPersonal": "True",
 					"Virtual.DataloadSyncInfo": "",
-					"Virtual.LeaseStatus": "ACTIVE",
-					"Virtual.TjanstStart": "2022-01-01 00:00:00",
-					"Virtual.TjanstSlut": "2025-01-01 00:00:00"
+					"Virtual.Ovrigt": "",
+					"Virtual.ManualOverrideSyncPhysOrgFromPhysCus": "False",
+					"Virtual.MDM_MobileDeviceMgmt": "",
+					"Virtual.MgmtSource_Detail": "8c sccm saknas",
+					"Virtual.ActionIdOfRemovedSla": "2023-04-18 10:48:57;234173",
+					"Virtual.ManualOverrideNoSlaTrygghetslarm": "",
+					"Virtual.EQU_INKOPSPRIS": ""
 				},
 				"Memo": {}
 			}

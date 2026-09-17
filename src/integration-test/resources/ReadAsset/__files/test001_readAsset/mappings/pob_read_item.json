@@ -8,7 +8,7 @@
 		"method": "GET",
 		"queryParameters": {
 			"Filter": {
-				"equalTo": "Id=10018"
+				"equalTo": "Id=100733"
 			}
 		},
 		"urlPath": "/pob/items"
@@ -20,18 +20,40 @@
 		"jsonBody": [
 			{
 				"Type": "Item",
+				"$id": "100733",
 				"Links": [],
 				"Data": {
-					"Virtual.ITE_SYSADMIN_EMAIL": "",
+					"ItemPK": "105280030",
+					"Id": "100733",
+					"Description": "Latitude 7280",
+					"IdOption": "DELL Latitude 7280",
 					"AbcGroup": "",
 					"CurrencyFactor": "0,00",
-					"ItemStatus": "",
-					"Description": "Latitude 9000",
-					"QuantityIn": "0,00",
-					"IdOption": "Latitude 9000",
 					"CurrencyRate": "0,00000",
+					"ExpDate": "",
+					"StartDate": "2017-09-01 00:00:00",
+					"ItemStatus": "1",
+					"TypeNo": "",
+					"StdPrice": "0,00",
+					"SalePrice": "0,00",
+					"AvgPrice": "0,00",
+					"ProcPrice": "0,00",
+					"VatProcent": "0,00",
+					"Stock": "0,00",
+					"QuantityOut": "0,00",
+					"QuantityIn": "0,00",
+					"MinQuantity": "0,00",
+					"OrderQuantity": "0,00",
+					"DeliveryTime": "",
+					"PmConfig": "",
+					"FromWarehouse": "",
+					"PmwebOk": "",
+					"GenCi": "",
+					"VirtualItem": "",
+					"ImageFileName": "",
 					"CiItemType": {
 						"Type": "ConfigurationItemType",
+						"$id": "Lätt Bärbar",
 						"Links": [
 							{
 								"Relation": "self",
@@ -39,25 +61,17 @@
 							}
 						],
 						"Data": {
-							"Description": "Lätt Bärbar datorarbetsplats",
-							"Id": "Lätt Bärbar"
+							"Id": "Lätt Bärbar",
+							"Description": "Lätt Bärbar datorarbetsplats"
 						},
 						"Memo": {}
 					},
-					"Virtual.ITE_OPER_MAN_RES_NAME": "",
-					"ItemPK": "113915178",
-					"Virtual.ITE_OPER_MAN_EMAIL": "",
-					"MinQuantity": "0,00",
-					"TypeNo": "",
-					"OrderQuantity": "0,00",
-					"Virtual.ITE_OPER_MAN_TEL": "",
-					"StartDate": "2022-10-05 00:00:00",
-					"StdPrice": "0,00",
-					"QuantityOut": "0,00",
-					"ExpDate": "",
-					"Virtual.ITE_SYSADMIN_TEL": "",
+					"DeleteDate": "",
+					"Virtual.AnsvarigtDriftteamCalcDisplayId": "",
+					"Virtual.DriftasAvDigIt": "",
 					"Virtual.Manufacturer": {
 						"Type": "Organization",
+						"$id": "X_Dell",
 						"Links": [
 							{
 								"Relation": "self",
@@ -65,33 +79,13 @@
 							}
 						],
 						"Data": {
-							"Virtual.DefaultContractId": "",
+							"Id": "X_Dell",
 							"Description": "Hårdvaruleverantör, datorer och servrar",
 							"Address2": "",
-							"Id": "X_Dell"
+							"Virtual.DefaultContractId": ""
 						},
 						"Memo": {}
-					},
-					"VirtualItem": "",
-					"AvgPrice": "0,00",
-					"VatProcent": "0,00",
-					"FromWarehouse": "",
-					"GenCi": "",
-					"DeleteDate": "",
-					"Virtual.ITE_SYSADMIN_NAME": "",
-					"DeliveryTime": "",
-					"Virtual.ITE_OPER_MAN_NAME": "",
-					"PmConfig": "",
-					"ImageFileName": "",
-					"Virtual.ITE_SYSOWNER_TEL": "",
-					"Virtual.ITE_OPER_MAN_RES_EMAIL": "",
-					"Id": "10018",
-					"SalePrice": "0,00",
-					"ProcPrice": "0,00",
-					"PmwebOk": "",
-					"Stock": "0,00",
-					"Virtual.ITE_SYSOWNER_NAME": "",
-					"Virtual.ITE_SYSOWNER_EMAIL": ""
+					}
 				},
 				"Memo": {}
 			}
