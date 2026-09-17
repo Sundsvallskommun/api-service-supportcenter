@@ -52,6 +52,7 @@ public final class GetAssetMapper {
 			.filter(Objects::nonNull)
 			.map(LinkedHashMap.class::cast)
 			.map(id -> id.get(KEY_ITEM_ID))
+			.filter(Objects::nonNull)
 			.map(Object::toString).findFirst()
 			.orElse(null);
 	}
