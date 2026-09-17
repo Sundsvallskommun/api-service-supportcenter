@@ -1,11 +1,13 @@
 package se.sundsvall.supportcenter.integration.sysman.configuration;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Optional;
+import jcifs.CIFSContext;
+import jcifs.context.SingletonContext;
 import jcifs.ntlmssp.Type1Message;
 import jcifs.ntlmssp.Type2Message;
 import jcifs.ntlmssp.Type3Message;
-import jcifs.util.Base64;
 import okhttp3.Authenticator;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,6 +15,7 @@ import okhttp3.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -43,13 +46,21 @@ class NTLMAuthenticator implements Authenticator {
 	private final String domain;
 	private final String username;
 	private final String password;
+	private final CIFSContext cifsContext;
+	private final String workstation;
 	private final String type1Message;
 
 	NTLMAuthenticator(final String domain, final String username, final String password) {
 		this.domain = domain;
 		this.username = username;
 		this.password = password;
-		this.type1Message = Base64.encode(new Type1Message(Type1Message.getDefaultFlags(), null, null).toByteArray());
+		// One shared context: each one registers its own JVM shutdown hook. getInstance returns null rather than
+		// throwing when a jcifs.* property will not parse, and the null check is what names that cause.
+		this.cifsContext = requireNonNull(SingletonContext.getInstance(), "jcifs could not build its context, check the jcifs.* properties");
+		// The host we authenticate from. Left empty, a domain controller turns away an account carrying a "Log On To"
+		// restriction. jcifs.netbios.hostname when set, otherwise a name generated from the local address.
+		this.workstation = cifsContext.getNameServiceClient().getLocalHost().getHostName();
+		this.type1Message = Base64.getEncoder().encodeToString(new Type1Message(cifsContext, Type1Message.getDefaultFlags(cifsContext), null, null).toByteArray());
 	}
 
 	@Override
@@ -99,16 +110,18 @@ class NTLMAuthenticator implements Authenticator {
 		}
 
 		try {
-			final var type2Message = new Type2Message(Base64.decode(challenge.substring(SCHEME_PREFIX.length())));
-			// Flags read off the type 2 rather than the no argument defaults, which are OR'd into whatever the server
-			// negotiated and can only add bits. Against a server that asked for OEM the no argument version forces
-			// unicode back on, and jcifs then writes the username as UTF-16LE for a server that cannot read it.
-			return Optional.of(Base64.encode(new Type3Message(type2Message, password, domain, username, null, Type3Message.getDefaultFlags(type2Message)).toByteArray()));
+			final var type2Message = new Type2Message(Base64.getDecoder().decode(challenge.substring(SCHEME_PREFIX.length())));
+			// No flags of our own. jcifs-ng ORs in the defaults it reads off the type 2, which is where the choice
+			// between unicode and OEM comes from, and anything we passed could only add bits on top of that.
+			// The null is the target SPN, carried as MsvAvTargetName and insisted on only by an IIS site with Extended
+			// Protection set to Required.
+			return Optional.of(Base64.getEncoder().encodeToString(
+				new Type3Message(cifsContext, type2Message, null, password, domain, username, workstation, 0).toByteArray()));
 		} catch (final Exception e) {
-			// Broad on purpose. A malformed message is an IOException, but a well formed type 2 that carries no
-			// challenge bytes throws a NullPointerException out of the digest instead, since jcifs computes an NTLMv2
-			// response by default and hashes the challenge. Neither is something OkHttp catches, so an escaping one
-			// leaves the call as itself rather than as the 401 the server actually sent.
+			// Broad on purpose. Bad base64 is an IllegalArgumentException, a malformed message an IOException, and a
+			// well formed type 2 with no challenge bytes a NullPointerException out of the digest, since jcifs computes
+			// an NTLMv2 response by default and hashes the challenge. None is something OkHttp catches, so an escaping
+			// one leaves the call as itself rather than as the 401 the server actually sent.
 			LOG.error("Could not answer the NTLM type 2 challenge, so no type 3 message was sent", e);
 			return empty();
 		}
