@@ -3,25 +3,34 @@ package se.sundsvall.supportcenter.service;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputer;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseComputerParameters;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsParameters;
 import se.sundsvall.supportcenter.api.model.RetryEndOfLeaseComputersRequest;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseBatchRepository;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount;
 
 import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
@@ -266,85 +275,118 @@ class EndOfLeaseServiceTest {
 		final var from = LocalDate.of(2026, 8, 18);
 		final var to = LocalDate.of(2026, 9, 18);
 
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(List.of(
+		when(endOfLeaseBatchRepositoryMock.findInWindow(eq(MUNICIPALITY_ID), any(), any(), any()))
+			.thenReturn(new PageImpl<>(List.of(batchEntity(created)), PageRequest.of(0, 100), 1));
+		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(List.of(BATCH_ID))).thenReturn(List.of(
 			new EndOfLeaseBatchStatusCount(BATCH_ID, EXTERNAL_BATCH_ID, created, SENT, 961),
 			new EndOfLeaseBatchStatusCount(BATCH_ID, EXTERNAL_BATCH_ID, created, FAILED, 3),
 			new EndOfLeaseBatchStatusCount(BATCH_ID, EXTERNAL_BATCH_ID, created, EXCLUDED, 18)));
+		when(endOfLeaseComputerRepositoryMock.countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any())).thenReturn(List.of(
+			new EndOfLeaseStatusCount(SENT, 961),
+			new EndOfLeaseStatusCount(FAILED, 3),
+			new EndOfLeaseStatusCount(EXCLUDED, 18)));
 
-		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, from, to);
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(from, to));
 
-		assertThat(statistics.getBatches()).isEqualTo(1);
-		assertThat(statistics.getComputers().getTotal()).isEqualTo(982);
-		assertThat(statistics.getComputers().getSent()).isEqualTo(961);
-		assertThat(statistics.getComputers().getFailed()).isEqualTo(3);
-		assertThat(statistics.getComputers().getExcluded()).isEqualTo(18);
-		assertThat(statistics.getPerBatch()).singleElement().satisfies(batch -> {
+		assertThat(statistics.getMetadata().getTotalRecords()).isEqualTo(1);
+		assertThat(statistics.getCounts().getTotal()).isEqualTo(982);
+		assertThat(statistics.getCounts().getSent()).isEqualTo(961);
+		assertThat(statistics.getCounts().getFailed()).isEqualTo(3);
+		assertThat(statistics.getCounts().getExcluded()).isEqualTo(18);
+		assertThat(statistics.getBatches()).singleElement().satisfies(batch -> {
 			assertThat(batch.getId()).isEqualTo(BATCH_ID);
 			assertThat(batch.getExternalBatchId()).isEqualTo(EXTERNAL_BATCH_ID);
 			assertThat(batch.getCreated()).isEqualTo(created);
-			assertThat(batch.getTotal()).isEqualTo(982);
+			assertThat(batch.getCounts().getTotal()).isEqualTo(982);
 		});
 
 		assertThat(statistics.getFrom()).isEqualTo(from);
 		assertThat(statistics.getTo()).isEqualTo(to);
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(MUNICIPALITY_ID, startOfDay(from), startOfDay(to.plusDays(1)));
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(MUNICIPALITY_ID, startOfDay(from), startOfDay(to.plusDays(1)), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(List.of(BATCH_ID));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(MUNICIPALITY_ID, startOfDay(from), startOfDay(to.plusDays(1)));
+		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
+		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
+	}
+
+	/**
+	 * The page number is one based on the way in and zero based to Spring Data, and a page past the last one is a page
+	 * with no batches on it. There is nothing to count those against, so the grouped count is not asked at all.
+	 */
+	@Test
+	void getStatisticsSkipsTheGroupedCountForAPageWithNoBatchesOnIt() {
+		when(endOfLeaseBatchRepositoryMock.findInWindow(eq(MUNICIPALITY_ID), any(), any(), any()))
+			.thenReturn(new PageImpl<>(List.of(), PageRequest.of(3, 25), 2));
+		when(endOfLeaseComputerRepositoryMock.countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(null, null).withPage(4).withLimit(25));
+
+		assertThat(statistics.getBatches()).isEmpty();
+		assertThat(statistics.getCounts().getTotal()).isZero();
+
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(eq(MUNICIPALITY_ID), any(), any(), eq(PageRequest.of(3, 25)));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any());
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
 
 	@Test
 	void getStatisticsForAMunicipalityThatHasRegisteredNothing() {
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+		when(endOfLeaseBatchRepositoryMock.findInWindow(eq(MUNICIPALITY_ID), any(), any(), any())).thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 100), 0));
+		when(endOfLeaseComputerRepositoryMock.countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
 
-		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, null, null);
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(null, null));
 
-		assertThat(statistics.getBatches()).isZero();
-		assertThat(statistics.getPerBatch()).isEmpty();
-		assertThat(statistics.getComputers().getTotal()).isZero();
+		assertThat(statistics.getMetadata().getTotalRecords()).isZero();
+		assertThat(statistics.getBatches()).isEmpty();
+		assertThat(statistics.getCounts().getTotal()).isZero();
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any());
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(eq(MUNICIPALITY_ID), any(), any(), any());
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any());
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
 
 	/**
-	 * Nothing asked for is the month up to today. Without it the read grows with everything the municipality has ever
-	 * registered, which is the one thing here that has no end to it.
+	 * Nothing asked for is the month up to today. A wider window no longer decides how large the answer is, but it does
+	 * decide how many rows the two counts are taken over, so there is still a default rather than everything ever stored.
 	 */
 	@Test
 	void getStatisticsWithoutAWindowCountsTheMonthUpToToday() {
 		final var today = LocalDate.now(ZoneId.systemDefault());
 
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+		givenAnEmptyWindow();
 
-		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, null, null);
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(null, null));
 
 		assertThat(statistics.getFrom()).isEqualTo(today.minusMonths(1));
 		assertThat(statistics.getTo()).isEqualTo(today);
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(MUNICIPALITY_ID, startOfDay(today.minusMonths(1)), startOfDay(today.plusDays(1)));
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(MUNICIPALITY_ID, startOfDay(today.minusMonths(1)), startOfDay(today.plusDays(1)), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(MUNICIPALITY_ID, startOfDay(today.minusMonths(1)), startOfDay(today.plusDays(1)));
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
 
 	/**
-	 * A caller who names one end gets the default span measured from that end, so neither half of the window can be left
-	 * open by leaving a parameter out.
+	 * The last day is settled first and the first day is derived from it, so naming only the first day is counted up to
+	 * today rather than a month on from what was named.
 	 */
 	@Test
 	void getStatisticsWithOnlyAFirstDayCountsUpToToday() {
 		final var today = LocalDate.now(ZoneId.systemDefault());
 		final var from = today.minusYears(1);
 
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+		givenAnEmptyWindow();
 
-		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, from, null);
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(from, null));
 
 		assertThat(statistics.getFrom()).isEqualTo(from);
 		assertThat(statistics.getTo()).isEqualTo(today);
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(MUNICIPALITY_ID, startOfDay(from), startOfDay(today.plusDays(1)));
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(MUNICIPALITY_ID, startOfDay(from), startOfDay(today.plusDays(1)), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(MUNICIPALITY_ID, startOfDay(from), startOfDay(today.plusDays(1)));
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
@@ -353,14 +395,15 @@ class EndOfLeaseServiceTest {
 	void getStatisticsWithOnlyALastDayCountsTheMonthBeforeIt() {
 		final var to = LocalDate.of(2026, 6, 30);
 
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+		givenAnEmptyWindow();
 
-		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, null, to);
+		final var statistics = endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(null, to));
 
 		assertThat(statistics.getFrom()).isEqualTo(LocalDate.of(2026, 5, 30));
 		assertThat(statistics.getTo()).isEqualTo(to);
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(MUNICIPALITY_ID, startOfDay(LocalDate.of(2026, 5, 30)), startOfDay(LocalDate.of(2026, 7, 1)));
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(MUNICIPALITY_ID, startOfDay(LocalDate.of(2026, 5, 30)), startOfDay(LocalDate.of(2026, 7, 1)), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(MUNICIPALITY_ID, startOfDay(LocalDate.of(2026, 5, 30)), startOfDay(LocalDate.of(2026, 7, 1)));
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
@@ -372,11 +415,12 @@ class EndOfLeaseServiceTest {
 	void getStatisticsCountsTheLastDayInFull() {
 		final var day = LocalDate.of(2026, 6, 30);
 
-		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+		givenAnEmptyWindow();
 
-		endOfLeaseService.getStatistics(MUNICIPALITY_ID, day, day);
+		endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(day, day));
 
-		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(MUNICIPALITY_ID, startOfDay(day), startOfDay(day.plusDays(1)));
+		verify(endOfLeaseBatchRepositoryMock).findInWindow(MUNICIPALITY_ID, startOfDay(day), startOfDay(day.plusDays(1)), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusInWindow(MUNICIPALITY_ID, startOfDay(day), startOfDay(day.plusDays(1)));
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
@@ -387,7 +431,7 @@ class EndOfLeaseServiceTest {
 		final var to = LocalDate.of(2026, 8, 18);
 
 		assertThatExceptionOfType(ThrowableProblem.class)
-			.isThrownBy(() -> endOfLeaseService.getStatistics(MUNICIPALITY_ID, from, to))
+			.isThrownBy(() -> endOfLeaseService.getStatistics(MUNICIPALITY_ID, parameters(from, to)))
 			.satisfies(problem -> {
 				assertThat(problem.getStatus()).isEqualTo(BAD_REQUEST);
 				assertThat(problem.getDetail()).isEqualTo("The window ends before it starts: from '2026-09-18' is later than to '2026-08-18'");
@@ -397,28 +441,46 @@ class EndOfLeaseServiceTest {
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
 
+	private void givenAnEmptyWindow() {
+		when(endOfLeaseBatchRepositoryMock.findInWindow(eq(MUNICIPALITY_ID), any(), any(), any())).thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 100), 0));
+		when(endOfLeaseComputerRepositoryMock.countByStatusInWindow(eq(MUNICIPALITY_ID), any(), any())).thenReturn(emptyList());
+	}
+
+	private static EndOfLeaseStatisticsParameters parameters(final LocalDate from, final LocalDate to) {
+		return EndOfLeaseStatisticsParameters.create().withFrom(from).withTo(to);
+	}
+
+	private static EndOfLeaseBatchEntity batchEntity(final OffsetDateTime created) {
+		return EndOfLeaseBatchEntity.create()
+			.withId(BATCH_ID)
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withMunicipalityId(MUNICIPALITY_ID)
+			.withCreated(created);
+	}
+
 	private static OffsetDateTime startOfDay(final LocalDate day) {
 		return day.atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
 	}
 
 	@Test
-	void getBatchStatusAnswersWithTheBatchAndEveryComputerInIt() {
-		final var batch = EndOfLeaseBatchEntity.create()
-			.withId(BATCH_ID)
-			.withExternalBatchId(EXTERNAL_BATCH_ID)
-			.withMunicipalityId(MUNICIPALITY_ID);
+	void getBatchStatusAnswersWithTheBatchAndThePageOfComputers() {
+		final var batch = batchEntity(null);
 
 		when(endOfLeaseBatchRepositoryMock.findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID)).thenReturn(of(batch));
-		when(endOfLeaseComputerRepositoryMock.findByBatchId(BATCH_ID)).thenReturn(List.of(
+		when(endOfLeaseComputerRepositoryMock.findByBatchId(eq(BATCH_ID), any(), any())).thenReturn(new PageImpl<>(List.of(
 			EndOfLeaseComputerEntity.create().withSerialNumber("J123ABC").withAssetTag("AB12345").withStatus(FAILED).withAttempts(5).withErrorMessage("POB is unwell"),
-			EndOfLeaseComputerEntity.create().withSerialNumber("K456DEF").withAssetTag("AB67890").withStatus(SENT).withAttempts(1)));
+			EndOfLeaseComputerEntity.create().withSerialNumber("K456DEF").withAssetTag("AB67890").withStatus(SENT).withAttempts(1)), PageRequest.of(0, 100), 2));
+		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(List.of(BATCH_ID))).thenReturn(List.of(
+			new EndOfLeaseBatchStatusCount(BATCH_ID, EXTERNAL_BATCH_ID, null, FAILED, 1),
+			new EndOfLeaseBatchStatusCount(BATCH_ID, EXTERNAL_BATCH_ID, null, SENT, 1)));
 
-		final var batchStatus = endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, null);
+		final var batchStatus = endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, EndOfLeaseComputerParameters.create());
 
 		assertThat(batchStatus.getId()).isEqualTo(BATCH_ID);
-		assertThat(batchStatus.getTotal()).isEqualTo(2);
-		assertThat(batchStatus.getFailed()).isEqualTo(1);
-		assertThat(batchStatus.getSent()).isEqualTo(1);
+		assertThat(batchStatus.getCounts().getTotal()).isEqualTo(2);
+		assertThat(batchStatus.getCounts().getFailed()).isEqualTo(1);
+		assertThat(batchStatus.getCounts().getSent()).isEqualTo(1);
+		assertThat(batchStatus.getMetadata().getTotalRecords()).isEqualTo(2);
 		assertThat(batchStatus.getComputers())
 			.extracting("serialNumber", "status", "errorMessage")
 			.containsExactly(
@@ -426,7 +488,8 @@ class EndOfLeaseServiceTest {
 				tuple("K456DEF", "SENT", null));
 
 		verify(endOfLeaseBatchRepositoryMock).findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID);
-		verify(endOfLeaseComputerRepositoryMock).findByBatchId(BATCH_ID);
+		verify(endOfLeaseComputerRepositoryMock).findByBatchId(BATCH_ID, EnumSet.allOf(EndOfLeaseStatus.class), PageRequest.of(0, 100));
+		verify(endOfLeaseComputerRepositoryMock).countByStatusGroupedByBatch(List.of(BATCH_ID));
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
 	}
@@ -440,7 +503,7 @@ class EndOfLeaseServiceTest {
 		when(endOfLeaseBatchRepositoryMock.findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID)).thenReturn(empty());
 
 		assertThatExceptionOfType(ThrowableProblem.class)
-			.isThrownBy(() -> endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, null))
+			.isThrownBy(() -> endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, EndOfLeaseComputerParameters.create()))
 			.satisfies(problem -> {
 				assertThat(problem.getStatus()).isEqualTo(NOT_FOUND);
 				assertThat(problem.getDetail()).isEqualTo("No batch with id '%s' is registered for municipality '%s'".formatted(BATCH_ID, MUNICIPALITY_ID));
@@ -452,30 +515,35 @@ class EndOfLeaseServiceTest {
 	}
 
 	/**
-	 * The states asked for are carried through to what is listed, and the batch is still read in full so that the counts
-	 * say what the listed computers are a part of.
+	 * The states asked for are carried into the query rather than applied to the page after it has been read, or a page
+	 * of ten would answer with however few of those ten happened to match.
 	 */
 	@Test
-	void getBatchStatusListsOnlyTheStatesAskedFor() {
-		final var batch = EndOfLeaseBatchEntity.create()
-			.withId(BATCH_ID)
-			.withExternalBatchId(EXTERNAL_BATCH_ID)
-			.withMunicipalityId(MUNICIPALITY_ID);
+	void getBatchStatusAsksTheQueryForOnlyTheStatesNamed() {
+		givenABatchWithNoComputersOnThePage();
 
-		when(endOfLeaseBatchRepositoryMock.findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID)).thenReturn(of(batch));
-		when(endOfLeaseComputerRepositoryMock.findByBatchId(BATCH_ID)).thenReturn(List.of(
-			EndOfLeaseComputerEntity.create().withSerialNumber("J123ABC").withAssetTag("AB12345").withStatus(FAILED).withAttempts(5).withErrorMessage("POB is unwell"),
-			EndOfLeaseComputerEntity.create().withSerialNumber("K456DEF").withAssetTag("AB67890").withStatus(SENT).withAttempts(1)));
+		endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, EndOfLeaseComputerParameters.create().withStatus(List.of("FAILED", "PENDING")).withPage(2).withLimit(10));
 
-		final var batchStatus = endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, List.of("FAILED"));
+		verify(endOfLeaseComputerRepositoryMock).findByBatchId(BATCH_ID, EnumSet.of(FAILED, PENDING), PageRequest.of(1, 10));
+	}
 
-		assertThat(batchStatus.getComputers()).extracting("serialNumber").containsExactly("J123ABC");
-		assertThat(batchStatus.getTotal()).isEqualTo(2);
-		assertThat(batchStatus.getSent()).isEqualTo(1);
+	/**
+	 * Nothing asked for is every state. An empty collection would answer the query with nothing, which is not what a
+	 * caller who left the parameter out means by it.
+	 */
+	@ParameterizedTest
+	@NullAndEmptySource
+	void getBatchStatusAsksForEveryStateWhenNoneWasNamed(final List<String> statuses) {
+		givenABatchWithNoComputersOnThePage();
 
-		verify(endOfLeaseBatchRepositoryMock).findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID);
-		verify(endOfLeaseComputerRepositoryMock).findByBatchId(BATCH_ID);
-		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
-		verifyNoMoreInteractions(endOfLeaseComputerRepositoryMock);
+		endOfLeaseService.getBatchStatus(MUNICIPALITY_ID, BATCH_ID, EndOfLeaseComputerParameters.create().withStatus(statuses));
+
+		verify(endOfLeaseComputerRepositoryMock).findByBatchId(BATCH_ID, EnumSet.allOf(EndOfLeaseStatus.class), PageRequest.of(0, 100));
+	}
+
+	private void givenABatchWithNoComputersOnThePage() {
+		when(endOfLeaseBatchRepositoryMock.findByIdAndMunicipalityId(BATCH_ID, MUNICIPALITY_ID)).thenReturn(of(batchEntity(null)));
+		when(endOfLeaseComputerRepositoryMock.findByBatchId(eq(BATCH_ID), any(), any())).thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 100), 0));
+		when(endOfLeaseComputerRepositoryMock.countByStatusGroupedByBatch(List.of(BATCH_ID))).thenReturn(emptyList());
 	}
 }

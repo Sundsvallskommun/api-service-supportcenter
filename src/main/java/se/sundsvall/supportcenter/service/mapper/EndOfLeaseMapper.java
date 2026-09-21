@@ -4,9 +4,11 @@ import generated.client.pob.PobPayload;
 import generated.client.sysman.SaveMessagesToTargetsCommand;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.data.domain.Page;
+import se.sundsvall.dept44.models.api.paging.PagingMetaData;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseBatchStatistics;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseBatchStatusResponse;
@@ -18,14 +20,13 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount;
 
 import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
 import static java.util.Collections.emptyList;
-import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.EXCLUDED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
@@ -142,88 +143,122 @@ public final class EndOfLeaseMapper {
 	}
 
 	/**
-	 * The counts a municipality's batches add up to, and the same counts one batch at a time.
+	 * The counts a municipality's batches add up to over a window, and the same counts for one page of those batches.
 	 *
-	 * The totals are added up from the rows rather than counted again, so that the summary and the batches it is made of
-	 * cannot disagree. The order the rows arrive in is the order they keep, which is why the grouping is collected into a
-	 * map that remembers it.
+	 * The window counts and the page counts come from two queries and answer two different questions. The window counts
+	 * say what every batch between the two days adds up to, so that a reader on page four still sees what the page is a
+	 * part of. The page counts say what each batch on the page holds. Adding the page up would answer the first question
+	 * with one page of the second.
+	 *
+	 * The batches of the page decide which rows appear and in which order, and the counts are looked up against them. A
+	 * batch is registered with at least one computer, so a batch with no counts should not happen, but one would answer
+	 * with zeroes rather than be dropped from a page that has already been counted.
 	 *
 	 * The window is carried into the answer rather than left to the caller to remember, so that a reader can tell a
 	 * quiet month from a quiet service without knowing what was asked for.
 	 *
-	 * @param  endOfLeaseBatchStatusCounts one count per batch and state, newest batch first
-	 * @param  from                        the first day the counts cover
-	 * @param  to                          the last day the counts cover
-	 * @return                             the statistics
+	 * @param  batches           the page of batches inside the window, newest first
+	 * @param  countsOfThePage   one count per batch and state, for the batches of the page
+	 * @param  countsOfTheWindow one count per state, for every batch inside the window
+	 * @param  from              the first day the counts cover
+	 * @param  to                the last day the counts cover
+	 * @return                   the statistics
 	 */
-	public static EndOfLeaseStatisticsResponse toEndOfLeaseStatisticsResponse(final List<EndOfLeaseBatchStatusCount> endOfLeaseBatchStatusCounts, final LocalDate from, final LocalDate to) {
-		final var perBatch = endOfLeaseBatchStatusCounts.stream()
-			.collect(groupingBy(EndOfLeaseBatchStatusCount::batchId, LinkedHashMap::new, toList()))
-			.values().stream()
-			.map(EndOfLeaseMapper::toEndOfLeaseBatchStatistics)
-			.toList();
+	public static EndOfLeaseStatisticsResponse toEndOfLeaseStatisticsResponse(
+		final Page<EndOfLeaseBatchEntity> batches,
+		final List<EndOfLeaseBatchStatusCount> countsOfThePage,
+		final List<EndOfLeaseStatusCount> countsOfTheWindow,
+		final LocalDate from,
+		final LocalDate to) {
+
+		final var countsByBatchId = countsOfThePage.stream()
+			.collect(groupingBy(EndOfLeaseBatchStatusCount::batchId));
 
 		return EndOfLeaseStatisticsResponse.create()
 			.withFrom(from)
 			.withTo(to)
-			.withBatches(perBatch.size())
-			.withComputers(toEndOfLeaseComputerCounts(perBatch))
-			.withPerBatch(perBatch);
+			.withCounts(toEndOfLeaseComputerCounts(countsOfTheWindow))
+			.withBatches(batches.getContent().stream()
+				.map(batch -> toEndOfLeaseBatchStatistics(batch, countsByBatchId.getOrDefault(batch.getId(), emptyList())))
+				.toList())
+			.withMetadata(toPagingMetaData(batches));
 	}
 
 	/**
-	 * One batch with the computers in it that were asked for.
+	 * One batch, one page of the computers in it that were asked for, and what the whole batch adds up to.
 	 *
-	 * The counts are taken from the computers that are already in hand rather than from a second query, which is also
-	 * what keeps them from disagreeing with the list underneath them. They count the whole batch even when only some of
-	 * the states were asked for: the list answers what was asked, and the counts say what it is a part of, which is the
-	 * difference between three computers failing and three out of nine hundred failing.
+	 * The counts come from a query of their own rather than from the page, because they have to cover the whole batch
+	 * whichever states were asked for and whichever page is being read. That is the difference between three computers
+	 * failing and three out of nine hundred failing, and a page of ten cannot answer it.
 	 *
-	 * That is also why the states are picked out here rather than in the query. The counts need every row either way,
-	 * so narrowing the read would buy a second query rather than less work.
+	 * The states are picked out in the query rather than here. Filtering a page after it has been cut out of the batch
+	 * would answer a page of ten with however few of those ten happened to match.
 	 *
-	 * @param  endOfLeaseBatchEntity      the batch
-	 * @param  endOfLeaseComputerEntities the computers of the batch
-	 * @param  statuses                   the states to list, or nothing to list them all
-	 * @return                            the batch with the computers that were asked for
+	 * @param  endOfLeaseBatchEntity the batch
+	 * @param  computers             the page of computers that were asked for
+	 * @param  countsOfTheBatch      one count per state, for the whole batch
+	 * @return                       the batch with the page of computers
 	 */
-	public static EndOfLeaseBatchStatusResponse toEndOfLeaseBatchStatusResponse(final EndOfLeaseBatchEntity endOfLeaseBatchEntity, final List<EndOfLeaseComputerEntity> endOfLeaseComputerEntities, final List<String> statuses) {
+	public static EndOfLeaseBatchStatusResponse toEndOfLeaseBatchStatusResponse(
+		final EndOfLeaseBatchEntity endOfLeaseBatchEntity,
+		final Page<EndOfLeaseComputerEntity> computers,
+		final List<EndOfLeaseBatchStatusCount> countsOfTheBatch) {
+
 		return EndOfLeaseBatchStatusResponse.create()
 			.withId(endOfLeaseBatchEntity.getId())
 			.withExternalBatchId(endOfLeaseBatchEntity.getExternalBatchId())
 			.withCreated(endOfLeaseBatchEntity.getCreated())
-			.withTotal(endOfLeaseComputerEntities.size())
-			.withPending(countIn(endOfLeaseComputerEntities, PENDING))
-			.withSent(countIn(endOfLeaseComputerEntities, SENT))
-			.withFailed(countIn(endOfLeaseComputerEntities, FAILED))
-			.withExcluded(countIn(endOfLeaseComputerEntities, EXCLUDED))
-			.withComputers(endOfLeaseComputerEntities.stream()
-				.filter(computer -> wasAskedFor(computer, statuses))
+			.withCounts(toEndOfLeaseComputerCounts(toStatusCounts(countsOfTheBatch)))
+			.withComputers(computers.getContent().stream()
 				.map(EndOfLeaseMapper::toEndOfLeaseComputerStatus)
-				.toList());
+				.toList())
+			.withMetadata(toPagingMetaData(computers));
 	}
 
-	private static EndOfLeaseBatchStatistics toEndOfLeaseBatchStatistics(final List<EndOfLeaseBatchStatusCount> countsOfOneBatch) {
-		final var batch = countsOfOneBatch.getFirst();
-
+	private static EndOfLeaseBatchStatistics toEndOfLeaseBatchStatistics(final EndOfLeaseBatchEntity batch, final List<EndOfLeaseBatchStatusCount> countsOfOneBatch) {
 		return EndOfLeaseBatchStatistics.create()
-			.withId(batch.batchId())
-			.withExternalBatchId(batch.externalBatchId())
-			.withCreated(batch.created())
-			.withTotal(countsOfOneBatch.stream().mapToLong(EndOfLeaseBatchStatusCount::count).sum())
-			.withPending(sumOf(countsOfOneBatch, PENDING))
-			.withSent(sumOf(countsOfOneBatch, SENT))
-			.withFailed(sumOf(countsOfOneBatch, FAILED))
-			.withExcluded(sumOf(countsOfOneBatch, EXCLUDED));
+			.withId(batch.getId())
+			.withExternalBatchId(batch.getExternalBatchId())
+			.withCreated(batch.getCreated())
+			.withCounts(toEndOfLeaseComputerCounts(toStatusCounts(countsOfOneBatch)));
 	}
 
-	private static EndOfLeaseComputerCounts toEndOfLeaseComputerCounts(final List<EndOfLeaseBatchStatistics> perBatch) {
+	/**
+	 * Folds the rows of a grouped count into the five numbers the API answers with.
+	 *
+	 * The total is every row added up rather than the four states added together, so that a state added to the enum and
+	 * forgotten here is missing from its own field but still counted in the total, instead of making the total disagree
+	 * with the rows it came from.
+	 */
+	private static EndOfLeaseComputerCounts toEndOfLeaseComputerCounts(final List<EndOfLeaseStatusCount> counts) {
+		final var byStatus = new EnumMap<EndOfLeaseStatus, Long>(EndOfLeaseStatus.class);
+		counts.forEach(count -> byStatus.merge(count.status(), count.count(), Long::sum));
+
 		return EndOfLeaseComputerCounts.create()
-			.withTotal(perBatch.stream().mapToLong(EndOfLeaseBatchStatistics::getTotal).sum())
-			.withPending(perBatch.stream().mapToLong(EndOfLeaseBatchStatistics::getPending).sum())
-			.withSent(perBatch.stream().mapToLong(EndOfLeaseBatchStatistics::getSent).sum())
-			.withFailed(perBatch.stream().mapToLong(EndOfLeaseBatchStatistics::getFailed).sum())
-			.withExcluded(perBatch.stream().mapToLong(EndOfLeaseBatchStatistics::getExcluded).sum());
+			.withTotal(byStatus.values().stream().mapToLong(Long::longValue).sum())
+			.withPending(byStatus.getOrDefault(PENDING, 0L))
+			.withSent(byStatus.getOrDefault(SENT, 0L))
+			.withFailed(byStatus.getOrDefault(FAILED, 0L))
+			.withExcluded(byStatus.getOrDefault(EXCLUDED, 0L));
+	}
+
+	private static List<EndOfLeaseStatusCount> toStatusCounts(final List<EndOfLeaseBatchStatusCount> counts) {
+		return counts.stream()
+			.map(count -> new EndOfLeaseStatusCount(count.status(), count.count()))
+			.toList();
+	}
+
+	/**
+	 * The page number is one based in the API and zero based in Spring Data, which is the whole reason this is not
+	 * {@code new PagingMetaData()} with the page copied straight across.
+	 */
+	private static PagingMetaData toPagingMetaData(final Page<?> page) {
+		return PagingMetaData.create()
+			.withPage(page.getNumber() + 1)
+			.withLimit(page.getSize())
+			.withCount(page.getNumberOfElements())
+			.withTotalRecords(page.getTotalElements())
+			.withTotalPages(page.getTotalPages());
 	}
 
 	private static EndOfLeaseComputerStatus toEndOfLeaseComputerStatus(final EndOfLeaseComputerEntity endOfLeaseComputerEntity) {
@@ -234,26 +269,5 @@ public final class EndOfLeaseMapper {
 			.withAttempts(endOfLeaseComputerEntity.getAttempts())
 			.withErrorMessage(endOfLeaseComputerEntity.getErrorMessage())
 			.withSentAt(endOfLeaseComputerEntity.getSentAt());
-	}
-
-	/**
-	 * Whether a computer is in one of the states that were asked for. Nothing asked for is every state, which is what a
-	 * caller who left the parameter out means by it.
-	 */
-	private static boolean wasAskedFor(final EndOfLeaseComputerEntity computer, final List<String> statuses) {
-		return isNull(statuses) || statuses.isEmpty() || statuses.contains(computer.getStatus().name());
-	}
-
-	private static long sumOf(final List<EndOfLeaseBatchStatusCount> counts, final EndOfLeaseStatus status) {
-		return counts.stream()
-			.filter(count -> count.status() == status)
-			.mapToLong(EndOfLeaseBatchStatusCount::count)
-			.sum();
-	}
-
-	private static long countIn(final List<EndOfLeaseComputerEntity> computers, final EndOfLeaseStatus status) {
-		return computers.stream()
-			.filter(computer -> computer.getStatus() == status)
-			.count();
 	}
 }

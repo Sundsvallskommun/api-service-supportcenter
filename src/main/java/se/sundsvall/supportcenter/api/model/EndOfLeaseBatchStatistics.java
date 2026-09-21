@@ -16,20 +16,8 @@ public class EndOfLeaseBatchStatistics {
 	@Schema(examples = "2026-09-17T06:03:11+02:00", description = "When the batch was registered")
 	private OffsetDateTime created;
 
-	@Schema(examples = "982", description = "Number of computers the batch was received with")
-	private long total;
-
-	@Schema(examples = "0", description = "Number of computers in the batch waiting to be sent")
-	private long pending;
-
-	@Schema(examples = "961", description = "Number of computers in the batch that have been sent their message")
-	private long sent;
-
-	@Schema(examples = "3", description = "Number of computers in the batch whose attempts are used up")
-	private long failed;
-
-	@Schema(examples = "18", description = "Number of computers in the batch that are never sent a message")
-	private long excluded;
+	@Schema(description = "The computers of the batch, counted per state")
+	private EndOfLeaseComputerCounts counts;
 
 	public static EndOfLeaseBatchStatistics create() {
 		return new EndOfLeaseBatchStatistics();
@@ -74,68 +62,16 @@ public class EndOfLeaseBatchStatistics {
 		return this;
 	}
 
-	public long getTotal() {
-		return total;
+	public EndOfLeaseComputerCounts getCounts() {
+		return counts;
 	}
 
-	public void setTotal(long total) {
-		this.total = total;
+	public void setCounts(EndOfLeaseComputerCounts counts) {
+		this.counts = counts;
 	}
 
-	public EndOfLeaseBatchStatistics withTotal(long total) {
-		this.total = total;
-		return this;
-	}
-
-	public long getPending() {
-		return pending;
-	}
-
-	public void setPending(long pending) {
-		this.pending = pending;
-	}
-
-	public EndOfLeaseBatchStatistics withPending(long pending) {
-		this.pending = pending;
-		return this;
-	}
-
-	public long getSent() {
-		return sent;
-	}
-
-	public void setSent(long sent) {
-		this.sent = sent;
-	}
-
-	public EndOfLeaseBatchStatistics withSent(long sent) {
-		this.sent = sent;
-		return this;
-	}
-
-	public long getFailed() {
-		return failed;
-	}
-
-	public void setFailed(long failed) {
-		this.failed = failed;
-	}
-
-	public EndOfLeaseBatchStatistics withFailed(long failed) {
-		this.failed = failed;
-		return this;
-	}
-
-	public long getExcluded() {
-		return excluded;
-	}
-
-	public void setExcluded(long excluded) {
-		this.excluded = excluded;
-	}
-
-	public EndOfLeaseBatchStatistics withExcluded(long excluded) {
-		this.excluded = excluded;
+	public EndOfLeaseBatchStatistics withCounts(EndOfLeaseComputerCounts counts) {
+		this.counts = counts;
 		return this;
 	}
 
@@ -143,13 +79,12 @@ public class EndOfLeaseBatchStatistics {
 	public boolean equals(Object o) {
 		if (!(o instanceof final EndOfLeaseBatchStatistics that))
 			return false;
-		return total == that.total && pending == that.pending && sent == that.sent && failed == that.failed && excluded == that.excluded && Objects.equals(id, that.id) && Objects.equals(externalBatchId, that.externalBatchId)
-			&& Objects.equals(created, that.created);
+		return Objects.equals(id, that.id) && Objects.equals(externalBatchId, that.externalBatchId) && Objects.equals(created, that.created) && Objects.equals(counts, that.counts);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, externalBatchId, created, total, pending, sent, failed, excluded);
+		return Objects.hash(id, externalBatchId, created, counts);
 	}
 
 	@Override
@@ -158,11 +93,7 @@ public class EndOfLeaseBatchStatistics {
 			"id='" + id + '\'' +
 			", externalBatchId='" + externalBatchId + '\'' +
 			", created=" + created +
-			", total=" + total +
-			", pending=" + pending +
-			", sent=" + sent +
-			", failed=" + failed +
-			", excluded=" + excluded +
+			", counts=" + counts +
 			'}';
 	}
 }

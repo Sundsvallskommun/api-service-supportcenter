@@ -63,16 +63,16 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.sendRequest()
 			.andReturnBody(EndOfLeaseStatisticsResponse.class);
 
-		assertThat(statistics.getBatches()).isEqualTo(2);
-		assertThat(statistics.getComputers().getTotal()).isEqualTo(5);
-		assertThat(statistics.getComputers().getPending()).isEqualTo(1);
-		assertThat(statistics.getComputers().getSent()).isEqualTo(2);
-		assertThat(statistics.getComputers().getFailed()).isEqualTo(1);
-		assertThat(statistics.getComputers().getExcluded()).isEqualTo(1);
+		assertThat(statistics.getMetadata().getTotalRecords()).isEqualTo(2);
+		assertThat(statistics.getCounts().getTotal()).isEqualTo(5);
+		assertThat(statistics.getCounts().getPending()).isEqualTo(1);
+		assertThat(statistics.getCounts().getSent()).isEqualTo(2);
+		assertThat(statistics.getCounts().getFailed()).isEqualTo(1);
+		assertThat(statistics.getCounts().getExcluded()).isEqualTo(1);
 
-		assertThat(statistics.getPerBatch())
+		assertThat(statistics.getBatches())
 			.as("the newest batch is answered first")
-			.extracting("id", "total", "pending", "sent", "failed", "excluded")
+			.extracting("id", "counts.total", "counts.pending", "counts.sent", "counts.failed", "counts.excluded")
 			.containsExactly(
 				tuple(newer, 2L, 1L, 0L, 0L, 1L),
 				tuple(older, 3L, 0L, 2L, 1L, 0L));
@@ -96,9 +96,9 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.sendRequest()
 			.andReturnBody(EndOfLeaseStatisticsResponse.class);
 
-		assertThat(statistics.getBatches()).isEqualTo(1);
-		assertThat(statistics.getComputers().getTotal()).isEqualTo(1);
-		assertThat(statistics.getPerBatch()).extracting("id").containsExactly(ours);
+		assertThat(statistics.getMetadata().getTotalRecords()).isEqualTo(1);
+		assertThat(statistics.getCounts().getTotal()).isEqualTo(1);
+		assertThat(statistics.getBatches()).extracting("id").containsExactly(ours);
 	}
 
 	/**
@@ -114,9 +114,9 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.sendRequest()
 			.andReturnBody(EndOfLeaseStatisticsResponse.class);
 
-		assertThat(statistics.getBatches()).isZero();
-		assertThat(statistics.getComputers().getTotal()).isZero();
-		assertThat(statistics.getPerBatch()).isEmpty();
+		assertThat(statistics.getMetadata().getTotalRecords()).isZero();
+		assertThat(statistics.getCounts().getTotal()).isZero();
+		assertThat(statistics.getBatches()).isEmpty();
 	}
 
 	@Test
@@ -135,19 +135,20 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.andReturnBody(EndOfLeaseBatchStatusResponse.class);
 
 		assertThat(batch.getId()).isEqualTo(batchId);
-		assertThat(batch.getTotal()).isEqualTo(3);
-		assertThat(batch.getSent()).isEqualTo(1);
-		assertThat(batch.getFailed()).isEqualTo(1);
-		assertThat(batch.getExcluded()).isEqualTo(1);
-		assertThat(batch.getPending()).isZero();
+		assertThat(batch.getCounts().getTotal()).isEqualTo(3);
+		assertThat(batch.getCounts().getSent()).isEqualTo(1);
+		assertThat(batch.getCounts().getFailed()).isEqualTo(1);
+		assertThat(batch.getCounts().getExcluded()).isEqualTo(1);
+		assertThat(batch.getCounts().getPending()).isZero();
+		assertThat(batch.getMetadata().getTotalRecords()).isEqualTo(3);
 
 		assertThat(batch.getComputers())
-			.as("the states sit together, and the reason is only kept where the last attempt left one")
+			.as("the states come in the order they are declared in and not the order their names sort in")
 			.extracting("serialNumber", "status", "attempts", "errorMessage")
 			.containsExactly(
-				tuple("J333CCC", EXCLUDED.name(), 0, null),
+				tuple("J222BBB", SENT.name(), 3, null),
 				tuple("J111AAA", FAILED.name(), 5, "Gave up on serial number J111AAA after 5 attempts: POB is unwell"),
-				tuple("J222BBB", SENT.name(), 3, null));
+				tuple("J333CCC", EXCLUDED.name(), 0, null));
 	}
 
 	/**
@@ -205,10 +206,15 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.extracting("serialNumber", "status", "errorMessage")
 			.containsExactly(tuple("J111AAA", FAILED.name(), "POB is unwell"));
 
-		assertThat(batch.getTotal()).isEqualTo(3);
-		assertThat(batch.getFailed()).isEqualTo(1);
-		assertThat(batch.getSent()).isEqualTo(1);
-		assertThat(batch.getPending()).isEqualTo(1);
+		assertThat(batch.getCounts().getTotal())
+			.as("the counts cover the whole batch, not the states that were asked for")
+			.isEqualTo(3);
+		assertThat(batch.getCounts().getFailed()).isEqualTo(1);
+		assertThat(batch.getCounts().getSent()).isEqualTo(1);
+		assertThat(batch.getCounts().getPending()).isEqualTo(1);
+		assertThat(batch.getMetadata().getTotalRecords())
+			.as("the page is cut out of the states that were asked for")
+			.isEqualTo(1);
 	}
 
 	@Test
@@ -227,8 +233,9 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.andReturnBody(EndOfLeaseBatchStatusResponse.class);
 
 		assertThat(batch.getComputers())
+			.as("PENDING is declared before FAILED, so it comes first however the two names sort")
 			.extracting("serialNumber")
-			.containsExactly("J111AAA", "J333CCC");
+			.containsExactly("J333CCC", "J111AAA");
 	}
 
 	/**
@@ -255,8 +262,8 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 		final var today = LocalDate.now(ZoneId.systemDefault());
 		assertThat(byDefault.getFrom()).isEqualTo(today.minusMonths(1));
 		assertThat(byDefault.getTo()).isEqualTo(today);
-		assertThat(byDefault.getBatches()).isEqualTo(1);
-		assertThat(byDefault.getPerBatch()).extracting("id").containsExactly(recent);
+		assertThat(byDefault.getMetadata().getTotalRecords()).isEqualTo(1);
+		assertThat(byDefault.getBatches()).extracting("id").containsExactly(recent);
 
 		final var widened = setupCall()
 			.withServicePath(STATISTICS_PATH + "?from=" + today.minusYears(1))
@@ -265,15 +272,127 @@ class EndOfLeaseStatisticsIT extends AbstractAppTest {
 			.sendRequest()
 			.andReturnBody(EndOfLeaseStatisticsResponse.class);
 
-		assertThat(widened.getBatches()).isEqualTo(2);
-		assertThat(widened.getComputers().getTotal()).isEqualTo(2);
-		assertThat(widened.getPerBatch()).extracting("id").containsExactly(recent, old);
+		assertThat(widened.getMetadata().getTotalRecords()).isEqualTo(2);
+		assertThat(widened.getCounts().getTotal()).isEqualTo(2);
+		assertThat(widened.getBatches()).extracting("id").containsExactly(recent, old);
 	}
 
 	@Test
 	void test009_aWindowThatEndsBeforeItStarts() throws Exception {
 		setupCall()
 			.withServicePath(STATISTICS_PATH + "?from=2026-09-18&to=2026-08-18")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(BAD_REQUEST)
+			.sendRequest();
+	}
+
+	/**
+	 * A batch comes back one page at a time, and the counts stay over the whole of it however small the page is. A page
+	 * past the last one is empty rather than an error, which is what a caller walking the pages runs into at the end.
+	 */
+	@Test
+	void test010_readOneBatchOnePageAtATime() throws Exception {
+		final var batchId = givenABatch("2281", OffsetDateTime.now());
+
+		givenAComputer(batchId, "J111AAA", PENDING.name(), 0, null);
+		givenAComputer(batchId, "J222BBB", SENT.name(), 1, null);
+		givenAComputer(batchId, "J333CCC", FAILED.name(), 5, "POB is unwell");
+
+		final var firstPage = setupCall()
+			.withServicePath(BATCH_PATH + batchId + "?page=1&limit=2")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(OK)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseBatchStatusResponse.class);
+
+		assertThat(firstPage.getComputers()).extracting("serialNumber").containsExactly("J111AAA", "J222BBB");
+		assertThat(firstPage.getCounts().getTotal()).isEqualTo(3);
+		assertThat(firstPage.getMetadata().getPage()).isEqualTo(1);
+		assertThat(firstPage.getMetadata().getLimit()).isEqualTo(2);
+		assertThat(firstPage.getMetadata().getCount()).isEqualTo(2);
+		assertThat(firstPage.getMetadata().getTotalRecords()).isEqualTo(3);
+		assertThat(firstPage.getMetadata().getTotalPages()).isEqualTo(2);
+
+		final var secondPage = setupCall()
+			.withServicePath(BATCH_PATH + batchId + "?page=2&limit=2")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(OK)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseBatchStatusResponse.class);
+
+		assertThat(secondPage.getComputers()).extracting("serialNumber").containsExactly("J333CCC");
+		assertThat(secondPage.getCounts().getTotal()).isEqualTo(3);
+
+		final var pastTheEnd = setupCall()
+			.withServicePath(BATCH_PATH + batchId + "?page=9&limit=2")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(OK)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseBatchStatusResponse.class);
+
+		assertThat(pastTheEnd.getComputers()).isEmpty();
+		assertThat(pastTheEnd.getCounts().getTotal()).isEqualTo(3);
+	}
+
+	/**
+	 * The batches are paged and the window counts are not. A reader on the second page is still told what the whole
+	 * window holds, which is what a page of one batch cannot say on its own.
+	 */
+	@Test
+	void test011_readTheStatisticsOnePageAtATime() throws Exception {
+		final var now = OffsetDateTime.now();
+		final var oldest = givenABatch("2281", now.minusDays(3));
+		final var middle = givenABatch("2281", now.minusDays(2));
+		final var newest = givenABatch("2281", now.minusDays(1));
+
+		givenAComputer(oldest, "J111AAA", SENT.name(), 1, null);
+		givenAComputer(middle, "J222BBB", SENT.name(), 1, null);
+		givenAComputer(newest, "J333CCC", FAILED.name(), 5, "POB is unwell");
+
+		final var firstPage = setupCall()
+			.withServicePath(STATISTICS_PATH + "?page=1&limit=2")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(OK)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseStatisticsResponse.class);
+
+		assertThat(firstPage.getBatches()).extracting("id").containsExactly(newest, middle);
+		assertThat(firstPage.getMetadata().getTotalRecords()).isEqualTo(3);
+		assertThat(firstPage.getMetadata().getTotalPages()).isEqualTo(2);
+		assertThat(firstPage.getCounts().getTotal())
+			.as("the counts cover the window and not the page")
+			.isEqualTo(3);
+		assertThat(firstPage.getCounts().getFailed()).isEqualTo(1);
+
+		final var secondPage = setupCall()
+			.withServicePath(STATISTICS_PATH + "?page=2&limit=2")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(OK)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseStatisticsResponse.class);
+
+		assertThat(secondPage.getBatches()).extracting("id").containsExactly(oldest);
+		assertThat(secondPage.getBatches()).extracting("counts.total").containsExactly(1L);
+		assertThat(secondPage.getCounts().getTotal()).isEqualTo(3);
+	}
+
+	/**
+	 * The limit is capped by dept44.models.api.paging.max.limit, which is what stops a single call from asking for a
+	 * whole batch and getting back what paging was added to stop.
+	 */
+	@Test
+	void test012_aLimitAboveTheCap() throws Exception {
+		final var batchId = givenABatch("2281", OffsetDateTime.now());
+		givenAComputer(batchId, "J111AAA", SENT.name(), 1, null);
+
+		setupCall()
+			.withServicePath(BATCH_PATH + batchId + "?limit=201")
+			.withHttpMethod(GET)
+			.withExpectedResponseStatus(BAD_REQUEST)
+			.sendRequest();
+
+		setupCall()
+			.withServicePath(STATISTICS_PATH + "?limit=201")
 			.withHttpMethod(GET)
 			.withExpectedResponseStatus(BAD_REQUEST)
 			.sendRequest();

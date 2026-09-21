@@ -57,4 +57,36 @@ class EndOfLeaseStatisticsResourceFailuresTest {
 
 		verifyNoInteractions(endOfLeaseServiceMock);
 	}
+
+	/**
+	 * A wide window is now a count the database takes over more rows rather than a larger answer, but the page it comes
+	 * back on is still capped.
+	 */
+	@Test
+	void getEndOfLeaseStatisticsWithALimitAboveTheCap() {
+
+		webTestClient.get().uri("/2281/endOfLeaseStatistics?limit=201")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations[0].message").isEqualTo("Page limit cannot be greater than 200")));
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	@Test
+	void getEndOfLeaseStatisticsWithAPageBelowTheFirst() {
+
+		webTestClient.get().uri("/2281/endOfLeaseStatistics?page=0")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON);
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
 }

@@ -10,12 +10,16 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import se.sundsvall.dept44.models.api.paging.PagingMetaData;
 import se.sundsvall.supportcenter.Application;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseBatchStatistics;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputerCounts;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsParameters;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsResponse;
 import se.sundsvall.supportcenter.service.EndOfLeaseService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -39,24 +43,25 @@ class EndOfLeaseStatisticsResourceTest {
 	@Test
 	void getEndOfLeaseStatistics() {
 
-		when(endOfLeaseServiceMock.getStatistics(MUNICIPALITY_ID, null, null)).thenReturn(EndOfLeaseStatisticsResponse.create()
+		when(endOfLeaseServiceMock.getStatistics(eq(MUNICIPALITY_ID), any())).thenReturn(EndOfLeaseStatisticsResponse.create()
 			.withFrom(FROM)
 			.withTo(TO)
-			.withBatches(1)
-			.withComputers(EndOfLeaseComputerCounts.create()
+			.withCounts(EndOfLeaseComputerCounts.create()
 				.withTotal(982)
 				.withPending(0)
 				.withSent(961)
 				.withFailed(3)
 				.withExcluded(18))
-			.withPerBatch(List.of(EndOfLeaseBatchStatistics.create()
+			.withBatches(List.of(EndOfLeaseBatchStatistics.create()
 				.withId(BATCH_ID)
 				.withExternalBatchId("d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90")
 				.withCreated(OffsetDateTime.parse("2026-09-17T06:03:11+02:00"))
-				.withTotal(982)
-				.withSent(961)
-				.withFailed(3)
-				.withExcluded(18))));
+				.withCounts(EndOfLeaseComputerCounts.create()
+					.withTotal(982)
+					.withSent(961)
+					.withFailed(3)
+					.withExcluded(18))))
+			.withMetadata(PagingMetaData.create().withPage(1).withLimit(100).withCount(1).withTotalRecords(1).withTotalPages(1)));
 
 		webTestClient.get().uri("/{municipalityId}/endOfLeaseStatistics", MUNICIPALITY_ID)
 			.exchange()
@@ -65,15 +70,15 @@ class EndOfLeaseStatisticsResourceTest {
 			.expectBody()
 			.jsonPath("$.from").isEqualTo("2026-08-18")
 			.jsonPath("$.to").isEqualTo("2026-09-18")
-			.jsonPath("$.batches").isEqualTo(1)
-			.jsonPath("$.computers.total").isEqualTo(982)
-			.jsonPath("$.computers.sent").isEqualTo(961)
-			.jsonPath("$.computers.failed").isEqualTo(3)
-			.jsonPath("$.computers.excluded").isEqualTo(18)
-			.jsonPath("$.perBatch[0].id").isEqualTo(BATCH_ID)
-			.jsonPath("$.perBatch[0].total").isEqualTo(982);
+			.jsonPath("$.counts.total").isEqualTo(982)
+			.jsonPath("$.counts.sent").isEqualTo(961)
+			.jsonPath("$.counts.failed").isEqualTo(3)
+			.jsonPath("$.counts.excluded").isEqualTo(18)
+			.jsonPath("$.batches[0].id").isEqualTo(BATCH_ID)
+			.jsonPath("$.batches[0].counts.total").isEqualTo(982)
+			.jsonPath("$._meta.totalRecords").isEqualTo(1);
 
-		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, null, null);
+		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, EndOfLeaseStatisticsParameters.create());
 	}
 
 	/**
@@ -83,22 +88,22 @@ class EndOfLeaseStatisticsResourceTest {
 	@Test
 	void getEndOfLeaseStatisticsForAMunicipalityWithNoBatches() {
 
-		when(endOfLeaseServiceMock.getStatistics(MUNICIPALITY_ID, null, null)).thenReturn(EndOfLeaseStatisticsResponse.create()
+		when(endOfLeaseServiceMock.getStatistics(eq(MUNICIPALITY_ID), any())).thenReturn(EndOfLeaseStatisticsResponse.create()
 			.withFrom(FROM)
 			.withTo(TO)
-			.withBatches(0)
-			.withComputers(EndOfLeaseComputerCounts.create())
-			.withPerBatch(List.of()));
+			.withCounts(EndOfLeaseComputerCounts.create())
+			.withBatches(List.of())
+			.withMetadata(PagingMetaData.create().withPage(1).withLimit(100)));
 
 		webTestClient.get().uri("/{municipalityId}/endOfLeaseStatistics", MUNICIPALITY_ID)
 			.exchange()
 			.expectStatus().isOk()
 			.expectBody()
-			.jsonPath("$.batches").isEqualTo(0)
-			.jsonPath("$.computers.total").isEqualTo(0)
-			.jsonPath("$.perBatch").isEmpty();
+			.jsonPath("$.counts.total").isEqualTo(0)
+			.jsonPath("$.batches").isEmpty()
+			.jsonPath("$._meta.totalRecords").isEqualTo(0);
 
-		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, null, null);
+		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, EndOfLeaseStatisticsParameters.create());
 	}
 
 	/**
@@ -107,12 +112,12 @@ class EndOfLeaseStatisticsResourceTest {
 	@Test
 	void getEndOfLeaseStatisticsForAWindow() {
 
-		when(endOfLeaseServiceMock.getStatistics(MUNICIPALITY_ID, FROM, TO)).thenReturn(EndOfLeaseStatisticsResponse.create()
+		when(endOfLeaseServiceMock.getStatistics(eq(MUNICIPALITY_ID), any())).thenReturn(EndOfLeaseStatisticsResponse.create()
 			.withFrom(FROM)
 			.withTo(TO)
-			.withBatches(30)
-			.withComputers(EndOfLeaseComputerCounts.create().withTotal(29460))
-			.withPerBatch(List.of()));
+			.withCounts(EndOfLeaseComputerCounts.create().withTotal(29460))
+			.withBatches(List.of())
+			.withMetadata(PagingMetaData.create().withTotalRecords(30)));
 
 		webTestClient.get()
 			.uri(builder -> builder.path("/{municipalityId}/endOfLeaseStatistics").queryParam("from", "2026-08-18").queryParam("to", "2026-09-18").build(MUNICIPALITY_ID))
@@ -121,20 +126,37 @@ class EndOfLeaseStatisticsResourceTest {
 			.expectBody()
 			.jsonPath("$.from").isEqualTo("2026-08-18")
 			.jsonPath("$.to").isEqualTo("2026-09-18")
-			.jsonPath("$.batches").isEqualTo(30);
+			.jsonPath("$._meta.totalRecords").isEqualTo(30);
 
-		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, FROM, TO);
+		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, EndOfLeaseStatisticsParameters.create().withFrom(FROM).withTo(TO));
 	}
 
 	@Test
 	void getEndOfLeaseStatisticsFromOneDayOnwards() {
 
-		when(endOfLeaseServiceMock.getStatistics(MUNICIPALITY_ID, FROM, null)).thenReturn(EndOfLeaseStatisticsResponse.create().withFrom(FROM).withTo(TO));
+		when(endOfLeaseServiceMock.getStatistics(eq(MUNICIPALITY_ID), any())).thenReturn(EndOfLeaseStatisticsResponse.create().withFrom(FROM).withTo(TO));
 
 		webTestClient.get().uri(builder -> builder.path("/{municipalityId}/endOfLeaseStatistics").queryParam("from", "2026-08-18").build(MUNICIPALITY_ID))
 			.exchange()
 			.expectStatus().isOk();
 
-		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, FROM, null);
+		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, EndOfLeaseStatisticsParameters.create().withFrom(FROM));
+	}
+
+	/**
+	 * The page and limit are bound onto the same object as the window, and a call that names neither is the first
+	 * hundred batches rather than all of them.
+	 */
+	@Test
+	void getEndOfLeaseStatisticsForAPage() {
+
+		when(endOfLeaseServiceMock.getStatistics(eq(MUNICIPALITY_ID), any())).thenReturn(EndOfLeaseStatisticsResponse.create().withFrom(FROM).withTo(TO));
+
+		webTestClient.get()
+			.uri(builder -> builder.path("/{municipalityId}/endOfLeaseStatistics").queryParam("page", "3").queryParam("limit", "25").build(MUNICIPALITY_ID))
+			.exchange()
+			.expectStatus().isOk();
+
+		verify(endOfLeaseServiceMock).getStatistics(MUNICIPALITY_ID, EndOfLeaseStatisticsParameters.create().withPage(3).withLimit(25));
 	}
 }

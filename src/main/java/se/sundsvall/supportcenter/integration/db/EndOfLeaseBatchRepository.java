@@ -1,7 +1,10 @@
 package se.sundsvall.supportcenter.integration.db;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import java.time.OffsetDateTime;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 
@@ -48,4 +51,28 @@ public interface EndOfLeaseBatchRepository extends JpaRepository<EndOfLeaseBatch
 	 * @return                the batch, or empty when the municipality has no batch under the id
 	 */
 	Optional<EndOfLeaseBatchEntity> findByIdAndMunicipalityId(String id, String municipalityId);
+
+	/**
+	 * One page of the batches a municipality registered inside a window, newest first.
+	 * The batches are paged here rather than the counts being paged, because the counts are grouped by batch and state
+	 * and a page cut out of those would end in the middle of a batch. Paging the batch table instead means one page is
+	 * a whole number of batches, and the number of batches in the window comes back as the total without a query of its
+	 * own.
+	 *
+	 * @param  municipalityId the municipality of the sender that registered the batches
+	 * @param  from           the first moment to read, included
+	 * @param  to             the moment to stop reading at, not included
+	 * @param  pageable       which page to read
+	 * @return                the page of batches
+	 */
+	@Query(value = "select batch from EndOfLeaseBatchEntity batch "
+		+ "where batch.municipalityId = :municipalityId "
+		+ "and batch.created >= :from "
+		+ "and batch.created < :to "
+		+ "order by batch.created desc, batch.id",
+		countQuery = "select count(batch) from EndOfLeaseBatchEntity batch "
+			+ "where batch.municipalityId = :municipalityId "
+			+ "and batch.created >= :from "
+			+ "and batch.created < :to")
+	Page<EndOfLeaseBatchEntity> findInWindow(@Param("municipalityId") String municipalityId, @Param("from") OffsetDateTime from, @Param("to") OffsetDateTime to, Pageable pageable);
 }

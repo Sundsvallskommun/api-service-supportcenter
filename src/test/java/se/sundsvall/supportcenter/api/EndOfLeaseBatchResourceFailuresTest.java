@@ -356,4 +356,40 @@ class EndOfLeaseBatchResourceFailuresTest {
 
 		verifyNoInteractions(endOfLeaseServiceMock);
 	}
+
+	/**
+	 * The cap is what stands between a batch of a thousand and a single call that reads all of it, so a limit above it
+	 * is turned down rather than quietly lowered.
+	 */
+	@Test
+	void getEndOfLeaseBatchWithALimitAboveTheCap() {
+
+		webTestClient.get().uri("/2281/endOfLeaseBatches/8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c?limit=201")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations[0].message").isEqualTo("Page limit cannot be greater than 200")));
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	/**
+	 * The page is one based on the way in, so a zero is a caller who thinks it is zero based and would otherwise be
+	 * answered with a page before the first one.
+	 */
+	@Test
+	void getEndOfLeaseBatchWithAPageBelowTheFirst() {
+
+		webTestClient.get().uri("/2281/endOfLeaseBatches/8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c?page=0")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON);
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
 }

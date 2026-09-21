@@ -21,6 +21,7 @@ class EndOfLeaseBatchStatisticsTest {
 	@BeforeAll
 	static void setup() {
 		registerValueGenerator(() -> now().plusSeconds(new Random().nextInt()), OffsetDateTime.class);
+		registerValueGenerator(() -> EndOfLeaseComputerCounts.create().withTotal(new Random().nextInt(1000)), EndOfLeaseComputerCounts.class);
 	}
 
 	@Test
@@ -38,32 +39,28 @@ class EndOfLeaseBatchStatisticsTest {
 		final var id = "8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c";
 		final var externalBatchId = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90";
 		final var created = now();
+		final var counts = EndOfLeaseComputerCounts.create()
+			.withTotal(982)
+			.withSent(961)
+			.withFailed(3)
+			.withExcluded(18);
 
 		final var endOfLeaseBatchStatistics = EndOfLeaseBatchStatistics.create()
 			.withId(id)
 			.withExternalBatchId(externalBatchId)
 			.withCreated(created)
-			.withTotal(982)
-			.withPending(0)
-			.withSent(961)
-			.withFailed(3)
-			.withExcluded(18);
+			.withCounts(counts);
 
 		assertThat(endOfLeaseBatchStatistics).hasNoNullFieldsOrProperties();
 		assertThat(endOfLeaseBatchStatistics.getId()).isEqualTo(id);
 		assertThat(endOfLeaseBatchStatistics.getExternalBatchId()).isEqualTo(externalBatchId);
 		assertThat(endOfLeaseBatchStatistics.getCreated()).isEqualTo(created);
-		assertThat(endOfLeaseBatchStatistics.getTotal()).isEqualTo(982);
-		assertThat(endOfLeaseBatchStatistics.getPending()).isZero();
-		assertThat(endOfLeaseBatchStatistics.getSent()).isEqualTo(961);
-		assertThat(endOfLeaseBatchStatistics.getFailed()).isEqualTo(3);
-		assertThat(endOfLeaseBatchStatistics.getExcluded()).isEqualTo(18);
+		assertThat(endOfLeaseBatchStatistics.getCounts()).isEqualTo(counts);
 	}
 
 	@Test
 	void hasNoDirtOnCreatedBean() {
-		assertThat(EndOfLeaseBatchStatistics.create()).hasAllNullFieldsOrPropertiesExcept("total", "pending", "sent", "failed", "excluded");
-		assertThat(new EndOfLeaseBatchStatistics()).hasAllNullFieldsOrPropertiesExcept("total", "pending", "sent", "failed", "excluded");
-		assertThat(EndOfLeaseBatchStatistics.create().getTotal()).isZero();
+		assertThat(EndOfLeaseBatchStatistics.create()).hasAllNullFieldsOrProperties();
+		assertThat(new EndOfLeaseBatchStatistics()).hasAllNullFieldsOrProperties();
 	}
 }

@@ -54,6 +54,12 @@
 			<artifactId>dept44-common-validators</artifactId>
 		</dependency>
 		<dependency>
+			<!-- PagingMetaData and AbstractParameterPagingBase, which the paged end of lease reads answer with and
+					take their page and limit from. Not pulled in by any of the starters above. -->
+			<groupId>se.sundsvall.dept44</groupId>
+			<artifactId>dept44-models</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 		</dependency>

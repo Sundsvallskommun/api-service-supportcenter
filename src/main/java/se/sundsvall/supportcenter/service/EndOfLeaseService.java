@@ -2,26 +2,36 @@ package se.sundsvall.supportcenter.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseBatchStatusResponse;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseComputerParameters;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsParameters;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsResponse;
 import se.sundsvall.supportcenter.api.model.RetryEndOfLeaseComputersRequest;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseBatchRepository;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 
 import static java.time.ZoneId.systemDefault;
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toCollection;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -170,58 +180,97 @@ public class EndOfLeaseService {
 	}
 
 	/**
-	 * What every batch a municipality has registered adds up to, and the same counts one batch at a time.
+	 * What every batch a municipality has registered inside a window adds up to, and the same counts one page of those
+	 * batches at a time.
 	 *
 	 * This is the state the rows are in now, not a record of how they got there. A computer that failed twice and then
 	 * went through counts as sent, and the reason it failed is gone, since every run that succeeds clears it. What is
 	 * left of a struggle that ended well is the attempts on the computer itself, which the batch answers with.
 	 *
-	 * The counts cover a window of days rather than everything ever stored, since counting every state of every batch
-	 * reads every computer row of the municipality and nothing ever leaves the table. Left out, the window is the month
-	 * up to today. Given, it is what was asked for, and asking for a wide one is a deliberate act that pays for itself.
-	 * A caller who names only one end gets the default span measured from that end, so there is no way to ask for a
-	 * window without one.
+	 * The counts cover a window of days rather than everything ever stored. Left out, the window is the month up to
+	 * today. Given, it is what was asked for. A caller who names only the first day is counted up to today, and one who
+	 * names only the last day is counted a month back from it.
+	 *
+	 * A wide window costs a count the database takes over more rows. It does not cost a larger answer: the batches come
+	 * back one page at a time and the window counts are four numbers however many batches they were taken over.
 	 *
 	 * The days are read in the zone the rows were written in, which is the one the two runs stamp their timestamps in.
 	 *
+	 * The three queries are read in one transaction. The session is not held open for the request, so without it each
+	 * would see the table as it was when it ran, and a write landing between two of them would answer the window from
+	 * one moment and the batches from another. The retry endpoint and the dispatch run both write while this is read.
+	 *
 	 * @param  municipalityId the municipality of the sender that registered the batches
-	 * @param  from           the first day to count, or nothing for a month back from the last day
-	 * @param  to             the last day to count, counted in full, or nothing for today
+	 * @param  parameters     the window to count and the page of batches to answer with
 	 * @return                the counts, and the window they cover
 	 * @throws Problem        BAD_REQUEST when the window ends before it starts
 	 */
-	public EndOfLeaseStatisticsResponse getStatistics(final String municipalityId, final LocalDate from, final LocalDate to) {
-		final var lastDay = ofNullable(to).orElseGet(() -> LocalDate.now(systemDefault()));
-		final var firstDay = ofNullable(from).orElseGet(() -> lastDay.minus(DEFAULT_WINDOW));
+	@Transactional(readOnly = true)
+	public EndOfLeaseStatisticsResponse getStatistics(final String municipalityId, final EndOfLeaseStatisticsParameters parameters) {
+		final var lastDay = ofNullable(parameters.getTo()).orElseGet(() -> LocalDate.now(systemDefault()));
+		final var firstDay = ofNullable(parameters.getFrom()).orElseGet(() -> lastDay.minus(DEFAULT_WINDOW));
 
 		if (firstDay.isAfter(lastDay)) {
 			throw Problem.valueOf(BAD_REQUEST, WINDOW_ENDS_BEFORE_IT_STARTS.formatted(firstDay, lastDay));
 		}
 
-		// The last day is counted in full, so the query stops at the first moment of the day after it.
-		final var counts = endOfLeaseComputerRepository.countByStatusGroupedByBatch(municipalityId,
-			firstDay.atStartOfDay(systemDefault()).toOffsetDateTime(),
-			lastDay.plusDays(1).atStartOfDay(systemDefault()).toOffsetDateTime());
+		// The last day is counted in full, so the queries stop at the first moment of the day after it.
+		final var from = firstDay.atStartOfDay(systemDefault()).toOffsetDateTime();
+		final var to = lastDay.plusDays(1).atStartOfDay(systemDefault()).toOffsetDateTime();
 
-		return toEndOfLeaseStatisticsResponse(counts, firstDay, lastDay);
+		final var batches = endOfLeaseBatchRepository.findInWindow(municipalityId, from, to, PageRequest.of(parameters.getPage() - 1, parameters.getLimit()));
+		final var batchIds = batches.getContent().stream()
+			.map(EndOfLeaseBatchEntity::getId)
+			.toList();
+
+		// A page past the last one holds no batches, and there is nothing to count them against.
+		final var countsOfThePage = batchIds.isEmpty() ? Collections.<EndOfLeaseBatchStatusCount>emptyList() : endOfLeaseComputerRepository.countByStatusGroupedByBatch(batchIds);
+
+		return toEndOfLeaseStatisticsResponse(batches, countsOfThePage, endOfLeaseComputerRepository.countByStatusInWindow(municipalityId, from, to), firstDay, lastDay);
 	}
 
 	/**
-	 * One batch with the computers in it, the state each one is in, and why the ones that were given up on were.
+	 * One batch, one page of the computers in it, and why the ones that were given up on were.
 	 *
-	 * The counts cover the whole batch whichever states are asked for, so that a handful of failures is read against
-	 * the size of the batch they came out of rather than on their own.
+	 * The counts cover the whole batch whichever states are asked for and whichever page is being read, so that a handful
+	 * of failures is read against the size of the batch they came out of rather than on their own. They are counted by
+	 * the database rather than taken from the page, which is the only way a page of ten can say what it is a part of.
+	 *
+	 * The page and the counts are read in one transaction, or a computer could be listed in the state it was in before
+	 * a write and counted in the state it was in after one, and the page would not be readable against the counts at
+	 * all.
 	 *
 	 * @param  municipalityId the municipality of the sender that registered the batch
 	 * @param  batchId        the id of the batch
-	 * @param  statuses       the states to list, or nothing to list them all
-	 * @return                the batch with the computers that were asked for
+	 * @param  parameters     the states to list and the page of computers to answer with
+	 * @return                the batch with the page of computers that were asked for
 	 * @throws Problem        NOT_FOUND when the municipality has no batch under the id
 	 */
-	public EndOfLeaseBatchStatusResponse getBatchStatus(final String municipalityId, final String batchId, final List<String> statuses) {
+	@Transactional(readOnly = true)
+	public EndOfLeaseBatchStatusResponse getBatchStatus(final String municipalityId, final String batchId, final EndOfLeaseComputerParameters parameters) {
 		final var batch = endOfLeaseBatchRepository.findByIdAndMunicipalityId(batchId, municipalityId)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, BATCH_NOT_FOUND.formatted(batchId, municipalityId)));
 
-		return toEndOfLeaseBatchStatusResponse(batch, endOfLeaseComputerRepository.findByBatchId(batchId), statuses);
+		final var computers = endOfLeaseComputerRepository.findByBatchId(batchId, toStatuses(parameters.getStatus()), PageRequest.of(parameters.getPage() - 1, parameters.getLimit()));
+
+		return toEndOfLeaseBatchStatusResponse(batch, computers, endOfLeaseComputerRepository.countByStatusGroupedByBatch(List.of(batchId)));
+	}
+
+	/**
+	 * The states to read. Nothing asked for is every state, which is what a caller who left the parameter out means by
+	 * it, and what an empty collection would not mean to the query.
+	 *
+	 * The names are turned into enum constants here rather than compared as strings in the query, so that the state a
+	 * caller asked for and the state the column holds cannot differ by case or by spelling. {@code @OneOf} on the
+	 * parameter has already turned anything else away.
+	 */
+	private static Collection<EndOfLeaseStatus> toStatuses(final List<String> statuses) {
+		if (isNull(statuses) || statuses.isEmpty()) {
+			return EnumSet.allOf(EndOfLeaseStatus.class);
+		}
+
+		return statuses.stream()
+			.map(EndOfLeaseStatus::valueOf)
+			.collect(toCollection(() -> EnumSet.noneOf(EndOfLeaseStatus.class)));
 	}
 }
