@@ -12,27 +12,25 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"Virtual.ExternalCaseId": "",
-						"ClosureCode": "Byte av hårdvara",
+						"ClosureCode": "Levererat Hårdvara - Service request",
 						"CaseStatus": "Solved",
-						"CIInfo2.Ci": "350860",
-						"Id": "910277",
-						"Virtual.Shop_CI_Name": "WB12345NY"
+						"Virtual.Shop_CI_Name": "WB12345NY",
+						"Id": "867416"
 					},
 					"Memo": {
 						"CaseInternalNotesCustom": {
 							"Extension": ".html",
 							"HandleSeparators": true,
 							"Style": "2",
-							"IsValidForWeb": false,
-							"Memo": "Status: 'Resolved'"
+							"IsValidForWeb": true,
+							"Memo": "Delivered"
 						},
 						"Solution": {
 							"Extension": ".html",
 							"HandleSeparators": true,
 							"Style": "2",
 							"IsValidForWeb": false,
-							"Memo": "Enheten utbytt"
+							"Memo": "Beställning levererad. Stöldmärkning: 'WB12345NY'"
 						}
 					}
 				}
@@ -40,11 +38,8 @@
 		],
 		"urlPath": "/pob/cases"
 	},
-	"newScenarioState": "CaseSolved",
 	"response": {
 		"status": 200
 	},
-	"name": "pob-update-case-to-solved",
-	"requiredScenarioState": "Started",
-	"scenarioName": "resolve-case"
+	"name": "pob-update-case-updateCase-firstcall"
 }

@@ -84,6 +84,7 @@ class CaseMapperConstantsTest {
 	void testNoteValues() {
 		assertThat(CaseMapperConstants.NOTE_STATUS_PART).isEqualTo("Status: '%s'");
 		assertThat(CaseMapperConstants.NOTE_DELIVERED).isEqualTo("Beställning levererad");
+		assertThat(CaseMapperConstants.NOTE_DELIVERED_PART).isEqualTo("Beställning levererad. Stöldmärkning: '%s'");
 	}
 
 	@Test
