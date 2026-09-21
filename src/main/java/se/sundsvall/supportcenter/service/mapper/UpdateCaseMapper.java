@@ -29,6 +29,7 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_RESPONSIBLE_GROUP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_DELIVERED;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_DELIVERED_PART;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_STATUS_PART;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_DELIVERED;
 
@@ -64,7 +65,7 @@ public final class UpdateCaseMapper {
 					dataMap.putAll(customStatusMapping.getAttributes());
 
 					// Create note if status note type has been set in the custom mapping in CaseMapperConstants class
-					final var statusNote = createStatusNote(customStatusMapping.getStatusNoteType(), updateCaseRequest.getCaseStatus());
+					final var statusNote = createStatusNote(customStatusMapping.getStatusNoteType(), updateCaseRequest.getCaseStatus(), (String) dataMap.get(KEY_SHOP_CI_NAME));
 
 					return new PobPayload()
 						.links(emptyList())
@@ -75,11 +76,12 @@ public final class UpdateCaseMapper {
 				.toList();
 		}
 		// There was no custom mapping for this status. Create a PobPayload with a worknote containing the status.
+		// The delivered note is only created from a custom mapping, so no CI name is needed here.
 		return List.of(new PobPayload()
 			.links(emptyList())
 			.type(DEFAULT_TYPE)
 			.data(toData(caseId, updateCaseRequest))
-			.memo(toMemos(createStatusNote(NoteType.WORKNOTE, updateCaseRequest.getCaseStatus()), toMemo(updateCaseRequest.getNote()))));
+			.memo(toMemos(createStatusNote(NoteType.WORKNOTE, updateCaseRequest.getCaseStatus(), null), toMemo(updateCaseRequest.getNote()))));
 	}
 
 	private static Map<String, Object> toData(String caseId, UpdateCaseRequest updateCaseRequest) {
@@ -138,13 +140,14 @@ public final class UpdateCaseMapper {
 	 * 
 	 * @param  noteType   the notetype to use
 	 * @param  caseStatus the status to be used
+	 * @param  ciName     the CI name (i.e. hardware name or IMEI number) to include in the delivered note
 	 * @return            a note instance representing sent in parameters
 	 */
-	private static Note createStatusNote(NoteType noteType, String caseStatus) {
+	private static Note createStatusNote(NoteType noteType, String caseStatus, String ciName) {
 		if (isNull(noteType)) {
 			return null;
 		} else if (STATUS_DELIVERED.equals(caseStatus)) {
-			return Note.create().withType(noteType).withText(NOTE_DELIVERED);
+			return Note.create().withType(noteType).withText(isNotBlank(ciName) ? format(NOTE_DELIVERED_PART, ciName) : NOTE_DELIVERED);
 		}
 
 		return Note.create().withType(noteType).withText(format(NOTE_STATUS_PART, caseStatus));

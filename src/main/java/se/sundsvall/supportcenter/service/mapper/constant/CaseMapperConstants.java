@@ -73,6 +73,7 @@ public final class CaseMapperConstants {
 	// Format
 	public static final String NOTE_STATUS_PART = "Status: '%s'";
 	public static final String NOTE_DELIVERED = "Beställning levererad";
+	public static final String NOTE_DELIVERED_PART = "Beställning levererad. Stöldmärkning: '%s'";
 
 	// Custom status mapping (I.e. custom logic for different statuses)
 	public static final String STATUS_SOLVED = "Solved";

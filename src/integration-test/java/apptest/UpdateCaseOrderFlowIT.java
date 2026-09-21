@@ -265,4 +265,16 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 	}
+
+	@Test
+	void test021_updateStatusToDeliveredWithHardwareName() {
+
+		setupCall()
+			.withServicePath(PATH + "/867416")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
 }

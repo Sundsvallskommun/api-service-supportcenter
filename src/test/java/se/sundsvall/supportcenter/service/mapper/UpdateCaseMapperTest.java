@@ -135,7 +135,7 @@ class UpdateCaseMapperTest {
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getHandleSeparators()).isTrue();
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getIsValidForWeb()).isFalse();
 		assertThat(firstResult.getMemo().get(NoteType.PROBLEM.toValue()).getStyle()).isEqualTo(PobMemo.StyleEnum.NUMBER_2);
-		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad");
+		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getMemo()).isEqualTo("Beställning levererad. Stöldmärkning: 'hardwareName'");
 		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getExtension()).isEqualTo(".html");
 		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getHandleSeparators()).isTrue();
 		assertThat(firstResult.getMemo().get(CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getStatusNoteType().toValue()).getIsValidForWeb()).isFalse();
@@ -328,5 +328,53 @@ class UpdateCaseMapperTest {
 			.containsEntry(KEY_SHOP_CI_NAME, imeiNumber)
 			.containsEntry(KEY_ITEM_NAME, modelName);
 		assertThat(result.getMemo()).isNull();
+	}
+
+	@Test
+	void toPobPayloadsWhenStatusIsDeliveredWithImeiNumber() {
+
+		// Parameter values.
+		final var caseId = "caseId";
+		final var caseStatus = "Delivered";
+		final var imeiNumber = "imeiNumber";
+
+		final var updateCaseRequest = UpdateCaseRequest.create()
+			.withCaseStatus(caseStatus)
+			.withImeiNumber(imeiNumber);
+
+		// Call
+		final var resultList = UpdateCaseMapper.toPobPayloads(caseId, updateCaseRequest);
+
+		// Verification
+		assertThat(resultList).hasSize(2);
+		final var firstResult = resultList.getFirst();
+		final var secondResult = resultList.getLast();
+
+		assertThat(firstResult.getData()).containsEntry(KEY_SHOP_CI_NAME, imeiNumber);
+		assertThat(firstResult.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo("Beställning levererad. Stöldmärkning: 'imeiNumber'");
+		assertThat(secondResult.getData()).containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(1).getAttributes().get(KEY_CASE_STATUS));
+	}
+
+	@Test
+	void toPobPayloadsWhenStatusIsDeliveredWithoutHardwareNameAndImeiNumber() {
+
+		// Parameter values.
+		final var caseId = "caseId";
+		final var caseStatus = "Delivered";
+
+		final var updateCaseRequest = UpdateCaseRequest.create()
+			.withCaseStatus(caseStatus);
+
+		// Call
+		final var resultList = UpdateCaseMapper.toPobPayloads(caseId, updateCaseRequest);
+
+		// Verification
+		assertThat(resultList).hasSize(2);
+		final var firstResult = resultList.getFirst();
+		final var secondResult = resultList.getLast();
+
+		assertThat(firstResult.getData()).doesNotContainKey(KEY_SHOP_CI_NAME);
+		assertThat(firstResult.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo("Beställning levererad");
+		assertThat(secondResult.getData()).containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(1).getAttributes().get(KEY_CASE_STATUS));
 	}
 }

@@ -12,11 +12,9 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"Virtual.ExternalCaseId": "",
 						"CaseStatus": "Closed",
-						"CIInfo2.Ci": "350860",
-						"Id": "910277",
-						"Virtual.Shop_CI_Name": "WB12345NY"
+						"Virtual.Shop_CI_Name": "WB12345NY",
+						"Id": "867416"
 					},
 					"Memo": null
 				}
@@ -27,7 +25,5 @@
 	"response": {
 		"status": 200
 	},
-	"name": "pob-update-case-to-closed",
-	"requiredScenarioState": "CaseSolved",
-	"scenarioName": "resolve-case"
+	"name": "pob-update-case-updateCase-secondcall"
 }
