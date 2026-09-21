@@ -20,7 +20,7 @@
 				spring-boot-dependencies, so the two are kept level by hand. They resolve to the same version today. This is
 				still the okhttp 4 MockWebServer, with the setResponseCode and shutdown API; the okhttp 5 successor is a
 				different artifact called mockwebserver3. -->
-		<mockwebserver.version>4.12.0</mockwebserver.version>
+		<mockwebserver.version>5.5.0</mockwebserver.version>
 	</properties>
 	<dependencies>
 		<dependency>
