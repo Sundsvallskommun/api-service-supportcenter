@@ -28,4 +28,24 @@ public interface EndOfLeaseBatchRepository extends JpaRepository<EndOfLeaseBatch
 	 * @return                 the batch, or empty when the sender has stored no batch under the id
 	 */
 	Optional<EndOfLeaseBatchEntity> findByMunicipalityIdAndExternalBatchId(String municipalityId, String externalBatchId);
+
+	/**
+	 * Counts the computers in a batch. A query rather than the size of the batch's own collection, which is lazy and
+	 * would have to be loaded in full to be counted.
+	 *
+	 * @param  batchId the id of the batch
+	 * @return         the number of computers in the batch
+	 */
+	@Query("select count(computer) from EndOfLeaseComputerEntity computer where computer.batch.id = :batchId")
+	long countComputers(@Param("batchId") String batchId);
+
+	/**
+	 * Finds one batch of a municipality. Scoped by municipality so that holding an id is not on its own enough to read
+	 * another sender's batch.
+	 *
+	 * @param  id             the id of the batch
+	 * @param  municipalityId the municipality of the sender that registered it
+	 * @return                the batch, or empty when the municipality has no batch under the id
+	 */
+	Optional<EndOfLeaseBatchEntity> findByIdAndMunicipalityId(String id, String municipalityId);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 
@@ -128,4 +129,49 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * @return        the number of computers in the state
 	 */
 	long countByStatus(EndOfLeaseStatus status);
+
+	/**
+	 * How many computers of each batch a municipality registered inside a window are in each state, newest batch first.
+	 *
+	 * One row per batch and state rather than one query per batch. Scoped by the municipality of the sender, the same
+	 * way the retry endpoint is, so that a computer POB places in another municipality still counts towards the batch it
+	 * arrived in.
+	 *
+	 * The window is what keeps this from growing without end. Counting every state of every batch means reading every
+	 * computer row the municipality has, and a batch a day of a thousand computers is a third of a million rows a year.
+	 * Narrowing the batches first leaves only the rows of the batches inside the window to read. The batch table stays
+	 * small enough at that rate that no index on the timestamp earns its place; it is the computer rows the window
+	 * saves.
+	 *
+	 * The id breaks ties on the timestamp, or two batches registered in the same instant would come back in whatever
+	 * order the database felt like and the answer would differ between two calls that should agree.
+	 *
+	 * @param  municipalityId the municipality of the sender that registered the batch
+	 * @param  from           the first moment to count, included
+	 * @param  to             the moment to stop counting at, not included
+	 * @return                one count per batch and state
+	 */
+	@Query("select new se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount("
+		+ "computer.batch.id, computer.batch.externalBatchId, computer.batch.created, computer.status, count(computer)) "
+		+ "from EndOfLeaseComputerEntity computer "
+		+ "where computer.batch.municipalityId = :municipalityId "
+		+ "and computer.batch.created >= :from "
+		+ "and computer.batch.created < :to "
+		+ "group by computer.batch.id, computer.batch.externalBatchId, computer.batch.created, computer.status "
+		+ "order by computer.batch.created desc, computer.batch.id")
+	List<EndOfLeaseBatchStatusCount> countByStatusGroupedByBatch(@Param("municipalityId") String municipalityId, @Param("from") OffsetDateTime from, @Param("to") OffsetDateTime to);
+
+	/**
+	 * The computers of one batch, in state order and then by serial number.
+	 *
+	 * Ordered so that the states a reader is looking for sit together, and so that two calls answer the same way. The
+	 * whole batch comes back in one go, which is a thousand rows at the volume the batches arrive in.
+	 *
+	 * @param  batchId the id of the batch
+	 * @return         the computers of the batch
+	 */
+	@Query("select computer from EndOfLeaseComputerEntity computer "
+		+ "where computer.batch.id = :batchId "
+		+ "order by computer.status, computer.serialNumber")
+	List<EndOfLeaseComputerEntity> findByBatchId(@Param("batchId") String batchId);
 }

@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.service.mapper;
 
 import generated.client.pob.PobPayload;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +13,22 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputer;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
 
 import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.EXCLUDED;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
+import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchStatusResponse;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseStatisticsResponse;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toErrorMessage;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveMessagesToTargetsCommand;
 
@@ -218,5 +226,186 @@ class EndOfLeaseMapperTest {
 	})
 	void toErrorMessageLeavesAReasonThatFitsAlone(final String errorMessage) {
 		assertThat(toErrorMessage(errorMessage)).isEqualTo(errorMessage);
+	}
+
+	/**
+	 * The rows arrive one per batch and state. What comes back is one entry per batch, in the order the rows came in,
+	 * with the totals added up from the same rows so that the summary cannot disagree with the batches under it.
+	 */
+	@Test
+	void toEndOfLeaseStatisticsResponseGroupsTheCountsPerBatch() {
+		final var newerCreated = OffsetDateTime.parse("2026-09-17T06:03:11+02:00");
+		final var olderCreated = OffsetDateTime.parse("2026-09-16T06:03:11+02:00");
+
+		final var counts = List.of(
+			new EndOfLeaseBatchStatusCount("newer", "ADV-2", newerCreated, PENDING, 4),
+			new EndOfLeaseBatchStatusCount("newer", "ADV-2", newerCreated, EXCLUDED, 1),
+			new EndOfLeaseBatchStatusCount("older", "ADV-1", olderCreated, SENT, 20),
+			new EndOfLeaseBatchStatusCount("older", "ADV-1", olderCreated, FAILED, 2));
+
+		final var statistics = toEndOfLeaseStatisticsResponse(counts, LocalDate.of(2026, 8, 18), LocalDate.of(2026, 9, 18));
+
+		assertThat(statistics.getFrom()).isEqualTo(LocalDate.of(2026, 8, 18));
+		assertThat(statistics.getTo()).isEqualTo(LocalDate.of(2026, 9, 18));
+		assertThat(statistics.getBatches()).isEqualTo(2);
+		assertThat(statistics.getComputers().getTotal()).isEqualTo(27);
+		assertThat(statistics.getComputers().getPending()).isEqualTo(4);
+		assertThat(statistics.getComputers().getSent()).isEqualTo(20);
+		assertThat(statistics.getComputers().getFailed()).isEqualTo(2);
+		assertThat(statistics.getComputers().getExcluded()).isEqualTo(1);
+
+		assertThat(statistics.getPerBatch())
+			.extracting("id", "externalBatchId", "created", "total", "pending", "sent", "failed", "excluded")
+			.containsExactly(
+				tuple("newer", "ADV-2", newerCreated, 5L, 4L, 0L, 0L, 1L),
+				tuple("older", "ADV-1", olderCreated, 22L, 0L, 20L, 2L, 0L));
+	}
+
+	/**
+	 * A window with nothing in it is still the window that was asked for, which is what tells a quiet month apart from a
+	 * service nobody has ever sent anything to.
+	 */
+	@Test
+	void toEndOfLeaseStatisticsResponseAnswersZeroForAMunicipalityThatHasRegisteredNothing() {
+		final var statistics = toEndOfLeaseStatisticsResponse(List.of(), LocalDate.of(2026, 8, 18), LocalDate.of(2026, 9, 18));
+
+		assertThat(statistics.getFrom()).isEqualTo(LocalDate.of(2026, 8, 18));
+		assertThat(statistics.getTo()).isEqualTo(LocalDate.of(2026, 9, 18));
+		assertThat(statistics.getBatches()).isZero();
+		assertThat(statistics.getPerBatch()).isEmpty();
+		assertThat(statistics.getComputers()).isNotNull();
+		assertThat(statistics.getComputers().getTotal()).isZero();
+		assertThat(statistics.getComputers().getPending()).isZero();
+		assertThat(statistics.getComputers().getSent()).isZero();
+		assertThat(statistics.getComputers().getFailed()).isZero();
+		assertThat(statistics.getComputers().getExcluded()).isZero();
+	}
+
+	@Test
+	void toEndOfLeaseBatchStatusResponseCountsTheComputersItLists() {
+		final var created = OffsetDateTime.parse("2026-09-17T06:03:11+02:00");
+		final var sentAt = OffsetDateTime.parse("2026-09-17T06:14:52+02:00");
+
+		final var batch = EndOfLeaseBatchEntity.create()
+			.withId("8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c")
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withMunicipalityId(MUNICIPALITY_ID)
+			.withCreated(created);
+
+		final var computers = List.of(
+			computerEntity("J111AAA", "AB11111", PENDING).withAttempts(1),
+			computerEntity("J222BBB", "AB22222", SENT).withAttempts(3).withSentAt(sentAt),
+			computerEntity("J333CCC", "AB33333", FAILED).withAttempts(5).withErrorMessage("POB is unwell"),
+			computerEntity("J444DDD", "PUB44444", EXCLUDED).withAttempts(0));
+
+		final var response = toEndOfLeaseBatchStatusResponse(batch, computers, null);
+
+		assertThat(response.getId()).isEqualTo("8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c");
+		assertThat(response.getExternalBatchId()).isEqualTo(EXTERNAL_BATCH_ID);
+		assertThat(response.getCreated()).isEqualTo(created);
+		assertThat(response.getTotal()).isEqualTo(4);
+		assertThat(response.getPending()).isEqualTo(1);
+		assertThat(response.getSent()).isEqualTo(1);
+		assertThat(response.getFailed()).isEqualTo(1);
+		assertThat(response.getExcluded()).isEqualTo(1);
+
+		assertThat(response.getComputers())
+			.extracting("serialNumber", "assetTag", "status", "attempts", "errorMessage", "sentAt")
+			.containsExactly(
+				tuple("J111AAA", "AB11111", "PENDING", 1, null, null),
+				tuple("J222BBB", "AB22222", "SENT", 3, null, sentAt),
+				tuple("J333CCC", "AB33333", "FAILED", 5, "POB is unwell", null),
+				tuple("J444DDD", "PUB44444", "EXCLUDED", 0, null, null));
+	}
+
+	@Test
+	void toEndOfLeaseBatchStatusResponseAnswersWithAnEmptyListForABatchWithNoComputers() {
+		final var batch = EndOfLeaseBatchEntity.create()
+			.withId("8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c")
+			.withExternalBatchId(EXTERNAL_BATCH_ID);
+
+		final var response = toEndOfLeaseBatchStatusResponse(batch, List.of(), null);
+
+		assertThat(response.getTotal()).isZero();
+		assertThat(response.getComputers()).isEmpty();
+	}
+
+	/**
+	 * The attempts are set the way the column is: not null, and zero until something spends one. A row that reaches the
+	 * mapper has been through the database and always carries a number.
+	 */
+	private static EndOfLeaseComputerEntity computerEntity(final String serialNumber, final String assetTag, final EndOfLeaseStatus status) {
+		return EndOfLeaseComputerEntity.create()
+			.withSerialNumber(serialNumber)
+			.withAssetTag(assetTag)
+			.withEndOfLeaseDate(END_OF_LEASE_DATE)
+			.withStatus(status)
+			.withAttempts(0);
+	}
+
+	/**
+	 * The states asked for decide what is listed, and nothing else. The counts stay over the whole batch, which is what
+	 * lets three failures be read as three out of four rather than as the whole of it.
+	 */
+	@Test
+	void toEndOfLeaseBatchStatusResponseListsOnlyTheStatesAskedFor() {
+		final var batch = EndOfLeaseBatchEntity.create().withId("batchId").withExternalBatchId(EXTERNAL_BATCH_ID);
+
+		final var computers = List.of(
+			computerEntity("J111AAA", "AB11111", PENDING),
+			computerEntity("J222BBB", "AB22222", SENT),
+			computerEntity("J333CCC", "AB33333", FAILED).withAttempts(5).withErrorMessage("POB is unwell"),
+			computerEntity("J444DDD", "PUB44444", EXCLUDED));
+
+		final var response = toEndOfLeaseBatchStatusResponse(batch, computers, List.of("FAILED"));
+
+		assertThat(response.getComputers())
+			.extracting("serialNumber", "status")
+			.containsExactly(tuple("J333CCC", "FAILED"));
+		assertThat(response.getTotal()).isEqualTo(4);
+		assertThat(response.getSent()).isEqualTo(1);
+		assertThat(response.getPending()).isEqualTo(1);
+		assertThat(response.getExcluded()).isEqualTo(1);
+	}
+
+	@Test
+	void toEndOfLeaseBatchStatusResponseListsSeveralStatesAtOnce() {
+		final var batch = EndOfLeaseBatchEntity.create().withId("batchId").withExternalBatchId(EXTERNAL_BATCH_ID);
+
+		final var computers = List.of(
+			computerEntity("J111AAA", "AB11111", PENDING),
+			computerEntity("J222BBB", "AB22222", SENT),
+			computerEntity("J333CCC", "AB33333", FAILED));
+
+		final var response = toEndOfLeaseBatchStatusResponse(batch, computers, List.of("PENDING", "FAILED"));
+
+		assertThat(response.getComputers())
+			.extracting("serialNumber")
+			.containsExactly("J111AAA", "J333CCC");
+	}
+
+	/**
+	 * A state nothing in the batch is in is not an error, it is a batch with nothing in that state.
+	 */
+	@Test
+	void toEndOfLeaseBatchStatusResponseForAStateNoComputerIsIn() {
+		final var batch = EndOfLeaseBatchEntity.create().withId("batchId").withExternalBatchId(EXTERNAL_BATCH_ID);
+
+		final var response = toEndOfLeaseBatchStatusResponse(batch, List.of(computerEntity("J111AAA", "AB11111", SENT)), List.of("FAILED"));
+
+		assertThat(response.getComputers()).isEmpty();
+		assertThat(response.getTotal()).isEqualTo(1);
+		assertThat(response.getSent()).isEqualTo(1);
+	}
+
+	@Test
+	void toEndOfLeaseBatchStatusResponseListsEveryStateForAnEmptyFilter() {
+		final var batch = EndOfLeaseBatchEntity.create().withId("batchId").withExternalBatchId(EXTERNAL_BATCH_ID);
+
+		final var computers = List.of(
+			computerEntity("J111AAA", "AB11111", PENDING),
+			computerEntity("J222BBB", "AB22222", SENT));
+
+		assertThat(toEndOfLeaseBatchStatusResponse(batch, computers, List.of()).getComputers()).hasSize(2);
 	}
 }

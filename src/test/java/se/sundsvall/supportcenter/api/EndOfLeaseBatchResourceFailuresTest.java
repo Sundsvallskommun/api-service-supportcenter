@@ -302,4 +302,58 @@ class EndOfLeaseBatchResourceFailuresTest {
 			.withAssetTag("AB12345")
 			.withEndOfLeaseDate(LocalDate.of(2026, 11, 30));
 	}
+
+	@Test
+	void getEndOfLeaseBatchWithInvalidMunicipalityId() {
+
+		webTestClient.get().uri("/not-a-municipality-id/endOfLeaseBatches/8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations[0].field").isEqualTo("getEndOfLeaseBatch.municipalityId")));
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	/**
+	 * The id is one we generated, so anything that is not a uuid is a mistake rather than a batch nobody has.
+	 */
+	@Test
+	void getEndOfLeaseBatchWithInvalidBatchId() {
+
+		webTestClient.get().uri("/2281/endOfLeaseBatches/not-a-uuid")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations[0].field").isEqualTo("getEndOfLeaseBatch.batchId")));
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	@Test
+	void getEndOfLeaseBatchWithAStateThatDoesNotExist() {
+
+		webTestClient.get().uri("/2281/endOfLeaseBatches/8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c?status=GONE")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations[0].message").isEqualTo("must be one of: [PENDING, SENT, FAILED, EXCLUDED]")));
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
 }

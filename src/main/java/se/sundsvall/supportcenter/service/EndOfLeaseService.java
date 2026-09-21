@@ -1,5 +1,7 @@
 package se.sundsvall.supportcenter.service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -9,24 +11,41 @@ import org.springframework.stereotype.Service;
 import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseBatchStatusResponse;
+import se.sundsvall.supportcenter.api.model.EndOfLeaseStatisticsResponse;
 import se.sundsvall.supportcenter.api.model.RetryEndOfLeaseComputersRequest;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseBatchRepository;
 import se.sundsvall.supportcenter.integration.db.EndOfLeaseComputerRepository;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 
+import static java.time.ZoneId.systemDefault;
 import static java.util.Objects.isNull;
+import static java.util.Optional.ofNullable;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static se.sundsvall.dept44.util.LogUtils.sanitizeForLogging;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchStatusResponse;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseStatisticsResponse;
 
 @Service
 public class EndOfLeaseService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(EndOfLeaseService.class);
 	private static final String ALREADY_REGISTERED = "A batch with external id '%s' is already registered as '%s'";
+
+	private static final String BATCH_NOT_FOUND = "No batch with id '%s' is registered for municipality '%s'";
+	private static final String WINDOW_ENDS_BEFORE_IT_STARTS = "The window ends before it starts: from '%s' is later than to '%s'";
+
+	/**
+	 * How far back the counts reach when nobody says. Long enough to hold a month of daily batches, and short enough
+	 * that the read stays the same size as the service ages.
+	 */
+	private static final Period DEFAULT_WINDOW = Period.ofMonths(1);
 
 	private final EndOfLeaseBatchRepository endOfLeaseBatchRepository;
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
@@ -148,5 +167,61 @@ public class EndOfLeaseService {
 			"It is registered as {}, nothing was stored", sanitizedExternalBatchId, batchId.get());
 
 		return alreadyRegistered(externalBatchId, batchId.get());
+	}
+
+	/**
+	 * What every batch a municipality has registered adds up to, and the same counts one batch at a time.
+	 *
+	 * This is the state the rows are in now, not a record of how they got there. A computer that failed twice and then
+	 * went through counts as sent, and the reason it failed is gone, since every run that succeeds clears it. What is
+	 * left of a struggle that ended well is the attempts on the computer itself, which the batch answers with.
+	 *
+	 * The counts cover a window of days rather than everything ever stored, since counting every state of every batch
+	 * reads every computer row of the municipality and nothing ever leaves the table. Left out, the window is the month
+	 * up to today. Given, it is what was asked for, and asking for a wide one is a deliberate act that pays for itself.
+	 * A caller who names only one end gets the default span measured from that end, so there is no way to ask for a
+	 * window without one.
+	 *
+	 * The days are read in the zone the rows were written in, which is the one the two runs stamp their timestamps in.
+	 *
+	 * @param  municipalityId the municipality of the sender that registered the batches
+	 * @param  from           the first day to count, or nothing for a month back from the last day
+	 * @param  to             the last day to count, counted in full, or nothing for today
+	 * @return                the counts, and the window they cover
+	 * @throws Problem        BAD_REQUEST when the window ends before it starts
+	 */
+	public EndOfLeaseStatisticsResponse getStatistics(final String municipalityId, final LocalDate from, final LocalDate to) {
+		final var lastDay = ofNullable(to).orElseGet(() -> LocalDate.now(systemDefault()));
+		final var firstDay = ofNullable(from).orElseGet(() -> lastDay.minus(DEFAULT_WINDOW));
+
+		if (firstDay.isAfter(lastDay)) {
+			throw Problem.valueOf(BAD_REQUEST, WINDOW_ENDS_BEFORE_IT_STARTS.formatted(firstDay, lastDay));
+		}
+
+		// The last day is counted in full, so the query stops at the first moment of the day after it.
+		final var counts = endOfLeaseComputerRepository.countByStatusGroupedByBatch(municipalityId,
+			firstDay.atStartOfDay(systemDefault()).toOffsetDateTime(),
+			lastDay.plusDays(1).atStartOfDay(systemDefault()).toOffsetDateTime());
+
+		return toEndOfLeaseStatisticsResponse(counts, firstDay, lastDay);
+	}
+
+	/**
+	 * One batch with the computers in it, the state each one is in, and why the ones that were given up on were.
+	 *
+	 * The counts cover the whole batch whichever states are asked for, so that a handful of failures is read against
+	 * the size of the batch they came out of rather than on their own.
+	 *
+	 * @param  municipalityId the municipality of the sender that registered the batch
+	 * @param  batchId        the id of the batch
+	 * @param  statuses       the states to list, or nothing to list them all
+	 * @return                the batch with the computers that were asked for
+	 * @throws Problem        NOT_FOUND when the municipality has no batch under the id
+	 */
+	public EndOfLeaseBatchStatusResponse getBatchStatus(final String municipalityId, final String batchId, final List<String> statuses) {
+		final var batch = endOfLeaseBatchRepository.findByIdAndMunicipalityId(batchId, municipalityId)
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, BATCH_NOT_FOUND.formatted(batchId, municipalityId)));
+
+		return toEndOfLeaseBatchStatusResponse(batch, endOfLeaseComputerRepository.findByBatchId(batchId), statuses);
 	}
 }
