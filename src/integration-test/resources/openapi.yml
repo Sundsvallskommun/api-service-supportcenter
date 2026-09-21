@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: "2.4"
 servers:
-  - url: http://localhost:63063
+  - url: http://localhost:56236
     description: Generated server url
 tags:
   - name: Configuration
@@ -554,7 +554,13 @@ paths:
       tags:
         - End of lease
       summary: How the end of lease batches of a municipality have gone
-      description: Answers with what the batches of a window add up to and with the same counts one batch at a time, so that a batch worth looking closer at can be picked out and read by its id. The window is the month up to today when none is given, and the one that was answered is part of the answer. The counts are the state the computers are in now. A computer that failed and then went through counts as sent
+      description: "Answers with what the batches of a window add up to and with the\
+        \ same counts one batch at a time, so that a batch worth looking closer at\
+        \ can be picked out and read by its id. The batches come back one page at\
+        \ a time, while the counts at the top cover the whole window. The window is\
+        \ the month up to today when none is given, and the one that was answered\
+        \ is part of the answer. The counts are the state the computers are in now.\
+        \ A computer that failed and then went through counts as sent"
       operationId: getEndOfLeaseStatistics
       parameters:
         - name: municipalityId
@@ -566,47 +572,82 @@ paths:
           example: 2281
         - name: from
           in: query
-          description: First day to count, by the day the batch was registered. A month back from the last day when left out
+        description: "First day to count, by the day the batch was registered. A month\
+          \ back from the last day when left out"
           required: false
           schema:
             type: string
             format: date
-          example: 2026-08-18
+          description: "First day to count, by the day the batch was registered. A\
+            \ month back from the last day when left out"
+          examples:
+          - 2026-08-18
         - name: to
           in: query
-          description: Last day to count, counted in full. Today when left out
+        description: "Last day to count, counted in full. Today when left out"
           required: false
           schema:
             type: string
             format: date
-          example: 2026-09-18
+          description: "Last day to count, counted in full. Today when left out"
+          examples:
+          - 2026-09-18
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+      - name: limit
+        in: query
+        description: Result size per page. Maximum allowed value is dynamically configured
+        required: false
+        schema:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EndOfLeaseStatisticsResponse'
-        '400':
+                $ref: "#/components/schemas/EndOfLeaseStatisticsResponse"
+        "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        '500':
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
           description: Internal Server Error
           content:
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/Problem'
+                $ref: "#/components/schemas/Problem"
   /{municipalityId}/endOfLeaseBatches/{batchId}:
     get:
       tags:
         - End of lease
       summary: Read one batch with the computers in it
-      description: Answers with the state each computer of the batch is in and, for the ones that were given up on, why. The reason is what the last attempt said, and a run that gets through clears it, so a computer that is SENT carries none even when it took several tries. The counts cover the whole batch whichever states are asked for
+      description: "Answers with the state each computer of the batch is in and, for\
+        \ the ones that were given up on, why. The reason is what the last attempt\
+        \ said, and a run that gets through clears it, so a computer that is SENT\
+        \ carries none even when it took several tries. The computers come back one\
+        \ page at a time, while the counts cover the whole batch whichever states\
+        \ are asked for"
       operationId: getEndOfLeaseBatch
       parameters:
         - name: municipalityId
@@ -618,47 +659,73 @@ paths:
           example: 2281
         - name: batchId
           in: path
-          description: Id of the batch, as answered by the call that registered it
+        description: "Id of the batch, as answered by the call that registered it"
           required: true
           schema:
             type: string
           example: 8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c
         - name: status
           in: query
-          description: States to list, one or more of PENDING, SENT, FAILED and EXCLUDED. Every state is listed when the parameter is left out
           required: false
           schema:
             type: array
             items:
               type: string
-          example: FAILED
+            description: "States to list, one or more of PENDING, SENT, FAILED and\
+              \ EXCLUDED. Every state is listed when the parameter is left out"
+            examples:
+            - FAILED
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+      - name: limit
+        in: query
+        description: Result size per page. Maximum allowed value is dynamically configured
+        required: false
+        schema:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EndOfLeaseBatchStatusResponse'
-        '400':
+                $ref: "#/components/schemas/EndOfLeaseBatchStatusResponse"
+        "400":
           description: Bad Request
           content:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/Problem'
-                  - $ref: '#/components/schemas/ConstraintViolationProblem'
-        '404':
-          description: Not Found
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/Problem'
-        '500':
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
           description: Internal Server Error
           content:
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/Problem'
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /{municipalityId}/configuration/closureCodes:
     get:
       tags:
@@ -833,10 +900,10 @@ components:
             $ref: "#/components/schemas/Violation"
         title:
           type: string
-        detail:
-          type: string
         causeAsProblem:
           $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
         instance:
           type: string
           format: uri
@@ -881,12 +948,10 @@ components:
         externalBatchId:
           type: string
           description: "Id of the batch, set by the sender. A batch sent again under\
-            \ an id that is already registered is rejected with 409 Conflict and not\
-            \ queued a second time"
+            \ an id that is already registered is accepted without being queued a\
+            \ second time"
           examples:
-            - DSET0001234
-          maxLength: 36
-          minLength: 1
+          - d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90
         computers:
           type: array
           items:
@@ -1580,6 +1645,213 @@ components:
           description: Lease end date
           examples:
             - 2022-01-01
+    EndOfLeaseBatchStatistics:
+      type: object
+      description: EndOfLeaseBatchStatistics model
+      properties:
+        id:
+          type: string
+          description: "Id of the batch, which is what a single batch is read by"
+          examples:
+            - 8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c
+        externalBatchId:
+          type: string
+          description: Id the sender gave the batch
+          examples:
+            - d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90
+        created:
+          type: string
+          format: date-time
+          description: When the batch was registered
+          examples:
+            - 2026-09-17T06:03:11+02:00
+        counts:
+          $ref: "#/components/schemas/EndOfLeaseComputerCounts"
+          description: "The computers of the batch, counted per state"
+    EndOfLeaseComputerCounts:
+      type: object
+      description: EndOfLeaseComputerCounts model
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of computers that have been received, which is the\
+            \ sum of the states below"
+          examples:
+            - 1240
+        pending:
+          type: integer
+          format: int64
+          description: "Number of computers waiting to be sent, or waiting to be sent\
+            \ again after an attempt that did not succeed"
+          examples:
+            - 12
+        sent:
+          type: integer
+          format: int64
+          description: Number of computers that have been sent their message
+          examples:
+            - 1180
+        failed:
+          type: integer
+          format: int64
+          description: "Number of computers whose attempts are used up, which need\
+            \ to be looked at by a human"
+          examples:
+            - 8
+        excluded:
+          type: integer
+          format: int64
+          description: "Number of computers that are never sent a message, recognized\
+            \ by the letters their asset tag starts with"
+          examples:
+            - 40
+    EndOfLeaseStatisticsResponse:
+      type: object
+      description: EndOfLeaseStatisticsResponse model
+      properties:
+        from:
+          type: string
+          format: date
+          description: "First day the counts cover. The window that was asked for,\
+            \ or the month up to today when none was"
+          examples:
+            - 2026-08-18
+        to:
+          type: string
+          format: date
+          description: "Last day the counts cover, counted in full"
+          examples:
+            - 2026-09-18
+        counts:
+          $ref: "#/components/schemas/EndOfLeaseComputerCounts"
+          description: "The computers of every batch in the window, counted per state.\
+            \ Covers the whole window, not the page of batches below"
+        batches:
+          type: array
+          items:
+            $ref: "#/components/schemas/EndOfLeaseBatchStatistics"
+            description: "One page of the batches in the window, with the same counts\
+              \ one batch at a time, newest batch first"
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          description: The page of batches this answer holds. totalRecords is how
+            many batches the municipality registered inside the window
+    PagingMetaData:
+      type: object
+      description: PagingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+            - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+            - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+            - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+            - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+            - 23
+          readOnly: true
+    EndOfLeaseBatchStatusResponse:
+      type: object
+      description: EndOfLeaseBatchStatusResponse model
+      properties:
+        id:
+          type: string
+          description: Id of the batch
+          examples:
+            - 8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c
+        externalBatchId:
+          type: string
+          description: Id the sender gave the batch
+          examples:
+            - d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90
+        created:
+          type: string
+          format: date-time
+          description: When the batch was registered
+          examples:
+            - 2026-09-17T06:03:11+02:00
+        counts:
+          $ref: "#/components/schemas/EndOfLeaseComputerCounts"
+          description: "The computers of the batch, counted per state. Covers the\
+            \ whole batch whichever states were asked for"
+        computers:
+          type: array
+          items:
+            $ref: "#/components/schemas/EndOfLeaseComputerStatus"
+            description: "One page of the computers of the batch, the states that\
+              \ were asked for, in state order and then by serial number"
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          description: "The page of computers this answer holds. Counts the computers\
+            \ in the states that were asked for, not the whole batch"
+    EndOfLeaseComputerStatus:
+      type: object
+      description: EndOfLeaseComputerStatus model
+      properties:
+        serialNumber:
+          type: string
+          description: Serial number
+          examples:
+            - J123ABC
+        assetTag:
+          type: string
+          description: "Asset tag, which is the name the computer is known by in SysMan"
+          examples:
+            - AB12345
+        status:
+          type: string
+          description: "The state the computer is in: PENDING, SENT, FAILED or EXCLUDED.\
+            \ A string rather than an enumeration"
+          examples:
+            - FAILED
+        attempts:
+          type: integer
+          format: int32
+          description: "How many attempts the computer has cost. An attempt is only\
+            \ spent on something that is the computer's own fault, so a dependency\
+            \ that could not be reached does not show here"
+          examples:
+            - 5
+        errorMessage:
+          type: string
+          description: "Why the last attempt did not succeed. Cleared as soon as an\
+            \ attempt gets through, so a computer that is SENT carries none even when\
+            \ it took several tries to get there"
+          examples:
+            - POB answered the serial number with no configuration item holding a municipality
+              we can route on
+        sentAt:
+          type: string
+          format: date-time
+          description: "When the message was sent, or null when it has not been"
+          examples:
+            - 2026-09-17T06:14:52+02:00
     Case:
       type: object
       description: Case model

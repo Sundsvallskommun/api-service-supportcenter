@@ -14,7 +14,7 @@ public class EndOfLeaseComputerStatus {
 	private String assetTag;
 
 	@Schema(examples = "FAILED",
-		description = "The state the computer is in: PENDING, SENT, FAILED or EXCLUDED. A string rather than an enumeration, so that a state added later reaches a client that has not heard of it yet as a value it does not recognize rather than as a broken answer")
+		description = "The state the computer is in: PENDING, SENT, FAILED or EXCLUDED. A string rather than an enumeration")
 	private String status;
 
 	@Schema(examples = "5", description = "How many attempts the computer has cost. An attempt is only spent on something that is the computer's own fault, so a dependency that could not be reached does not show here")

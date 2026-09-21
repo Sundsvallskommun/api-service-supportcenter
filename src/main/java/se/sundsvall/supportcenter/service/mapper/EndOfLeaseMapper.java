@@ -102,11 +102,8 @@ public final class EndOfLeaseMapper {
 
 	/**
 	 * A failure reason cut to what its column holds.
-	 *
 	 * POB and SysMan both answer a failure with whatever their own stack had to say, and a server that hands back a
-	 * stack trace produces a message several times wider than the column. Stored as it comes, the insert is rejected
-	 * from inside the very catch block that was recording the failure, which takes the whole run down and leaves the
-	 * row to do it again on the next one.
+	 * stack trace produces a message several times wider than the column.
 	 *
 	 * @param  errorMessage the reason, of any length
 	 * @return              the reason, no wider than the column
@@ -150,13 +147,6 @@ public final class EndOfLeaseMapper {
 	 * part of. The page counts say what each batch on the page holds. Adding the page up would answer the first question
 	 * with one page of the second.
 	 *
-	 * The batches of the page decide which rows appear and in which order, and the counts are looked up against them. A
-	 * batch is registered with at least one computer, so a batch with no counts should not happen, but one would answer
-	 * with zeroes rather than be dropped from a page that has already been counted.
-	 *
-	 * The window is carried into the answer rather than left to the caller to remember, so that a reader can tell a
-	 * quiet month from a quiet service without knowing what was asked for.
-	 *
 	 * @param  batches           the page of batches inside the window, newest first
 	 * @param  countsOfThePage   one count per batch and state, for the batches of the page
 	 * @param  countsOfTheWindow one count per state, for every batch inside the window
@@ -186,13 +176,7 @@ public final class EndOfLeaseMapper {
 
 	/**
 	 * One batch, one page of the computers in it that were asked for, and what the whole batch adds up to.
-	 *
-	 * The counts come from a query of their own rather than from the page, because they have to cover the whole batch
-	 * whichever states were asked for and whichever page is being read. That is the difference between three computers
-	 * failing and three out of nine hundred failing, and a page of ten cannot answer it.
-	 *
-	 * The states are picked out in the query rather than here. Filtering a page after it has been cut out of the batch
-	 * would answer a page of ten with however few of those ten happened to match.
+	 * The states are picked out in the query rather than here.
 	 *
 	 * @param  endOfLeaseBatchEntity the batch
 	 * @param  computers             the page of computers that were asked for
