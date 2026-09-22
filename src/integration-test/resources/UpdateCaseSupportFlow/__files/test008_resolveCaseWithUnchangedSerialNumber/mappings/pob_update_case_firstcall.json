@@ -1,0 +1,50 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "xyz"
+			}
+		},
+		"method": "POST",
+		"bodyPatterns": [
+			{
+				"equalToJson": {
+					"Type": "Case",
+					"Links": [],
+					"Data": {
+						"Virtual.ExternalCaseId": "",
+						"ClosureCode": "Byte av hårdvara",
+						"CaseStatus": "Solved",
+						"Id": "910277",
+						"Virtual.Shop_CI_Name": "WB12345NY",
+						"CIInfo.Ci": "307915"
+					},
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Status: 'Resolved'"
+						},
+						"Solution": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Enheten utbytt"
+						}
+					}
+				}
+			}
+		],
+		"urlPath": "/pob/cases"
+	},
+	"newScenarioState": "CaseSolved",
+	"response": {
+		"status": 200
+	},
+	"name": "pob-update-case-to-solved",
+	"requiredScenarioState": "Started",
+	"scenarioName": "resolve-case"
+}
