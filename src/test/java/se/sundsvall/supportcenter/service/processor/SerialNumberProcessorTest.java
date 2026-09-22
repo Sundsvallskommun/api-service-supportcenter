@@ -1,6 +1,8 @@
 package se.sundsvall.supportcenter.service.processor;
 
+import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
+import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +21,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static se.sundsvall.supportcenter.api.model.enums.NoteType.SOLUTION;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.RESOLVED;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CI_INFO2;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_SHOP_CI_NAME;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_CLOSED;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
 @ExtendWith(MockitoExtension.class)
 class SerialNumberProcessorTest {
@@ -151,6 +159,130 @@ class SerialNumberProcessorTest {
 		verify(configurationServiceMock, never()).getSerialNumberId(any(), any());
 		verify(pobIntegrationMock, never()).getCase(any(), any());
 		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock, pobPayloadMock, mapMock);
+	}
+
+	@Test
+	void preProcessAppendsHardwareSwapNoteToSolutionSentBySupplier() {
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var serialNumber = "serialNumber";
+		final var serialNumberId = "123456789";
+		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber).withCaseStatus(RESOLVED.getValue());
+		final var pobPayload = new PobPayload()
+			.data(new HashMap<>(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_SHOP_CI_NAME, "WB12345NY")))
+			.memo(new HashMap<>(Map.of(SOLUTION.toValue(), new PobMemo().memo("Enheten utbytt"))));
+
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(existingCase("xxx-111", "WB10123"));
+		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
+
+		// Call
+		processor.preProcess(pobKey, caseId, request, pobPayload);
+
+		// Verification
+		assertThat(pobPayload.getData()).containsEntry(KEY_CI_INFO2, serialNumberId);
+		assertThat(pobPayload.getMemo().get(SOLUTION.toValue()).getMemo()).isEqualTo("Enheten utbytt. WB10123 har bytts mot WB12345NY");
+		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNumber);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock);
+	}
+
+	@Test
+	void preProcessAddsHardwareSwapNoteWhenSupplierSentNoSolution() {
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var serialNumber = "serialNumber";
+		final var serialNumberId = "123456789";
+		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber).withCaseStatus(RESOLVED.getValue());
+		final var pobPayload = new PobPayload().data(new HashMap<>(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_SHOP_CI_NAME, "WB12345NY")));
+
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(existingCase("xxx-111", "WB10123"));
+		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn(serialNumberId);
+
+		// Call
+		processor.preProcess(pobKey, caseId, request, pobPayload);
+
+		// Verification
+		assertThat(pobPayload.getMemo().get(SOLUTION.toValue()).getMemo()).isEqualTo("WB10123 har bytts mot WB12345NY");
+		verify(configurationServiceMock).getSerialNumberId(pobKey, serialNumber);
+		verify(pobIntegrationMock).getCase(pobKey, caseId);
+		verifyNoMoreInteractions(configurationServiceMock, pobIntegrationMock);
+	}
+
+	@Test
+	void preProcessAddsNoHardwareSwapNoteWhenPayloadStatusIsNotSolved() {
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var serialNumber = "serialNumber";
+		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber).withCaseStatus(RESOLVED.getValue());
+		final var pobPayload = new PobPayload().data(new HashMap<>(Map.of(KEY_CASE_STATUS, STATUS_CLOSED, KEY_SHOP_CI_NAME, "WB12345NY")));
+
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(existingCase("xxx-111", "WB10123"));
+		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn("123456789");
+
+		// Call
+		processor.preProcess(pobKey, caseId, request, pobPayload);
+
+		// Verification
+		assertThat(pobPayload.getMemo()).doesNotContainKey(SOLUTION.toValue());
+	}
+
+	@Test
+	void preProcessAddsNoHardwareSwapNoteWhenReplacedHardwareNameIsMissing() {
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var serialNumber = "serialNumber";
+		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber).withCaseStatus(RESOLVED.getValue());
+		final var pobPayload = new PobPayload().data(new HashMap<>(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_SHOP_CI_NAME, "WB12345NY")));
+
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(existingCase("xxx-111", null));
+		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn("123456789");
+
+		// Call
+		processor.preProcess(pobKey, caseId, request, pobPayload);
+
+		// Verification
+		assertThat(pobPayload.getMemo()).doesNotContainKey(SOLUTION.toValue());
+	}
+
+	@Test
+	void preProcessAddsNoHardwareSwapNoteWhenHardwareNameIsMissing() {
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var serialNumber = "serialNumber";
+		final var request = UpdateCaseRequest.create().withSerialNumber(serialNumber).withCaseStatus(RESOLVED.getValue());
+		final var pobPayload = new PobPayload().data(new HashMap<>(Map.of(KEY_CASE_STATUS, STATUS_SOLVED)));
+
+		when(pobIntegrationMock.getCase(pobKey, caseId)).thenReturn(existingCase("xxx-111", "WB10123"));
+		when(configurationServiceMock.getSerialNumberId(pobKey, serialNumber)).thenReturn("123456789");
+
+		// Call
+		processor.preProcess(pobKey, caseId, request, pobPayload);
+
+		// Verification
+		assertThat(pobPayload.getMemo()).doesNotContainKey(SOLUTION.toValue());
+	}
+
+	/**
+	 * Creates a case matching the jsonPaths $['Data']['CIInfo.Ci']['Data']['SerialNumber'] and
+	 * $['Data']['CIInfo.Ci']['Data']['OptionalNumber'], i.e. the serial number and the theft marking of the hardware
+	 * currently registered on the case.
+	 */
+	private static PobPayload existingCase(String serialNumber, String hardwareName) {
+		final var ciData = new HashMap<String, Object>();
+		ciData.put("SerialNumber", serialNumber);
+		ciData.put("OptionalNumber", hardwareName);
+
+		return new PobPayload().data(Map.of("CIInfo.Ci", Map.of("Data", ciData)));
 	}
 
 	@Test
