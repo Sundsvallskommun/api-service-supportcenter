@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputer;
 import se.sundsvall.supportcenter.api.model.RetryEndOfLeaseComputersRequest;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
@@ -72,34 +74,19 @@ class EndOfLeaseServiceTest {
 	}
 
 	@Test
-	void registerBatchReturnsExistingIdWhenExternalBatchIdIsAlreadyRegistered() {
+	void registerBatchThrowsConflictWhenExternalBatchIdIsAlreadyRegistered() {
 		final var createEndOfLeaseBatchRequest = createRequest(2);
 
 		when(endOfLeaseBatchRepositoryMock.findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID)).thenReturn(of(EndOfLeaseBatchEntity.create().withId(BATCH_ID)));
-		when(endOfLeaseBatchRepositoryMock.countComputers(BATCH_ID)).thenReturn(2L);
 
-		final var batchId = endOfLeaseService.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
-
-		assertThat(batchId).isEqualTo(BATCH_ID);
-
-		verify(endOfLeaseBatchRepositoryMock).findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID);
-		verify(endOfLeaseBatchRepositoryMock).countComputers(BATCH_ID);
-		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
-	}
-
-	@Test
-	void registerBatchReturnsExistingIdWhenResendCarriesADifferentNumberOfComputers() {
-		final var createEndOfLeaseBatchRequest = createRequest(3);
-
-		when(endOfLeaseBatchRepositoryMock.findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID)).thenReturn(of(EndOfLeaseBatchEntity.create().withId(BATCH_ID)));
-		when(endOfLeaseBatchRepositoryMock.countComputers(BATCH_ID)).thenReturn(1L);
-
-		final var batchId = endOfLeaseService.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
-
-		assertThat(batchId).isEqualTo(BATCH_ID);
+		assertThatExceptionOfType(ThrowableProblem.class)
+			.isThrownBy(() -> endOfLeaseService.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest))
+			.satisfies(problem -> {
+				assertThat(problem.getStatus()).isEqualTo(CONFLICT);
+				assertThat(problem.getDetail()).isEqualTo("A batch with external id '" + EXTERNAL_BATCH_ID + "' is already registered as '" + BATCH_ID + "'");
+			});
 
 		verify(endOfLeaseBatchRepositoryMock).findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID);
-		verify(endOfLeaseBatchRepositoryMock).countComputers(BATCH_ID);
 		verifyNoMoreInteractions(endOfLeaseBatchRepositoryMock);
 	}
 
@@ -118,7 +105,7 @@ class EndOfLeaseServiceTest {
 	}
 
 	@Test
-	void registerBatchReturnsExistingIdWhenTwoResendsRaceForTheSameExternalBatchId() {
+	void registerBatchThrowsConflictWhenTwoResendsRaceForTheSameExternalBatchId() {
 		final var createEndOfLeaseBatchRequest = createRequest(1);
 
 		when(endOfLeaseBatchRepositoryMock.findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID))
@@ -126,9 +113,12 @@ class EndOfLeaseServiceTest {
 			.thenReturn(of(EndOfLeaseBatchEntity.create().withId(BATCH_ID)));
 		when(endOfLeaseBatchRepositoryMock.save(any(EndOfLeaseBatchEntity.class))).thenThrow(new DataIntegrityViolationException("duplicate entry"));
 
-		final var batchId = endOfLeaseService.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
-
-		assertThat(batchId).isEqualTo(BATCH_ID);
+		assertThatExceptionOfType(ThrowableProblem.class)
+			.isThrownBy(() -> endOfLeaseService.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest))
+			.satisfies(problem -> {
+				assertThat(problem.getStatus()).isEqualTo(CONFLICT);
+				assertThat(problem.getDetail()).isEqualTo("A batch with external id '" + EXTERNAL_BATCH_ID + "' is already registered as '" + BATCH_ID + "'");
+			});
 
 		verify(endOfLeaseBatchRepositoryMock, times(2)).findByMunicipalityIdAndExternalBatchId(MUNICIPALITY_ID, EXTERNAL_BATCH_ID);
 		verify(endOfLeaseBatchRepositoryMock).save(any(EndOfLeaseBatchEntity.class));

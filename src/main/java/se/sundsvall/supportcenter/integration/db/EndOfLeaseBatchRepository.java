@@ -3,8 +3,6 @@ package se.sundsvall.supportcenter.integration.db;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchEntity;
 
 @CircuitBreaker(name = "endOfLeaseBatchRepository")
@@ -30,14 +28,4 @@ public interface EndOfLeaseBatchRepository extends JpaRepository<EndOfLeaseBatch
 	 * @return                 the batch, or empty when the sender has stored no batch under the id
 	 */
 	Optional<EndOfLeaseBatchEntity> findByMunicipalityIdAndExternalBatchId(String municipalityId, String externalBatchId);
-
-	/**
-	 * Counts the computers in a batch. A query rather than the size of the batch's own collection, which is lazy and
-	 * would have to be loaded in full to be counted.
-	 *
-	 * @param  batchId the id of the batch
-	 * @return         the number of computers in the batch
-	 */
-	@Query("select count(computer) from EndOfLeaseComputerEntity computer where computer.batch.id = :batchId")
-	long countComputers(@Param("batchId") String batchId);
 }

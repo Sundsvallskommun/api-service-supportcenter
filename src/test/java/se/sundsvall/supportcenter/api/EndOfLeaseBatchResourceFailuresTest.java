@@ -2,8 +2,12 @@ package se.sundsvall.supportcenter.api;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
@@ -123,18 +127,19 @@ class EndOfLeaseBatchResourceFailuresTest {
 					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
 					json -> json.node("violations").isEqualTo("""
 						[
-							{"field":"externalBatchId","message":"not a valid UUID"}
+							{"field":"externalBatchId","message":"must be provided"}
 						]""")));
 
 		verifyNoInteractions(endOfLeaseServiceMock);
 	}
 
-	@Test
-	void createEndOfLeaseBatchWithInvalidExternalBatchId() {
+	@ParameterizedTest
+	@MethodSource("invalidExternalBatchIdArguments")
+	void createEndOfLeaseBatchWithInvalidExternalBatchId(final String externalBatchId, final String expectedViolations) {
 
 		webTestClient.post().uri("/2281/endOfLeaseBatches")
 			.contentType(APPLICATION_JSON)
-			.bodyValue(CreateEndOfLeaseBatchRequest.create().withExternalBatchId("not-a-uuid").withComputers(List.of(validComputer())))
+			.bodyValue(CreateEndOfLeaseBatchRequest.create().withExternalBatchId(externalBatchId).withComputers(List.of(validComputer())))
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
@@ -144,12 +149,26 @@ class EndOfLeaseBatchResourceFailuresTest {
 				.and(
 					json -> json.node("title").isEqualTo("Constraint Violation"),
 					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
-					json -> json.node("violations").isEqualTo("""
-						[
-							{"field":"externalBatchId","message":"not a valid UUID"}
-						]""")));
+					json -> json.node("violations").isEqualTo(expectedViolations)));
 
 		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	private static Stream<Arguments> invalidExternalBatchIdArguments() {
+		return Stream.of(
+			Arguments.of("", """
+				[
+					{"field":"externalBatchId","message":"must be provided"},
+					{"field":"externalBatchId","message":"size must be between 1 and 36"}
+				]"""),
+			Arguments.of("   ", """
+				[
+					{"field":"externalBatchId","message":"must be provided"}
+				]"""),
+			Arguments.of("D".repeat(37), """
+				[
+					{"field":"externalBatchId","message":"size must be between 1 and 36"}
+				]"""));
 	}
 
 	@Test
