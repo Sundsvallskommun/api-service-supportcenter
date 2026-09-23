@@ -47,7 +47,10 @@ class EndOfLeaseBatchResource {
 
 	@PostMapping(consumes = APPLICATION_JSON_VALUE)
 	@Operation(summary = "Register a batch of computers that have reached end of lease", responses = {
-		@ApiResponse(responseCode = "202", headers = @Header(name = LOCATION, schema = @Schema(type = "string")), description = "Batch accepted for processing", useReturnTypeSchema = true)
+		@ApiResponse(responseCode = "202", headers = @Header(name = LOCATION, schema = @Schema(type = "string")), description = "Batch accepted for processing", useReturnTypeSchema = true),
+		@ApiResponse(responseCode = "409",
+			description = "Conflict, a batch with the same external id is already registered. The detail names the stored batch",
+			content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	})
 	ResponseEntity<EndOfLeaseBatchResponse> createEndOfLeaseBatch(
 		@Parameter(name = "municipalityId", description = "Municipality Id of the sender. The municipality of each computer is resolved from POB and may differ", example = "2281") @PathVariable @ValidMunicipalityId final String municipalityId,

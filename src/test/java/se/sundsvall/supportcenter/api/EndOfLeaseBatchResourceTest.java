@@ -2,7 +2,10 @@ package se.sundsvall.supportcenter.api;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
@@ -60,5 +63,33 @@ class EndOfLeaseBatchResourceTest {
 			.expectBody().jsonPath("$.id").isEqualTo(BATCH_ID);
 
 		verify(endOfLeaseServiceMock).registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
+	}
+
+	@ParameterizedTest
+	@MethodSource("validExternalBatchIdArguments")
+	void createEndOfLeaseBatchWithValidExternalBatchId(final String externalBatchId) {
+
+		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(externalBatchId)
+			.withComputers(List.of(
+				EndOfLeaseComputer.create()
+					.withSerialNumber("J123ABC")
+					.withAssetTag("AB12345")
+					.withEndOfLeaseDate(LocalDate.of(2026, 11, 30))));
+
+		when(endOfLeaseServiceMock.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest)).thenReturn(BATCH_ID);
+
+		webTestClient.post().uri("/{municipalityId}/endOfLeaseBatches", MUNICIPALITY_ID)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isAccepted()
+			.expectBody().jsonPath("$.id").isEqualTo(BATCH_ID);
+
+		verify(endOfLeaseServiceMock).registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
+	}
+
+	private static Stream<String> validExternalBatchIdArguments() {
+		return Stream.of("D", "DSET0001234", "D".repeat(36));
 	}
 }

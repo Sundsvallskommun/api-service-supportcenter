@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 
@@ -54,7 +56,7 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 		assertThat(getResponseHeaders().getFirst(LOCATION)).isEqualTo(PATH + "/" + batchId);
 
 		final var batch = jdbcTemplate.queryForMap("select external_batch_id, municipality_id, created from end_of_lease_batch where id = ?", batchId);
-		assertThat(batch).containsEntry("external_batch_id", "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90");
+		assertThat(batch).containsEntry("external_batch_id", "DSET0001234");
 		assertThat(batch).containsEntry("municipality_id", "2281");
 		assertThat(batch.get("created")).isNotNull();
 
@@ -77,9 +79,20 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 	void test002_createEndOfLeaseBatchThatIsSentAgain() throws Exception {
 
 		final var batchId = sendBatch();
-		final var batchIdFromResend = sendBatch();
 
-		assertThat(batchIdFromResend).isEqualTo(batchId);
+		final var problem = setupCall()
+			.withServicePath(PATH)
+			.withHttpMethod(POST)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(CONFLICT)
+			.sendRequest()
+			.andReturnBody(Map.class);
+
+		assertThat(problem)
+			.containsEntry("status", CONFLICT.value())
+			.containsEntry("title", CONFLICT.getReasonPhrase())
+			.containsEntry("detail", "A batch with external id 'DSET0001234' is already registered as '" + batchId + "'");
+
 		assertThat(jdbcTemplate.queryForObject("select count(*) from end_of_lease_batch", Integer.class)).isOne();
 		assertThat(jdbcTemplate.queryForObject("select count(*) from end_of_lease_computer", Integer.class)).isOne();
 	}
