@@ -15,9 +15,9 @@
 						"Virtual.ExternalCaseId": "",
 						"ClosureCode": "Byte av hårdvara",
 						"CaseStatus": "Solved",
-						"CIInfo2.Ci": "350860",
 						"Id": "910277",
-						"Virtual.Shop_CI_Name": "WB12345NY"
+						"Virtual.Shop_CI_Name": "WB12345NY",
+						"CIInfo.Ci": "307915"
 					},
 					"Memo": {
 						"CaseInternalNotesCustom": {
@@ -32,7 +32,7 @@
 							"HandleSeparators": true,
 							"Style": "2",
 							"IsValidForWeb": false,
-							"Memo": "Enheten utbytt. WB10123 har bytts mot WB12345NY"
+							"Memo": "Enheten utbytt"
 						}
 					}
 				}

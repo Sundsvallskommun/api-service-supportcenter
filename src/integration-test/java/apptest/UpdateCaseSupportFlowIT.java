@@ -107,4 +107,35 @@ class UpdateCaseSupportFlowIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 	}
+
+	/**
+	 * The incoming serial number is the one already registered on the case, i.e. no hardware has been replaced. The
+	 * configuration item is therefore set in 'CIInfo.Ci' instead of 'CIInfo2.Ci', while the closure code is still set to
+	 * 'Byte av hårdvara'.
+	 */
+	@Test
+	void test008_resolveCaseWithUnchangedSerialNumber() {
+
+		setupCall()
+			.withServicePath(PATH + "/910277")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseBodyIsNull()
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test009_resolveCaseWithSerialNumberWhenCaseHasNoConfigurationItem() {
+
+		setupCall()
+			.withServicePath(PATH + "/910277")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseBodyIsNull()
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
 }
