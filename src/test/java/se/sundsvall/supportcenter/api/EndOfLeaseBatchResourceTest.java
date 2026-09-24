@@ -29,6 +29,7 @@ class EndOfLeaseBatchResourceTest {
 	private static final String MUNICIPALITY_ID = "2281";
 	private static final String BATCH_ID = "8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c";
 	private static final String EXTERNAL_BATCH_ID = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90";
+	private static final String DATASET_REQUEST_HEADER = "adv-dataset-request";
 
 	@MockitoBean
 	private EndOfLeaseService endOfLeaseServiceMock;
@@ -55,12 +56,51 @@ class EndOfLeaseBatchResourceTest {
 
 		webTestClient.post().uri("/{municipalityId}/endOfLeaseBatches", MUNICIPALITY_ID)
 			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
 			.bodyValue(createEndOfLeaseBatchRequest)
 			.exchange()
 			.expectStatus().isAccepted()
 			.expectHeader().contentType(APPLICATION_JSON)
 			.expectHeader().location("/2281/endOfLeaseBatches/" + BATCH_ID)
-			.expectBody().jsonPath("$.id").isEqualTo(BATCH_ID);
+			.expectHeader().valueEquals(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.expectBody()
+			.jsonPath("$.id").isEqualTo(BATCH_ID)
+			.jsonPath("$.externalBatchId").isEqualTo(EXTERNAL_BATCH_ID);
+
+		verify(endOfLeaseServiceMock).registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
+	}
+
+	@Test
+	void createEndOfLeaseBatchWithoutDatasetRequestHeader() {
+
+		final var createEndOfLeaseBatchRequest = createEndOfLeaseBatchRequest();
+
+		when(endOfLeaseServiceMock.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest)).thenReturn(BATCH_ID);
+
+		webTestClient.post().uri("/{municipalityId}/endOfLeaseBatches", MUNICIPALITY_ID)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isAccepted()
+			.expectHeader().doesNotExist(DATASET_REQUEST_HEADER);
+
+		verify(endOfLeaseServiceMock).registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
+	}
+
+	@Test
+	void createEndOfLeaseBatchWithEmptyDatasetRequestHeader() {
+
+		final var createEndOfLeaseBatchRequest = createEndOfLeaseBatchRequest();
+
+		when(endOfLeaseServiceMock.registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest)).thenReturn(BATCH_ID);
+
+		webTestClient.post().uri("/{municipalityId}/endOfLeaseBatches", MUNICIPALITY_ID)
+			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, "")
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isAccepted()
+			.expectHeader().doesNotExist(DATASET_REQUEST_HEADER);
 
 		verify(endOfLeaseServiceMock).registerBatch(MUNICIPALITY_ID, createEndOfLeaseBatchRequest);
 	}
@@ -91,5 +131,15 @@ class EndOfLeaseBatchResourceTest {
 
 	private static Stream<String> validExternalBatchIdArguments() {
 		return Stream.of("D", "DSET0001234", "D".repeat(36));
+	}
+
+	private static CreateEndOfLeaseBatchRequest createEndOfLeaseBatchRequest() {
+		return CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withComputers(List.of(
+				EndOfLeaseComputer.create()
+					.withSerialNumber("J123ABC")
+					.withAssetTag("AB12345")
+					.withEndOfLeaseDate(LocalDate.of(2026, 11, 30))));
 	}
 }

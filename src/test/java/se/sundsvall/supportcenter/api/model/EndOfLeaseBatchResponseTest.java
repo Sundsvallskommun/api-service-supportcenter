@@ -26,11 +26,14 @@ class EndOfLeaseBatchResponseTest {
 	@Test
 	void hasValidBuilderMethods() {
 		final var id = "id";
+		final var externalBatchId = "externalBatchId";
 		final var endOfLeaseBatchResponse = EndOfLeaseBatchResponse.create()
-			.withId(id);
+			.withId(id)
+			.withExternalBatchId(externalBatchId);
 
 		assertThat(endOfLeaseBatchResponse).hasNoNullFieldsOrProperties();
 		assertThat(endOfLeaseBatchResponse.getId()).isEqualTo(id);
+		assertThat(endOfLeaseBatchResponse.getExternalBatchId()).isEqualTo(externalBatchId);
 	}
 
 	@Test

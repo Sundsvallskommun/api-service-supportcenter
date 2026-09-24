@@ -14,6 +14,7 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.supportcenter.Application;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
 import se.sundsvall.supportcenter.api.model.EndOfLeaseComputer;
@@ -21,8 +22,12 @@ import se.sundsvall.supportcenter.service.EndOfLeaseService;
 
 import static java.util.Collections.emptyList;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
@@ -32,6 +37,7 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 class EndOfLeaseBatchResourceFailuresTest {
 
 	private static final String EXTERNAL_BATCH_ID = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90";
+	private static final String DATASET_REQUEST_HEADER = "adv-dataset-request";
 
 	@MockitoBean
 	private EndOfLeaseService endOfLeaseServiceMock;
@@ -194,6 +200,100 @@ class EndOfLeaseBatchResourceFailuresTest {
 						]""")));
 
 		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	@Test
+	void createEndOfLeaseBatchThatIsAlreadyRegistered() {
+
+		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withComputers(List.of(validComputer()));
+
+		when(endOfLeaseServiceMock.registerBatch("2281", createEndOfLeaseBatchRequest)).thenThrow(Problem.valueOf(CONFLICT, "Already registered"));
+
+		webTestClient.post().uri("/2281/endOfLeaseBatches")
+			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isEqualTo(CONFLICT)
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectHeader().valueEquals(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.expectBody()
+			.jsonPath("$.status").isEqualTo(CONFLICT.value())
+			.jsonPath("$.detail").isEqualTo("Already registered");
+
+		verify(endOfLeaseServiceMock).registerBatch("2281", createEndOfLeaseBatchRequest);
+	}
+
+	@Test
+	void createEndOfLeaseBatchThatIsAlreadyRegisteredWithoutDatasetRequestHeader() {
+
+		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withComputers(List.of(validComputer()));
+
+		when(endOfLeaseServiceMock.registerBatch("2281", createEndOfLeaseBatchRequest)).thenThrow(Problem.valueOf(CONFLICT, "Already registered"));
+
+		webTestClient.post().uri("/2281/endOfLeaseBatches")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isEqualTo(CONFLICT)
+			.expectHeader().doesNotExist(DATASET_REQUEST_HEADER);
+
+		verify(endOfLeaseServiceMock).registerBatch("2281", createEndOfLeaseBatchRequest);
+	}
+
+	@Test
+	void createEndOfLeaseBatchThatFailsValidationWithDatasetRequestHeader() {
+
+		webTestClient.post().uri("/2281/endOfLeaseBatches")
+			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.bodyValue(CreateEndOfLeaseBatchRequest.create().withExternalBatchId(EXTERNAL_BATCH_ID))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectHeader().valueEquals(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID);
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	@Test
+	void createEndOfLeaseBatchWithUnreadableBodyWithDatasetRequestHeader() {
+
+		webTestClient.post().uri("/2281/endOfLeaseBatches")
+			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.bodyValue("{")
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectHeader().valueEquals(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID);
+
+		verifyNoInteractions(endOfLeaseServiceMock);
+	}
+
+	@Test
+	void createEndOfLeaseBatchWhenServiceFailsWithDatasetRequestHeader() {
+
+		final var createEndOfLeaseBatchRequest = CreateEndOfLeaseBatchRequest.create()
+			.withExternalBatchId(EXTERNAL_BATCH_ID)
+			.withComputers(List.of(validComputer()));
+
+		when(endOfLeaseServiceMock.registerBatch("2281", createEndOfLeaseBatchRequest)).thenThrow(new IllegalStateException("Database is unavailable"));
+
+		webTestClient.post().uri("/2281/endOfLeaseBatches")
+			.contentType(APPLICATION_JSON)
+			.header(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID)
+			.bodyValue(createEndOfLeaseBatchRequest)
+			.exchange()
+			.expectStatus().isEqualTo(INTERNAL_SERVER_ERROR)
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectHeader().valueEquals(DATASET_REQUEST_HEADER, EXTERNAL_BATCH_ID);
+
+		verify(endOfLeaseServiceMock).registerBatch("2281", createEndOfLeaseBatchRequest);
 	}
 
 	private static EndOfLeaseComputer validComputer() {
