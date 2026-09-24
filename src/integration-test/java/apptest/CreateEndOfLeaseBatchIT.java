@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
@@ -38,6 +39,8 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 
 	private static final String PATH = "/2281/endOfLeaseBatches";
 	private static final String REQUEST_FILE = "request.json";
+	private static final String DATASET_REQUEST_HEADER = "adv-dataset-request";
+	private static final String DATASET_REQUEST = "DSET0001234";
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -51,13 +54,17 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 	@Test
 	void test001_createEndOfLeaseBatch() throws Exception {
 
-		final var batchId = sendBatch();
+		final var response = sendBatch();
+		final var batchId = response.getId();
 
+		assertThat(response.getExternalBatchId()).isEqualTo("DSET0001234");
 		assertThat(getResponseHeaders().getFirst(LOCATION)).isEqualTo(PATH + "/" + batchId);
+		assertThat(getResponseHeaders().getFirst(DATASET_REQUEST_HEADER)).isEqualTo(DATASET_REQUEST);
 
 		final var batch = jdbcTemplate.queryForMap("select external_batch_id, municipality_id, created from end_of_lease_batch where id = ?", batchId);
-		assertThat(batch).containsEntry("external_batch_id", "DSET0001234");
-		assertThat(batch).containsEntry("municipality_id", "2281");
+		assertThat(batch)
+			.containsEntry("external_batch_id", "DSET0001234")
+			.containsEntry("municipality_id", "2281");
 		assertThat(batch.get("created")).isNotNull();
 
 		final var computers = jdbcTemplate.queryForList(
@@ -78,15 +85,18 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 	@Test
 	void test002_createEndOfLeaseBatchThatIsSentAgain() throws Exception {
 
-		final var batchId = sendBatch();
+		final var batchId = sendBatch().getId();
 
 		final var problem = setupCall()
 			.withServicePath(PATH)
 			.withHttpMethod(POST)
+			.withHeader(DATASET_REQUEST_HEADER, DATASET_REQUEST)
 			.withRequest(REQUEST_FILE)
 			.withExpectedResponseStatus(CONFLICT)
 			.sendRequest()
 			.andReturnBody(Map.class);
+
+		assertThat(getResponseHeaders().getFirst(DATASET_REQUEST_HEADER)).isEqualTo(DATASET_REQUEST);
 
 		assertThat(problem)
 			.containsEntry("status", CONFLICT.value())
@@ -140,15 +150,48 @@ class CreateEndOfLeaseBatchIT extends AbstractAppTest {
 		assertThat(jdbcTemplate.queryForObject("select count(*) from end_of_lease_batch", Integer.class)).isEqualTo(2);
 	}
 
-	private String sendBatch() throws Exception {
-		return setupCall()
+	@Test
+	void test005_createEndOfLeaseBatchWithoutDatasetRequestHeader() throws Exception {
+
+		setupCall()
 			.withServicePath(PATH)
 			.withHttpMethod(POST)
 			.withRequest(REQUEST_FILE)
 			.withExpectedResponseStatus(ACCEPTED)
+			.sendRequest();
+
+		assertThat(getResponseHeaders().containsHeader(DATASET_REQUEST_HEADER)).isFalse();
+		assertThat(jdbcTemplate.queryForObject("select count(*) from end_of_lease_batch", Integer.class)).isOne();
+	}
+
+	@Test
+	void test006_createEndOfLeaseBatchThatFailsValidation() throws Exception {
+
+		final var problem = setupCall()
+			.withServicePath(PATH)
+			.withHttpMethod(POST)
+			.withHeader(DATASET_REQUEST_HEADER, DATASET_REQUEST)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(BAD_REQUEST)
 			.sendRequest()
-			.andReturnBody(EndOfLeaseBatchResponse.class)
-			.getId();
+			.andReturnBody(Map.class);
+
+		assertThat(getResponseHeaders().getFirst(DATASET_REQUEST_HEADER)).isEqualTo(DATASET_REQUEST);
+		assertThat(problem)
+			.containsEntry("status", BAD_REQUEST.value())
+			.containsEntry("title", "Constraint Violation");
+		assertThat(jdbcTemplate.queryForObject("select count(*) from end_of_lease_batch", Integer.class)).isZero();
+	}
+
+	private EndOfLeaseBatchResponse sendBatch() throws Exception {
+		return setupCall()
+			.withServicePath(PATH)
+			.withHttpMethod(POST)
+			.withHeader(DATASET_REQUEST_HEADER, DATASET_REQUEST)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(ACCEPTED)
+			.sendRequest()
+			.andReturnBody(EndOfLeaseBatchResponse.class);
 	}
 
 	private static EndOfLeaseBatchEntity batch(final String municipalityId, final String externalBatchId) {

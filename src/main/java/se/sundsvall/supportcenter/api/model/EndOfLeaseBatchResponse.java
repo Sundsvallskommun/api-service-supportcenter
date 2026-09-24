@@ -9,6 +9,9 @@ public class EndOfLeaseBatchResponse {
 	@Schema(examples = "8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c", description = "Id of the registered batch")
 	private String id;
 
+	@Schema(examples = "DSET0001234", description = "Id of the batch, set by the sender")
+	private String externalBatchId;
+
 	public static EndOfLeaseBatchResponse create() {
 		return new EndOfLeaseBatchResponse();
 	}
@@ -26,22 +29,36 @@ public class EndOfLeaseBatchResponse {
 		return this;
 	}
 
+	public String getExternalBatchId() {
+		return externalBatchId;
+	}
+
+	public void setExternalBatchId(String externalBatchId) {
+		this.externalBatchId = externalBatchId;
+	}
+
+	public EndOfLeaseBatchResponse withExternalBatchId(String externalBatchId) {
+		this.externalBatchId = externalBatchId;
+		return this;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof final EndOfLeaseBatchResponse that))
 			return false;
-		return Objects.equals(id, that.id);
+		return Objects.equals(id, that.id) && Objects.equals(externalBatchId, that.externalBatchId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(id);
+		return Objects.hash(id, externalBatchId);
 	}
 
 	@Override
 	public String toString() {
 		return "EndOfLeaseBatchResponse{" +
 			"id='" + id + '\'' +
+			", externalBatchId='" + externalBatchId + '\'' +
 			'}';
 	}
 }

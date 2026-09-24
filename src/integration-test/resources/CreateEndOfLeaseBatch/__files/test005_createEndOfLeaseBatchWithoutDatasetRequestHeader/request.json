@@ -1,0 +1,15 @@
+{
+	"externalBatchId": "DSET0001234",
+	"computers": [
+		{
+			"serialNumber": "J123ABC",
+			"assetTag": "AB12345",
+			"endOfLeaseDate": "2026-11-30"
+		},
+		{
+			"serialNumber": "K456DEF",
+			"assetTag": "PUB16604",
+			"endOfLeaseDate": "2026-12-31"
+		}
+	]
+}

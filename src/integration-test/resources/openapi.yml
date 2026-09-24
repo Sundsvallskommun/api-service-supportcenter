@@ -79,6 +79,12 @@ paths:
           schema:
             type: string
           example: 2281
+        - name: adv-dataset-request
+          in: header
+          description: Set by the sender. Returned unchanged on every response
+          schema:
+            type: string
+          example: DSET0001234
       requestBody:
         content:
           application/json:
@@ -93,6 +99,12 @@ paths:
               style: simple
               schema:
                 type: string
+            adv-dataset-request:
+              description: "The adv-dataset-request header of the request, unchanged.\
+                \ Left out when that header is missing or empty"
+              style: simple
+              schema:
+                type: string
           content:
             application/json:
               schema:
@@ -100,12 +112,26 @@ paths:
         "409":
           description: "Conflict, a batch with the same external id is already registered.\
             \ The detail names the stored batch"
+          headers:
+            adv-dataset-request:
+              description: "The adv-dataset-request header of the request, unchanged.\
+                \ Left out when that header is missing or empty"
+              style: simple
+              schema:
+                type: string
           content:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
         "400":
           description: Bad Request
+          headers:
+            adv-dataset-request:
+              description: "The adv-dataset-request header of the request, unchanged.\
+                \ Left out when that header is missing or empty"
+              style: simple
+              schema:
+                type: string
           content:
             application/problem+json:
               schema:
@@ -114,6 +140,13 @@ paths:
                   - $ref: "#/components/schemas/ConstraintViolationProblem"
         "500":
           description: Internal Server Error
+          headers:
+            adv-dataset-request:
+              description: "The adv-dataset-request header of the request, unchanged.\
+                \ Left out when that header is missing or empty"
+              style: simple
+              schema:
+                type: string
           content:
             application/problem+json:
               schema:
@@ -791,6 +824,11 @@ components:
           description: Id of the registered batch
           examples:
             - 8f3c1e0a-2b4d-4f2e-9c7a-1d5e6f7a8b9c
+        externalBatchId:
+          type: string
+          description: "Id of the batch, set by the sender"
+          examples:
+            - DSET0001234
     Address:
       type: object
       description: Address model
