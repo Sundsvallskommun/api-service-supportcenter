@@ -4,6 +4,7 @@ import feign.Client;
 import feign.okhttp.OkHttpClient;
 import java.util.List;
 import javax.net.ssl.X509TrustManager;
+import okhttp3.Protocol;
 import org.springframework.cloud.openfeign.FeignBuilderCustomizer;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.dept44.configuration.feign.decoder.JsonPathErrorDecoder;
@@ -31,6 +32,12 @@ final class SysManFeignFactory {
 	 * is there: dept44 installs its certificates as the only trust anchors of the process, so a client built without
 	 * them trusts nothing we talk to.
 	 *
+	 * The protocol list is pinned because NTLM is bound to one connection and IIS will not run Windows Authentication
+	 * over a multiplexed one. Left to itself OkHttp offers h2 over ALPN, IIS answers the first request by resetting the
+	 * stream with HTTP_1_1_REQUIRED, and OkHttp does not retry that on HTTP/1.1 of its own accord, so the handshake
+	 * never starts. Nothing under test catches it: WireMock and MockWebServer both serve plain HTTP, which is HTTP/1.1
+	 * regardless of what we ask for.
+	 *
 	 * @param  instance   the installation whose account answers the challenge
 	 * @param  truststore the certificates the process trusts
 	 * @return            the client
@@ -39,6 +46,7 @@ final class SysManFeignFactory {
 		final var trustManager = (X509TrustManager) truststore.getTrustManagerFactory().getTrustManagers()[0];
 
 		return new OkHttpClient(new okhttp3.OkHttpClient.Builder()
+			.protocols(List.of(Protocol.HTTP_1_1))
 			.sslSocketFactory(truststore.getSSLContext().getSocketFactory(), trustManager)
 			.authenticator(new NTLMAuthenticator(instance.domain(), instance.username(), instance.password()))
 			.build());

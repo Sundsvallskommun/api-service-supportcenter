@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import static java.time.Clock.systemUTC;
@@ -40,6 +41,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 	"spring.lifecycle.timeout-per-shutdown-phase=0s"
 })
 @ActiveProfiles("junit")
+// Closed after the class rather than left in the test context cache. The properties above are this class's
+// alone, so nothing else can reuse the context, and the run stubbed above never returns, so the scheduling
+// thread it holds would go on ticking for the rest of the fork.
+@DirtiesContext
 class EndOfLeaseDispatchSchedulerShedlockTest {
 
 	private static final String LOCK_NAME = "end-of-lease-dispatch";

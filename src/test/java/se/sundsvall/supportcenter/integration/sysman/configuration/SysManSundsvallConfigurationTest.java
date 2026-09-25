@@ -5,6 +5,7 @@ import java.security.KeyStore;
 import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import okhttp3.Protocol;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -91,6 +92,11 @@ class SysManSundsvallConfigurationTest {
 			.isInstanceOf(NTLMAuthenticator.class)
 			.hasFieldOrPropertyWithValue("domain", "PERSONAL")
 			.hasFieldOrPropertyWithValue("username", "sundsvallUsername");
+
+		// Asserted here only, since both installations are handed the same list by SysManFeignFactory. h2 left in the
+		// list is what IIS resets the stream over, and no test that speaks plain HTTP would notice.
+		assertThat(client).extracting("delegate").extracting("protocols")
+			.isEqualTo(List.of(Protocol.HTTP_1_1));
 	}
 
 	private static Instance sundsvall() {
