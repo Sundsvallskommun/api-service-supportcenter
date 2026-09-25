@@ -86,16 +86,18 @@ scheduler:
       # the message id further down names a real message. Half an hour apart so the dispatch run reads what this one
       # has already written rather than racing it.
       cron: '-'
-      # One POB call per computer, measured at just under a hundred milliseconds, so a page of this size is half a
-      # minute and a batch of a thousand drains in four runs.
+      # Five calls of serial-numbers-per-call. A batch of a thousand drains in four runs.
       page-size: 250
-      # Has to outlast a run, or the lock passes to the next instance mid-run and a computer is looked up twice. An
-      # hour covers POB at fourteen seconds a call, a hundred and forty times the measured pace. Deliberately not the
-      # arithmetic worst case of four hours: the same lock is what holds the queue still after an instance dies, and
-      # that is the far likelier bill.
-      shedlock-lock-at-most-for: PT1H
-      # Twenty times the measured pace. Worth knowing about, not worth panicking over.
-      maximum-execution-time: PT10M
+      # POB's IIS rejects query strings over 2048 bytes. Fifty encoded serial numbers of ten characters come to about
+      # 1400. A call whose serial numbers average more than 22 characters goes over, fails, and costs each computer an
+      # attempt.
+      serial-numbers-per-call: 50
+      # Must outlast a run, or another instance starts on the same computers. The worst case is five calls at full
+      # connect and read timeouts, just under six minutes. No longer, since the lock of a dead instance also holds the
+      # queue still until it expires. Not measured against POB.
+      shedlock-lock-at-most-for: PT10M
+      # Below the lock, so a run close to losing it shows on the health endpoint first.
+      maximum-execution-time: PT5M
     dispatch:
       name: end-of-lease-dispatch
       # Off for the same reason as the lookup, and half an hour behind it when turned on.

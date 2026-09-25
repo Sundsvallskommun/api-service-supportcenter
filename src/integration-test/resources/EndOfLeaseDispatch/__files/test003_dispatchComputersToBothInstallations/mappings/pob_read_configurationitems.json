@@ -8,7 +8,7 @@
 		"method": "GET",
 		"queryParameters": {
 			"Filter": {
-				"equalTo": "SerialNumber=J123ABC"
+				"matches": "(?=.*SerialNumber=J123ABC(,|$))(?=.*SerialNumber=L789GHI(,|$))SerialNumber=[^,]+,SerialNumber=[^,]+"
 			}
 		},
 		"urlPath": "/pob/configurationitems"
@@ -26,9 +26,18 @@
 					"Virtual.CIKommun": "Sundsvall"
 				},
 				"Memo": {}
+			},
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"SerialNumber": "L789GHI",
+					"Virtual.CIKommun": "Ånge"
+				},
+				"Memo": {}
 			}
 		],
 		"status": 200
 	},
-	"name": "pob-read-configurationitems-sundsvall"
+	"name": "pob-read-configurationitems"
 }

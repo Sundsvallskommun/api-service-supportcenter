@@ -24,12 +24,13 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount;
 
 import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.tuple;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.EXCLUDED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
-import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityIds;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchEntity;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseBatchStatusResponse;
 import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toEndOfLeaseStatisticsResponse;
@@ -39,6 +40,7 @@ import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toSaveM
 class EndOfLeaseMapperTest {
 
 	private static final String MUNICIPALITY_ID = "2281";
+	private static final String SERIAL_NUMBER = "J123ABC";
 	private static final String EXTERNAL_BATCH_ID = "d1f3a8c2-9b7e-4a5f-8c3d-2e6b1a4f7c90";
 	private static final LocalDate END_OF_LEASE_DATE = LocalDate.of(2026, 11, 30);
 
@@ -133,8 +135,8 @@ class EndOfLeaseMapperTest {
 		"2260, 2260",
 		"Ånge, 2260"
 	})
-	void toAssetMunicipalityIdReadsBothSpellings(final String municipality, final String expectedMunicipalityId) {
-		assertThat(toAssetMunicipalityId(configurationItem(municipality))).isEqualTo(expectedMunicipalityId);
+	void toAssetMunicipalityIdsReadsBothSpellings(final String municipality, final String expectedMunicipalityId) {
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), configurationItem(municipality))).containsExactly(entry(SERIAL_NUMBER, expectedMunicipalityId));
 	}
 
 	@ParameterizedTest
@@ -142,8 +144,8 @@ class EndOfLeaseMapperTest {
 	@CsvSource({
 		"Timrå", "9999"
 	})
-	void toAssetMunicipalityIdAnswersNullForAMunicipalityWeCannotRouteOn(final String municipality) {
-		assertThat(toAssetMunicipalityId(configurationItem(municipality))).isNull();
+	void toAssetMunicipalityIdsLeavesOutAMunicipalityWeCannotRouteOn(final String municipality) {
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), configurationItem(municipality))).isEmpty();
 	}
 
 	/**
@@ -166,33 +168,100 @@ class EndOfLeaseMapperTest {
 	 * perfectly well written out.
 	 */
 	@Test
-	void toAssetMunicipalityIdReadsAMunicipalityThatCameBackAsANumber() {
-		final var configurationItem = new PobPayload().type("ConfigurationItem").data(new HashMap<>(Map.of("Virtual.CIKommun", 2281)));
+	void toAssetMunicipalityIdsReadsAMunicipalityThatCameBackAsANumber() {
+		final var configurationItem = new PobPayload().type("ConfigurationItem").data(new HashMap<>(Map.of("SerialNumber", SERIAL_NUMBER, "Virtual.CIKommun", 2281)));
 
-		assertThat(toAssetMunicipalityId(List.of(configurationItem))).isEqualTo("2281");
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), List.of(configurationItem))).containsExactly(entry(SERIAL_NUMBER, "2281"));
 	}
 
 	@ParameterizedTest
 	@NullSource
-	void toAssetMunicipalityIdAnswersNullWhenPobKnowsNoSuchComputer(final List<PobPayload> configurationItems) {
-		assertThat(toAssetMunicipalityId(configurationItems)).isNull();
+	void toAssetMunicipalityIdsIsEmptyWhenPobKnowsNoSuchComputer(final List<PobPayload> configurationItems) {
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), configurationItems)).isEmpty();
 	}
 
 	@Test
-	void toAssetMunicipalityIdAnswersNullForAnEmptyAnswer() {
-		assertThat(toAssetMunicipalityId(List.of())).isNull();
+	void toAssetMunicipalityIdsIsEmptyForAnEmptyAnswer() {
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), List.of())).isEmpty();
 	}
 
 	@Test
-	void toAssetMunicipalityIdAnswersNullForAConfigurationItemWithoutData() {
-		assertThat(toAssetMunicipalityId(List.of(new PobPayload().type("ConfigurationItem")))).isNull();
+	void toAssetMunicipalityIdsIsEmptyForAConfigurationItemWithoutData() {
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), List.of(new PobPayload().type("ConfigurationItem")))).isEmpty();
+	}
+
+	/**
+	 * POB does not keep the order. Paired on position, a computer would get its neighbour's municipality.
+	 */
+	@Test
+	void toAssetMunicipalityIdsPairsEachComputerWithItsOwnSerialNumber() {
+		final var configurationItems = List.of(
+			configurationItem("K456DEF", "Ånge"),
+			configurationItem("J123ABC", "Sundsvall"));
+
+		assertThat(toAssetMunicipalityIds(List.of("J123ABC", "K456DEF"), configurationItems))
+			.containsOnly(entry("J123ABC", "2281"), entry("K456DEF", "2260"));
+	}
+
+	@Test
+	void toAssetMunicipalityIdsLeavesOutASerialNumberPobDidNotAnswer() {
+		assertThat(toAssetMunicipalityIds(List.of("J123ABC", "K456DEF"), List.of(configurationItem("J123ABC", "2281"))))
+			.containsExactly(entry("J123ABC", "2281"));
+	}
+
+	/**
+	 * A configuration item without a serial number could belong to any computer of the call, so it is skipped.
+	 */
+	@Test
+	void toAssetMunicipalityIdsIgnoresAConfigurationItemWithoutASerialNumber() {
+		final var configurationItem = new PobPayload().type("ConfigurationItem").data(new HashMap<>(Map.of("Virtual.CIKommun", "2281")));
+
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), List.of(configurationItem))).isEmpty();
+	}
+
+	/**
+	 * Matched trimmed and case-insensitively, but keyed on the serial number as the caller gave it.
+	 */
+	@Test
+	void toAssetMunicipalityIdsMatchesTheSerialNumberRegardlessOfCaseAndPadding() {
+		assertThat(toAssetMunicipalityIds(List.of(" j123abc"), List.of(configurationItem("J123ABC ", "2281"))))
+			.containsExactly(entry(" j123abc", "2281"));
+	}
+
+	/**
+	 * The first configuration item decides. Whether POB can hold two for one serial number is still an open question.
+	 */
+	@Test
+	void toAssetMunicipalityIdsTakesTheFirstConfigurationItemOfASerialNumber() {
+		final var configurationItems = List.of(
+			configurationItem(SERIAL_NUMBER, "Sundsvall"),
+			configurationItem(SERIAL_NUMBER, "Ånge"));
+
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), configurationItems)).containsExactly(entry(SERIAL_NUMBER, "2281"));
+	}
+
+	/**
+	 * A second configuration item is not searched when the first cannot be routed on.
+	 */
+	@Test
+	void toAssetMunicipalityIdsDoesNotLookPastAFirstConfigurationItemItCannotRouteOn() {
+		final var configurationItems = List.of(
+			configurationItem(SERIAL_NUMBER, "Timrå"),
+			configurationItem(SERIAL_NUMBER, "Sundsvall"));
+
+		assertThat(toAssetMunicipalityIds(List.of(SERIAL_NUMBER), configurationItems)).isEmpty();
 	}
 
 	private static List<PobPayload> configurationItem(final String municipality) {
+		return List.of(configurationItem(SERIAL_NUMBER, municipality));
+	}
+
+	private static PobPayload configurationItem(final String serialNumber, final String municipality) {
 		final var dataMap = new HashMap<String, Object>();
+		dataMap.put("SerialNumber", serialNumber);
 		dataMap.put("Virtual.CIKommun", municipality);
 
-		return List.of(new PobPayload().type("ConfigurationItem").data(dataMap));
+		return new PobPayload().type("ConfigurationItem").data(dataMap);
 	}
 
 	/**

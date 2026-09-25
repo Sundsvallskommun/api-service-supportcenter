@@ -69,8 +69,7 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * The computers the lookup run has left to do, oldest first.
 	 *
 	 * A null municipality is what says a computer has not been looked up yet, so no second state is needed to tell the
-	 * two runs apart. Taken a page at a time rather than all at once, since every computer here is one POB call and a
-	 * run has to finish inside its lock.
+	 * two runs apart. Paged, since a run has to finish inside its lock.
 	 *
 	 * The hold is filtered on for symmetry with {@link #findReadyToSend}, though nothing sets one on a row awaiting
 	 * lookup any more. That run answers a dependency failure by stopping, not by holding the page back.

@@ -117,7 +117,7 @@ class EndOfLeaseFailureRecorderTest {
 	 */
 	@Test
 	void aNotedDependencyFailureCostsNoAttemptEither() {
-		endOfLeaseFailureRecorder.noteDependencyFailure(computer(3), JOB_NAME, SUBJECT, "POB turned the job's key down: 401");
+		endOfLeaseFailureRecorder.noteDependencyFailure(List.of(computer(3)), JOB_NAME, "POB turned the job's key down: 401");
 
 		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
 		assertThat(computerCaptor.getValue())
@@ -134,10 +134,28 @@ class EndOfLeaseFailureRecorderTest {
 	 */
 	@Test
 	void aNotedDependencyFailureDoesNotHoldTheComputerBack() {
-		endOfLeaseFailureRecorder.noteDependencyFailure(computer(0), JOB_NAME, SUBJECT, "POB could not be reached");
+		endOfLeaseFailureRecorder.noteDependencyFailure(List.of(computer(0)), JOB_NAME, "POB could not be reached");
 
 		verify(endOfLeaseComputerRepositoryMock).save(computerCaptor.capture());
 		assertThat(computerCaptor.getValue().getRetryAfter()).isNull();
+	}
+
+	/**
+	 * The reason goes on every computer of the call, since any of them may be the oldest the queue indicator reads. The
+	 * health endpoint still reports one outage.
+	 */
+	@Test
+	void aNotedDependencyFailureIsWrittenOnEveryComputerOfTheCall() {
+		endOfLeaseFailureRecorder.noteDependencyFailure(List.of(computer(0), computer(2)), JOB_NAME, "POB could not be reached");
+
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getAttempts, EndOfLeaseComputerEntity::getErrorMessage, EndOfLeaseComputerEntity::getRetryAfter)
+			.containsExactly(
+				tuple(0, "POB could not be reached", null),
+				tuple(2, "POB could not be reached", null));
+
+		verify(dept44HealthUtilityMock).setHealthIndicatorUnhealthy(JOB_NAME, "POB could not be reached");
 	}
 
 	/**

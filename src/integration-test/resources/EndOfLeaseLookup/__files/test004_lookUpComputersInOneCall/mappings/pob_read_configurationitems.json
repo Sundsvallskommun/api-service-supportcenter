@@ -8,7 +8,7 @@
 		"method": "GET",
 		"queryParameters": {
 			"Filter": {
-				"equalTo": "SerialNumber=L789GHI"
+				"matches": "(?=.*SerialNumber=J123ABC(,|$))(?=.*SerialNumber=K456DEF(,|$))(?=.*SerialNumber=L789GHI(,|$))SerialNumber=[^,]+(,SerialNumber=[^,]+){2}"
 			}
 		},
 		"urlPath": "/pob/configurationitems"
@@ -22,13 +22,26 @@
 				"Type": "ConfigurationItem",
 				"Links": [],
 				"Data": {
+					"Id": "867405",
 					"SerialNumber": "L789GHI",
+					"OptionalNumber": "CD67890",
 					"Virtual.CIKommun": "Ånge"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"Id": "867403",
+					"SerialNumber": "J123ABC",
+					"OptionalNumber": "AB12345",
+					"Virtual.CIKommun": "Sundsvall"
 				},
 				"Memo": {}
 			}
 		],
 		"status": 200
 	},
-	"name": "pob-read-configurationitems-ange"
+	"name": "pob-read-configurationitems"
 }
