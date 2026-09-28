@@ -94,7 +94,10 @@ public final class GetAssetMapper {
 	}
 
 	private static LocalDate toLocalDate(String date) {
-		return StringUtils.isNotEmpty(date) ? LocalDate.parse(date, DATE_TIME_FORMATTER) : null;
+		if (StringUtils.isNotEmpty(date)) {
+			return LocalDate.parse(date, DATE_TIME_FORMATTER);
+		}
+		return null;
 	}
 
 	private static String toManufacturer(Map<String, Object> manufacturerMap) {
@@ -111,7 +114,10 @@ public final class GetAssetMapper {
 
 	@SuppressWarnings("unchecked")
 	private static Map<String, Object> convertObjectToMap(Object attributes) {
-		return attributes instanceof Map<?, ?> ? (Map<String, Object>) attributes : emptyMap();
+		if (attributes instanceof Map<?, ?>) {
+			return (Map<String, Object>) attributes;
+		}
+		return emptyMap();
 	}
 
 }

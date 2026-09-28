@@ -1,3 +1,12 @@
+dept44:
+  models:
+    api:
+      paging:
+        max:
+          # Lowered from the inherited thousand. A batch arrives with about a thousand computers, so at the default a
+          # single call could still ask for the whole of one and get back what paging was added to stop. Two hundred is
+          # a page a reader can take in and an answer the service can hold, and the batch is five calls away.
+          limit: 200
 integration:
   pob:
     connectTimeout: 10

@@ -54,6 +54,12 @@
 			<artifactId>dept44-common-validators</artifactId>
 		</dependency>
 		<dependency>
+			<!-- PagingMetaData and AbstractParameterPagingBase, which the paged end of lease reads answer with and
+					take their page and limit from. Not pulled in by any of the starters above. -->
+			<groupId>se.sundsvall.dept44</groupId>
+			<artifactId>dept44-models</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 		</dependency>
@@ -162,6 +168,16 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- The parent's 256m is not enough here. The unit tests build ten Spring contexts in one reused
+							fork and the test context cache holds on to all of them, so the last one to start is the one
+							that runs out. Only the heap is changed, the rest of the argLine is the parent's. -->
+					<argLine>-Dfile.encoding=${project.encoding} -Xmx1024m ${mockito.agent} ${surefireArgLine}</argLine>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>

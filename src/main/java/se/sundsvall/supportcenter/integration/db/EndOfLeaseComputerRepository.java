@@ -5,12 +5,15 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus;
+import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount;
 
 @CircuitBreaker(name = "endOfLeaseComputerRepository")
 public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseComputerEntity, String> {
@@ -128,4 +131,82 @@ public interface EndOfLeaseComputerRepository extends JpaRepository<EndOfLeaseCo
 	 * @return        the number of computers in the state
 	 */
 	long countByStatus(EndOfLeaseStatus status);
+
+	/**
+	 * How many computers of each of the named batches are in each state.
+	 *
+	 * One row per batch and state rather than one query per batch. The caller names the batches, which is what bounds
+	 * this: the statistics read hands it one page of batch ids and the single batch read hands it one id, so the number
+	 * of rows that come back is four times the page and never grows with the table.
+	 *
+	 * Unordered, because nothing reads it in order. The rows are looked up by batch id against a page of batches that
+	 * carries the order the answer keeps, so a sort here would be one the database pays for and nobody observes.
+	 *
+	 * @param  batchIds the ids of the batches to count
+	 * @return          one count per batch and state
+	 */
+	@Query("select new se.sundsvall.supportcenter.integration.db.model.EndOfLeaseBatchStatusCount("
+		+ "computer.batch.id, computer.batch.externalBatchId, computer.batch.created, computer.status, count(computer)) "
+		+ "from EndOfLeaseComputerEntity computer "
+		+ "where computer.batch.id in :batchIds "
+		+ "group by computer.batch.id, computer.batch.externalBatchId, computer.batch.created, computer.status")
+	List<EndOfLeaseBatchStatusCount> countByStatusGroupedByBatch(@Param("batchIds") Collection<String> batchIds);
+
+	/**
+	 * How many computers a municipality registered inside a window are in each state, across every batch of the window.
+	 *
+	 * Scoped by the municipality of the sender, the same way the retry endpoint is, so that a computer POB places in
+	 * another municipality still counts towards the batch it arrived in.
+	 *
+	 * Separate from the per batch counts because it has to cover the whole window and those cover one page of it. The
+	 * window still decides how many rows the database reads, and a batch a day of a thousand computers is a third of a
+	 * million rows a year, but the counting happens in the database and four rows come back. What the window saves here
+	 * is a scan, not a heap.
+	 *
+	 * @param  municipalityId the municipality of the sender that registered the batches
+	 * @param  from           the first moment to count, included
+	 * @param  to             the moment to stop counting at, not included
+	 * @return                one count per state
+	 */
+	@Query("select new se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount(computer.status, count(computer)) "
+		+ "from EndOfLeaseComputerEntity computer "
+		+ "where computer.batch.municipalityId = :municipalityId "
+		+ "and computer.batch.created >= :from "
+		+ "and computer.batch.created < :to "
+		+ "group by computer.status")
+	List<EndOfLeaseStatusCount> countByStatusInWindow(@Param("municipalityId") String municipalityId, @Param("from") OffsetDateTime from, @Param("to") OffsetDateTime to);
+
+	/**
+	 * One page of the computers of a batch that are in the named states, in state order and then by serial number.
+	 *
+	 * State order is the order the states are declared in, PENDING first and EXCLUDED last, which is the order a reader
+	 * opening the first page wants: what is still coming, then what went through, then what needs a human. Ordering by
+	 * the column itself would sort the stored strings and answer alphabetically, which puts EXCLUDED first and is not
+	 * what either this method or the response schema promises. A state added to the enum and not to the case sorts
+	 * last.
+	 *
+	 * The states are filtered here rather than after the rows are read, or the page would be cut out of the whole batch
+	 * and then filtered, and a page of ten would answer with however few of those ten happened to match.
+	 *
+	 * The caller passes every state when it wants every state. An empty collection answers with nothing, which is not
+	 * what a caller who left the parameter out means by it.
+	 *
+	 * @param  batchId  the id of the batch
+	 * @param  statuses the states to read, never empty
+	 * @param  pageable which page to read
+	 * @return          the page of computers
+	 */
+	@Query(value = "select computer from EndOfLeaseComputerEntity computer "
+		+ "where computer.batch.id = :batchId "
+		+ "and computer.status in :statuses "
+		+ "order by case computer.status "
+		+ "when se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING then 1 "
+		+ "when se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT then 2 "
+		+ "when se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED then 3 "
+		+ "when se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.EXCLUDED then 4 "
+		+ "else 5 end, computer.serialNumber",
+		countQuery = "select count(computer) from EndOfLeaseComputerEntity computer "
+			+ "where computer.batch.id = :batchId "
+			+ "and computer.status in :statuses")
+	Page<EndOfLeaseComputerEntity> findByBatchId(@Param("batchId") String batchId, @Param("statuses") Collection<EndOfLeaseStatus> statuses, Pageable pageable);
 }
