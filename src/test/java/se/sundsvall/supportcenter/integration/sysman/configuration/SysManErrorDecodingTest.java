@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.integration.sysman.configuration;
 
 import feign.Request;
 import feign.Response;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpStatus;
 import se.sundsvall.dept44.configuration.feign.decoder.JsonPathErrorDecoder;
 import se.sundsvall.dept44.exception.ClientProblem;
@@ -17,8 +19,10 @@ import se.sundsvall.dept44.exception.ServerProblem;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Stream.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static se.sundsvall.supportcenter.integration.sysman.configuration.SysManFeignFactory.errorDecoder;
 
@@ -79,11 +83,27 @@ class SysManErrorDecodingTest {
 	 */
 	@Test
 	void aBodyThatIsNotJsonFallsBackOnTheStatus() {
-		final var message = decode("<html>502 Bad Gateway</html>");
+		final var message = decode(BAD_REQUEST.value(), "text/html", "<html>502 Bad Gateway</html>").getMessage();
 
 		assertThat(message)
 			.contains(CLIENT_ID)
-			.contains("400 Bad Request");
+			.contains("400 Bad Request")
+			.doesNotContain("<html>");
+	}
+
+	/**
+	 * SysMan answers a missing permission with the message as the whole body rather than inside an ApiErrorMessage, and
+	 * "$.message" throws on a string. Seen on 2026-09-28 as a 403 that said nothing but "Unknown error". Both spellings are
+	 * asserted, since the payload log prints a quoted and an unquoted body the same way.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"\"Missing permission on resource: Message.Send\"", "Missing permission on resource: Message.Send"
+	})
+	void aBareStringIsTheMessage(final String body) {
+		assertThat(decode(FORBIDDEN.value(), "application/json; charset=utf-8", body))
+			.isInstanceOf(ClientProblem.class)
+			.hasMessage("Forbidden: sysman-sundsvall error: {status=403 Forbidden, title=Missing permission on resource: Message.Send}");
 	}
 
 	/**
@@ -159,11 +179,16 @@ class SysManErrorDecodingTest {
 	}
 
 	private Exception decode(final int status, final String body) {
+		return decode(status, null, body);
+	}
+
+	private Exception decode(final int status, final String contentType, final String body) {
 		final var request = Request.create(Request.HttpMethod.POST, "http://sysman.url/api/v2/message/target", Map.of(), null, null, null);
 		final var response = Response.builder()
 			.status(status)
 			.reason(HttpStatus.valueOf(status).getReasonPhrase())
 			.request(request)
+			.headers(contentType == null ? Map.of() : Map.of(CONTENT_TYPE, List.of(contentType)))
 			.body(body, UTF_8)
 			.build();
 

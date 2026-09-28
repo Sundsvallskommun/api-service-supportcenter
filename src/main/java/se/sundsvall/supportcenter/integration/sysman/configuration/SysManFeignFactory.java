@@ -75,10 +75,12 @@ final class SysManFeignFactory {
 	 * String.class) hands back null for an array, and a definite path throws when the field is absent, which costs the
 	 * message as well. Both shapes are asserted in SysManErrorDecodingTest.
 	 *
+	 * A body that is a bare string has nothing for either path to point into, and is read by SysManErrorDecoder instead.
+	 *
 	 * @param  clientId the name the failure is reported under
 	 * @return          the decoder
 	 */
 	static JsonPathErrorDecoder errorDecoder(final String clientId) {
-		return new JsonPathErrorDecoder(clientId, List.of(UNAUTHORIZED.value(), FORBIDDEN.value()), new JsonPathSetup(TITLE_PATH, DETAIL_PATH));
+		return new SysManErrorDecoder(clientId, List.of(UNAUTHORIZED.value(), FORBIDDEN.value()), new JsonPathSetup(TITLE_PATH, DETAIL_PATH));
 	}
 }
