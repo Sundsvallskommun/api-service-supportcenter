@@ -25,7 +25,8 @@ import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toError
  *
  * A dependency failure is written down two ways, because the runs answer one differently. The dispatch run carries on
  * to the next municipality, so the group it just tried is held back to keep it from filling the front of every page.
- * The lookup run stops, so there is nothing behind it left to protect and the computer is left free for the next run.
+ * The lookup run stops, so there is nothing behind it left to protect and the computers of the call are left free for
+ * the next run.
  */
 @Component
 class EndOfLeaseFailureRecorder {

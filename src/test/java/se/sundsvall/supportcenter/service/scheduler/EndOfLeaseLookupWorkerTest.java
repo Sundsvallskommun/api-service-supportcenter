@@ -4,9 +4,13 @@ import generated.client.pob.PobPayload;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -24,11 +28,13 @@ import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 import static java.util.Collections.emptyList;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -37,6 +43,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.FAILED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
@@ -160,23 +167,111 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	/**
-	 * A rejected request may be about one computer's data, so it costs attempts. The answer does not say which
-	 * computer, so all of them pay.
+	 * A call POB turns down, or that breaks us, may be about one computer's data, and the answer does not say which. Each
+	 * serial number is asked about again on its own, so only the computer at fault pays. 404 is what POB's IIS answers a
+	 * query string that is too long.
 	 */
-	@Test
-	void aRequestPobTurnsDownCostsEveryComputerOfTheCallAnAttempt() {
+	@ParameterizedTest
+	@MethodSource("failuresOfTheCall")
+	void aCallPobTurnsDownIsAskedAgainOneSerialNumberAtATime(final RuntimeException failure) {
 		whenPageContains(computer("J000ABC", PENDING, 1), computer("J001ABC", PENDING, 0));
-		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC", "J001ABC"))).thenThrow(new ClientProblem(BAD_REQUEST, "Malformed filter"));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC", "J001ABC"))).thenThrow(failure);
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC"))).thenReturn(List.of(configurationItem("J000ABC", "2281")));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J001ABC"))).thenThrow(failure);
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
 		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
 		assertThat(computerCaptor.getAllValues())
-			.extracting(EndOfLeaseComputerEntity::getSerialNumber, EndOfLeaseComputerEntity::getStatus, EndOfLeaseComputerEntity::getAttempts)
+			.extracting(EndOfLeaseComputerEntity::getSerialNumber, EndOfLeaseComputerEntity::getAssetMunicipalityId, EndOfLeaseComputerEntity::getAttempts)
 			.containsExactly(
-				tuple("J000ABC", PENDING, 2),
-				tuple("J001ABC", PENDING, 1));
-		assertThat(computerCaptor.getAllValues()).extracting(EndOfLeaseComputerEntity::getErrorMessage).allSatisfy(errorMessage -> assertThat(errorMessage).isNotBlank());
+				tuple("J000ABC", "2281", 0),
+				tuple("J001ABC", null, 1));
+		assertThat(computerCaptor.getAllValues().getLast().getErrorMessage()).isNotBlank();
+	}
+
+	private static Stream<RuntimeException> failuresOfTheCall() {
+		return Stream.of(
+			new ClientProblem(BAD_REQUEST, "Malformed filter"),
+			new ClientProblem(NOT_FOUND, "Query string too long"),
+			new IllegalStateException("the payload broke us on the way through"));
+	}
+
+	/**
+	 * Two rows of one serial number are one serial number to POB, so there is nothing left to split them into.
+	 */
+	@Test
+	void aTurnedDownCallOfOneSerialNumberIsChargedRatherThanSplit() {
+		whenPageContains(computer(PENDING, 0), computer(PENDING, 2));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of(SERIAL_NUMBER))).thenThrow(new ClientProblem(BAD_REQUEST, "Malformed filter"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(pobIntegrationMock).getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of(SERIAL_NUMBER));
+		verify(endOfLeaseComputerRepositoryMock, times(2)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues()).extracting(EndOfLeaseComputerEntity::getAttempts).containsExactly(1, 3);
+		verifyNoMoreInteractions(pobIntegrationMock);
+	}
+
+	/**
+	 * Split, the rows that share a serial number stay in one call.
+	 */
+	@Test
+	void rowsThatShareASerialNumberStayTogetherWhenACallIsSplit() {
+		endOfLeaseLookupWorker = new EndOfLeaseLookupWorker(
+			endOfLeaseComputerRepositoryMock, pobIntegrationMock, new POBProperties(1, 2, POB_KEY),
+			new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF),
+			dept44HealthUtilityMock, PAGE_SIZE, 3, JOB_NAME);
+		whenPageContains(computer("J000ABC", PENDING, 0), computer("J001ABC", PENDING, 0), computer("J000ABC", PENDING, 2));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC", "J001ABC"))).thenThrow(new ClientProblem(BAD_REQUEST, "Malformed filter"));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC"))).thenReturn(List.of(configurationItem("J000ABC", "2281")));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J001ABC"))).thenReturn(emptyList());
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verify(pobIntegrationMock).getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J000ABC"));
+		verify(endOfLeaseComputerRepositoryMock, times(3)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues())
+			.extracting(EndOfLeaseComputerEntity::getSerialNumber, EndOfLeaseComputerEntity::getAssetMunicipalityId)
+			.containsExactly(
+				tuple("J000ABC", "2281"),
+				tuple("J000ABC", "2281"),
+				tuple("J001ABC", null));
+	}
+
+	/**
+	 * The single calls count towards giving up on the page like any other, or a POB that dies halfway through a split
+	 * would be asked about fifty serial numbers, each one waiting out its timeout.
+	 */
+	@Test
+	void theRunStopsWhenPobFailsWhileAskingOneSerialNumberAtATime() {
+		whenPageContains(computers(4));
+		when(pobIntegrationMock.getConfigurationItemsBySerialNumbersForEndOfLease(eq(POB_KEY), any()))
+			.thenThrow(new ClientProblem(BAD_REQUEST, "Malformed filter"))
+			.thenThrow(new ClientProblem(BAD_REQUEST, "Malformed filter"))
+			.thenThrow(new ServerProblem(BAD_GATEWAY, "POB is unwell"));
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		// Two calls turned down, then J000ABC, J001ABC and J002ABC on their own. J003ABC is left for the next run.
+		verify(pobIntegrationMock, times(5)).getConfigurationItemsBySerialNumbersForEndOfLease(eq(POB_KEY), any());
+		verify(pobIntegrationMock, never()).getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J003ABC"));
+		verify(endOfLeaseComputerRepositoryMock, times(3)).save(computerCaptor.capture());
+		assertThat(computerCaptor.getAllValues()).extracting(EndOfLeaseComputerEntity::getAttempts).containsOnly(0);
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = {
+		0, -1
+	})
+	void aCallSizeBelowOneIsRefusedAtStartup(final int serialNumbersPerCall) {
+		final var failureRecorder = new EndOfLeaseFailureRecorder(endOfLeaseComputerRepositoryMock, dept44HealthUtilityMock, MAXIMUM_ATTEMPTS, BACKOFF);
+		final var pobProperties = new POBProperties(1, 2, POB_KEY);
+
+		assertThatExceptionOfType(IllegalStateException.class)
+			.isThrownBy(() -> new EndOfLeaseLookupWorker(endOfLeaseComputerRepositoryMock, pobIntegrationMock, pobProperties, failureRecorder,
+				dept44HealthUtilityMock, PAGE_SIZE, serialNumbersPerCall, JOB_NAME))
+			.withMessageContaining("scheduler.end-of-lease.lookup.serial-numbers-per-call");
 	}
 
 	/**
@@ -234,7 +329,7 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	/**
-	 * The key this job carries is its own, and POB turning it down is no fact about the computer the call happened to
+	 * The key this job carries is its own, and POB turning it down is no fact about the computers the call happened to
 	 * be about. Counted, a rotated key would drain the whole queue into FAILED before anyone noticed.
 	 */
 	@Test
@@ -250,9 +345,9 @@ class EndOfLeaseLookupWorkerTest {
 	}
 
 	/**
-	 * The run stops on a POB that is not answering, so there is nothing behind this computer left to protect from it
-	 * and no reason to hold it back. Left free, it is the first one tried on the next run, which makes one failing call
-	 * an hour the whole price of an outage instead of a page held back for six.
+	 * The run stops on a POB that is not answering, so there is nothing behind this call left to protect from it and no
+	 * reason to hold its computers back. Left free, they are the first tried on the next run, which makes one failing
+	 * call an hour the whole price of an outage instead of a page held back for six.
 	 */
 	@Test
 	void aRejectedPobKeyDoesNotHoldTheComputerBack() {
@@ -311,7 +406,8 @@ class EndOfLeaseLookupWorkerTest {
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
 
-		verify(pobIntegrationMock, times(5)).getConfigurationItemsBySerialNumbersForEndOfLease(eq(POB_KEY), any());
+		// Five calls of two, then each of the ten on its own.
+		verify(pobIntegrationMock, times(15)).getConfigurationItemsBySerialNumbersForEndOfLease(eq(POB_KEY), any());
 		verify(endOfLeaseComputerRepositoryMock, times(10)).save(any());
 	}
 

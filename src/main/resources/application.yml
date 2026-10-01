@@ -89,12 +89,13 @@ scheduler:
       # Five calls of serial-numbers-per-call. A batch of a thousand drains in four runs.
       page-size: 250
       # POB's IIS rejects query strings over 2048 bytes. Fifty encoded serial numbers of ten characters come to about
-      # 1400. A call whose serial numbers average more than 22 characters goes over, fails, and costs each computer an
-      # attempt.
+      # 1400. A call whose serial numbers average more than 22 characters goes over, and POB turning it down makes the
+      # run ask about them one at a time.
       serial-numbers-per-call: 50
       # Must outlast a run, or another instance starts on the same computers. The worst case is five calls at full
-      # connect and read timeouts, just under six minutes. No longer, since the lock of a dead instance also holds the
-      # queue still until it expires. Not measured against POB.
+      # connect and read timeouts, just under six minutes. A call POB turns down adds up to fifty single calls, quick
+      # while POB answers, and three timeouts in a row end the run. No longer, since the lock of a dead instance also
+      # holds the queue still until it expires. Not measured against POB.
       shedlock-lock-at-most-for: PT10M
       # Below the lock, so a run close to losing it shows on the health endpoint first.
       maximum-execution-time: PT5M

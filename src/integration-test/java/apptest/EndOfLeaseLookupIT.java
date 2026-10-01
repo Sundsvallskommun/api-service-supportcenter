@@ -138,10 +138,11 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 	}
 
 	/**
-	 * A rejected call costs every computer in it an attempt, since the answer does not say which one it was about.
+	 * POB turns the call of three down, since it cannot take K456DEF. The answer does not say which serial number was at
+	 * fault, so each is asked about on its own and only K456DEF pays an attempt.
 	 */
 	@Test
-	void test005_pobTurnsTheCallDown() throws Exception {
+	void test005_aCallPobTurnsDownIsAskedAgainOneSerialNumberAtATime() throws Exception {
 		final var batchId = sendBatch();
 
 		endOfLeaseLookupWorker.processComputersAwaitingLookup();
@@ -151,12 +152,12 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 		assertThat(computers(batchId))
 			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
 			.containsExactly(
-				tuple("J123ABC", "PENDING", null, 1),
+				tuple("J123ABC", "PENDING", "2281", 0),
 				tuple("K456DEF", "PENDING", null, 1),
-				tuple("L789GHI", "PENDING", null, 1));
+				tuple("L789GHI", "PENDING", "2260", 0));
 
-		assertThat(jdbcTemplate.queryForList("select error_message from end_of_lease_computer where batch_id = ?", String.class, batchId))
-			.allSatisfy(errorMessage -> assertThat(errorMessage).isNotBlank());
+		assertThat(jdbcTemplate.queryForObject("select error_message from end_of_lease_computer where batch_id = ? and serial_number = 'K456DEF'", String.class, batchId))
+			.isNotBlank();
 	}
 
 	private String sendBatch() throws Exception {

@@ -112,8 +112,8 @@ class EndOfLeaseFailureRecorderTest {
 	}
 
 	/**
-	 * The lookup run answers a dependency failure by stopping, so nothing behind this computer was tried and nothing
-	 * was starved. The reason still has to reach the row and the health endpoint, since those are all a person has.
+	 * The lookup run answers a dependency failure by stopping, so nothing behind the call was tried and nothing was
+	 * starved. The reason still has to reach the row and the health endpoint, since those are all a person has.
 	 */
 	@Test
 	void aNotedDependencyFailureCostsNoAttemptEither() {
