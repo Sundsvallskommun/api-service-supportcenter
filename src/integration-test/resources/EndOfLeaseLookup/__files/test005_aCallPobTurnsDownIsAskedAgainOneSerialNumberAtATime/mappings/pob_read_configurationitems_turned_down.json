@@ -1,0 +1,28 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"matches": "(?=.*SerialNumber=J123ABC(,|$))(?=.*SerialNumber=K456DEF(,|$))(?=.*SerialNumber=L789GHI(,|$))SerialNumber=[^,]+(,SerialNumber=[^,]+){2}"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": {
+			"InternalMessage": "The filter could not be parsed",
+			"UserMessage": "An error occured",
+			"Code": 1
+		},
+		"status": 400
+	},
+	"name": "pob-read-configurationitems-turned-down"
+}

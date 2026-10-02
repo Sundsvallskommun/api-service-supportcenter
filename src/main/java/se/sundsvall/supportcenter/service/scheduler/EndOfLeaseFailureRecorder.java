@@ -25,7 +25,8 @@ import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toError
  *
  * A dependency failure is written down two ways, because the runs answer one differently. The dispatch run carries on
  * to the next municipality, so the group it just tried is held back to keep it from filling the front of every page.
- * The lookup run stops, so there is nothing behind it left to protect and the computer is left free for the next run.
+ * The lookup run stops, so there is nothing behind it left to protect and the computers of the call are left free for
+ * the next run.
  */
 @Component
 class EndOfLeaseFailureRecorder {
@@ -77,28 +78,24 @@ class EndOfLeaseFailureRecorder {
 	}
 
 	/**
-	 * Records that the other end could not be reached without holding the computer back, for a run that answers a
-	 * dependency failure by stopping rather than by working on.
+	 * Records a dependency failure without spending an attempt, for a run that stops on one. No hold as in {@link
+	 * #recordDependencyFailure}, since a run that stops has no later page to protect.
 	 *
-	 * The hold in {@link #recordDependencyFailure} keeps a row that costs no attempt from filling the front of every
-	 * page. A run that stops has nothing behind it to protect, and left free this computer is the first one tried on
-	 * the next run.
-	 *
-	 * @param computer the computer the call was for
-	 * @param jobName  the run reporting it, which is the name its health indicator is registered under
-	 * @param subject  what to call the computer in what a person reads, such as "serial number J123ABC"
-	 * @param reason   what could not be reached and why, in the words of the run that found out
+	 * @param computers the computers of the failed call
+	 * @param jobName   the run, which is also the name of its health indicator
+	 * @param reason    what could not be reached and why
 	 */
-	void noteDependencyFailure(final EndOfLeaseComputerEntity computer, final String jobName, final String subject, final String reason) {
+	void noteDependencyFailure(final List<EndOfLeaseComputerEntity> computers, final String jobName, final String reason) {
 		// Swallowed by the run, so the scheduler aspect never sees it. Said here or an outage is invisible until the
 		// queue has aged enough for the queue indicator to notice.
-		LOG.warn("{}. The attempts of {} are left untouched, and it is left free to be tried again on the next run.", reason, subject);
+		LOG.warn("{}. The attempts of {} computer(s) are left untouched, and they are left free to be tried again on the next run.", reason, computers.size());
 		dept44HealthUtility.setHealthIndicatorUnhealthy(jobName, reason);
 
-		// Written down even though the run is about to stop: this is the row the queue indicator reads the oldest
-		// waiting computer off.
-		computer.setErrorMessage(toErrorMessage(reason));
-		endOfLeaseComputerRepository.save(computer);
+		// The queue indicator reads the reason off the oldest waiting computer, likely one of these.
+		computers.forEach(computer -> {
+			computer.setErrorMessage(toErrorMessage(reason));
+			endOfLeaseComputerRepository.save(computer);
+		});
 	}
 
 	/**

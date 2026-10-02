@@ -1,0 +1,43 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"matches": "(?=.*SerialNumber=J123ABC(,|$))(?=.*SerialNumber=L789GHI(,|$))SerialNumber=[^,]+,SerialNumber=[^,]+"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": [
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"SerialNumber": "J123ABC",
+					"Virtual.CIKommun": "Sundsvall"
+				},
+				"Memo": {}
+			},
+			{
+				"Type": "ConfigurationItem",
+				"Links": [],
+				"Data": {
+					"SerialNumber": "L789GHI",
+					"Virtual.CIKommun": "Ånge"
+				},
+				"Memo": {}
+			}
+		],
+		"status": 200
+	},
+	"name": "pob-read-configurationitems"
+}

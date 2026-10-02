@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import static java.util.stream.Collectors.joining;
+
 @Component
 public class POBIntegration {
 
@@ -84,16 +86,19 @@ public class POBIntegration {
 	}
 
 	/**
-	 * The same lookup as {@link #getConfigurationItemsBySerialNumber}, over the client the end of lease job has to
-	 * itself. Separate so that the job's circuit breaker is its own and cannot decide availability for the endpoints
-	 * this service exposes.
+	 * {@link #getConfigurationItemsBySerialNumber} for several serial numbers in one call, over the end of lease job's
+	 * own client so that its circuit breaker cannot affect the API endpoints.
 	 *
-	 * @param  pobKey       the key to use for authorization
-	 * @param  serialNumber the serial number to filter the results on
-	 * @return              a list of configuration-items
+	 * @param  pobKey        the key to use for authorization
+	 * @param  serialNumbers the serial numbers to filter the results on, at least one
+	 * @return               the configuration-items of every serial number POB knows
 	 */
-	public List<PobPayload> getConfigurationItemsBySerialNumberForEndOfLease(String pobKey, String serialNumber) {
-		return endOfLeasePOBClient.getConfigurationItemsBySerialNumber(pobKey, serialNumber);
+	public List<PobPayload> getConfigurationItemsBySerialNumbersForEndOfLease(String pobKey, List<String> serialNumbers) {
+		final var filter = serialNumbers.stream()
+			.map(serialNumber -> "SerialNumber=" + serialNumber)
+			.collect(joining(","));
+
+		return endOfLeasePOBClient.getConfigurationItemsBySerialNumbers(pobKey, filter);
 	}
 
 	/**

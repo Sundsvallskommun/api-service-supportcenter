@@ -41,7 +41,7 @@ public class EndOfLeasePOBConfiguration {
 	 * refused the call it was asked to make. Without them AbstractErrorDecoder answers every 4xx with BAD_GATEWAY, and
 	 * a key somebody rotated is then charged to every computer in the queue, which drains the lot into FAILED in five
 	 * runs. 404 is kept from the shared decoder so the two clients read a missing item the same way. Every other 4xx
-	 * is about the row the call was made for and is meant to count.
+	 * is about the call, and the lookup run narrows it down to one serial number before it counts.
 	 *
 	 * Reported under the shared integration name, because that is what it is: a failure talking to POB. The name ends
 	 * up in the reason written on the computer's row.
