@@ -34,12 +34,16 @@ public interface EndOfLeasePOBClient {
 	String CLIENT_ID = "pob-end-of-lease";
 
 	/**
-	 * Returns a list of configuration-items by serialNumber.
+	 * Returns the configuration-items of several serial numbers in one call, as in {@code
+	 * configurationitems?Filter=SerialNumber=A,SerialNumber=B}. Feign percent-encodes the = and , of the filter.
 	 *
-	 * @param  pobKey       the key to use for authorization
-	 * @param  serialNumber the serial number to filter the results on
-	 * @return              a list of configuration-items
+	 * @param  pobKey the key to use for authorization
+	 * @param  filter the serial numbers, built by
+	 *                {@link POBIntegration#getConfigurationItemsBySerialNumbersForEndOfLease}
+	 * @return        the configuration-items of every serial number POB knows
 	 */
-	@GetMapping(path = "configurationitems?Filter=SerialNumber={serialNumber}", produces = APPLICATION_JSON_VALUE)
-	List<PobPayload> getConfigurationItemsBySerialNumber(@RequestHeader(AUTHORIZATION) String pobKey, @PathVariable String serialNumber);
+	@GetMapping(path = "configurationitems?Filter={filter}", produces = APPLICATION_JSON_VALUE)
+	List<PobPayload> getConfigurationItemsBySerialNumbers(
+		@RequestHeader(AUTHORIZATION) String pobKey,
+		@PathVariable String filter);
 }

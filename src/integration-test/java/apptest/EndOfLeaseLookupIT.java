@@ -116,6 +116,50 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 				.isNull();
 	}
 
+	/**
+	 * Three computers in one call. POB answers in its own order and leaves K456DEF out, so each row must get the
+	 * municipality of its own serial number and K456DEF is retried. The stub accepts any order, since rows of one batch
+	 * can share a timestamp.
+	 */
+	@Test
+	void test004_lookUpComputersInOneCall() throws Exception {
+		final var batchId = sendBatch();
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verifyStubs();
+
+		assertThat(computers(batchId))
+			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
+			.containsExactly(
+				tuple("J123ABC", "PENDING", "2281", 0),
+				tuple("K456DEF", "PENDING", null, 1),
+				tuple("L789GHI", "PENDING", "2260", 0));
+	}
+
+	/**
+	 * POB turns the call of three down, since it cannot take K456DEF. The answer does not say which serial number was at
+	 * fault, so each is asked about on its own and only K456DEF pays an attempt.
+	 */
+	@Test
+	void test005_aCallPobTurnsDownIsAskedAgainOneSerialNumberAtATime() throws Exception {
+		final var batchId = sendBatch();
+
+		endOfLeaseLookupWorker.processComputersAwaitingLookup();
+
+		verifyStubs();
+
+		assertThat(computers(batchId))
+			.extracting("serial_number", "status", "asset_municipality_id", "attempts")
+			.containsExactly(
+				tuple("J123ABC", "PENDING", "2281", 0),
+				tuple("K456DEF", "PENDING", null, 1),
+				tuple("L789GHI", "PENDING", "2260", 0));
+
+		assertThat(jdbcTemplate.queryForObject("select error_message from end_of_lease_computer where batch_id = ? and serial_number = 'K456DEF'", String.class, batchId))
+			.isNotBlank();
+	}
+
 	private String sendBatch() throws Exception {
 		return setupCall()
 			.withServicePath(PATH)

@@ -4,9 +4,12 @@ import generated.client.pob.PobPayload;
 import generated.client.sysman.SaveMessagesToTargetsCommand;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import se.sundsvall.dept44.models.api.paging.PagingMetaData;
 import se.sundsvall.supportcenter.api.model.CreateEndOfLeaseBatchRequest;
@@ -24,6 +27,7 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatusCount;
 
 import static generated.client.sysman.SaveMessagesToTargetsCommand.TargetTypeEnum.COMPUTER;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
@@ -32,6 +36,7 @@ import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.F
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.SENT;
 import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_MUNICIPALITY;
+import static se.sundsvall.supportcenter.service.mapper.constant.ConfigurationMapperConstants.KEY_SERIAL_NUMBER;
 import static se.sundsvall.supportcenter.service.mapper.constant.EndOfLeaseMapperConstants.EXCLUDED_ASSET_TAG_PREFIXES;
 
 public final class EndOfLeaseMapper {
@@ -56,13 +61,43 @@ public final class EndOfLeaseMapper {
 	}
 
 	/**
-	 * The municipality of the computer a POB lookup answered with, which is what decides its SysMan installation.
+	 * The municipality of each computer in a POB answer for several serial numbers. POB does not keep the order, so
+	 * each configuration item is paired with its computer on the serial number it carries, trimmed and
+	 * case-insensitively. Configuration items without a serial number are skipped.
 	 *
-	 * @param  configurationItems what POB answered the serial number with
-	 * @return                    the municipality id, or null when POB knows no such computer or holds a municipality we
-	 *                            cannot route on
+	 * @param  serialNumbers      the serial numbers POB was asked about
+	 * @param  configurationItems what POB answered
+	 * @return                    the municipality id by serial number as given. A serial number POB does not know, or
+	 *                            whose municipality we cannot route on, is absent
 	 */
-	public static String toAssetMunicipalityId(final List<PobPayload> configurationItems) {
+	public static Map<String, String> toAssetMunicipalityIds(final Collection<String> serialNumbers, final List<PobPayload> configurationItems) {
+		final var configurationItemsBySerialNumber = ofNullable(configurationItems).orElse(emptyList()).stream()
+			.filter(configurationItem -> nonNull(toSerialNumber(configurationItem)))
+			.collect(groupingBy(EndOfLeaseMapper::toSerialNumber));
+
+		final var assetMunicipalityIds = new HashMap<String, String>();
+		serialNumbers.forEach(serialNumber -> ofNullable(toAssetMunicipalityId(configurationItemsBySerialNumber.get(toComparableSerialNumber(serialNumber))))
+			.ifPresent(assetMunicipalityId -> assetMunicipalityIds.put(serialNumber, assetMunicipalityId)));
+
+		return assetMunicipalityIds;
+	}
+
+	private static String toSerialNumber(final PobPayload configurationItem) {
+		return ofNullable(configurationItem.getData())
+			.map(data -> data.get(KEY_SERIAL_NUMBER))
+			.map(String::valueOf)
+			.map(EndOfLeaseMapper::toComparableSerialNumber)
+			.orElse(null);
+	}
+
+	private static String toComparableSerialNumber(final String serialNumber) {
+		return serialNumber.strip().toUpperCase(Locale.ROOT);
+	}
+
+	/**
+	 * The first configuration item decides, even if a second one says otherwise.
+	 */
+	private static String toAssetMunicipalityId(final List<PobPayload> configurationItems) {
 		return ofNullable(configurationItems).orElse(emptyList()).stream()
 			.findFirst()
 			.map(PobPayload::getData)

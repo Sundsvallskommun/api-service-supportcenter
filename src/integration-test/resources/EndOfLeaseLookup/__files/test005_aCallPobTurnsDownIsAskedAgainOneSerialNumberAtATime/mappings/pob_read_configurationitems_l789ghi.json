@@ -22,7 +22,9 @@
 				"Type": "ConfigurationItem",
 				"Links": [],
 				"Data": {
+					"Id": "867405",
 					"SerialNumber": "L789GHI",
+					"OptionalNumber": "CD67890",
 					"Virtual.CIKommun": "Ånge"
 				},
 				"Memo": {}
@@ -30,5 +32,5 @@
 		],
 		"status": 200
 	},
-	"name": "pob-read-configurationitems-ange"
+	"name": "pob-read-configurationitems-l789ghi"
 }

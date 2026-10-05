@@ -96,8 +96,8 @@ class EndOfLeasePOBConfigurationTest {
 	}
 
 	/**
-	 * The other half of that branch. A 4xx about the row the call was made for has to keep costing that computer an
-	 * attempt, so it must not arrive looking like a rejected key.
+	 * The other half of that branch. A 4xx about the call has to keep costing the computer at fault an attempt once the
+	 * run has narrowed it down, so it must not arrive looking like a rejected key.
 	 */
 	@Test
 	void everyOtherClientErrorIsStillReportedAsBadGateway() {

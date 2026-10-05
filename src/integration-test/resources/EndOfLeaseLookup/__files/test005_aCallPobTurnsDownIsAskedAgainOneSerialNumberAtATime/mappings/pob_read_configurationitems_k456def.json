@@ -1,0 +1,28 @@
+{
+	"request": {
+		"headers": {
+			"Authorization": {
+				"equalTo": "pobKey"
+			}
+		},
+		"method": "GET",
+		"queryParameters": {
+			"Filter": {
+				"equalTo": "SerialNumber=K456DEF"
+			}
+		},
+		"urlPath": "/pob/configurationitems"
+	},
+	"response": {
+		"headers": {
+			"Content-Type": "application/json"
+		},
+		"jsonBody": {
+			"InternalMessage": "The filter could not be parsed",
+			"UserMessage": "An error occured",
+			"Code": 1
+		},
+		"status": 400
+	},
+	"name": "pob-read-configurationitems-k456def"
+}

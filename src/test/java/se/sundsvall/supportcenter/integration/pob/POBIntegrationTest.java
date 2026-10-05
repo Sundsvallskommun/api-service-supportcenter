@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cache.annotation.Cacheable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -135,14 +135,27 @@ class POBIntegrationTest {
 	 * endpoints this service exposes. Asserting that the shared client is left alone is what says the two stay apart.
 	 */
 	@Test
-	void getConfigurationItemsBySerialNumberForEndOfLease() {
-		final var serialNbr = RandomStringUtils.secure().nextAlphabetic(10);
-		when(endOfLeaseClientMock.getConfigurationItemsBySerialNumber(POB_KEY, serialNbr)).thenReturn(List.of(payloadMock));
+	void getConfigurationItemsBySerialNumbersForEndOfLease() {
+		when(endOfLeaseClientMock.getConfigurationItemsBySerialNumbers(POB_KEY, "SerialNumber=J123ABC,SerialNumber=K456DEF,SerialNumber=L789GHI")).thenReturn(List.of(payloadMock));
 
-		final var result = integration.getConfigurationItemsBySerialNumberForEndOfLease(POB_KEY, serialNbr);
+		final var result = integration.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J123ABC", "K456DEF", "L789GHI"));
 
 		assertThat(result).containsExactly(payloadMock);
-		verify(endOfLeaseClientMock).getConfigurationItemsBySerialNumber(POB_KEY, serialNbr);
+		verify(endOfLeaseClientMock).getConfigurationItemsBySerialNumbers(POB_KEY, "SerialNumber=J123ABC,SerialNumber=K456DEF,SerialNumber=L789GHI");
+		verifyNoInteractions(clientMock);
+	}
+
+	/**
+	 * A single serial number is a filter of one, with no comma.
+	 */
+	@Test
+	void getConfigurationItemsBySerialNumbersForEndOfLeaseWithASingleSerialNumber() {
+		when(endOfLeaseClientMock.getConfigurationItemsBySerialNumbers(POB_KEY, "SerialNumber=J123ABC")).thenReturn(List.of(payloadMock));
+
+		final var result = integration.getConfigurationItemsBySerialNumbersForEndOfLease(POB_KEY, List.of("J123ABC"));
+
+		assertThat(result).containsExactly(payloadMock);
+		verify(endOfLeaseClientMock).getConfigurationItemsBySerialNumbers(POB_KEY, "SerialNumber=J123ABC");
 		verifyNoInteractions(clientMock);
 	}
 
@@ -171,7 +184,7 @@ class POBIntegrationTest {
 	@Test
 	void getSuspension() {
 		final var caseId = RandomStringUtils.secure().nextAlphabetic(10);
-		final var suspensionInfoMock = Mockito.mock(SuspensionInfo.class);
+		final var suspensionInfoMock = mock(SuspensionInfo.class);
 
 		when(clientMock.getSuspension(POB_KEY, caseId)).thenReturn(suspensionInfoMock);
 
@@ -185,7 +198,7 @@ class POBIntegrationTest {
 	@Test
 	void suspendCase() {
 		final var caseId = RandomStringUtils.secure().nextAlphabetic(10);
-		final var suspensionInfoMock = Mockito.mock(SuspensionInfo.class);
+		final var suspensionInfoMock = mock(SuspensionInfo.class);
 
 		integration.suspendCase(POB_KEY, caseId, suspensionInfoMock);
 

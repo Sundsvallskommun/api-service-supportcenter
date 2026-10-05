@@ -2,7 +2,12 @@ package se.sundsvall.supportcenter.service.scheduler;
 
 import feign.RetryableException;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,21 +21,23 @@ import se.sundsvall.supportcenter.integration.db.model.EndOfLeaseComputerEntity;
 import se.sundsvall.supportcenter.integration.pob.POBIntegration;
 import se.sundsvall.supportcenter.integration.pob.configuration.POBProperties;
 
+import static java.lang.Math.min;
 import static java.time.OffsetDateTime.now;
 import static java.time.ZoneId.systemDefault;
 import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static se.sundsvall.supportcenter.integration.db.model.EndOfLeaseStatus.PENDING;
-import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityId;
+import static se.sundsvall.supportcenter.service.mapper.EndOfLeaseMapper.toAssetMunicipalityIds;
 
 /**
  * The work the lookup run does. Separate from the scheduler so that the scheduler stays the part that says when, and
  * this stays the part that says what.
  *
- * One computer is one POB call and one saved row. Kept that way rather than saving the page at the end, so that a run
- * cut short by its lock leaves behind every computer it did get through instead of losing the lot.
+ * Each computer is saved as soon as its call answers, so a run cut short by its lock keeps what it got through.
  */
 @Component
 public class EndOfLeaseLookupWorker {
@@ -41,16 +48,27 @@ public class EndOfLeaseLookupWorker {
 
 	private static final String UNKNOWN_TO_POB = "POB answered the serial number with no configuration item holding a municipality we can route on";
 
+	private static final String NO_CALL_SIZE = "scheduler.end-of-lease.lookup.serial-numbers-per-call is %d, and a call has to hold at least one serial number";
+
 	/**
-	 * How many computers in a row may fail on POB itself before the run gives up on the rest of the page.
-	 *
-	 * POB is the same POB for all 250 in a page, so working on once it has stopped answering buys nothing. Three rather
-	 * than one, or a POB that answers half the calls would barely move the queue. Reset by any computer that goes
-	 * through, so this counts a run of failures and not a total.
+	 * How many calls in a row may fail on POB itself before the run gives up on the rest of the page. Three rather than
+	 * one, so a POB that answers half the calls still moves the queue. Any call that goes through resets the count.
 	 */
 	private static final int MAXIMUM_CONSECUTIVE_DEPENDENCY_FAILURES = 3;
 
 	private static final String GAVE_UP_ON_THE_PAGE = "POB failed %d calls in a row, so the rest of this page is left for the next run rather than tried against a POB that is plainly not answering";
+
+	/**
+	 * How a call went, as far as the rest of the page is concerned.
+	 */
+	private enum Outcome {
+		/** Every computer of the call has its answer written on it, a failed attempt included. */
+		DONE,
+		/** POB failed. Costs the computers nothing and counts towards giving up on the page. */
+		POB_FAILED,
+		/** POB turned down a call of several serial numbers, which is to be asked again one serial number at a time. */
+		TURNED_DOWN
+	}
 
 	private final EndOfLeaseComputerRepository endOfLeaseComputerRepository;
 	private final POBIntegration pobIntegration;
@@ -58,6 +76,7 @@ public class EndOfLeaseLookupWorker {
 	private final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder;
 	private final Dept44HealthUtility dept44HealthUtility;
 	private final int pageSize;
+	private final int serialNumbersPerCall;
 	private final String jobName;
 
 	public EndOfLeaseLookupWorker(
@@ -67,7 +86,14 @@ public class EndOfLeaseLookupWorker {
 		final EndOfLeaseFailureRecorder endOfLeaseFailureRecorder,
 		final Dept44HealthUtility dept44HealthUtility,
 		@Value("${scheduler.end-of-lease.lookup.page-size}") final int pageSize,
+		@Value("${scheduler.end-of-lease.lookup.serial-numbers-per-call}") final int serialNumbersPerCall,
 		@Value("${scheduler.end-of-lease.lookup.name}") final String jobName) {
+
+		// Unlike a missing key, this is a value someone set. Better refused at startup than found in a run that never
+		// gets past its first call and fills the heap while holding the lock.
+		if (serialNumbersPerCall < 1) {
+			throw new IllegalStateException(NO_CALL_SIZE.formatted(serialNumbersPerCall));
+		}
 
 		this.endOfLeaseComputerRepository = endOfLeaseComputerRepository;
 		this.pobIntegration = pobIntegration;
@@ -75,6 +101,7 @@ public class EndOfLeaseLookupWorker {
 		this.endOfLeaseFailureRecorder = endOfLeaseFailureRecorder;
 		this.dept44HealthUtility = dept44HealthUtility;
 		this.pageSize = pageSize;
+		this.serialNumbersPerCall = serialNumbersPerCall;
 		this.jobName = jobName;
 	}
 
@@ -101,26 +128,52 @@ public class EndOfLeaseLookupWorker {
 	}
 
 	/**
-	 * Works through the page, and stops once POB has turned enough calls down in a row to have stopped answering.
-	 *
-	 * Everything not reached is left exactly as it was found, so the next run starts where this one stopped. A failure
-	 * of the computer itself never stops the run, since the next computer has nothing to do with it.
+	 * Works through the page a call at a time and stops after {@link #MAXIMUM_CONSECUTIVE_DEPENDENCY_FAILURES} POB
+	 * failures in a row. A call POB turns down goes to the back of the page as one call per serial number, and those
+	 * count towards the limit like any other. What is not reached is left untouched for the next run.
 	 */
 	private void lookUpPage(final List<EndOfLeaseComputerEntity> computers) {
+		final var calls = new ArrayDeque<>(toCalls(computers));
 		var consecutiveDependencyFailures = 0;
 
-		for (final var computer : computers) {
-			if (lookUp(computer)) {
-				consecutiveDependencyFailures++;
+		while (!calls.isEmpty()) {
+			final var call = calls.poll();
 
-				if (consecutiveDependencyFailures >= MAXIMUM_CONSECUTIVE_DEPENDENCY_FAILURES) {
-					LOG.warn(GAVE_UP_ON_THE_PAGE.formatted(consecutiveDependencyFailures));
-					return;
+			switch (lookUp(call)) {
+				case POB_FAILED -> {
+					consecutiveDependencyFailures++;
+
+					if (consecutiveDependencyFailures >= MAXIMUM_CONSECUTIVE_DEPENDENCY_FAILURES) {
+						LOG.warn(GAVE_UP_ON_THE_PAGE.formatted(consecutiveDependencyFailures));
+						return;
+					}
 				}
-			} else {
-				consecutiveDependencyFailures = 0;
+				case TURNED_DOWN -> {
+					consecutiveDependencyFailures = 0;
+					calls.addAll(toCallsPerSerialNumber(call));
+				}
+				case DONE -> consecutiveDependencyFailures = 0;
 			}
 		}
+	}
+
+	/**
+	 * The page split into calls of at most serial-numbers-per-call computers. See application.yml for the size.
+	 */
+	private List<List<EndOfLeaseComputerEntity>> toCalls(final List<EndOfLeaseComputerEntity> computers) {
+		return IntStream.iterate(0, from -> from < computers.size(), from -> from + serialNumbersPerCall)
+			.mapToObj(from -> computers.subList(from, min(from + serialNumbersPerCall, computers.size())))
+			.toList();
+	}
+
+	/**
+	 * A call split into one call per serial number. Rows that share a serial number stay together, since one lookup
+	 * answers them all.
+	 */
+	private static Collection<List<EndOfLeaseComputerEntity>> toCallsPerSerialNumber(final List<EndOfLeaseComputerEntity> computers) {
+		return computers.stream()
+			.collect(groupingBy(EndOfLeaseComputerEntity::getSerialNumber, LinkedHashMap::new, toList()))
+			.values();
 	}
 
 	private static String subject(final EndOfLeaseComputerEntity computer) {
@@ -128,55 +181,78 @@ public class EndOfLeaseLookupWorker {
 	}
 
 	/**
-	 * @return whether POB was the thing that failed, rather than this computer
+	 * Asks POB about the computers of one call and writes the answer on each. A POB failure costs no attempts. Any
+	 * other failure is {@link #turnDown handed on} to work out who pays.
 	 */
-	private boolean lookUp(final EndOfLeaseComputerEntity computer) {
+	private Outcome lookUp(final List<EndOfLeaseComputerEntity> computers) {
+		// A computer can sit in several batches, and one lookup answers all its rows.
+		final var serialNumbers = computers.stream()
+			.map(EndOfLeaseComputerEntity::getSerialNumber)
+			.distinct()
+			.toList();
+
+		final Map<String, String> assetMunicipalityIds;
+
 		try {
-			final var assetMunicipalityId = toAssetMunicipalityId(
-				pobIntegration.getConfigurationItemsBySerialNumberForEndOfLease(pobProperties.key(), computer.getSerialNumber()));
-
-			if (isNull(assetMunicipalityId)) {
-				// Retried rather than failed outright, since the computer is missing from POB or carries a municipality
-				// nobody has mapped, and both are things someone can put right while the attempts last.
-				endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), UNKNOWN_TO_POB);
-				return false;
-			}
-
-			computer.setAssetMunicipalityId(assetMunicipalityId);
-			// Back to nothing spent, so that the dispatch run starts on a full budget. The two runs share the column but
-			// fail for unrelated reasons, and POB having been slow to answer says nothing about whether SysMan will. A
-			// computer that used most of its attempts getting looked up would otherwise be given up on after a single
-			// bad call to SysMan.
-			computer.setAttempts(0);
-			// Don't carry an old failure into a successful lookup. retryAfter is cleared for the same reason, though
-			// only the dispatch run sets one now.
-			computer.setErrorMessage(null);
-			computer.setRetryAfter(null);
-			endOfLeaseComputerRepository.save(computer);
-			return false;
+			assetMunicipalityIds = toAssetMunicipalityIds(serialNumbers,
+				pobIntegration.getConfigurationItemsBySerialNumbersForEndOfLease(pobProperties.key(), serialNumbers));
 		} catch (final ServerProblem | RetryableException | CallNotPermittedException e) {
-			// POB is unwell or out of reach, which is no fact about this computer, so no attempt is spent. Listed by
-			// name rather than caught as everything else, so anything we did not foresee falls through below.
-			endOfLeaseFailureRecorder.noteDependencyFailure(computer, jobName, subject(computer), "POB could not be reached: " + e.getMessage());
-			return true;
+			// POB being down says nothing about the computers. Listed by name, so anything unforeseen falls through
+			// below.
+			endOfLeaseFailureRecorder.noteDependencyFailure(computers, jobName, "POB could not be reached: " + e.getMessage());
+			return Outcome.POB_FAILED;
 		} catch (final ClientProblem e) {
-			// The key this job authenticates with is its own, and POB turning it down says nothing about the computer
-			// the call happened to be about. Counted, a rotated key would drain the whole queue into FAILED before
-			// anyone noticed. Every other 4xx is about this row and falls through below.
+			// A rejected key is not the computers' fault, and counting it would drain the queue into FAILED after a key
+			// rotation. Any other 4xx is about the call.
 			if (e.getStatus() == UNAUTHORIZED || e.getStatus() == FORBIDDEN) {
-				endOfLeaseFailureRecorder.noteDependencyFailure(computer, jobName, subject(computer), "POB turned the job's key down: " + e.getMessage());
-				return true;
+				endOfLeaseFailureRecorder.noteDependencyFailure(computers, jobName, "POB turned the job's key down: " + e.getMessage());
+				return Outcome.POB_FAILED;
 			}
 
-			endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage());
-			return false;
+			return turnDown(computers, serialNumbers, e.getMessage());
 		} catch (final Exception e) {
-			// POB turned our request down, or this row's own data broke us on the way through. Either way it counts:
-			// a row nothing can make sense of would otherwise keep its place in every page for good, and a hundred of
-			// them stop the queue for everyone behind them.
-			endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), e.getMessage());
-			return false;
+			// Counted, or a call that always breaks keeps its place at the front of every page and blocks the queue.
+			return turnDown(computers, serialNumbers, e.getMessage());
 		}
+
+		computers.forEach(computer -> write(computer, assetMunicipalityIds.get(computer.getSerialNumber())));
+		return Outcome.DONE;
+	}
+
+	/**
+	 * A call of several serial numbers is split rather than charged. The answer does not say which serial number was at
+	 * fault, and charged, one that POB cannot take, such as one with a comma in it, would fail every computer of the call
+	 * along with its own. Down to one serial number, its rows pay an attempt each.
+	 */
+	private Outcome turnDown(final List<EndOfLeaseComputerEntity> computers, final List<String> serialNumbers, final String errorMessage) {
+		if (serialNumbers.size() > 1) {
+			LOG.warn("POB turned down a call of {} serial numbers, so they are asked about one at a time: {}", serialNumbers.size(), errorMessage);
+			return Outcome.TURNED_DOWN;
+		}
+
+		recordFailedAttempts(computers, errorMessage);
+		return Outcome.DONE;
+	}
+
+	private void write(final EndOfLeaseComputerEntity computer, final String assetMunicipalityId) {
+		if (isNull(assetMunicipalityId)) {
+			// Retried rather than failed, since someone can add the computer to POB or fix its municipality meanwhile.
+			endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), UNKNOWN_TO_POB);
+			return;
+		}
+
+		computer.setAssetMunicipalityId(assetMunicipalityId);
+		// Reset, so the dispatch run starts with a full budget. The runs share the column but fail for unrelated
+		// reasons.
+		computer.setAttempts(0);
+		// Don't carry an old failure over. Only the dispatch run sets retryAfter now, but it is cleared all the same.
+		computer.setErrorMessage(null);
+		computer.setRetryAfter(null);
+		endOfLeaseComputerRepository.save(computer);
+	}
+
+	private void recordFailedAttempts(final List<EndOfLeaseComputerEntity> computers, final String errorMessage) {
+		computers.forEach(computer -> endOfLeaseFailureRecorder.recordFailedAttempt(computer, jobName, subject(computer), errorMessage));
 	}
 
 }
