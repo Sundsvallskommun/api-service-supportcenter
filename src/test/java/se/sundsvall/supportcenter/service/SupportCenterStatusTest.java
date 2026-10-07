@@ -1,13 +1,18 @@
 package se.sundsvall.supportcenter.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.AWAITING_INFO;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.CANCELLED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACCESSORIES;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACTION_NEEDED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_IT;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DESPATCHED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ENGINEER_START_WORK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
@@ -29,7 +34,9 @@ class SupportCenterStatusTest {
 			AWAITING_INFO,
 			CANCELLED,
 			DELIVERED,
+			DELIVERED_ACCESSORIES,
 			DELIVERED_ACTION_NEEDED,
+			DELIVERED_IT,
 			DESPATCHED,
 			OPEN,
 			PARTIALLY_DESPATCHED,
@@ -49,6 +56,8 @@ class SupportCenterStatusTest {
 		assertThat(AWAITING_INFO.getValue()).isEqualTo("Awaiting info");
 		assertThat(CANCELLED.getValue()).isEqualTo("Cancelled");
 		assertThat(DELIVERED.getValue()).isEqualTo("Delivered");
+		assertThat(DELIVERED_ACCESSORIES.getValue()).isEqualTo("DeliveredAccessories");
+		assertThat(DELIVERED_IT.getValue()).isEqualTo("DeliveredIT");
 		assertThat(DELIVERED_ACTION_NEEDED.getValue()).isEqualTo("Delivered - Action Needed");
 		assertThat(DESPATCHED.getValue()).isEqualTo("Despatched");
 		assertThat(OPEN.getValue()).isEqualTo("Open");
@@ -61,5 +70,35 @@ class SupportCenterStatusTest {
 		assertThat(SCHEDULE_CHANGED.getValue()).isEqualTo("ScheduleChanged");
 		assertThat(ENGINEER_START_WORK.getValue()).isEqualTo("EngineerStartWork");
 		assertThat(ORDER_NOT_COMPLETED.getValue()).isEqualTo("OrderNotCompleted");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"DeliveredIT", "deliveredit", "DELIVEREDIT", "dElIvErEdIt"
+	})
+	void fromValueIgnoresCase(final String value) {
+		assertThat(SupportCenterStatus.fromValue(value)).contains(DELIVERED_IT);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"DeliveredIT ", " DeliveredIT", "  deliveredit  ", "\tDeliveredIT\n"
+	})
+	void fromValueIgnoresSurroundingWhitespace(final String value) {
+		assertThat(SupportCenterStatus.fromValue(value)).contains(DELIVERED_IT);
+	}
+
+	@Test
+	void fromValueMatchesValuesWithSpaces() {
+		assertThat(SupportCenterStatus.fromValue("awaiting INFO")).contains(AWAITING_INFO);
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@ValueSource(strings = {
+		"   ", "In Process", "Delivered IT", "DeliveredITs", "awaiting  info"
+	})
+	void fromValueWithoutMatch(final String value) {
+		assertThat(SupportCenterStatus.fromValue(value)).isEmpty();
 	}
 }

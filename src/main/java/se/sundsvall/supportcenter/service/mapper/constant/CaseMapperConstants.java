@@ -3,6 +3,7 @@ package se.sundsvall.supportcenter.service.mapper.constant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import se.sundsvall.supportcenter.service.mapper.model.CustomStatusMapping;
@@ -12,7 +13,9 @@ import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.CANCELLED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACCESSORIES;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACTION_NEEDED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_IT;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DESPATCHED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ENGINEER_START_WORK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
@@ -80,7 +83,7 @@ public final class CaseMapperConstants {
 	public static final String STATUS_SOLVED = "Solved";
 	public static final String STATUS_IN_PROCESS = "In Process";
 	public static final String STATUS_CLOSED = "Closed";
-	public static final String STATUS_DELIVERED = "Delivered";
+	public static final Set<String> DELIVERED_STATUSES = Set.of(DELIVERED.getValue(), DELIVERED_IT.getValue(), DELIVERED_ACCESSORIES.getValue());
 
 	public static final String CLOSURE_CODE_CHANGE_OF_HARDWARE = "Byte av hårdvara";
 	public static final String CLOSURE_CODE_DELIVERED_HARDWARE = "Levererat Hårdvara - Service request";
@@ -90,8 +93,9 @@ public final class CaseMapperConstants {
 
 	private CaseMapperConstants() {}
 
-	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Stream.concat(getCubeStatusMap().entrySet().stream(),
-		getNetsetStatusMap().entrySet().stream()).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+	public static final Map<String, List<CustomStatusMapping>> CUSTOM_STATUS_MAP = Stream.of(getCubeStatusMap(), getNetsetStatusMap(), getDeliveredStatusMap())
+		.flatMap(map -> map.entrySet().stream())
+		.collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
 	/**
 	 * Method used for the CANCELLED status, as this status need external case id value to be set to null, which Map.of()
@@ -122,9 +126,7 @@ public final class CaseMapperConstants {
 	}
 
 	private static Map<String, List<CustomStatusMapping>> getCubeStatusMap() {
-		/**
-		 * CUBE statuses (Support flow):
-		 */
+		// CUBE statuses (Support flow):
 		return Map.of(
 			OPEN.getValue(), List.of(
 				CustomStatusMapping.create()
@@ -147,9 +149,8 @@ public final class CaseMapperConstants {
 	}
 
 	private static Map<String, List<CustomStatusMapping>> getNetsetStatusMap() {
-		/**
-		 * NETSET statuses (Order flow):
-		 */
+
+		// NETSET statuses (Order flow):
 		return Map.of(PROCESSED.getValue(), List.of(
 			CustomStatusMapping.create()
 				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
@@ -166,12 +167,6 @@ public final class CaseMapperConstants {
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)),
-			DELIVERED.getValue(), List.of(
-				CustomStatusMapping.create()
-					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_DELIVERED_HARDWARE))
-					.withStatusNoteType(SOLUTION),
-				CustomStatusMapping.create()
-					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED))),
 			DELIVERED_ACTION_NEEDED.getValue(), List.of(
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS, KEY_RESPONSIBLE_GROUP, IT_SUPPORT))
@@ -192,5 +187,22 @@ public final class CaseMapperConstants {
 				CustomStatusMapping.create()
 					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
 					.withStatusNoteType(WORKNOTE)));
+	}
+
+	private static Map<String, List<CustomStatusMapping>> getDeliveredStatusMap() {
+
+		// Delivered statuses (Order flow). They only differ in which fields the request must contain, see
+		// ValidDeliveryIdentifiers.
+		final var deliveredMappings = List.of(
+			CustomStatusMapping.create()
+				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_DELIVERED_HARDWARE))
+				.withStatusNoteType(SOLUTION),
+			CustomStatusMapping.create()
+				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED)));
+
+		return Map.of(
+			DELIVERED.getValue(), deliveredMappings,
+			DELIVERED_IT.getValue(), deliveredMappings,
+			DELIVERED_ACCESSORIES.getValue(), deliveredMappings);
 	}
 }

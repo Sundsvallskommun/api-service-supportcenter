@@ -18,7 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ASSIGN_BACK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.CANCELLED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACCESSORIES;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACTION_NEEDED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_IT;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DESPATCHED;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.ENGINEER_START_WORK;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.OPEN;
@@ -92,7 +94,7 @@ class CaseMapperConstantsTest {
 		assertThat(CaseMapperConstants.STATUS_SOLVED).isEqualTo("Solved");
 		assertThat(CaseMapperConstants.STATUS_IN_PROCESS).isEqualTo("In Process");
 		assertThat(CaseMapperConstants.STATUS_CLOSED).isEqualTo("Closed");
-		assertThat(CaseMapperConstants.STATUS_DELIVERED).isEqualTo("Delivered");
+		assertThat(CaseMapperConstants.DELIVERED_STATUSES).containsExactlyInAnyOrder("Delivered", "DeliveredIT", "DeliveredAccessories");
 	}
 
 	@Test
@@ -108,7 +110,9 @@ class CaseMapperConstantsTest {
 			ASSIGN_BACK.getValue(),
 			CANCELLED.getValue(),
 			DELIVERED.getValue(),
+			DELIVERED_ACCESSORIES.getValue(),
 			DELIVERED_ACTION_NEEDED.getValue(),
+			DELIVERED_IT.getValue(),
 			DESPATCHED.getValue(),
 			OPEN.getValue(),
 			PICKING.getValue(),
@@ -144,6 +148,22 @@ class CaseMapperConstantsTest {
 					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DELIVERED, List.of(
+				createCustomStatusMapping(from(Map.of(
+					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
+					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))
+					.withStatusNoteType(NoteType.SOLUTION),
+				createCustomStatusMapping(from(Map.of(
+					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED))))),
+
+			Arguments.of(DELIVERED_IT, List.of(
+				createCustomStatusMapping(from(Map.of(
+					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
+					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))
+					.withStatusNoteType(NoteType.SOLUTION),
+				createCustomStatusMapping(from(Map.of(
+					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED))))),
+
+			Arguments.of(DELIVERED_ACCESSORIES, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
 					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))

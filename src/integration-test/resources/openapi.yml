@@ -1350,7 +1350,10 @@ components:
             - INC232323
         caseStatus:
           type: string
-          description: Case status
+          description: "Case status. Known statuses are matched without regard to\
+            \ case and surrounding whitespace, other values are passed on to POB as\
+            \ they are. Delivered requires serialNumber and either hardwareName or imeiNumber,\
+            \ DeliveredIT requires serialNumber"
           examples:
             - In Process
         caseCategory:

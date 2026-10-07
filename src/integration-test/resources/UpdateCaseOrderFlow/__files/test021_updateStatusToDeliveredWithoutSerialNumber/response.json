@@ -1,0 +1,11 @@
+{
+	"type": "https://github.com/Sundsvallskommun/dept44/problems/constraint-violation",
+	"title": "Constraint Violation",
+	"status": 400,
+	"violations": [
+		{
+			"field": "serialNumber",
+			"message": "must be provided for the given caseStatus"
+		}
+	]
+}
