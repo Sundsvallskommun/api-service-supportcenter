@@ -101,6 +101,7 @@ class CaseMapperConstantsTest {
 	void testClosureCodes() {
 		assertThat(CaseMapperConstants.CLOSURE_CODE_CHANGE_OF_HARDWARE).isEqualTo("Byte av hårdvara");
 		assertThat(CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE).isEqualTo("Levererat Hårdvara - Service request");
+		assertThat(CaseMapperConstants.CLOSURE_CODE_DELIVERED_PRODUCT).isEqualTo("Levererat Produkt - Service request");
 		assertThat(CaseMapperConstants.CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT).isEqualTo("Advania - Övriga lösningar Incident");
 	}
 
@@ -157,16 +158,13 @@ class CaseMapperConstantsTest {
 
 			Arguments.of(DELIVERED_IT, List.of(
 				createCustomStatusMapping(from(Map.of(
-					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
-					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))
-					.withStatusNoteType(NoteType.SOLUTION),
-				createCustomStatusMapping(from(Map.of(
-					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED))))),
+					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_IN_PROCESS)))
+					.withStatusNoteType(NoteType.WORKNOTE))),
 
 			Arguments.of(DELIVERED_ACCESSORIES, List.of(
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_SOLVED,
-					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_HARDWARE)))
+					CaseMapperConstants.KEY_CLOSURE_CODE, CaseMapperConstants.CLOSURE_CODE_DELIVERED_PRODUCT)))
 					.withStatusNoteType(NoteType.SOLUTION),
 				createCustomStatusMapping(from(Map.of(
 					CaseMapperConstants.KEY_CASE_STATUS, CaseMapperConstants.STATUS_CLOSED))))),

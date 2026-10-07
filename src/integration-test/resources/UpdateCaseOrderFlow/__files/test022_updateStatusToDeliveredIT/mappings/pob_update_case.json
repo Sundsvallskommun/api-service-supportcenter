@@ -12,11 +12,19 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"CaseStatus": "Closed",
+						"CaseStatus": "In Process",
 						"CIInfo2.Ci": "867403",
 						"Id": "867417"
 					},
-					"Memo": null
+					"Memo": {
+						"CaseInternalNotesCustom": {
+							"Extension": ".html",
+							"HandleSeparators": true,
+							"Style": "2",
+							"IsValidForWeb": false,
+							"Memo": "Beställning levererad"
+						}
+					}
 				}
 			}
 		],
@@ -25,5 +33,5 @@
 	"response": {
 		"status": 200
 	},
-	"name": "pob-update-case-updateCase-secondcall"
+	"name": "pob-update-case-updateCase"
 }

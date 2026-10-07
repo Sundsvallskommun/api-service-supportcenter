@@ -87,6 +87,7 @@ public final class CaseMapperConstants {
 
 	public static final String CLOSURE_CODE_CHANGE_OF_HARDWARE = "Byte av hårdvara";
 	public static final String CLOSURE_CODE_DELIVERED_HARDWARE = "Levererat Hårdvara - Service request";
+	public static final String CLOSURE_CODE_DELIVERED_PRODUCT = "Levererat Produkt - Service request";
 	public static final String CLOSURE_CODE_ADVANIA_DEFAULT_SOLUTION_TEXT = "Advania - Övriga lösningar Incident";
 	private static final String SEE_INTERNAL_NOTE_FOR_ACTION = "Åtgärdsbeskrivning i interna anteckningar";
 	private static final String IT_SUPPORT = "IT Support";
@@ -191,18 +192,25 @@ public final class CaseMapperConstants {
 
 	private static Map<String, List<CustomStatusMapping>> getDeliveredStatusMap() {
 
-		// Delivered statuses (Order flow). They only differ in which fields the request must contain, see
-		// ValidDeliveryIdentifiers.
-		final var deliveredMappings = List.of(
+		// Delivered statuses (Order flow). Delivered and DeliveredAccessories are solved and closed, each with a closure
+		// code of its own. DeliveredIT is a computer delivered uninstalled to IT, so the case stays open. POB moves it to
+		// the support queue once the serial number is linked to the case, and support solves it after the installation.
+		// Which fields the request must contain differs between all three, see ValidDeliveryIdentifiers.
+		return Map.of(
+			DELIVERED.getValue(), createSolvedAndClosedMappings(CLOSURE_CODE_DELIVERED_HARDWARE),
+			DELIVERED_IT.getValue(), List.of(
+				CustomStatusMapping.create()
+					.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_IN_PROCESS))
+					.withStatusNoteType(WORKNOTE)),
+			DELIVERED_ACCESSORIES.getValue(), createSolvedAndClosedMappings(CLOSURE_CODE_DELIVERED_PRODUCT));
+	}
+
+	private static List<CustomStatusMapping> createSolvedAndClosedMappings(final String closureCode) {
+		return List.of(
 			CustomStatusMapping.create()
-				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, CLOSURE_CODE_DELIVERED_HARDWARE))
+				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_SOLVED, KEY_CLOSURE_CODE, closureCode))
 				.withStatusNoteType(SOLUTION),
 			CustomStatusMapping.create()
 				.withAttributes(Map.of(KEY_CASE_STATUS, STATUS_CLOSED)));
-
-		return Map.of(
-			DELIVERED.getValue(), deliveredMappings,
-			DELIVERED_IT.getValue(), deliveredMappings,
-			DELIVERED_ACCESSORIES.getValue(), deliveredMappings);
 	}
 }
