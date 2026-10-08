@@ -12,6 +12,7 @@ import static java.util.Objects.nonNull;
 import static se.sundsvall.supportcenter.api.model.enums.NoteType.WORKNOTE;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
 import static se.sundsvall.supportcenter.service.mapper.CommonMapper.toMemo;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DELIVERED_STATUSES;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
@@ -24,7 +25,8 @@ public class ExtraWorknoteProcessor implements ProcessorInterface {
 
 	@Override
 	public boolean shouldProcess(UpdateCaseRequest updateCaseRequest) {
-		return nonNull(updateCaseRequest) && Objects.equals(DELIVERED.getValue(), updateCaseRequest.getCaseStatus());
+		// The null check is needed since DELIVERED_STATUSES is an immutable set, which throws on contains(null).
+		return nonNull(updateCaseRequest) && nonNull(updateCaseRequest.getCaseStatus()) && DELIVERED_STATUSES.contains(updateCaseRequest.getCaseStatus());
 	}
 
 	/**

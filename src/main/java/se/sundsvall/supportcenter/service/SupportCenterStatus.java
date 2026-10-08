@@ -1,5 +1,8 @@
 package se.sundsvall.supportcenter.service;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum SupportCenterStatus {
 
 	// NETSET statuses (order flow)
@@ -9,6 +12,8 @@ public enum SupportCenterStatus {
 	PARTIALLY_DESPATCHED("Partially Despatched"),
 	DESPATCHED("Despatched"),
 	DELIVERED("Delivered"),
+	DELIVERED_IT("DeliveredIT"),
+	DELIVERED_ACCESSORIES("DeliveredAccessories"),
 	DELIVERED_ACTION_NEEDED("Delivered - Action Needed"),
 
 	// CUBE statuses (support flow)
@@ -30,5 +35,19 @@ public enum SupportCenterStatus {
 
 	public String getValue() {
 		return value;
+	}
+
+	/**
+	 * Finds the status with the provided value, without regard to case and surrounding whitespace.
+	 *
+	 * @param  value the value to look for
+	 * @return       the matching status, or an empty optional if there is none
+	 */
+	public static Optional<SupportCenterStatus> fromValue(final String value) {
+		return Optional.ofNullable(value)
+			.map(String::strip)
+			.flatMap(strippedValue -> Arrays.stream(values())
+				.filter(status -> status.value.equalsIgnoreCase(strippedValue))
+				.findFirst());
 	}
 }

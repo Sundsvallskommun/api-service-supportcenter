@@ -3,10 +3,12 @@ package se.sundsvall.supportcenter.api.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import java.util.Objects;
+import se.sundsvall.supportcenter.api.validation.ValidDeliveryIdentifiers;
 import se.sundsvall.supportcenter.api.validation.ValidHardwareIdentifiers;
 
 @Schema(description = "UpdateCaseRequest model")
 @ValidHardwareIdentifiers
+@ValidDeliveryIdentifiers
 public class UpdateCaseRequest {
 
 	@Valid
@@ -15,7 +17,9 @@ public class UpdateCaseRequest {
 	@Schema(description = "External case-ID", examples = "INC232323")
 	private String externalCaseId;
 
-	@Schema(description = "Case status", examples = "In Process")
+	@Schema(
+		description = "Case status. Known statuses are matched without regard to case and surrounding whitespace, other values are passed on to POB as they are. Delivered requires serialNumber and either hardwareName or imeiNumber, DeliveredIT requires serialNumber",
+		examples = "In Process")
 	private String caseStatus;
 
 	@Schema(description = "Case category", examples = "IT Användarhantering")

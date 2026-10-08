@@ -2,6 +2,9 @@ package se.sundsvall.supportcenter.service.mapper;
 
 import generated.client.pob.PobMemo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
@@ -82,13 +85,15 @@ class UpdateCaseMapperTest {
 		assertThat(result.getMemo().get(NoteType.WORKNOTE.toValue()).getStyle()).isEqualTo(PobMemo.StyleEnum.NUMBER_2);
 	}
 
-	@Test
-	void toPobPayloadsWhenStatusIsDelivered() {
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"Delivered", "DeliveredAccessories"
+	})
+	void toPobPayloadsWhenStatusIsDelivered(final String caseStatus) {
 
 		// Parameter values.
 		final var caseId = "caseId";
 		final var caseCategory = "caseCategory";
-		final var caseStatus = "Delivered";
 		final var closureCode = "closureCode";
 		final var externalCaseId = "externalCaseId";
 		final var hardwareName = "hardwareName";
@@ -355,12 +360,14 @@ class UpdateCaseMapperTest {
 		assertThat(secondResult.getData()).containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(1).getAttributes().get(KEY_CASE_STATUS));
 	}
 
-	@Test
-	void toPobPayloadsWhenStatusIsDeliveredWithoutHardwareNameAndImeiNumber() {
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"Delivered", "DeliveredAccessories"
+	})
+	void toPobPayloadsWhenStatusIsDeliveredWithoutHardwareNameAndImeiNumber(final String caseStatus) {
 
 		// Parameter values.
 		final var caseId = "caseId";
-		final var caseStatus = "Delivered";
 
 		final var updateCaseRequest = UpdateCaseRequest.create()
 			.withCaseStatus(caseStatus);
@@ -376,5 +383,37 @@ class UpdateCaseMapperTest {
 		assertThat(firstResult.getData()).doesNotContainKey(KEY_SHOP_CI_NAME);
 		assertThat(firstResult.getMemo().get(NoteType.SOLUTION.toValue()).getMemo()).isEqualTo("Beställning levererad");
 		assertThat(secondResult.getData()).containsEntry(KEY_CASE_STATUS, CUSTOM_STATUS_MAP.get(caseStatus).get(1).getAttributes().get(KEY_CASE_STATUS));
+	}
+
+	@ParameterizedTest
+	@CsvSource(delimiter = '|', quoteCharacter = '"', nullValues = "null", value = {
+		"hardwareName | Beställning levererad. Stöldmärkning: 'hardwareName'",
+		"null         | Beställning levererad"
+	})
+	void toPobPayloadsWhenStatusIsDeliveredIT(final String hardwareName, final String expectedStatusNote) {
+
+		// Parameter values.
+		final var caseId = "caseId";
+		final var noteText = "noteText";
+
+		final var updateCaseRequest = UpdateCaseRequest.create()
+			.withCaseStatus("DeliveredIT")
+			.withHardwareName(hardwareName)
+			.withNote(Note.create()
+				.withText(noteText)
+				.withType(NoteType.WORKNOTE));
+
+		// Call
+		final var resultList = UpdateCaseMapper.toPobPayloads(caseId, updateCaseRequest);
+
+		// Verification. The case stays open, so there is one call, no closure code and the status note is a worknote.
+		assertThat(resultList).hasSize(1);
+		final var result = resultList.getFirst();
+		assertThat(result.getData())
+			.containsEntry(KEY_ID, caseId)
+			.containsEntry(KEY_CASE_STATUS, "In Process")
+			.doesNotContainKey(KEY_CLOSURE_CODE);
+		assertThat(result.getMemo()).containsOnlyKeys(NoteType.WORKNOTE.toValue());
+		assertThat(result.getMemo().get(NoteType.WORKNOTE.toValue()).getMemo()).isEqualTo(noteText + " | " + expectedStatusNote);
 	}
 }

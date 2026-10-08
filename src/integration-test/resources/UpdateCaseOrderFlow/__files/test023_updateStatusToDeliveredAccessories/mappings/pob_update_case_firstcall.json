@@ -12,11 +12,9 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"ClosureCode": "Levererat Hårdvara - Service request",
+						"ClosureCode": "Levererat Produkt - Service request",
 						"CaseStatus": "Solved",
-						"CIInfo2.Ci": "867403",
-						"Virtual.Shop_CI_Name": "WB12345NY",
-						"Id": "867413"
+						"Id": "867418"
 					},
 					"Memo": {
 						"CaseInternalNotesCustom": {
@@ -31,7 +29,7 @@
 							"HandleSeparators": true,
 							"Style": "2",
 							"IsValidForWeb": false,
-							"Memo": "Beställning levererad. Stöldmärkning: 'WB12345NY'"
+							"Memo": "Beställning levererad"
 						}
 					}
 				}

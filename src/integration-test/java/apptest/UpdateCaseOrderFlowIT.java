@@ -183,14 +183,15 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	}
 
 	@Test
-	void test014_updateStatusToDeliveredWithSerialNumber() {
+	void test014_updateStatusToDeliveredWithoutHardwareName() {
 
 		setupCall()
 			.withServicePath(PATH + "/867414")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)
-			.withExpectedResponseStatus(NO_CONTENT)
+			.withExpectedResponse(RESPONSE_FILE)
+			.withExpectedResponseStatus(BAD_REQUEST)
 			.sendRequestAndVerifyResponse();
 	}
 
@@ -267,10 +268,59 @@ class UpdateCaseOrderFlowIT extends AbstractAppTest {
 	}
 
 	@Test
-	void test021_updateStatusToDeliveredWithHardwareName() {
+	void test021_updateStatusToDeliveredWithoutSerialNumber() {
 
 		setupCall()
 			.withServicePath(PATH + "/867416")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponse(RESPONSE_FILE)
+			.withExpectedResponseStatus(BAD_REQUEST)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test022_updateStatusToDeliveredIT() {
+
+		setupCall()
+			.withServicePath(PATH + "/867417")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test023_updateStatusToDeliveredAccessories() {
+
+		setupCall()
+			.withServicePath(PATH + "/867418")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test024_updateStatusToDeliveredAccessoriesInLowerCase() {
+
+		setupCall()
+			.withServicePath(PATH + "/867419")
+			.withHttpMethod(PATCH)
+			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.withRequest(REQUEST_FILE)
+			.withExpectedResponseStatus(NO_CONTENT)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test025_updateStatusToDeliveredWithImeiNumber() {
+
+		setupCall()
+			.withServicePath(PATH + "/867420")
 			.withHttpMethod(PATCH)
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withRequest(REQUEST_FILE)

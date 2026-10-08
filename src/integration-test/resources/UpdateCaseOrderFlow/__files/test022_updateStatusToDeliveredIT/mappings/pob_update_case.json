@@ -12,25 +12,17 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"ClosureCode": "Levererat Hårdvara - Service request",
-						"CaseStatus": "Solved",
-						"Virtual.Shop_CI_Name": "WB12345NY",
-						"Id": "867416"
+						"CaseStatus": "In Process",
+						"CIInfo2.Ci": "867403",
+						"Id": "867417"
 					},
 					"Memo": {
 						"CaseInternalNotesCustom": {
 							"Extension": ".html",
 							"HandleSeparators": true,
 							"Style": "2",
-							"IsValidForWeb": true,
-							"Memo": "Delivered"
-						},
-						"Solution": {
-							"Extension": ".html",
-							"HandleSeparators": true,
-							"Style": "2",
 							"IsValidForWeb": false,
-							"Memo": "Beställning levererad. Stöldmärkning: 'WB12345NY'"
+							"Memo": "Beställning levererad"
 						}
 					}
 				}
@@ -41,5 +33,5 @@
 	"response": {
 		"status": 200
 	},
-	"name": "pob-update-case-updateCase-firstcall"
+	"name": "pob-update-case-updateCase"
 }

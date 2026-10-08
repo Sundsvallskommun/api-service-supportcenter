@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.service.processor;
 
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_ACCESSORIES;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_IT;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_SOLVED;
 
@@ -50,10 +53,13 @@ class ExtraWorkNoteProcessorTest {
 
 	@Test
 	void shouldProcess() {
-		assertThat(processor.shouldProcess(UpdateCaseRequest.create().withCaseStatus(DELIVERED.getValue()))).isTrue();
+		final var deliveredStatuses = EnumSet.of(DELIVERED, DELIVERED_IT, DELIVERED_ACCESSORIES);
+
+		deliveredStatuses.forEach(status -> assertThat(processor.shouldProcess(UpdateCaseRequest.create().withCaseStatus(status.getValue()))).isTrue());
 		assertThat(processor.shouldProcess(null)).isFalse();
+		assertThat(processor.shouldProcess(UpdateCaseRequest.create())).isFalse();
 		Stream.of(SupportCenterStatus.values())
-			.filter(status -> DELIVERED != status)
+			.filter(status -> !deliveredStatuses.contains(status))
 			.forEach(status -> assertThat(processor.shouldProcess(UpdateCaseRequest.create().withCaseStatus(status.getValue()))).isFalse());
 	}
 

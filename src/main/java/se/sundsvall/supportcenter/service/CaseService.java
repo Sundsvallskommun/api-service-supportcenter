@@ -44,6 +44,10 @@ public class CaseService {
 	}
 
 	public void updateCase(final String pobKey, final String caseId, final UpdateCaseRequest updateCaseRequest) {
+		// The status is matched without regard to case and surrounding whitespace. Rewriting it to the spelling in
+		// SupportCenterStatus lets the mapping and the processors compare it exactly.
+		SupportCenterStatus.fromValue(updateCaseRequest.getCaseStatus()).ifPresent(status -> updateCaseRequest.setCaseStatus(status.getValue()));
+
 		// Will throw a runtime-exception if validation is unsuccessful.
 		validate(pobKey, updateCaseRequest);
 

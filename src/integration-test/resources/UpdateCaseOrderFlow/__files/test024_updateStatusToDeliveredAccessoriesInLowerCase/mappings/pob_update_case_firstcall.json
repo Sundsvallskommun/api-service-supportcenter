@@ -12,10 +12,9 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
-						"ClosureCode": "Levererat Hårdvara - Service request",
+						"ClosureCode": "Levererat Produkt - Service request",
 						"CaseStatus": "Solved",
-						"CIInfo2.Ci": "867403",
-						"Id": "867414"
+						"Id": "867419"
 					},
 					"Memo": {
 						"CaseInternalNotesCustom": {

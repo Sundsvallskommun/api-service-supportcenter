@@ -249,6 +249,35 @@ class UpdateCaseServiceTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {
+		"resolved", "RESOLVED", "rEsOlVeD", " resolved ", "\tResolved\n"
+	})
+	void updateCaseMatchesStatusWithoutRegardToCaseAndSurroundingWhitespace(final String incomingCaseStatus) {
+		when(trueProcessorMock.shouldProcess(any())).thenReturn(true);
+
+		// Parameter values
+		final var pobKey = "pobKey";
+		final var caseId = "12345";
+		final var request = UpdateCaseRequest.create().withCaseStatus(incomingCaseStatus);
+
+		// Call
+		caseService.updateCase(pobKey, caseId, request);
+
+		// Verification. The status is rewritten to the spelling in SupportCenterStatus before the processors see it.
+		assertThat(request.getCaseStatus()).isEqualTo("Resolved");
+		verify(pobIntegrationMock, times(2)).updateCase(eq(pobKey), pobPayloadCaptor.capture());
+		processorListSpy.forEach(processor -> verify(processor, times(4)).shouldProcess(request));
+		verify(trueProcessorMock, times(2)).preProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
+		verify(trueProcessorMock, times(2)).postProcess(eq(pobKey), eq(caseId), eq(request), any(PobPayload.class));
+		verifyNoMoreInteractions(pobIntegrationMock, trueProcessorMock, falseProcessorMock);
+		verifyNoInteractions(configurationServiceMock);
+
+		final var pobPayloadValues = pobPayloadCaptor.getAllValues();
+		assertThat(pobPayloadValues).extracting(pobPayload -> pobPayload.getData().get(KEY_CASE_STATUS)).containsExactly("Solved", "Closed");
+		assertThat(pobPayloadValues.getFirst().getMemo().get(NoteType.WORKNOTE.toValue()).getMemo()).isEqualTo("Status: 'Resolved'");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
 		"Processed", "Reserved", "Picking", "Despatched"
 	})
 	void updateCaseForKnownNetstatStatuses(String incomingCaseStatus) {

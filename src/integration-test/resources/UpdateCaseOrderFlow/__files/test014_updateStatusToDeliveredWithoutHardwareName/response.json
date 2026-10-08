@@ -1,0 +1,15 @@
+{
+	"type": "https://github.com/Sundsvallskommun/dept44/problems/constraint-violation",
+	"title": "Constraint Violation",
+	"status": 400,
+	"violations": [
+		{
+			"field": "hardwareName",
+			"message": "hardwareName or imeiNumber must be provided for the given caseStatus"
+		},
+		{
+			"field": "imeiNumber",
+			"message": "hardwareName or imeiNumber must be provided for the given caseStatus"
+		}
+	]
+}

@@ -322,6 +322,55 @@ class CaseResourceFailuresTest {
 	}
 
 	@Test
+	void updateCaseDeliveredWithoutDeliveryIdentifiers() {
+
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
+			.contentType(APPLICATION_JSON)
+			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.bodyValue(UpdateCaseRequest.create().withCaseStatus("Delivered"))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.when(Option.IGNORING_ARRAY_ORDER)
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"serialNumber","message":"must be provided for the given caseStatus"},
+							{"field":"hardwareName","message":"hardwareName or imeiNumber must be provided for the given caseStatus"},
+							{"field":"imeiNumber","message":"hardwareName or imeiNumber must be provided for the given caseStatus"}
+						]""")));
+
+		verifyNoInteractions(caseServiceMock);
+	}
+
+	@Test
+	void updateCaseDeliveredITInLowerCaseWithoutSerialNumber() {
+
+		webTestClient.patch().uri("/2281/cases/{caseId}", "12345")
+			.contentType(APPLICATION_JSON)
+			.header(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
+			.bodyValue(UpdateCaseRequest.create().withCaseStatus("deliveredit"))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
+			.expectBody(String.class)
+			.consumeWith(response -> assertThatJson(response.getResponseBody())
+				.and(
+					json -> json.node("title").isEqualTo("Constraint Violation"),
+					json -> json.node("status").isEqualTo(BAD_REQUEST.value()),
+					json -> json.node("violations").isEqualTo("""
+						[
+							{"field":"serialNumber","message":"must be provided for the given caseStatus"}
+						]""")));
+
+		verifyNoInteractions(caseServiceMock);
+	}
+
+	@Test
 	void getCaseMissingPobKeyHeader() {
 
 		webTestClient.get().uri("/2281/cases/{caseId}", "12345")

@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static se.sundsvall.supportcenter.service.mapper.CommonMapper.toMemo;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.CUSTOM_STATUS_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DELIVERED_STATUSES;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_CATEGORY;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CLOSURE_CODE;
@@ -31,7 +32,6 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_DELIVERED;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_DELIVERED_PART;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_STATUS_PART;
-import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.STATUS_DELIVERED;
 
 public final class UpdateCaseMapper {
 
@@ -146,10 +146,27 @@ public final class UpdateCaseMapper {
 	private static Note createStatusNote(NoteType noteType, String caseStatus, String ciName) {
 		if (isNull(noteType)) {
 			return null;
-		} else if (STATUS_DELIVERED.equals(caseStatus)) {
-			return Note.create().withType(noteType).withText(isNotBlank(ciName) ? format(NOTE_DELIVERED_PART, ciName) : NOTE_DELIVERED);
 		}
 
-		return Note.create().withType(noteType).withText(format(NOTE_STATUS_PART, caseStatus));
+		return Note.create().withType(noteType).withText(createStatusNoteText(caseStatus, ciName));
+	}
+
+	/**
+	 * Creates the text of the status note. A delivered status gets a delivery text, with the theft marking when the CI
+	 * name is known, and every other status gets the status itself.
+	 *
+	 * @param  caseStatus the status to be used
+	 * @param  ciName     the CI name (i.e. hardware name or IMEI number) to include in the delivered note
+	 * @return            the text of the status note
+	 */
+	private static String createStatusNoteText(String caseStatus, String ciName) {
+		if (!DELIVERED_STATUSES.contains(caseStatus)) {
+			return format(NOTE_STATUS_PART, caseStatus);
+		}
+		if (isNotBlank(ciName)) {
+			return format(NOTE_DELIVERED_PART, ciName);
+		}
+
+		return NOTE_DELIVERED;
 	}
 }
