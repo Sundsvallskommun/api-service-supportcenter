@@ -1,13 +1,12 @@
 package apptest;
 
-import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-
 import org.junit.jupiter.api.Test;
-
 import se.sundsvall.dept44.test.AbstractAppTest;
 import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
 import se.sundsvall.supportcenter.Application;
+
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @WireMockAppTestSuite(files = "classpath:/UpdateCaseSupportFlow/", classes = Application.class)
 class UpdateCaseSupportFlowIT extends AbstractAppTest {
@@ -94,10 +93,10 @@ class UpdateCaseSupportFlowIT extends AbstractAppTest {
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 	}
-	
+
 	@Test
 	void test007_assignBackCase() {
-		
+
 		setupCall()
 			.withServicePath(PATH + "/867597")
 			.withHttpMethod(PATCH)

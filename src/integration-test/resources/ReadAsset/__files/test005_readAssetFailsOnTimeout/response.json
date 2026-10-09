@@ -1,0 +1,5 @@
+{
+	"detail": "${json-unit.any-string}",
+	"status": 504,
+	"title": "Gateway Timeout"
+}

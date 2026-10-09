@@ -1,5 +1,0 @@
-{
-	"detail": "${json-unit.any-string}",
-	"status": 500,
-	"title": "Internal Server Error"
-}
