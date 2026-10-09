@@ -108,12 +108,12 @@ class EndOfLeaseLookupIT extends AbstractAppTest {
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select error_message from end_of_lease_computer where serial_number = 'J123ABC'", String.class))
-				.contains("POB could not be reached");
+			.contains("POB could not be reached");
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select retry_after from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class))
-				.as("left free, or the next run skips the very computer it stopped on and the outage costs six hours instead of one")
-				.isNull();
+			.as("left free, or the next run skips the very computer it stopped on and the outage costs six hours instead of one")
+			.isNull();
 	}
 
 	/**

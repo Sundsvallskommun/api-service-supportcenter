@@ -134,9 +134,9 @@ class EndOfLeaseDispatchIT extends AbstractAppTest {
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select error_message from end_of_lease_computer where serial_number = 'J123ABC'", String.class))
-				.as("the reason SysMan gave survives the error decoder and reaches the row")
-				.contains("The message service is not responding")
-				.contains("the queue host refused the connection");
+			.as("the reason SysMan gave survives the error decoder and reaches the row")
+			.contains("The message service is not responding")
+			.contains("the queue host refused the connection");
 
 		assertThat(jdbcTemplate.queryForObject(
 			"select retry_after from end_of_lease_computer where serial_number = 'J123ABC'", Timestamp.class)).isNotNull();

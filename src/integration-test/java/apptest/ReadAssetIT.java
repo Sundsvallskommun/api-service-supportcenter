@@ -1,15 +1,14 @@
 package apptest;
 
+import org.junit.jupiter.api.Test;
+import se.sundsvall.dept44.test.AbstractAppTest;
+import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
+import se.sundsvall.supportcenter.Application;
+
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
-
-import org.junit.jupiter.api.Test;
-
-import se.sundsvall.dept44.test.AbstractAppTest;
-import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
-import se.sundsvall.supportcenter.Application;
 
 @WireMockAppTestSuite(files = "classpath:/ReadAsset/", classes = Application.class)
 class ReadAssetIT extends AbstractAppTest {
