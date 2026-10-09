@@ -7,7 +7,7 @@ import se.sundsvall.supportcenter.Application;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.GATEWAY_TIMEOUT;
 import static org.springframework.http.HttpStatus.OK;
 
 @WireMockAppTestSuite(files = "classpath:/ReadAsset/", classes = Application.class)
@@ -67,7 +67,7 @@ class ReadAssetIT extends AbstractAppTest {
 	}
 
 	@Test
-	void test005_readAssetFailsAfterRetry() {
+	void test005_readAssetFailsOnTimeout() {
 
 		setupCall()
 			.withServicePath(PATH + "?serialNumber=YYY")
@@ -75,7 +75,7 @@ class ReadAssetIT extends AbstractAppTest {
 			.withHeader(POBKEY_HEADER_NAME, POBKEY_HEADER_VALUE)
 			.withHeader("Accept", "application/json")
 			.withExpectedResponse(RESPONSE_FILE)
-			.withExpectedResponseStatus(INTERNAL_SERVER_ERROR)
+			.withExpectedResponseStatus(GATEWAY_TIMEOUT)
 			.sendRequestAndVerifyResponse();
 	}
 }
