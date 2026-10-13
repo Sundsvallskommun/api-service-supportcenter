@@ -12,6 +12,7 @@
 					"Type": "Case",
 					"Links": [],
 					"Data": {
+						"Virtual.ActionId": "${json-unit.regex}^DeliveredIT;\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}$",
 						"CaseStatus": "In Process",
 						"CIInfo2.Ci": "867403",
 						"Id": "867417"

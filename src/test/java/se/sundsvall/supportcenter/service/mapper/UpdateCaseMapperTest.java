@@ -1,6 +1,7 @@
 package se.sundsvall.supportcenter.service.mapper;
 
 import generated.client.pob.PobMemo;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,9 +10,14 @@ import se.sundsvall.supportcenter.api.model.Note;
 import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
+import static java.time.LocalDateTime.now;
+import static java.time.ZoneId.systemDefault;
+import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.CUSTOM_STATUS_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_CATEGORY;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CLOSURE_CODE;
@@ -67,7 +73,8 @@ class UpdateCaseMapperTest {
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_SHOP_CI_NAME, hardwareName)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
-			.containsEntry(KEY_RESPONSIBLE, null);
+			.containsEntry(KEY_RESPONSIBLE, null)
+			.doesNotContainKey(KEY_ACTION_ID);
 
 		// Two different notes.
 		assertThat(result.getMemo()).isNotNull().hasSize(2);
@@ -129,7 +136,8 @@ class UpdateCaseMapperTest {
 			.containsEntry(KEY_CLOSURE_CODE, CUSTOM_STATUS_MAP.get(caseStatus).getFirst().getAttributes().get(KEY_CLOSURE_CODE)) // First call contain closure code.
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
-			.containsEntry(KEY_RESPONSIBLE, null);
+			.containsEntry(KEY_RESPONSIBLE, null)
+			.doesNotContainKey(KEY_ACTION_ID);
 
 		// Two different notes.
 		assertThat(firstResult.getMemo()).isNotNull().hasSize(2);
@@ -155,7 +163,8 @@ class UpdateCaseMapperTest {
 			.containsEntry(KEY_CLOSURE_CODE, closureCode) // Contains the original closure code (not overwritten)
 			.containsEntry(KEY_EXTERNAL_CASE_ID, externalCaseId)
 			.containsEntry(KEY_RESPONSIBLE_GROUP, responsibleGroup)
-			.containsEntry(KEY_RESPONSIBLE, null);
+			.containsEntry(KEY_RESPONSIBLE, null)
+			.doesNotContainKey(KEY_ACTION_ID);
 	}
 
 	@Test
@@ -404,7 +413,9 @@ class UpdateCaseMapperTest {
 				.withType(NoteType.WORKNOTE));
 
 		// Call
+		final var before = now(systemDefault()).truncatedTo(MILLIS);
 		final var resultList = UpdateCaseMapper.toPobPayloads(caseId, updateCaseRequest);
+		final var after = now(systemDefault());
 
 		// Verification. The case stays open, so there is one call, no closure code and the status note is a worknote.
 		assertThat(resultList).hasSize(1);
@@ -415,5 +426,10 @@ class UpdateCaseMapperTest {
 			.doesNotContainKey(KEY_CLOSURE_CODE);
 		assertThat(result.getMemo()).containsOnlyKeys(NoteType.WORKNOTE.toValue());
 		assertThat(result.getMemo().get(NoteType.WORKNOTE.toValue()).getMemo()).isEqualTo(noteText + " | " + expectedStatusNote);
+
+		// The action id is the status and the time of the call, which is what makes POB see it as a new action.
+		final var actionId = (String) result.getData().get(KEY_ACTION_ID);
+		assertThat(actionId).matches("DeliveredIT;\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}");
+		assertThat(LocalDateTime.parse(actionId.substring("DeliveredIT;".length()), ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))).isBetween(before, after);
 	}
 }

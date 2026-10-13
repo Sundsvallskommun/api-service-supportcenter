@@ -2,6 +2,7 @@ package se.sundsvall.supportcenter.service.mapper;
 
 import generated.client.pob.PobMemo;
 import generated.client.pob.PobPayload;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,20 @@ import se.sundsvall.supportcenter.api.model.UpdateCaseRequest;
 import se.sundsvall.supportcenter.api.model.enums.NoteType;
 
 import static java.lang.String.format;
+import static java.time.LocalDateTime.now;
+import static java.time.ZoneId.systemDefault;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static se.sundsvall.supportcenter.service.SupportCenterStatus.DELIVERED_IT;
 import static se.sundsvall.supportcenter.service.mapper.CommonMapper.toMemo;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.CUSTOM_STATUS_MAP;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DEFAULT_TYPE;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.DELIVERED_STATUSES;
+import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_ACTION_ID;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_CATEGORY;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CASE_STATUS;
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.KEY_CLOSURE_CODE;
@@ -34,6 +39,8 @@ import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConst
 import static se.sundsvall.supportcenter.service.mapper.constant.CaseMapperConstants.NOTE_STATUS_PART;
 
 public final class UpdateCaseMapper {
+
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	private UpdateCaseMapper() {}
 
@@ -62,6 +69,7 @@ public final class UpdateCaseMapper {
 
 					// Create data-map and put all extra attributes in this map (overwrite if the keys already exists).
 					final var dataMap = toData(caseId, updateCaseRequest);
+
 					dataMap.putAll(customStatusMapping.getAttributes());
 
 					// Create note if status note type has been set in the custom mapping in CaseMapperConstants class
@@ -88,7 +96,14 @@ public final class UpdateCaseMapper {
 		final var dataMap = new HashMap<String, Object>();
 		ofNullable(caseId).ifPresent(value -> dataMap.put(KEY_ID, value));
 		ofNullable(updateCaseRequest.getCaseCategory()).ifPresent(value -> dataMap.put(KEY_CASE_CATEGORY, value));
-		ofNullable(updateCaseRequest.getCaseStatus()).ifPresent(value -> dataMap.put(KEY_CASE_STATUS, value));
+		ofNullable(updateCaseRequest.getCaseStatus()).ifPresent(value -> {
+			// If it's "DeliveredIT" as caseStatus add it to ActionId with DeliveredIT and the time for it.
+			// This will give it a change flag in POB
+			if (value.equals(DELIVERED_IT.getValue())) {
+				dataMap.put(KEY_ACTION_ID, DELIVERED_IT.getValue() + ";" + DATE_TIME_FORMATTER.format(now(systemDefault())));
+			}
+			dataMap.put(KEY_CASE_STATUS, value);
+		});
 		ofNullable(updateCaseRequest.getClosureCode()).ifPresent(value -> dataMap.put(KEY_CLOSURE_CODE, value));
 		ofNullable(updateCaseRequest.getHardwareName()).ifPresent(value -> dataMap.put(KEY_SHOP_CI_NAME, value));
 		ofNullable(updateCaseRequest.getExternalCaseId()).ifPresent(value -> dataMap.put(KEY_EXTERNAL_CASE_ID, value));
