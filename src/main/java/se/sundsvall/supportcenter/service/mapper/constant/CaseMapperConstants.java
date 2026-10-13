@@ -69,6 +69,7 @@ public final class CaseMapperConstants {
 	public static final String KEY_EMAIL = "Virtual.Shop_Epost";
 	public static final String KEY_ACTION_NEEDED = "Virtual.ActionNeeded";
 	public static final String KEY_ACTION_NEEDED_DESCRIPTION = "Virtual.ActionNeededDescription";
+	public static final String KEY_ACTION_ID = "Virtual.ActionId";
 
 	// Default-values
 	public static final String DEFAULT_TYPE = "Case";
